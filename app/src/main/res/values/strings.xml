@@ -1,3 +1,208 @@
 <resources>
     <string name="app_name">HRFIDACS</string>
+
+<!--
+    &lt;!&ndash;- For Login &ndash;&gt;
+    <string name="bc_header_user_login">SCAN USER \nCARD</string>
+    <string name="next">Next</string>
+    <string name="str_rfid">RFID</string>
+    <string name="str_copyright_symbol_MAIN">\u00a9 2015 All rights Reserved v1.18.1 Build 05</string>
+
+    &lt;!&ndash; For Dialog &ndash;&gt;
+    <string name="alert_title_info">Information</string>
+    <string name="alert_message_cancel">Are you sure want to cancel this transaction?</string>
+    <string name="alert_message_back">Are you sure want to go back in Main Menu?</string>
+    <string name="alert_message_configure_success">Successfully connected to the server!</string>
+    <string name="str_organisation_select">Please Select Organisation</string>
+    <string name="str_organisation">Organisation</string>
+    <string name="msg_server_error_configration">Error! Unable to connect to server. Please try again</string>-->
+
+
+
+
+
+    <string name="app_short_name">BloodControl</string>
+    <string name="copy_right">HealthRFID © 2015 All rights Reserved</string>
+    <string name="img_app_string_desc">System App Logo</string>
+
+
+    <string name="err_dlg_img">Error Logo</string>
+
+    <string name="internet_connection_title">Internet Connection</string>
+    <string name="ic_not_connection_message">Internet connection is not available. Please try again.</string>
+
+    <string name="req_service_title">Request Service</string>
+    <string name="req_service_error_on">Error on process. Please try again</string>
+
+    <string name="server_title">Server Availability</string>
+    <string name="cnt_conn_server_msg">Cannot connect to the server! Please try again later.</string>
+
+    <string name="update_req_title">Update Required</string>
+    <string name="update_req_msg">The app version currently installed on the device is not supported. Tap the Update button to view the updated version on the Play Store.</string>
+
+
+    <string name="not_registration_title">Device Not Registered</string>
+    <string name="not_registration_msg">Device is not yet registered. Please proceed to registered this device.</string>
+
+    <string name="dlg_ok_text">OK</string>
+    <string name="dlg_yes_text">YES</string>
+    <string name="dlg_no_text">NO</string>
+
+    <string name="device_registration_title">Device Registration</string>
+
+    <string name="device_registration_img">Device Registration Image</string>
+
+    <string-array name="array_name">
+        <item>DEV-CONTROLPOINT</item>
+        <item>TEST-CONTROLPOINT</item>
+        <item>UAT-CONTROLPOINT</item>
+        <item>SIT-CONTROLPOINT</item>
+        <item>CONTROLPOINT</item>
+    </string-array>
+
+    <string name="check_prod_msg">Checking ControlPoint server</string>
+
+    <!--Button String -->
+    <string name="btn_next">Next</string>
+    <string name="btn_send">Send</string>
+    <string name="btn_cancel">Cancel</string>
+
+    <!--icons-->
+    <string name="icon_back">&#xf060;</string>
+    <string name="icon_logout">&#xf2f5;</string>
+    <string name="icon_update">&#xf044;</string>
+    <string name="icon_menu">&#xf0c9;</string>
+    <string name="icon_status">&#xf192;</string>
+    <string name="icon_refresh">&#xf021;</string>
+
+    <!-- Topbar Title -->
+    <string name="title_blood_component">Blood Component</string>
+    <string name="title_register_blood_component">Register Blood Component</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_blood_data_component">Blood Component Data</string>
+    <string name="title_send_to_location">Send to Location</string>
+    <string name="title_press_register">Press Register to Complete</string>
+
+    <!-- Register Component Texts -->
+    <string name="scan_rfid_tag">Scan RFID tag or barcode Tag</string>
+
+    <!--user level-->
+    <string name="user">User</string>
+    <string name="admin">Admin</string>
+    <string name="system_admin">System Admin</string>
+
+    <!--user level icons-->
+    <string name="icon_user">&#xf007;</string>
+    <string name="icon_admin">&#xf4fe;</string>
+    <string name="icon_system_admin">&#xf505;</string>
+
+    <string name="user_name">Support HealthRFID</string>
+
+    <!-- settings-icon -->
+    <string name="settings_icon_home">&#xf015;</string>
+    <string name="settings_icon_2">&#xf013;</string>
+    <string name="settings_icon_3">&#xf013;</string>
+    <string name="settings_icon_actions_navigate">&#xf105;</string>
+
+    <!--settings-label-->
+    <string name="settings_label_home">Home</string>
+    <string name="settings_label_2">Setting 2</string>
+    <string name="settings_label_3">Setting 3</string>
+    <string name="settings_logout">Logout</string>
+    <!--recive-->
+    <string name="login_scan_label">SCAN USER CARD</string>
+    <string name="login_label">USER LOGIN</string>
+
+    <!-- Register Component Texts -->
+    <string name="scan_donation">Scan Donation ID for one item only</string>
+
+    <!-- Blood Component Texts -->
+    <string name="hrfid_tag_id">HRFID TagID</string>
+    <string name="donation_id">Donation ID</string>
+    <string name="blood_group">Blood Group</string>
+    <string name="expiry_date_time">Expiry Date and Time</string>
+    <string name="component_code">Component Code</string>
+    <string name="component_name">Component Name</string>
+    <string name="special_testing_code">Special Testing Code</string>
+    <string name="special_testing_name">Special Testing Name</string>
+
+    <!--Section title-->
+    <string name="section_title_select_server">Please choose ControlPoint address</string>
+    <string name="section_scan_donation_id">Scan Donation ID or Tracking ID Label for each itemRegister Blood Component</string>
+    <string name="select_destination">Select Destination</string>
+
+    <string-array name="location_array">
+        <item>Location 1</item>
+        <item>Location 2</item>
+        <item>Location 3</item>
+        <item>Location 4</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Button Text -->
+    <string name="action_add">Add Blood Component</string>
+    <string name="action_update">Update Blood Component</string>
+    <string name="action_next">Next</string>
+    <string name="action_register">Register</string>
+
+    // savita
+    <string name="str_rfid">RFID</string>
+    <string name="str_copyright_symbol_MAIN">\u00a9 2015 All rights Reserved v1.18.1 Build 05</string>
+    <string name="bc_header_user_login">SCAN USER \nCARD</string>
+    <string name="string_scan_urcode">SCAN PATIENT UR CODE</string>
+    <string name="string_verify_urcode">PATIENT VERIFICATION</string>
+    <string name="bc_header_verbally_id_patient">VERBALLY IDENTIFY \nPATIENT</string>
+
+    //BC Titles
+    <string name="bc_page_blood_component_data">Blood Component Data</string>
+
+    <string name="scan_to_update">Scan to Update</string>
+
+    <string name="bt_next">Next</string>
+    <string name="bt_register">Register</string>
+
+    <string name="donation_id_register">Donation Id</string>
+    <string name="dialog_donation_id_registered">Unable to proceed. This Component is already registered in ControlPoint. Please select a different process.</string>
+    <string name="something_went_wrong">Something went wrong!</string>
+    <string name="alert_dialog_ok">OK</string>
+    <string name="completed_string">Completed</string>
+    <string name="home">HOME</string>
+    <string name="tb_configuration">Configuration</string>
+    <string name="tb_Register_blood_component">Register Blood Component</string>
+    <string name="tb_put_item_into_storage">PUT ITEM INTO STORAGE</string>
+    <string name="successfully_register_blood_data_put_item_into_storage">Successfully Register Blood Date. Put item into storage</string>
+    <string name="success">Success</string>
+    <string name="ComponentCodeNotFound">Component Code Not Found</string>
+    <string name="something_went_wrong_for_blood_component">Some thing went wrong for register blood component.</string>
+    <string name="no_data_will_be_recorded_for_this_session">No data will be recorded for this session.</string>
+    <string name="str_connect">Connect</string>
+    <string name="str_api_url">Api URL</string>
+
+    <!-- For Dialog -->
+    <string name="alert_title_info">Information</string>
+    <string name="alert_message_cancel">Are you sure want to cancel this transaction?</string>
+    <string name="alert_message_back">Are you sure want to go back in Main Menu?</string>
+    <string name="alert_message_configure_success">Successfully connected to the server!</string>
+    <string name="str_organisation_select">Please Select Organisation</string>
+    <string name="str_organisation">Organisation</string>
+    <string name="msg_server_error_configration">Error! Unable to connect to server. Please try again</string>
+
+    <!-- for license key -->
+    <string name="str_license_key_head">Please enter license key</string>
+    <string name="valid_license_key">License Key is Valid</string>
+    <string name="invalid_license_key">License Key is Invalid, Please try again or contact your Administrator</string>
+    <string name="exit">Exit</string>
+    <string name="next">Next</string>
+    <string name="device_register">Device Register</string>
+    <string name="enter_device_name">Enter device name</string>
+    <string name="license_key_here">License Key here</string>
+    <string name="str_select_location">Select Location</string>
+    <string name="not_able_to_register_at_this_lication">Not able to register at this location please try again</string>
+    <string name="update_require">Application requires update, would you like to do this now?</string>
+    <string name="user_role_not_define">You are not authorised to perform this action. Please ask your Administrator for assistance.</string>
+    <string name="please_scan_user_card_barcode">Please scan user card barcode.</string>
+    <string name="you_have_successfuly_registered_the_device">You have successful registered the device.</string>
+
 </resources>

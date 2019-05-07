@@ -3,4 +3,14 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="customColorPrimary">#da1d3a</color>
+    <color name="white">#fff</color>
+    <color name="black">#555</color>
+    <color name="gray">#dbdbdb</color>
+    <color name="dividerColor">#f4f4f4</color>
+    <color name="success">#00bebc</color>
+    <color name="warning">#f59227</color>
+    <color name="error">#db1e3a</color>
+    <color name="colorBCRed">#d50000</color>
+    <color name="green">#039c10</color>
 </resources>

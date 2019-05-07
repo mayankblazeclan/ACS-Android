@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Font size -->
+    <!--Blood Component Data-->
+    <dimen name="tv_size_big">48sp</dimen>
+    <dimen name="tv_size_less_big">40sp</dimen>
+    <!--<dimen name="tv_size_normal">32sp</dimen>-->
+    <dimen name="tv_size_normal">24sp</dimen>
+    <dimen name="tv_size_small">16sp</dimen>
+    <dimen name="tv_size_less_small">8sp</dimen>
+    <dimen name="tv_alert_dialog_size">18sp</dimen>
+    <dimen name="bt_ok_size">20dp</dimen>
+
+
+    <dimen name="bt_ok_padding">20dp</dimen>
+
+
+</resources>
