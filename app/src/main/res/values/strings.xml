@@ -204,5 +204,14 @@
     <string name="user_role_not_define">You are not authorised to perform this action. Please ask your Administrator for assistance.</string>
     <string name="please_scan_user_card_barcode">Please scan user card barcode.</string>
     <string name="you_have_successfuly_registered_the_device">You have successful registered the device.</string>
+    <string name="role_type_technical_staff">Senior Staff \n</string>
+    <string name="role_type_nurse_staff">Nurse \n</string>
+    <string name="role_type_lab_staff">Lab Staff \n</string>
+    <string name="btn_calendar">Calendar</string>
+    <string name="btn_barcode">Barcode</string>
+    <string name="btn_create_study">Create Study</string>
+    <string name="btn_create_inventory">Create Inventory</string>
+    <string name="btn_create_subjects">Create subjects</string>
+    <string name="btn_view_study">View Study</string>
 
 </resources>

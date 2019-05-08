@@ -32,12 +32,12 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
                     getSupportFragmentManager(), splashScreenFragment, R.id.splashscreen_frame, true);
         }
 
-        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(this);
+        //SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(this);
 
-        new SplashScreenPresenter(this, SplashScreenActivity.this, splashScreenFragment, sharedPreferenceManager);
+        //new SplashScreenPresenter(this, SplashScreenActivity.this, splashScreenFragment, sharedPreferenceManager);
 
-        SharedPrefsManager spfManager = new SharedPrefsManager();
-        LoggerLocal.error(TAG, "in OnCreate spm register ="+spfManager.isRegistered(this));
+       // SharedPrefsManager spfManager = new SharedPrefsManager();
+        //LoggerLocal.error(TAG, "in OnCreate spm register ="+spfManager.isRegistered(this));
 
     }
 

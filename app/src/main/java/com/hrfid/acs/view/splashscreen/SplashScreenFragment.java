@@ -28,6 +28,7 @@ import com.hrfid.acs.R;
 import com.hrfid.acs.data.Constants;
 import com.hrfid.acs.util.LoggerLocal;
 import com.hrfid.acs.util.Utils;
+import com.hrfid.acs.view.activity.SelectRoleActivity;
 import com.hrfid.acs.view.dialog.AlertDialogFragment;
 import com.hrfid.acs.view.dialog.AlertDialogInterface;
 
@@ -36,10 +37,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SplashScreenFragment extends Fragment implements SplashScreenTasks.View, AlertDialogInterface {
+public class SplashScreenFragment extends Fragment implements AlertDialogInterface {
     private final String TAG = getClass().getSimpleName();
 
-    private SplashScreenTasks.Presenter mPresenter;
+    //private SplashScreenTasks.Presenter mPresenter;
 
     Animation uptodown, downtoup, fadeIn;
     ProgressBar pb_custom_color;
@@ -104,7 +105,13 @@ public class SplashScreenFragment extends Fragment implements SplashScreenTasks.
                 logoContainer.setAnimation(fadeIn);
                 pb_custom_color.setAnimation(fadeIn);
 
-                mPresenter.loadProcess(Constants.CHECK_CONN_TASK);
+               // mPresenter.loadProcess(Constants.CHECK_CONN_TASK);
+
+                Intent mNextActivity = new Intent(getActivity(), SelectRoleActivity.class);
+                mNextActivity.putExtra(Constants.REG_ACTIVITY_FRAG, Constants.REG_SERVER_FRAG);
+                startActivity(mNextActivity);
+                getActivity().finish();
+
             }
         }, 1000);
         return root;
@@ -113,13 +120,13 @@ public class SplashScreenFragment extends Fragment implements SplashScreenTasks.
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.subscribe();
+       // mPresenter.subscribe();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mPresenter.unsubscribe();
+      //  mPresenter.unsubscribe();
     }
 
     @Override
@@ -136,14 +143,14 @@ public class SplashScreenFragment extends Fragment implements SplashScreenTasks.
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        //mListener = null;
     }
 
-    @Override
+ /*   @Override
     public void setPresenter(SplashScreenTasks.Presenter presenter) {
         mPresenter = presenter;
-    }
-
+    }*/
+/*
     @Override
     public void showDialog(String activity, int task) {
         mTask = task;
@@ -163,7 +170,7 @@ public class SplashScreenFragment extends Fragment implements SplashScreenTasks.
         mDialog.setTargetFragment(this, 0);
         mDialog.setCancelable(false);
         mDialog.show(getFragmentManager(), activity);
-    }
+    }*/
 
     @Override
     public void doPositiveClick() {
@@ -176,7 +183,7 @@ public class SplashScreenFragment extends Fragment implements SplashScreenTasks.
                 }*/
             } else {
                 mDialog.dismiss();
-                mPresenter.loadProcess(mTask);
+               // mPresenter.loadProcess(mTask);
             }
         }
     }
@@ -189,15 +196,15 @@ public class SplashScreenFragment extends Fragment implements SplashScreenTasks.
                 mListener.nextActivity(Constants.CLOSE_ACTIVITY);
             } else {
                 mDialog.dismiss();
-                mPresenter.loadProcess(mTask);
+               // mPresenter.loadProcess(mTask);
             }
         }
     }
-
+/*
     @Override
     public void nextActivity(int activity) {
         mListener.nextActivity(activity);
-    }
+    }*/
 
     //Permission check
 

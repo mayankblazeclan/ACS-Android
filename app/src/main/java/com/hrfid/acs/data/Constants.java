@@ -111,6 +111,10 @@ public class Constants {
     public static final String USER_ROLE_SYSTEM_ADMIN = "System Admin";
     public static final String USER_ROLE_ADMIN = "Admin";
     public static final int USER_CARD_TAG_LENGHT = 16;
+    public static final String USER_ROLE_TYPE = "User_role";
+    public static final String USER_ROLE_TYPE_SENIOR_STAFF = "Senior_role";
+    public static final String USER_ROLE_TYPE_NURSE_STAFF = "Nurse_role";
+    public static final String USER_ROLE_TYPE_LAB_STAFF = "Lab_role";
 
 
     public static int YELLOW_BUTTON = 139;

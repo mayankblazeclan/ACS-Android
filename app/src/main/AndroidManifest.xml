@@ -28,6 +28,32 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".view.activity.SelectRoleActivity"
+            android:label="@string/app_name"/>
+
+
+        <activity
+            android:name=".view.activity.RfidScanActivity"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop" />
+
+        <activity
+            android:name=".view.activity.SeniorStaffHomeActivity"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop" />
+
+        <activity
+            android:name=".view.activity.NurseStaffHomeActivity"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop" />
+
+        <activity
+            android:name=".view.activity.LabStaffHomeActivity"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop" />
+
     </application>
 
 </manifest>

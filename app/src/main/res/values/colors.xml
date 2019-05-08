@@ -13,4 +13,5 @@
     <color name="error">#db1e3a</color>
     <color name="colorBCRed">#d50000</color>
     <color name="green">#039c10</color>
+    <color name="color_white">#FFFFFF</color>
 </resources>

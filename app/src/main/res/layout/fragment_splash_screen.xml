@@ -81,7 +81,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/magistral_c"
             android:gravity="bottom"
-            android:text="BloodControl"
+            android:text="ACS"
             android:textAlignment="center"
             android:textColor="#fff"
             android:textSize="30sp" />
