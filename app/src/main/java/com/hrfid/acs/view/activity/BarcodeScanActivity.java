@@ -1,15 +1,20 @@
 package com.hrfid.acs.view.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.hrfid.acs.R;
 import com.hrfid.acs.components.BaseActivity;
@@ -22,9 +27,10 @@ import com.hrfid.acs.util.LoggerLocal;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
-public class RfidScanActivity extends BaseActivity implements View.OnClickListener,
+public class BarcodeScanActivity extends BaseActivity implements View.OnClickListener,
         UserRoleService.UserRoleInterface {
     private final String TAG = getClass().getSimpleName();
 
@@ -49,6 +55,19 @@ public class RfidScanActivity extends BaseActivity implements View.OnClickListen
         spfManager = new SharedPrefsManager();
         mService = new UserRoleService(this);
 
+        etRFIDNumber.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                v.onTouchEvent(event);
+                InputMethodManager inputMethod = (InputMethodManager)v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (inputMethod!= null) {
+                    inputMethod.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+                return true;
+            }
+        });
+
     }
 
     private void getIntentData() {
@@ -67,7 +86,7 @@ public class RfidScanActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-        etRFIDNumber.setText("");
+       // etRFIDNumber.setText("");
     }
 
     private void initUI() {
@@ -76,8 +95,9 @@ public class RfidScanActivity extends BaseActivity implements View.OnClickListen
         btNext = (Button) findViewById(R.id.bt_next);
         btNext.setOnClickListener(this);
         etRFIDNumber = (EditText) findViewById(R.id.et_rfid_number);
+        etRFIDNumber.setEnabled(false);
 
-        etRFIDNumber.addTextChangedListener(new TextWatcher() {
+      /*  etRFIDNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -85,7 +105,7 @@ public class RfidScanActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                Utils.showToast(RfidScanActivity.this, "2"+s.toString());
+//                Utils.showToast(BarcodeScanActivity.this, "2"+s.toString());
                 LoggerLocal.error(TAG, "TAG ID 2=" + s.toString());
             }
 
@@ -94,7 +114,7 @@ public class RfidScanActivity extends BaseActivity implements View.OnClickListen
                 LoggerLocal.error(TAG, "TAG ID 3 =" + s.toString());
 
             }
-        });
+        });*/
     }
 
     @Override
@@ -104,19 +124,20 @@ public class RfidScanActivity extends BaseActivity implements View.OnClickListen
                 tagId = etRFIDNumber.getText().toString();
 //                String url = spfManager.getApiUrl(getApplicationContext());
 
+                tagId = "E00401502B31ACBC";
+
                 gotoNextActivity(userRoleType);
 
 
-                /*
-                String url = Constants.SIT_STAGE_CONTROLPOINT + "." + Constants.CONTROLPOINT;
+                //String url = Constants.SIT_STAGE_CONTROLPOINT + "." + Constants.CONTROLPOINT;
+              /*  String url = "10.30.10.110:8080";
                 if (!TextUtils.isEmpty(tagId) && Constants.USER_CARD_TAG_LENGHT != tagId.length() - 1) {
                     mProgressBarLayout.setVisibility(View.VISIBLE);
                     mService.ApiCallGetUserRole(url, tagId);
                 } else {
                     Utils.showToast(this, "tag ID=" + tagId + "\nLength =" + tagId.length());
                     Utils.showAlertDialog(this, getString(R.string.please_scan_user_card_barcode));
-                }
-                */
+                }*/
 
                 break;
         }
@@ -127,21 +148,21 @@ public class RfidScanActivity extends BaseActivity implements View.OnClickListen
         if(userRoleType.equalsIgnoreCase(Constants.USER_ROLE_TYPE_SENIOR_STAFF)){
 
             //Go to next page of senior member
-            Intent mNextActivity = new Intent(RfidScanActivity.this, SeniorStaffHomeActivity.class);
+            Intent mNextActivity = new Intent(BarcodeScanActivity.this, SeniorStaffHomeActivity.class);
             mNextActivity.putExtra(Constants.USER_ROLE_TYPE, userRoleType);
             startActivity(mNextActivity);
 
         }else if(userRoleType.equalsIgnoreCase(Constants.USER_ROLE_TYPE_NURSE_STAFF)){
 
             //Go to next page of nurse member
-            Intent mNextActivity = new Intent(RfidScanActivity.this, NurseStaffHomeActivity.class);
+            Intent mNextActivity = new Intent(BarcodeScanActivity.this, NurseStaffHomeActivity.class);
             mNextActivity.putExtra(Constants.USER_ROLE_TYPE, userRoleType);
             startActivity(mNextActivity);
 
         }else {
 
             //Go to next page of lab member
-            Intent mNextActivity = new Intent(RfidScanActivity.this, LabStaffHomeActivity.class);
+            Intent mNextActivity = new Intent(BarcodeScanActivity.this, LabStaffHomeActivity.class);
             mNextActivity.putExtra(Constants.USER_ROLE_TYPE, userRoleType);
             startActivity(mNextActivity);
 
@@ -191,13 +212,16 @@ public class RfidScanActivity extends BaseActivity implements View.OnClickListen
         switch (mActivity)
         {
             case Constants.MAIN_ACTIVITY:
-               // intent = new Intent(RfidScanActivity.this, MainActivity.class);
+               // intent = new Intent(BarcodeScanActivity.this, MainActivity.class);
                 //startActivity(intent);
+                Toast.makeText(BarcodeScanActivity.this, "Go to MAINACTIVITY", Toast.LENGTH_LONG).show();
                 break;
 
             case Constants.LOCATION_SELECT_ACTIVITY:
-                //intent = new Intent(RfidScanActivity.this, LocationChangeActivity.class);
+                //intent = new Intent(BarcodeScanActivity.this, LocationChangeActivity.class);
                 //startActivity(intent);
+                Toast.makeText(BarcodeScanActivity.this, "Go to LOCATION_SELECT_ACTIVITY", Toast.LENGTH_LONG).show();
+
                 break;
         }
 

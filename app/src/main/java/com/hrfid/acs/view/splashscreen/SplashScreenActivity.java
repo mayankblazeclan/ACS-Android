@@ -65,7 +65,7 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
 
                 break;
             case Constants.DEVICE_RFID_SCAN_ACTIVITY:
-                mNextActivity = new Intent(SplashScreenActivity.this, RfidScanActivity.class);
+                mNextActivity = new Intent(SplashScreenActivity.this, BarcodeScanActivity.class);
                 mNextActivity.putExtra(Constants.REG_ACTIVITY_FRAG, Constants.REG_SERVER_FRAG);
 
                 break;*/

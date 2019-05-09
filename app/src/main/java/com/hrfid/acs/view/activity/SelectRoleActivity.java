@@ -9,7 +9,6 @@ import android.view.View;
 
 import com.hrfid.acs.R;
 import com.hrfid.acs.data.Constants;
-import com.hrfid.acs.util.Utilities;
 
 /**
  * Created by MS on 08/05/19.
@@ -74,7 +73,7 @@ public class SelectRoleActivity extends Activity implements View.OnClickListener
     private void gotoLoginPage() {
 
         //Utilities.showToast(getApplicationContext(), "Go to next Page");
-        Intent mNextActivity = new Intent(SelectRoleActivity.this, RfidScanActivity.class);
+        Intent mNextActivity = new Intent(SelectRoleActivity.this, BarcodeScanActivity.class);
         mNextActivity.putExtra(Constants.USER_ROLE_TYPE, strUserType);
         startActivity(mNextActivity);
         //finish();

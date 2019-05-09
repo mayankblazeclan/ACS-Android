@@ -89,6 +89,7 @@
                 android:layout_gravity="center"
                 android:text="@string/str_rfid"
                 android:textColor="@color/black"
+                android:visibility="gone"
                 android:textSize="30sp"
                 android:textStyle="bold" />
 

@@ -27,8 +27,13 @@
         android:gravity="center"
         android:orientation="vertical">
 
+        <GridView
+            android:id="@+id/simpleGridView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:numColumns="3"/>
 
-        <Button
+       <!-- <Button
             android:id="@+id/btnViewStudy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -60,7 +65,7 @@
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:text="@string/btn_barcode"/>
+            android:text="@string/btn_barcode"/>-->
 
 
     </LinearLayout>

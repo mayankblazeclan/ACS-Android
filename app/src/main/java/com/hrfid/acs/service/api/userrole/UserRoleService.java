@@ -74,8 +74,8 @@ private DisposableObserver<UserRoleData> getObserver(){
       /*  @GET("/api/user/userRole/{type}")
         Observable<UserRoleData> getUserRole(@Query("type") String tagID);
 */
-        @GET("/api/user/userRole/{type}")
-        Observable<UserRoleData> getUserRole(@Path("type") String tagID);
+        @GET("/api/user/userRole/{tagid}")
+        Observable<UserRoleData> getUserRole(@Path("tagid") String tagID);
 
     }
     public interface UserRoleInterface{
