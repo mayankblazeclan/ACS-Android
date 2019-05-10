@@ -149,7 +149,7 @@
 
     // savita
     <string name="str_rfid">RFID</string>
-    <string name="str_copyright_symbol_MAIN">\u00a9 2015 All rights Reserved v1.18.1 Build 05</string>
+    <string name="str_copyright_symbol_MAIN">\u00a9 2019 All rights Reserved v1.0 Build 01</string>
     <string name="bc_header_user_login">SCAN USER \nCARD</string>
     <string name="string_scan_urcode">SCAN PATIENT UR CODE</string>
     <string name="string_verify_urcode">PATIENT VERIFICATION</string>

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -59,9 +61,9 @@ public class LabStaffHomeActivity extends AppCompatActivity implements View.OnCl
         btnBarcode.setOnClickListener(this);*/
 
         gridView = (GridView) findViewById(R.id.simpleGridView);
-        staffItemList.add(new StaffItem("View Study",R.drawable.ic_error));
-        staffItemList.add(new StaffItem("CALENDAR",R.drawable.ic_error));
-        staffItemList.add(new StaffItem("BARCODE",R.drawable.ic_error));
+        staffItemList.add(new StaffItem("Lab Processing",R.drawable.ic_lab_staff_lab_processing));
+        staffItemList.add(new StaffItem("Storage \n",R.drawable.ic_lab_storage));
+        staffItemList.add(new StaffItem("Packing & Shipping",R.drawable.ic_lab_shipping));
 
         StaffItemAdapter staffItemAdapter=new StaffItemAdapter(this,R.layout.activity_staff_grid_items, staffItemList);
         gridView.setAdapter(staffItemAdapter);
@@ -109,6 +111,30 @@ public class LabStaffHomeActivity extends AppCompatActivity implements View.OnCl
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_notification) {
+            Toast.makeText(LabStaffHomeActivity.this, "Notification tapped", Toast.LENGTH_LONG).show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

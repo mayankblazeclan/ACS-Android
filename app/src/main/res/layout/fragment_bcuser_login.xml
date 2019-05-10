@@ -100,7 +100,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:paddingBottom="2dp"
-                android:src="@drawable/logo_main_footer" />
+                android:src="@drawable/ic_acs_horizontal_logo" />
 
             <TextView
                 android:layout_width="wrap_content"

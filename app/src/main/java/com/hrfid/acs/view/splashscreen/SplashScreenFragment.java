@@ -95,7 +95,7 @@ public class SplashScreenFragment extends Fragment implements AlertDialogInterfa
             public void run() {
                 bg3.setVisibility(View.VISIBLE);
             }
-        }, 800);
+        }, 1000);
 
         handlerLogin.postDelayed(new Runnable() {
             @Override
@@ -113,7 +113,7 @@ public class SplashScreenFragment extends Fragment implements AlertDialogInterfa
                 getActivity().finish();
 
             }
-        }, 1000);
+        }, 3000);
         return root;
     }
 

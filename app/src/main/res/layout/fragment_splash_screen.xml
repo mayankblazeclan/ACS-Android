@@ -63,14 +63,16 @@
 
         <ImageView
             android:id="@+id/systemProduct_logo"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="100dp"
             android:layout_marginBottom="40dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/splash_background"
-            app:srcCompat="@drawable/splash_logo" />
+            android:padding="10dp"
+            android:src="@drawable/ic_acs_horizontal_logo"
+            android:background="@color/white"
+            app:srcCompat="@drawable/ic_acs_horizontal_logo" />
 
         <TextView
             android:id="@+id/systemProduct_title"
@@ -109,7 +111,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="HealthRFID © 2015 All rights Reserved"
+        android:text="HealthRFID © 2019 All rights Reserved"
         android:textColor="#eee"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"

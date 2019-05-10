@@ -95,9 +95,10 @@ public class BarcodeScanActivity extends BaseActivity implements View.OnClickLis
         btNext = (Button) findViewById(R.id.bt_next);
         btNext.setOnClickListener(this);
         etRFIDNumber = (EditText) findViewById(R.id.et_rfid_number);
-        etRFIDNumber.setEnabled(false);
+       // etRFIDNumber.setEnabled(false);
 
-      /*  etRFIDNumber.addTextChangedListener(new TextWatcher() {
+        //etRFIDNumber.setText("E00401502B32123E");
+        etRFIDNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -114,7 +115,7 @@ public class BarcodeScanActivity extends BaseActivity implements View.OnClickLis
                 LoggerLocal.error(TAG, "TAG ID 3 =" + s.toString());
 
             }
-        });*/
+        });
     }
 
     @Override
@@ -124,21 +125,29 @@ public class BarcodeScanActivity extends BaseActivity implements View.OnClickLis
                 tagId = etRFIDNumber.getText().toString();
 //                String url = spfManager.getApiUrl(getApplicationContext());
 
-                tagId = "E00401502B31ACBC";
+                //tagId = "E00401502B31ACBC";
 
                 gotoNextActivity(userRoleType);
 
+               /* if (Utilities.isNetworkConnected(BarcodeScanActivity.this)) {
 
-                //String url = Constants.SIT_STAGE_CONTROLPOINT + "." + Constants.CONTROLPOINT;
-              /*  String url = "10.30.10.110:8080";
-                if (!TextUtils.isEmpty(tagId) && Constants.USER_CARD_TAG_LENGHT != tagId.length() - 1) {
-                    mProgressBarLayout.setVisibility(View.VISIBLE);
-                    mService.ApiCallGetUserRole(url, tagId);
+                    //Calling Login API ....
+                    //String url = Constants.SIT_STAGE_CONTROLPOINT + "." + Constants.CONTROLPOINT;
+                    String url = "10.30.10.110:8080";
+                    if (!TextUtils.isEmpty(tagId) && Constants.USER_CARD_TAG_LENGHT != tagId.length() - 1) {
+                        mProgressBarLayout.setVisibility(View.VISIBLE);
+                        mService.ApiCallGetUserRole(url, tagId);
+                    } else {
+                        Utils.showToast(this, "tag ID=" + tagId + "\nLength =" + tagId.length());
+                        Utils.showAlertDialog(this, getString(R.string.please_scan_user_card_barcode));
+                    }
+
+
                 } else {
-                    Utils.showToast(this, "tag ID=" + tagId + "\nLength =" + tagId.length());
-                    Utils.showAlertDialog(this, getString(R.string.please_scan_user_card_barcode));
-                }*/
 
+                    Utilities.showSnackBar(BarcodeScanActivity.this.findViewById(android.R.id.content),
+                            getResources().getString(R.string.ic_not_connection_message));
+                }*/
                 break;
         }
     }
@@ -179,14 +188,25 @@ public class BarcodeScanActivity extends BaseActivity implements View.OnClickLis
             }
         }
         if(isTagIdValid) {
-            if (mUserRole.equalsIgnoreCase(Constants.USER_ROLE_SYSTEM_ADMIN) || mUserRole.equalsIgnoreCase(Constants.USER_ROLE_ADMIN)) {
-                if(spfManager.isRegistered(this)) {
+            if (mUserRole.equalsIgnoreCase(userRoleType)) {
+
+                gotoNextActivity(userRoleType);
+
+                /*if(spfManager.isRegistered(this)) {
                     goToNextScreen(Constants.MAIN_ACTIVITY);
                 }else
                 {
                     goToNextScreen(Constants.LOCATION_SELECT_ACTIVITY);
-                }
-            } else {
+                }*/
+            }/*else if(mUserRole.equalsIgnoreCase(Constants.TYPE_NURSE_STAFF)){
+
+                gotoNextActivity(userRoleType);
+
+            }else if(mUserRole.equalsIgnoreCase(Constants.LAB_STAFF)){
+
+                gotoNextActivity(userRoleType);
+
+            }*/ else {
                 etRFIDNumber.setText("");
                 Utils.showAlertDialog(this, getString(R.string.user_role_not_define));
             }

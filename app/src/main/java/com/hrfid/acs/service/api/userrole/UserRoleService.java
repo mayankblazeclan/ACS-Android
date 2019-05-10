@@ -1,6 +1,7 @@
 package com.hrfid.acs.service.api.userrole;
 
 
+import com.google.gson.Gson;
 import com.hrfid.acs.service.rest.RestNoAuthClient;
 import com.hrfid.acs.util.LoggerLocal;
 
@@ -44,6 +45,8 @@ private DisposableObserver<UserRoleData> getObserver(){
 
                if(null != userRoleData)
                {
+
+                   LoggerLocal.error(TAG, "in userRoleData message ="+ new Gson().toJson(userRoleData));
                    if(userRoleData.getRoleList().size()>0){
                        mListener.onUserRoleResponse(userRoleData.getRoleList());
                    }else
