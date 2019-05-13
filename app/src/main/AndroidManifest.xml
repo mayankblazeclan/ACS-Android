@@ -36,9 +36,7 @@
 
         <activity
             android:name=".view.activity.BarcodeScanActivity"
-            android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="stateHidden"
-            android:launchMode="singleTop" />
+            android:configChanges="orientation|screenSize" />
 
         <activity
             android:name=".view.activity.SeniorStaffHomeActivity"

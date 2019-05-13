@@ -43,8 +43,8 @@ public class LabStaffHomeActivity extends AppCompatActivity implements View.OnCl
         toolbar.setTitle("Lab Staff");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+       // getSupportActionBar().setHomeButtonEnabled(true);
+       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initializeUI();
 

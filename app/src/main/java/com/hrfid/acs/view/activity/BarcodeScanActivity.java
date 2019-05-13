@@ -1,8 +1,8 @@
 package com.hrfid.acs.view.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -12,8 +12,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hrfid.acs.R;
@@ -27,14 +27,13 @@ import com.hrfid.acs.util.LoggerLocal;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
-public class BarcodeScanActivity extends BaseActivity implements View.OnClickListener,
+public class BarcodeScanActivity extends Activity implements
         UserRoleService.UserRoleInterface {
     private final String TAG = getClass().getSimpleName();
 
-    private EditText etRFIDNumber;
+    private TextView txtBarcodeNumber;
     private Button btNext;
 
     private String tagId;
@@ -55,7 +54,7 @@ public class BarcodeScanActivity extends BaseActivity implements View.OnClickLis
         spfManager = new SharedPrefsManager();
         mService = new UserRoleService(this);
 
-        etRFIDNumber.setOnTouchListener(new View.OnTouchListener() {
+        txtBarcodeNumber.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -86,50 +85,27 @@ public class BarcodeScanActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onResume() {
         super.onResume();
-       // etRFIDNumber.setText("");
+        txtBarcodeNumber.setText("");
     }
 
     private void initUI() {
         mProgressBarLayout = (RelativeLayout) findViewById(R.id.progressbar_relativelayout);
 
         btNext = (Button) findViewById(R.id.bt_next);
-        btNext.setOnClickListener(this);
-        etRFIDNumber = (EditText) findViewById(R.id.et_rfid_number);
-       // etRFIDNumber.setEnabled(false);
 
-        //etRFIDNumber.setText("E00401502B32123E");
-        etRFIDNumber.addTextChangedListener(new TextWatcher() {
+        btNext.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void onClick(View view) {
+               // mListener.userLogin();
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                Utils.showToast(BarcodeScanActivity.this, "2"+s.toString());
-                LoggerLocal.error(TAG, "TAG ID 2=" + s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                LoggerLocal.error(TAG, "TAG ID 3 =" + s.toString());
-
-            }
-        });
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_next:
-                tagId = etRFIDNumber.getText().toString();
+                tagId = txtBarcodeNumber.getText().toString();
 //                String url = spfManager.getApiUrl(getApplicationContext());
 
                 //tagId = "E00401502B31ACBC";
 
-                gotoNextActivity(userRoleType);
+                // gotoNextActivity(userRoleType);
 
-               /* if (Utilities.isNetworkConnected(BarcodeScanActivity.this)) {
+                if (Utilities.isNetworkConnected(BarcodeScanActivity.this)) {
 
                     //Calling Login API ....
                     //String url = Constants.SIT_STAGE_CONTROLPOINT + "." + Constants.CONTROLPOINT;
@@ -138,7 +114,68 @@ public class BarcodeScanActivity extends BaseActivity implements View.OnClickLis
                         mProgressBarLayout.setVisibility(View.VISIBLE);
                         mService.ApiCallGetUserRole(url, tagId);
                     } else {
-                        Utils.showToast(this, "tag ID=" + tagId + "\nLength =" + tagId.length());
+                        // Utils.showToast(this, "tag ID=" + tagId + "\nLength =" + tagId.length());
+                        Utils.showAlertDialog(BarcodeScanActivity.this, getString(R.string.please_scan_user_card_barcode));
+                    }
+
+
+                } else {
+
+                    Utilities.showSnackBar(BarcodeScanActivity.this.findViewById(android.R.id.content),
+                            getResources().getString(R.string.ic_not_connection_message));
+                }
+            }
+        });
+
+       // btNext.setOnClickListener(this);
+        txtBarcodeNumber = (TextView) findViewById(R.id.et_rfid_number);
+        txtBarcodeNumber.setText("E00401502B32123E");
+       // txtBarcodeNumber.setEnabled(false);
+
+        //txtBarcodeNumber.setText("E00401502B32123E");
+        txtBarcodeNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                Utils.showToast(BarcodeScanActivity.this, "2"+s.toString());
+                //LoggerLocal.error(TAG, "TAG ID 2=" + s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+               // LoggerLocal.error(TAG, "TAG ID 3 =" + s.toString());
+
+            }
+        });
+    }
+
+ /*   @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bt_next:
+               // txtBarcodeNumber.setText("E00401502B31ACBC");
+                //txtBarcodeNumber.setText("E00401502B32123E");
+                tagId = txtBarcodeNumber.getText().toString();
+//                String url = spfManager.getApiUrl(getApplicationContext());
+
+                //tagId = "E00401502B31ACBC";
+
+               // gotoNextActivity(userRoleType);
+
+                if (Utilities.isNetworkConnected(BarcodeScanActivity.this)) {
+
+                    //Calling Login API ....
+                    //String url = Constants.SIT_STAGE_CONTROLPOINT + "." + Constants.CONTROLPOINT;
+                    String url = "10.30.10.110:8080";
+                    if (!TextUtils.isEmpty(tagId) && Constants.USER_CARD_TAG_LENGHT != tagId.length() - 1) {
+                        mProgressBarLayout.setVisibility(View.VISIBLE);
+                        mService.ApiCallGetUserRole(url, tagId);
+                    } else {
+                       // Utils.showToast(this, "tag ID=" + tagId + "\nLength =" + tagId.length());
                         Utils.showAlertDialog(this, getString(R.string.please_scan_user_card_barcode));
                     }
 
@@ -147,10 +184,10 @@ public class BarcodeScanActivity extends BaseActivity implements View.OnClickLis
 
                     Utilities.showSnackBar(BarcodeScanActivity.this.findViewById(android.R.id.content),
                             getResources().getString(R.string.ic_not_connection_message));
-                }*/
+                }
                 break;
         }
-    }
+    }*/
 
     private void gotoNextActivity(String userRoleType) {
 
@@ -160,6 +197,7 @@ public class BarcodeScanActivity extends BaseActivity implements View.OnClickLis
             Intent mNextActivity = new Intent(BarcodeScanActivity.this, SeniorStaffHomeActivity.class);
             mNextActivity.putExtra(Constants.USER_ROLE_TYPE, userRoleType);
             startActivity(mNextActivity);
+            finish();
 
         }else if(userRoleType.equalsIgnoreCase(Constants.USER_ROLE_TYPE_NURSE_STAFF)){
 
@@ -167,6 +205,7 @@ public class BarcodeScanActivity extends BaseActivity implements View.OnClickLis
             Intent mNextActivity = new Intent(BarcodeScanActivity.this, NurseStaffHomeActivity.class);
             mNextActivity.putExtra(Constants.USER_ROLE_TYPE, userRoleType);
             startActivity(mNextActivity);
+            finish();
 
         }else {
 
@@ -174,6 +213,7 @@ public class BarcodeScanActivity extends BaseActivity implements View.OnClickLis
             Intent mNextActivity = new Intent(BarcodeScanActivity.this, LabStaffHomeActivity.class);
             mNextActivity.putExtra(Constants.USER_ROLE_TYPE, userRoleType);
             startActivity(mNextActivity);
+            finish();
 
         }
     }
@@ -207,12 +247,12 @@ public class BarcodeScanActivity extends BaseActivity implements View.OnClickLis
                 gotoNextActivity(userRoleType);
 
             }*/ else {
-                etRFIDNumber.setText("");
+                txtBarcodeNumber.setText("");
                 Utils.showAlertDialog(this, getString(R.string.user_role_not_define));
             }
         }else
         {
-            etRFIDNumber.setText("");
+            txtBarcodeNumber.setText("");
             Utils.showAlertDialog(this, getString(R.string.user_role_not_define));
         }
 

@@ -201,7 +201,7 @@
     <string name="str_select_location">Select Location</string>
     <string name="not_able_to_register_at_this_lication">Not able to register at this location please try again</string>
     <string name="update_require">Application requires update, would you like to do this now?</string>
-    <string name="user_role_not_define">You are not authorised to perform this action. Please ask your Administrator for assistance.</string>
+    <string name="user_role_not_define">Invalid User</string>
     <string name="please_scan_user_card_barcode">Please scan user card barcode.</string>
     <string name="you_have_successfuly_registered_the_device">You have successful registered the device.</string>
     <string name="role_type_technical_staff">Senior Staff \n</string>

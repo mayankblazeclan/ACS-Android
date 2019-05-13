@@ -43,8 +43,8 @@ public class SeniorStaffHomeActivity extends AppCompatActivity implements View.O
         toolbar.setTitle("Senior Staff");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+       // getSupportActionBar().setHomeButtonEnabled(true);
+       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initializeUI();
 

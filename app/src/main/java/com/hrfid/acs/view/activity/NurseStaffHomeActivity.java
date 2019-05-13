@@ -42,8 +42,8 @@ public class NurseStaffHomeActivity extends AppCompatActivity implements View.On
         toolbar.setTitle("Nurse");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setHomeButtonEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initializeUI();
 
