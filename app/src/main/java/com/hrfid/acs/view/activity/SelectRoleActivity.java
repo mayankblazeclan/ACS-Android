@@ -47,19 +47,16 @@ public class SelectRoleActivity extends Activity implements View.OnClickListener
 
         switch (v.getId()){
             case R.id.card_view_technical_staff:
-                //technicalStaffClickedFunctionality();
                 strUserType = Constants.USER_ROLE_TYPE_SENIOR_STAFF;
                 gotoLoginPage();
                 break;
 
             case R.id.card_view_nurse_staff:
-                // nurseStaffClickedFunctionality();
                 strUserType = Constants.USER_ROLE_TYPE_NURSE_STAFF;
                 gotoLoginPage();
                 break;
 
             case R.id.card_view_lab_staff:
-                //labStaffClickedFunctionality();
                 strUserType = Constants.USER_ROLE_TYPE_LAB_STAFF;
                 gotoLoginPage();
                 break;
@@ -71,11 +68,8 @@ public class SelectRoleActivity extends Activity implements View.OnClickListener
     }
 
     private void gotoLoginPage() {
-
-        //Utilities.showToast(getApplicationContext(), "Go to next Page");
         Intent mNextActivity = new Intent(SelectRoleActivity.this, BarcodeScanActivity.class);
         mNextActivity.putExtra(Constants.USER_ROLE_TYPE, strUserType);
         startActivity(mNextActivity);
-        //finish();
     }
 }

@@ -103,9 +103,9 @@ public class BarcodeScanActivity extends Activity implements
 
                 //tagId = "E00401502B31ACBC";
 
-                // gotoNextActivity(userRoleType);
+                 gotoNextActivity(userRoleType);
 
-                if (Utilities.isNetworkConnected(BarcodeScanActivity.this)) {
+                /*if (Utilities.isNetworkConnected(BarcodeScanActivity.this)) {
 
                     //Calling Login API ....
                     //String url = Constants.SIT_STAGE_CONTROLPOINT + "." + Constants.CONTROLPOINT;
@@ -123,13 +123,13 @@ public class BarcodeScanActivity extends Activity implements
 
                     Utilities.showSnackBar(BarcodeScanActivity.this.findViewById(android.R.id.content),
                             getResources().getString(R.string.ic_not_connection_message));
-                }
+                }*/
             }
         });
 
        // btNext.setOnClickListener(this);
         txtBarcodeNumber = (TextView) findViewById(R.id.et_rfid_number);
-        txtBarcodeNumber.setText("E00401502B32123E");
+       // txtBarcodeNumber.setText("E00401502B32123E");
        // txtBarcodeNumber.setEnabled(false);
 
         //txtBarcodeNumber.setText("E00401502B32123E");

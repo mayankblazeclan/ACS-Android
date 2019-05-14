@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.hrfid.acs.R;
 import com.hrfid.acs.model.StaffItem;
-import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.view.adapter.StaffItemAdapter;
 
 import java.util.ArrayList;
@@ -23,13 +22,8 @@ import java.util.ArrayList;
 /**
  * Created by MS on 08/05/19.
  */
-public class SeniorStaffHomeActivity extends AppCompatActivity implements View.OnClickListener{
+public class SeniorStaffHomeActivity extends AppCompatActivity {
 
-  /*  private Button btnCreateStudy;
-    private Button btnCalendar;
-    private Button btnBarcode;
-    private Button btnCreateInventory;
-    private Button btnCreateSubject;*/
 
     GridView gridView;
     ArrayList<StaffItem> staffItemList=new ArrayList<>();
@@ -43,8 +37,6 @@ public class SeniorStaffHomeActivity extends AppCompatActivity implements View.O
         toolbar.setTitle("Senior Staff");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
-       // getSupportActionBar().setHomeButtonEnabled(true);
-       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initializeUI();
 
@@ -53,25 +45,11 @@ public class SeniorStaffHomeActivity extends AppCompatActivity implements View.O
 
     private void initializeUI() {
 
-       /* btnCreateStudy = findViewById(R.id.btnCreateStudy);
-        btnCalendar = findViewById(R.id.btnCalendar);
-        btnBarcode = findViewById(R.id.btnBarcode);
-        btnCreateInventory = findViewById(R.id.btnCreateInventory);
-        btnCreateSubject = findViewById(R.id.btnCreateSubject);
-
-        btnCreateStudy.setOnClickListener(this);
-        btnCalendar.setOnClickListener(this);
-        btnBarcode.setOnClickListener(this);
-        btnCreateInventory.setOnClickListener(this);
-        btnCreateSubject.setOnClickListener(this);*/
-
 
         gridView = (GridView) findViewById(R.id.simpleGridView);
         staffItemList.add(new StaffItem("Study Setup",R.drawable.ic_study_setup));
         staffItemList.add(new StaffItem("Inventory Setup",R.drawable.ic_senior_inventory));
         staffItemList.add(new StaffItem("Subject Onboarding",R.drawable.ic_senior_onboarding));
-        //staffItemList.add(new StaffItem("CALENDAR",R.drawable.ic_error));
-        //staffItemList.add(new StaffItem("BARCODE",R.drawable.ic_error));
 
         StaffItemAdapter staffItemAdapter=new StaffItemAdapter(this,R.layout.activity_staff_grid_items, staffItemList);
         gridView.setAdapter(staffItemAdapter);
@@ -85,36 +63,6 @@ public class SeniorStaffHomeActivity extends AppCompatActivity implements View.O
             }
         });
 
-
-    }
-
-
-    @Override
-    public void onClick(View v) {
-/*
-        switch (v.getId()){
-            case R.id.btnCreateStudy:
-                Utilities.showToast(getApplicationContext(), "Tapped on Create Study");
-                break;
-
-            case R.id.btnCalendar:
-                Utilities.showToast(getApplicationContext(), "Tapped on CALENDAR");
-                break;
-
-            case R.id.btnBarcode:
-                Utilities.showToast(getApplicationContext(), "Tapped on BARCODE");
-                break;
-
-            case R.id.btnCreateInventory:
-                Utilities.showToast(getApplicationContext(), "Tapped on Create Inventory");
-                break;
-
-            case R.id.btnCreateSubject:
-                Utilities.showToast(getApplicationContext(), "Tapped on Create Subject");
-                break;
-            default:
-                break;
-        }*/
 
     }
 

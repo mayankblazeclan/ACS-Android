@@ -23,11 +23,7 @@ import java.util.ArrayList;
 /**
  * Created by MS on 08/05/19.
  */
-public class NurseStaffHomeActivity extends AppCompatActivity implements View.OnClickListener {
-
-   /* private Button btnViewStudy;
-    private Button btnCalendar;
-    private Button btnBarcode;*/
+public class NurseStaffHomeActivity extends AppCompatActivity {
 
     GridView gridView;
     ArrayList<StaffItem> staffItemList=new ArrayList<>();
@@ -42,8 +38,6 @@ public class NurseStaffHomeActivity extends AppCompatActivity implements View.On
         toolbar.setTitle("Nurse");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
-        //getSupportActionBar().setHomeButtonEnabled(true);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initializeUI();
 
@@ -51,19 +45,11 @@ public class NurseStaffHomeActivity extends AppCompatActivity implements View.On
 
     private void initializeUI() {
 
-       /* btnViewStudy = findViewById(R.id.btnViewStudy);
-        btnCalendar = findViewById(R.id.btnCalendar);
-        btnBarcode = findViewById(R.id.btnBarcode);
-
-        btnViewStudy.setOnClickListener(this);
-        btnCalendar.setOnClickListener(this);
-        btnBarcode.setOnClickListener(this);*/
 
         gridView = (GridView) findViewById(R.id.simpleGridView);
         staffItemList.add(new StaffItem("QC \n",R.drawable.ic_nurse_qc));
         staffItemList.add(new StaffItem("Sample Intake",R.drawable.ic_nurse_sample_intake));
         staffItemList.add(new StaffItem("Guidelines \n",R.drawable.ic_nurse_guidelines));
-       // staffItemList.add(new StaffItem("BARCODE",R.drawable.ic_error));
 
         StaffItemAdapter staffItemAdapter=new StaffItemAdapter(this,R.layout.activity_staff_grid_items, staffItemList);
         gridView.setAdapter(staffItemAdapter);
@@ -76,29 +62,6 @@ public class NurseStaffHomeActivity extends AppCompatActivity implements View.On
                 Toast.makeText(NurseStaffHomeActivity.this, "Tapped On " + staffItemList.get(i).getTagName(), Toast.LENGTH_LONG).show();
             }
         });
-    }
-
-
-    @Override
-    public void onClick(View v) {
-
-      /*  switch (v.getId()){
-            case R.id.btnViewStudy:
-                Utilities.showToast(getApplicationContext(), "Tapped on View Study");
-                break;
-
-            case R.id.btnCalendar:
-                Utilities.showToast(getApplicationContext(), "Tapped on CALENDAR");
-                break;
-
-            case R.id.btnBarcode:
-                Utilities.showToast(getApplicationContext(), "Tapped on BARCODE");
-                break;
-
-            default:
-                break;
-        }*/
-
     }
 
     @Override

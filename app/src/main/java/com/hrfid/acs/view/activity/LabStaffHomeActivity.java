@@ -24,12 +24,7 @@ import java.util.ArrayList;
 /**
  * Created by MS on 08/05/19.
  */
-public class LabStaffHomeActivity extends AppCompatActivity implements View.OnClickListener {
-
-  /*  private Button btnViewStudy;
-    private Button btnCalendar;
-    private Button btnBarcode;*/
-
+public class LabStaffHomeActivity extends AppCompatActivity {
 
     GridView gridView;
     ArrayList<StaffItem> staffItemList=new ArrayList<>();
@@ -43,23 +38,12 @@ public class LabStaffHomeActivity extends AppCompatActivity implements View.OnCl
         toolbar.setTitle("Lab Staff");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
-       // getSupportActionBar().setHomeButtonEnabled(true);
-       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initializeUI();
 
     }
 
     private void initializeUI() {
-
-        /*btnViewStudy = findViewById(R.id.btnViewStudy);
-        btnCalendar = findViewById(R.id.btnCalendar);
-        btnBarcode = findViewById(R.id.btnBarcode);
-
-        btnViewStudy.setOnClickListener(this);
-        btnCalendar.setOnClickListener(this);
-        btnBarcode.setOnClickListener(this);*/
-
         gridView = (GridView) findViewById(R.id.simpleGridView);
         staffItemList.add(new StaffItem("Lab Processing",R.drawable.ic_lab_staff_lab_processing));
         staffItemList.add(new StaffItem("Storage \n",R.drawable.ic_lab_storage));
@@ -76,29 +60,6 @@ public class LabStaffHomeActivity extends AppCompatActivity implements View.OnCl
                 Toast.makeText(LabStaffHomeActivity.this, "Tapped On " + staffItemList.get(i).getTagName(), Toast.LENGTH_LONG).show();
             }
         });
-    }
-
-
-    @Override
-    public void onClick(View v) {
-
-        /*switch (v.getId()){
-            case R.id.btnViewStudy:
-                Utilities.showToast(getApplicationContext(), "Tapped on View Study");
-                break;
-
-            case R.id.btnCalendar:
-                Utilities.showToast(getApplicationContext(), "Tapped on CALENDAR");
-                break;
-
-            case R.id.btnBarcode:
-                Utilities.showToast(getApplicationContext(), "Tapped on BARCODE");
-                break;
-
-            default:
-                break;
-        }*/
-
     }
 
     @Override
