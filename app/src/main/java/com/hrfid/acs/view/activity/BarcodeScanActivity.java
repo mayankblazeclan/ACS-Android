@@ -105,11 +105,11 @@ public class BarcodeScanActivity extends Activity implements
 
                  gotoNextActivity(userRoleType);
 
-                /*if (Utilities.isNetworkConnected(BarcodeScanActivity.this)) {
+              /*  if (Utilities.isNetworkConnected(BarcodeScanActivity.this)) {
 
                     //Calling Login API ....
                     //String url = Constants.SIT_STAGE_CONTROLPOINT + "." + Constants.CONTROLPOINT;
-                    String url = "10.30.10.110:8080";
+                    String url = "sit-stage.controlpoint.healthrfid.com/";
                     if (!TextUtils.isEmpty(tagId) && Constants.USER_CARD_TAG_LENGHT != tagId.length() - 1) {
                         mProgressBarLayout.setVisibility(View.VISIBLE);
                         mService.ApiCallGetUserRole(url, tagId);
@@ -290,12 +290,8 @@ public class BarcodeScanActivity extends Activity implements
 
     @Override
     public void onBackPressed() {
-
-        if(spfManager.isRegistered(this)) {
-            LoggerLocal.error(TAG, "Cant go back frome here");
-        }else
-        {
-            super.onBackPressed();
-        }
+        Intent mNextActivity = new Intent(BarcodeScanActivity.this, SelectRoleActivity.class);
+        startActivity(mNextActivity);
+        finish();
     }
 }

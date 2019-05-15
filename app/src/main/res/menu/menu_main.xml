@@ -6,9 +6,40 @@
 
     <item
         android:id="@+id/action_notification"
+        android:icon="@mipmap/ic_action_menu"
+        android:orderInCategory="300"
+        android:title="Cart"
+        app:actionLayout="@layout/notification_bell_with_count_layout"
+        app:showAsAction="always" />
+
+
+
+    <!--<item
+        android:id="@+id/action_notification"
         android:orderInCategory="300"
         android:title="User"
         android:icon="@mipmap/ic_action_menu"
+        android:visible="true"
         app:showAsAction="ifRoom"></item>
+
+    <com.nex3z.notificationbadge.NotificationBadge
+        android:id="@+id/badge"
+        android:layout_toRightOf="@id/action_notification"
+        android:layout_alignTop="@id/action_notification"
+        android:layout_marginLeft="-16dp"
+        android:layout_marginTop="-8dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        app:badgeBackground="@drawable/notification_badge_count"
+        app:maxTextLength="2"
+        ></com.nex3z.notificationbadge.NotificationBadge>-->
+
+    <item
+        android:id="@+id/action_logout"
+        android:orderInCategory="300"
+        android:title="User"
+        android:icon="@mipmap/ic_top_logout"
+        app:showAsAction="ifRoom"></item>
+
 
 </menu>

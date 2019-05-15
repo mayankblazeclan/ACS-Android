@@ -71,5 +71,12 @@ public class SelectRoleActivity extends Activity implements View.OnClickListener
         Intent mNextActivity = new Intent(SelectRoleActivity.this, BarcodeScanActivity.class);
         mNextActivity.putExtra(Constants.USER_ROLE_TYPE, strUserType);
         startActivity(mNextActivity);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+       // super.onBackPressed();
+        this.finish();
     }
 }

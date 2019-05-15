@@ -97,16 +97,17 @@ public class Utils {
 
         // Setting Dialog Title
         alertDialog.setTitle(title);
+        alertDialog.setCancelable(isCancelAble);
 
         // Setting Dialog Message
         alertDialog.setMessage(msg);
 
         // Setting Icon to Dialog
-        alertDialog.setIcon(R.drawable.ic_error);
+       // alertDialog.setIcon(R.drawable.ic_error);
         // Setting Positive "Yes" Button
-        alertDialog.setPositiveButton("YES", positiveOnClick);
+        alertDialog.setPositiveButton(positiveLabel, positiveOnClick);
         // Setting Negative "NO" Button
-        alertDialog.setNegativeButton("NO", negativeOnClick
+        alertDialog.setNegativeButton(negativeLabel, negativeOnClick
 
         );
 
