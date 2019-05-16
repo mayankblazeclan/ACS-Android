@@ -21,7 +21,6 @@ import com.hrfid.acs.data.Constants;
 import com.hrfid.acs.model.StaffItem;
 import com.hrfid.acs.util.Utils;
 import com.hrfid.acs.view.adapter.StaffItemAdapter;
-import com.nex3z.notificationbadge.NotificationBadge;
 
 import java.util.ArrayList;
 
@@ -33,8 +32,6 @@ public class SeniorStaffHomeActivity extends AppCompatActivity {
 
     GridView gridView;
     ArrayList<StaffItem> staffItemList=new ArrayList<>();
-    NotificationBadge mBadge;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,9 +56,6 @@ public class SeniorStaffHomeActivity extends AppCompatActivity {
         staffItemList.add(new StaffItem("Inventory Setup",R.drawable.ic_senior_inventory));
         staffItemList.add(new StaffItem("Subject Onboarding",R.drawable.ic_senior_onboarding));
 
-       // mBadge = (NotificationBadge) findViewById(R.id.badge);
-        //mBadge.setNumber(10);
-
         StaffItemAdapter staffItemAdapter=new StaffItemAdapter(this,R.layout.activity_staff_grid_items, staffItemList);
         gridView.setAdapter(staffItemAdapter);
 
@@ -80,7 +74,7 @@ public class SeniorStaffHomeActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
        // super.onBackPressed();
-        Utils.createDialogTwoButtons(SeniorStaffHomeActivity.this, "Logout", true, "Are you sure you want to logout?", "OK", "Cancel", new DialogInterface.OnClickListener() {
+        Utils.createDialogTwoButtons(SeniorStaffHomeActivity.this, "Logout", true, "Are you sure you want to logout?", "YES", "NO", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -106,13 +100,12 @@ public class SeniorStaffHomeActivity extends AppCompatActivity {
 
         final View notificaitons = menu.findItem(R.id.action_notification).getActionView();
 
-        TextView txtViewCount = (TextView) notificaitons.findViewById(R.id.txtCount);
+        final TextView txtViewCount = (TextView) notificaitons.findViewById(R.id.txtCount);
         txtViewCount.setText("10");
-        //updateHotCount(count++);
         txtViewCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // updateHotCount(count++);
+                txtViewCount.setVisibility(View.GONE);
                 Toast.makeText(SeniorStaffHomeActivity.this, "Notification tapped", Toast.LENGTH_LONG).show();
                 Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, NotificationActivity.class);
                 startActivity(mNextActivity);
@@ -121,7 +114,7 @@ public class SeniorStaffHomeActivity extends AppCompatActivity {
         notificaitons.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //
+                txtViewCount.setVisibility(View.GONE);
                 Toast.makeText(SeniorStaffHomeActivity.this, "Notification tapped", Toast.LENGTH_LONG).show();
                 Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, NotificationActivity.class);
                 startActivity(mNextActivity);
@@ -137,19 +130,10 @@ public class SeniorStaffHomeActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        //Notification Functionality
-        if (id == R.id.action_notification) {
-            Toast.makeText(SeniorStaffHomeActivity.this, "Notification tapped", Toast.LENGTH_LONG).show();
-            Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, NotificationActivity.class);
-            startActivity(mNextActivity);
-            //finish();
-            return true;
-        }
-
         //Logout Functionality
         if (id == R.id.action_logout) {
             //Toast.makeText(SeniorStaffHomeActivity.this, "Logout tapped", Toast.LENGTH_LONG).show();
-            Utils.createDialogTwoButtons(SeniorStaffHomeActivity.this, "Logout", true, "Are you sure you want to logout?", "OK", "Cancel", new DialogInterface.OnClickListener() {
+            Utils.createDialogTwoButtons(SeniorStaffHomeActivity.this, "Logout", true, "Are you sure you want to logout?", "YES", "NO", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 

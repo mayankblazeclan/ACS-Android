@@ -11,9 +11,9 @@
 
     <ImageView
         android:id="@+id/hotlist_bell"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="0dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="5dp"
         android:contentDescription="Notification Icon"
         android:gravity="center"
         android:src="@mipmap/ic_action_menu" />
@@ -27,8 +27,9 @@
         android:layout_marginRight="0dp"
         android:background="@color/green"
         android:gravity="center"
+        android:padding="3dp"
         android:minWidth="17sp"
-        android:text="0"
+        android:text="10"
         android:textColor="#ffffffff"
         android:textSize="12sp" />
 </RelativeLayout>

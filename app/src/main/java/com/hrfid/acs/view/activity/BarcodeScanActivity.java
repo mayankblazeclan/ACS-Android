@@ -10,8 +10,10 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +35,7 @@ public class BarcodeScanActivity extends Activity implements
         UserRoleService.UserRoleInterface {
     private final String TAG = getClass().getSimpleName();
 
-    private TextView txtBarcodeNumber;
+    private EditText txtBarcodeNumber;
     private Button btNext;
 
     private String tagId;
@@ -48,6 +50,8 @@ public class BarcodeScanActivity extends Activity implements
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_bcuser_login);
+        this.getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         initUI();
         getIntentData();
@@ -61,12 +65,18 @@ public class BarcodeScanActivity extends Activity implements
                 v.onTouchEvent(event);
                 InputMethodManager inputMethod = (InputMethodManager)v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (inputMethod!= null) {
-                    inputMethod.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    //txtBarcodeNumber.requestFocus();
+                   /* InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);*/
+
+                    getWindow().setSoftInputMode(
+                            WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    //txtBarcodeNumber.setFocusable(true);
+                    //inputMethod.showSoftInput(txtBarcodeNumber, InputMethodManager.SHOW_IMPLICIT);
                 }
                 return true;
             }
         });
-
     }
 
     private void getIntentData() {
@@ -98,12 +108,15 @@ public class BarcodeScanActivity extends Activity implements
             public void onClick(View view) {
                // mListener.userLogin();
 
-                tagId = txtBarcodeNumber.getText().toString();
+                if(txtBarcodeNumber.getText().length() >0 && txtBarcodeNumber.getText().length()<17){
+
+                    tagId = txtBarcodeNumber.getText().toString();
+
 //                String url = spfManager.getApiUrl(getApplicationContext());
 
-                //tagId = "E00401502B31ACBC";
+                    //tagId = "E00401502B31ACBC";
 
-                 gotoNextActivity(userRoleType);
+                    gotoNextActivity(userRoleType);
 
               /*  if (Utilities.isNetworkConnected(BarcodeScanActivity.this)) {
 
@@ -124,11 +137,18 @@ public class BarcodeScanActivity extends Activity implements
                     Utilities.showSnackBar(BarcodeScanActivity.this.findViewById(android.R.id.content),
                             getResources().getString(R.string.ic_not_connection_message));
                 }*/
+
+                }else {
+
+                    gotoNextActivity(userRoleType);
+                    //Utilities.showToast(getApplicationContext(),"Please enter valid input");
+
+                }
             }
         });
 
        // btNext.setOnClickListener(this);
-        txtBarcodeNumber = (TextView) findViewById(R.id.et_rfid_number);
+        txtBarcodeNumber = (EditText) findViewById(R.id.et_rfid_number);
        // txtBarcodeNumber.setText("E00401502B32123E");
        // txtBarcodeNumber.setEnabled(false);
 
@@ -152,42 +172,6 @@ public class BarcodeScanActivity extends Activity implements
             }
         });
     }
-
- /*   @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_next:
-               // txtBarcodeNumber.setText("E00401502B31ACBC");
-                //txtBarcodeNumber.setText("E00401502B32123E");
-                tagId = txtBarcodeNumber.getText().toString();
-//                String url = spfManager.getApiUrl(getApplicationContext());
-
-                //tagId = "E00401502B31ACBC";
-
-               // gotoNextActivity(userRoleType);
-
-                if (Utilities.isNetworkConnected(BarcodeScanActivity.this)) {
-
-                    //Calling Login API ....
-                    //String url = Constants.SIT_STAGE_CONTROLPOINT + "." + Constants.CONTROLPOINT;
-                    String url = "10.30.10.110:8080";
-                    if (!TextUtils.isEmpty(tagId) && Constants.USER_CARD_TAG_LENGHT != tagId.length() - 1) {
-                        mProgressBarLayout.setVisibility(View.VISIBLE);
-                        mService.ApiCallGetUserRole(url, tagId);
-                    } else {
-                       // Utils.showToast(this, "tag ID=" + tagId + "\nLength =" + tagId.length());
-                        Utils.showAlertDialog(this, getString(R.string.please_scan_user_card_barcode));
-                    }
-
-
-                } else {
-
-                    Utilities.showSnackBar(BarcodeScanActivity.this.findViewById(android.R.id.content),
-                            getResources().getString(R.string.ic_not_connection_message));
-                }
-                break;
-        }
-    }*/
 
     private void gotoNextActivity(String userRoleType) {
 
@@ -232,21 +216,7 @@ public class BarcodeScanActivity extends Activity implements
 
                 gotoNextActivity(userRoleType);
 
-                /*if(spfManager.isRegistered(this)) {
-                    goToNextScreen(Constants.MAIN_ACTIVITY);
-                }else
-                {
-                    goToNextScreen(Constants.LOCATION_SELECT_ACTIVITY);
-                }*/
-            }/*else if(mUserRole.equalsIgnoreCase(Constants.TYPE_NURSE_STAFF)){
-
-                gotoNextActivity(userRoleType);
-
-            }else if(mUserRole.equalsIgnoreCase(Constants.LAB_STAFF)){
-
-                gotoNextActivity(userRoleType);
-
-            }*/ else {
+            }else {
                 txtBarcodeNumber.setText("");
                 Utils.showAlertDialog(this, getString(R.string.user_role_not_define));
             }
@@ -263,29 +233,6 @@ public class BarcodeScanActivity extends Activity implements
         mProgressBarLayout.setVisibility(View.GONE);
 
         Utils.showAlertDialog(this, getString(R.string.something_went_wrong));
-    }
-
-    private void goToNextScreen(int mActivity) {
-
-        Intent intent;
-
-        switch (mActivity)
-        {
-            case Constants.MAIN_ACTIVITY:
-               // intent = new Intent(BarcodeScanActivity.this, MainActivity.class);
-                //startActivity(intent);
-                Toast.makeText(BarcodeScanActivity.this, "Go to MAINACTIVITY", Toast.LENGTH_LONG).show();
-                break;
-
-            case Constants.LOCATION_SELECT_ACTIVITY:
-                //intent = new Intent(BarcodeScanActivity.this, LocationChangeActivity.class);
-                //startActivity(intent);
-                Toast.makeText(BarcodeScanActivity.this, "Go to LOCATION_SELECT_ACTIVITY", Toast.LENGTH_LONG).show();
-
-                break;
-        }
-
-
     }
 
     @Override

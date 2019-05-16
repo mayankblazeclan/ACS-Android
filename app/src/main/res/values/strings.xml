@@ -213,5 +213,6 @@
     <string name="btn_create_inventory">Create Inventory</string>
     <string name="btn_create_subjects">Create subjects</string>
     <string name="btn_view_study">View Study</string>
+    <string name="logout_message">\"Are you sure you want to logout?\"</string>
 
 </resources>

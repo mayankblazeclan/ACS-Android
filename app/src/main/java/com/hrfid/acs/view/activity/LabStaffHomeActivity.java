@@ -1,5 +1,7 @@
 package com.hrfid.acs.view.activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,12 +13,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hrfid.acs.R;
 import com.hrfid.acs.data.Constants;
 import com.hrfid.acs.model.StaffItem;
 import com.hrfid.acs.util.Utilities;
+import com.hrfid.acs.util.Utils;
 import com.hrfid.acs.view.adapter.StaffItemAdapter;
 
 import java.util.ArrayList;
@@ -64,20 +68,52 @@ public class LabStaffHomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        this.finish();
+        // super.onBackPressed();
+        Utils.createDialogTwoButtons(LabStaffHomeActivity.this, "Logout", true, getString(R.string.logout_message), "YES", "NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                Intent mNextActivity = new Intent(LabStaffHomeActivity.this, SelectRoleActivity.class);
+                startActivity(mNextActivity);
+                finish();
+            }
+        }, null);
+        // this.finish();
     }
 
-    @Override
+   /* @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        final View notificaitons = menu.findItem(R.id.action_notification).getActionView();
+
+        final TextView txtViewCount = (TextView) notificaitons.findViewById(R.id.txtCount);
+        txtViewCount.setText("10");
+        txtViewCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtViewCount.setVisibility(View.GONE);
+                //Toast.makeText(LabStaffHomeActivity.this, "Notification tapped", Toast.LENGTH_LONG).show();
+                Intent mNextActivity = new Intent(LabStaffHomeActivity.this, NotificationActivity.class);
+                startActivity(mNextActivity);
+            }
+        });
+        notificaitons.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtViewCount.setVisibility(View.GONE);
+                Toast.makeText(LabStaffHomeActivity.this, "Notification tapped", Toast.LENGTH_LONG).show();
+                Intent mNextActivity = new Intent(LabStaffHomeActivity.this, NotificationActivity.class);
+                startActivity(mNextActivity);
+            }
+        });
         return true;
     }
 
@@ -89,13 +125,21 @@ public class LabStaffHomeActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_notification) {
-            Toast.makeText(LabStaffHomeActivity.this, "Notification tapped", Toast.LENGTH_LONG).show();
+        //Logout Functionality
+        if (id == R.id.action_logout) {
+            //Toast.makeText(SeniorStaffHomeActivity.this, "Logout tapped", Toast.LENGTH_LONG).show();
+            Utils.createDialogTwoButtons(LabStaffHomeActivity.this, "Logout", true, getString(R.string.logout_message), "YES", "NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    Intent mNextActivity = new Intent(LabStaffHomeActivity.this, SelectRoleActivity.class);
+                    startActivity(mNextActivity);
+                    finish();
+                }
+            }, null);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-
 }

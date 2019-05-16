@@ -8,19 +8,10 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.Toast;
-
 import com.hrfid.acs.R;
-import com.hrfid.acs.model.StaffItem;
 import com.hrfid.acs.util.DataModel;
 import com.hrfid.acs.view.adapter.NotificationItemAdapter;
-import com.hrfid.acs.view.adapter.StaffItemAdapter;
-import com.nex3z.notificationbadge.NotificationBadge;
 
 import java.util.ArrayList;
 
@@ -33,8 +24,6 @@ public class NotificationActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private static RecyclerView recyclerView;
     private static ArrayList<DataModel> data;
-    static View.OnClickListener myOnClickListener;
-    private static ArrayList<Integer> removedItems;
 
 
     static String[] nameArray = {"Senior staff has changed study schedule of Study-no/name from ‘old date’ to 'new date",
@@ -82,27 +71,6 @@ public class NotificationActivity extends AppCompatActivity {
 
     private void initializeUI() {
 
-
-
-       /* gridView = (GridView) findViewById(R.id.simpleGridView);
-        staffItemList.add(new StaffItem("QC \n",R.drawable.ic_nurse_qc));
-        staffItemList.add(new StaffItem("Sample Intake",R.drawable.ic_nurse_sample_intake));
-        staffItemList.add(new StaffItem("Guidelines \n",R.drawable.ic_nurse_guidelines));
-
-        StaffItemAdapter staffItemAdapter=new StaffItemAdapter(this,R.layout.activity_staff_grid_items, staffItemList);
-        gridView.setAdapter(staffItemAdapter);
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int i, long id) {
-                Toast.makeText(NotificationActivity.this, "Tapped On " + staffItemList.get(i).getTagName(), Toast.LENGTH_LONG).show();
-            }
-        });*/
-
-
-
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview_list);
         recyclerView.setHasFixedSize(true);
 
@@ -119,9 +87,6 @@ public class NotificationActivity extends AppCompatActivity {
                     drawableArray[i]
             ));
         }
-
-        removedItems = new ArrayList<Integer>();
-
         adapter = new NotificationItemAdapter(data);
         recyclerView.setAdapter(adapter);
 
@@ -139,27 +104,4 @@ public class NotificationActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return false;
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_notification) {
-            Toast.makeText(NotificationActivity.this, "Notification tapped", Toast.LENGTH_LONG).show();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }
