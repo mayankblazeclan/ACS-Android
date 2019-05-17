@@ -36,6 +36,8 @@ import static android.support.constraint.Constraints.TAG;
 public class Utils {
 
 
+    static Handler handler, handler2;
+    static Runnable runnable, runnable2;
     private static final long TIME_TO_DISMISS = 3000; // 3 Seconds
 
     public static boolean isNotNullOrEmpty(String value) {
@@ -466,6 +468,79 @@ public class Utils {
         }
         LoggerLocal.error(TAG, "getAppVersion() ="+result);
         return result;
+    }
+
+    public static void startIdleTimeOut(final Activity activity) {
+        handler = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                // manageBackup(true,false);
+                //Utils.showAlertDialog(activity, "u r logged Out....");
+
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
+// ...Irrelevant code for customizing the buttons and title
+                LayoutInflater inflater = activity.getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.alert_dialog_with_one_button, null);
+                dialogBuilder.setView(dialogView);
+                final AlertDialog alertDialog = dialogBuilder.create();
+
+                TextView tvDesc = (TextView) dialogView.findViewById(R.id.tv_dialog_desc);
+                tvDesc.setText("You will be logout after 5 min");
+                Button btDialogOk = (Button) dialogView.findViewById(R.id.bt_dialog_ok);
+                btDialogOk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                        Utils.stopHandler();  //first stop the timer and then again start it
+                        Utils.startHandler();
+                    }
+                });
+
+                alertDialog.setCanceledOnTouchOutside(false);
+                alertDialog.show();
+            }
+        };
+
+        handler2 = new Handler();
+        runnable2 = new Runnable() {
+            @Override
+            public void run() {
+                // manageBackup(true,false);
+                //Utils.showAlertDialog(activity, "u r logged Out....");
+
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
+// ...Irrelevant code for customizing the buttons and title
+                LayoutInflater inflater = activity.getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.alert_dialog_with_one_button, null);
+                dialogBuilder.setView(dialogView);
+                final AlertDialog alertDialog = dialogBuilder.create();
+
+                TextView tvDesc = (TextView) dialogView.findViewById(R.id.tv_dialog_desc);
+                tvDesc.setText("You are logout..Please re-login");
+                Button btDialogOk = (Button) dialogView.findViewById(R.id.bt_dialog_ok);
+                btDialogOk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                        Utils.stopHandler();  //first stop the timer and then again start it
+                        Utils.startHandler();
+                    }
+                });
+
+                alertDialog.setCanceledOnTouchOutside(false);
+                alertDialog.show();
+            }
+        };
+    }
+
+    public static void stopHandler() {
+        handler.removeCallbacks(runnable);
+        handler2.removeCallbacks(runnable);
+    }
+    public static void startHandler() {
+        handler.postDelayed(runnable, 1*60*1000); //for 1 minutes
+        handler2.postDelayed(runnable2, 2*60*1000); //for 2 minutes
     }
 
 }

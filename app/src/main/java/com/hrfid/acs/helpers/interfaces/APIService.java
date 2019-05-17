@@ -1,6 +1,9 @@
 package com.hrfid.acs.helpers.interfaces;
 
 
+import com.hrfid.acs.helpers.request.CommonRequestModel;
+import com.hrfid.acs.helpers.request.LogoutRequest;
+
 import java.util.Map;
 
 import okhttp3.RequestBody;
@@ -20,7 +23,11 @@ import retrofit2.http.Url;
 public interface APIService {
 
 
-  @POST("api/facebook/fblogin")
+  //  LOG OUT
+  @POST("acs/api/user/logout/")
+  Call<ResponseBody> logoutApi(@Body CommonRequestModel commonRequestModel);
+
+ /* @POST("api/facebook/fblogin")
   Call<ResponseBody> loginFBToSSOAPI(@Body RequestBody body);
 
   @POST("api/sso/validatessoticket")
@@ -118,7 +125,7 @@ public interface APIService {
 
   // GET LiveStreaming and Archived Videos List
   @GET("HotSpotLiveStreaming/LiveStreamingList")
-  Call<ResponseBody> getLiveStreamingListAPI();
+  Call<ResponseBody> getLiveStreamingListAPI();*/
 
   // PUSH NOTIFICATIONS BASED API
 /*

@@ -1,8 +1,10 @@
 package com.hrfid.acs.components;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,13 +16,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hrfid.acs.R;
+import com.hrfid.acs.util.Utils;
+import com.hrfid.acs.view.activity.SelectRoleActivity;
 import com.hrfid.acs.view.activity.SeniorStaffHomeActivity;
 
 
 public class BaseActivity extends AppCompatActivity {
 
+    static Handler handler;
+    static Runnable runnable;
 
-    public Toolbar toolbar;
+    /*public Toolbar toolbar;
 
 
     @Override
@@ -76,7 +82,7 @@ public class BaseActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
 
     /**
@@ -119,6 +125,25 @@ public class BaseActivity extends AppCompatActivity {
   /*  private void showSettings() {
         Intent mSettingsActivity = new Intent(getApplicationContext(), SettingsActivity.class);
         startActivity(mSettingsActivity);
+    }*/
+
+
+   /* public static void startIdleTimeOut(final Activity activity) {
+        handler = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                // manageBackup(true,false);
+                Utils.showAlertDialog(activity, "u r logged Out....");
+            }
+        };
+    }
+
+    public void stopHandler() {
+        handler.removeCallbacks(runnable);
+    }
+    public void startHandler() {
+        handler.postDelayed(runnable, 15*60*1000); //for 15 minutes
     }*/
 
 }

@@ -12,13 +12,13 @@ import android.widget.Toast;
 
 import com.hrfid.acs.R;
 import com.hrfid.acs.data.Constants;
-import com.hrfid.acs.util.LogOutTimerUtil;
+import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
 
 /**
  * Created by MS on 08/05/19.
  */
-public class SelectRoleActivity extends Activity implements View.OnClickListener, LogOutTimerUtil.LogOutListener {
+public class SelectRoleActivity extends Activity implements View.OnClickListener{
 
     private static final String TAG = "SelectRoleActivity";
     private String strUserType;
@@ -30,9 +30,10 @@ public class SelectRoleActivity extends Activity implements View.OnClickListener
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_role_type);
-
+       // Utils.startIdleTimeOut(this);
 
         initializeUI();
+
 
     }
 
@@ -54,17 +55,33 @@ public class SelectRoleActivity extends Activity implements View.OnClickListener
         switch (v.getId()){
             case R.id.card_view_technical_staff:
                 strUserType = Constants.USER_ROLE_TYPE_SENIOR_STAFF;
-                gotoLoginPage();
+                if (Utilities.isNetworkConnected(SelectRoleActivity.this)) {
+                    gotoLoginPage();
+                } else {
+                    Utils.showAlertDialog(SelectRoleActivity.this, getString(R.string.no_internet_connection));
+                }
+
+
                 break;
 
             case R.id.card_view_nurse_staff:
                 strUserType = Constants.USER_ROLE_TYPE_NURSE_STAFF;
-                gotoLoginPage();
+                // gotoLoginPage();
+                if (Utilities.isNetworkConnected(SelectRoleActivity.this)) {
+                    gotoLoginPage();
+                } else {
+                    Utils.showAlertDialog(SelectRoleActivity.this, getString(R.string.no_internet_connection));
+                }
                 break;
 
             case R.id.card_view_lab_staff:
                 strUserType = Constants.USER_ROLE_TYPE_LAB_STAFF;
-                gotoLoginPage();
+                //gotoLoginPage();
+                if (Utilities.isNetworkConnected(SelectRoleActivity.this)) {
+                    gotoLoginPage();
+                } else {
+                    Utils.showAlertDialog(SelectRoleActivity.this, getString(R.string.no_internet_connection));
+                }
                 break;
 
             default:
@@ -82,13 +99,13 @@ public class SelectRoleActivity extends Activity implements View.OnClickListener
 
     @Override
     public void onBackPressed() {
-       // super.onBackPressed();
+        // super.onBackPressed();
 
         Utils.createDialogTwoButtons(SelectRoleActivity.this, "Exit", true, "Are you sure you want to exit from app?", "OK", "Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-               // Intent mNextActivity = new Intent(SelectRoleActivity.this, SelectRoleActivity.class);
+                // Intent mNextActivity = new Intent(SelectRoleActivity.this, SelectRoleActivity.class);
                 //startActivity(mNextActivity);
                 finish();
             }
@@ -99,25 +116,26 @@ public class SelectRoleActivity extends Activity implements View.OnClickListener
     @Override
     protected void onStart() {
         super.onStart();
-        LogOutTimerUtil.startLogoutTimer(SelectRoleActivity.this, this);
         Log.e(TAG, "OnStart () &&& Starting timer");
+        // Utils.stopHandler();  //first stop the timer and then again start it
+        //Utils.startHandler();
     }
 
 
-    @Override
+   /* @Override
     public void onUserInteraction() {
         super.onUserInteraction();
-        LogOutTimerUtil.startLogoutTimer(SelectRoleActivity.this, this);
         Log.e(TAG, "User interacting with screen");
+
+        Utils.stopHandler();  //first stop the timer and then again start it
+        Utils.startHandler();
     }
 
-    /**
-     * Performing idle time logout
-     */
     @Override
-    public void doLogout() {
-        // write your stuff here
-        //Toast.makeText(SelectRoleActivity.this, "u r logged Out....", Toast.LENGTH_LONG).show();
-        Utils.showAlertDialog(SelectRoleActivity.this, "u r logged Out....");
-    }
+    protected void onResume() {
+        super.onResume();
+        Log.e(TAG, "onResume () &&& Starting timer");
+        Utils.stopHandler();  //first stop the timer and then again start it
+        Utils.startHandler();
+    }*/
 }

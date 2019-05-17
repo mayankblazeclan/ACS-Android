@@ -11,8 +11,8 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.http.GET;
-import retrofit2.http.Path;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
 
 public class UserRoleService {
 
@@ -24,15 +24,15 @@ public class UserRoleService {
         this.mListener = mListener;
     }
 
-    public void ApiCallGetUserRole(String url, String tagId){
-        getObservable(url,tagId).subscribe(getObserver());
+    public void ApiCallGetUserRole(String url, LoginRequestModel loginRequestModel){
+        getObservable(url, loginRequestModel).subscribe(getObserver());
     }
 
-   private Observable<UserRoleData> getObservable(String url, String tagId)
+   private Observable<UserRoleData> getObservable(String url, LoginRequestModel loginRequestModel)
    {
        return RestNoAuthClient.RestNoAuthClient(url)
                .create(UserRoleAPI.class)
-               .getUserRole(tagId)
+               .getUserRole(loginRequestModel)
                .subscribeOn(Schedulers.io())
                .observeOn(AndroidSchedulers.mainThread());
 
@@ -77,8 +77,11 @@ private DisposableObserver<UserRoleData> getObserver(){
       /*  @GET("/api/user/userRole/{type}")
         Observable<UserRoleData> getUserRole(@Query("type") String tagID);
 */
-        @GET("/api/user/userRole/{tagid}")
-        Observable<UserRoleData> getUserRole(@Path("tagid") String tagID);
+        //@GET("/api/user/userRole/{tagid}")
+        //Observable<UserRoleData> getUserRole(@Query("type") String tagID);
+
+        @POST("/acs/api/user/userRole/")
+        Observable<UserRoleData> getUserRole(@Body LoginRequestModel loginRequestModel);
 
     }
     public interface UserRoleInterface{

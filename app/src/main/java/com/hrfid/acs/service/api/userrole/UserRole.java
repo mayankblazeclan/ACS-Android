@@ -13,6 +13,10 @@ public class UserRole {
     @Expose
     private String userRole;
 
+    @SerializedName("userName")
+    @Expose
+    private String userName;
+
     public void setUserRole(String userRole) {
         this.userRole = userRole;
     }
@@ -28,4 +32,11 @@ public class UserRole {
         isTagIdValid = tagIdValid;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 }

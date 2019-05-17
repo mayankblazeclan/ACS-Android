@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 
 
 import com.hrfid.acs.helpers.request.BaseApiRequest;
+import com.hrfid.acs.helpers.request.LogoutRequest;
 import com.hrfid.acs.helpers.serverResponses.ErrorArrayResponse;
 import com.hrfid.acs.helpers.serverResponses.ErrorObjectResponse;
 import com.hrfid.acs.util.Logger;
@@ -107,7 +108,7 @@ public abstract class NetworkingHelper {
     switch (cmgRequest.apiToCall) {
 
       /*case LOGIN:
-        LoginRequest loginRequest = (LoginRequest) cmgRequest;
+        LoginRequestModel loginRequest = (LoginRequestModel) cmgRequest;
         apiInterface = ApiRouter.get().getRetrofitService()
             .loginToWebSSOAPI(loginRequest.map);
         break;
@@ -275,6 +276,11 @@ public abstract class NetworkingHelper {
         apiInterface = ApiRouter.get().getRetrofitService().getFAQListAPI(requestWebviewCheckerAPI.mURL);
         break;*/
 
+
+      case LOG_OUT:
+        LogoutRequest logoutRequest = (LogoutRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().logoutApi(logoutRequest.commonRequestModel);
+        break;
       default:
         Utilities.showToast(cmgRequest.mActivity, "Initialize Request class properly!");
         break;

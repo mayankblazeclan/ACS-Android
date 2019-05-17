@@ -3,6 +3,7 @@ package com.hrfid.acs.view.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -15,17 +16,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hrfid.acs.R;
-import com.hrfid.acs.components.BaseActivity;
 import com.hrfid.acs.data.Constants;
 import com.hrfid.acs.pref.SharedPrefsManager;
+import com.hrfid.acs.service.api.userrole.LoginRequestModel;
 import com.hrfid.acs.service.api.userrole.UserRole;
 import com.hrfid.acs.service.api.userrole.UserRoleService;
+import com.hrfid.acs.util.AppConstants;
 import com.hrfid.acs.util.Logger;
-import com.hrfid.acs.util.LoggerLocal;
+import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
 
@@ -40,9 +40,9 @@ public class BarcodeScanActivity extends Activity implements
 
     private String tagId;
     private String mUserRole = "";
+    private String mUserName = "";
     private boolean isTagIdValid = false;
     private UserRoleService mService;
-    private SharedPrefsManager spfManager;
     private RelativeLayout mProgressBarLayout;
     private String userRoleType;
 
@@ -55,7 +55,6 @@ public class BarcodeScanActivity extends Activity implements
 
         initUI();
         getIntentData();
-        spfManager = new SharedPrefsManager();
         mService = new UserRoleService(this);
 
         txtBarcodeNumber.setOnTouchListener(new View.OnTouchListener() {
@@ -96,36 +95,46 @@ public class BarcodeScanActivity extends Activity implements
     protected void onResume() {
         super.onResume();
         txtBarcodeNumber.setText("");
+        //txtBarcodeNumber.setText("E00401502B31ACBC");
     }
 
     private void initUI() {
         mProgressBarLayout = (RelativeLayout) findViewById(R.id.progressbar_relativelayout);
 
         btNext = (Button) findViewById(R.id.bt_next);
+        txtBarcodeNumber = (EditText) findViewById(R.id.et_rfid_number);
+        //txtBarcodeNumber.setText("E00401502B31ACBC");
 
         btNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // mListener.userLogin();
 
+               // txtBarcodeNumber.setText("E00401502B31ACBC");
                 if(txtBarcodeNumber.getText().length() >0 && txtBarcodeNumber.getText().length()<17){
 
                     tagId = txtBarcodeNumber.getText().toString();
 
-//                String url = spfManager.getApiUrl(getApplicationContext());
+                   // gotoNextActivity(userRoleType);
 
-                    //tagId = "E00401502B31ACBC";
+                    LoginRequestModel loginRequestModel = new LoginRequestModel();
+                    loginRequestModel.setAppName(AppConstants.APP_NAME);
+                    loginRequestModel.setVersionNumber(AppConstants.APP_VERSION);
+                    loginRequestModel.setDeviceType(AppConstants.APP_OS);
+                    loginRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
+                    loginRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(BarcodeScanActivity.this));
+                    //loginRequestModel.setDeviceNumber("D123456");
+                    loginRequestModel.setUserRole(userRoleType);
+                    loginRequestModel.setTagId(tagId);
+                    loginRequestModel.setEvent(AppConstants.LOGIN_EVENT);
 
-                    gotoNextActivity(userRoleType);
-
-              /*  if (Utilities.isNetworkConnected(BarcodeScanActivity.this)) {
+                if (Utilities.isNetworkConnected(BarcodeScanActivity.this)) {
 
                     //Calling Login API ....
-                    //String url = Constants.SIT_STAGE_CONTROLPOINT + "." + Constants.CONTROLPOINT;
-                    String url = "sit-stage.controlpoint.healthrfid.com/";
+                    String url = "10.30.10.110:8080/";
+                    //String url = AppConstants.LOGIN_URL;
                     if (!TextUtils.isEmpty(tagId) && Constants.USER_CARD_TAG_LENGHT != tagId.length() - 1) {
                         mProgressBarLayout.setVisibility(View.VISIBLE);
-                        mService.ApiCallGetUserRole(url, tagId);
+                        mService.ApiCallGetUserRole(url, loginRequestModel);
                     } else {
                         // Utils.showToast(this, "tag ID=" + tagId + "\nLength =" + tagId.length());
                         Utils.showAlertDialog(BarcodeScanActivity.this, getString(R.string.please_scan_user_card_barcode));
@@ -136,19 +145,19 @@ public class BarcodeScanActivity extends Activity implements
 
                     Utilities.showSnackBar(BarcodeScanActivity.this.findViewById(android.R.id.content),
                             getResources().getString(R.string.ic_not_connection_message));
-                }*/
+                }
 
                 }else {
 
                     gotoNextActivity(userRoleType);
-                    //Utilities.showToast(getApplicationContext(),"Please enter valid input");
+                   // Utilities.showToast(getApplicationContext(),"Please enter valid input");
 
                 }
             }
         });
 
        // btNext.setOnClickListener(this);
-        txtBarcodeNumber = (EditText) findViewById(R.id.et_rfid_number);
+
        // txtBarcodeNumber.setText("E00401502B32123E");
        // txtBarcodeNumber.setEnabled(false);
 
@@ -209,11 +218,13 @@ public class BarcodeScanActivity extends Activity implements
             if (null != userRole.get(i).getUserRole()) {
                 mUserRole = "" + userRole.get(i).getUserRole();
                 isTagIdValid = userRole.get(i).isTagIdValid();
+                mUserName = "" + userRole.get(i).getUserName();
             }
         }
         if(isTagIdValid) {
             if (mUserRole.equalsIgnoreCase(userRoleType)) {
 
+                saveLoginDetails(mUserName, mUserRole, true, tagId);;
                 gotoNextActivity(userRoleType);
 
             }else {
@@ -240,5 +251,9 @@ public class BarcodeScanActivity extends Activity implements
         Intent mNextActivity = new Intent(BarcodeScanActivity.this, SelectRoleActivity.class);
         startActivity(mNextActivity);
         finish();
+    }
+
+    private void saveLoginDetails(String userName, String userRoleType, boolean isLogin, String barCodeValue) {
+        new PrefManager(BarcodeScanActivity.this).saveLoginDetails(userName, userRoleType, isLogin, barCodeValue);
     }
 }

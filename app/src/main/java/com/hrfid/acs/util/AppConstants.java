@@ -18,7 +18,7 @@ public class AppConstants {
                     "&ReturnUrl=https://loginstg.astro.com.my/ssowebnx/appreturn.aspx";
 
     public static final String ENDPOINT_URL_ASTRO = "https://loginstg.astro.com.my/";
-    public static final String ENDPOINT_URL_KENTICO = "http://stg-hotspot.pink.cat/customapi/";
+    public static final String ENDPOINT_URL = "http://10.30.10.110:8080/";
     public static final String ENDPOINT_URL_ASTRO_FAQ = "http://support.astro.com.my/rest/content/site/Astrohelpsupport/en-us/all/read-watch-listen-shop/";
     public static final String ENDPOINT_URL_ASTRO_WEBVIEW_CHECKER = "http://stg-hotspot.pink.cat/rest/";
     public static final String ABOUT_URL = "http://stg-hotspot.pink.cat/MobileAppPages/About-US-Apps.aspx";
@@ -68,6 +68,9 @@ public class AppConstants {
     //public static final String GEMPAK_APP_FOLDER_PATH = "GEMPAK";
     public static final String DMP_APPLICATION_ID = "49707";
     public static final String TEXT_GEMPAK_P = "hotspot@faq";
+
+
+
     public static String USER_ID = "9B6716D95245BDC9DD1C4938CA2701";
     public static final String ComScore_PUBLISHER_SECRET_KEY = "434644afe0bd45e1d643c12f7cd99255";
     public static final String ComScore_PUBLISHER_ID = "6036540";
@@ -83,5 +86,13 @@ public class AppConstants {
 //      Production
 //  Parner key: hotspotapp
 //  Password: hotspotapp@prd123
+
+    //ACS Constant
+    public static final String APP_NAME = "ACS";
+    public static final String APP_VERSION = "1.0";
+    public static final String APP_OS = "Android";
+    public static final String LOGIN_EVENT = "APP LOGIN";
+    public static final String LOGIN_URL = "sit-stage.controlpoint.healthrfid.com/";
+    public static final String LOGOUT = "Android Logout";
 
 }
