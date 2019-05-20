@@ -9,9 +9,6 @@ import android.support.v4.util.DebugUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.hrfid.acs.HRFIDACSApplication;
-import com.hrfid.acs.view.activity.SeniorStaffHomeActivity;
-
 import java.io.IOException;
 
 /**

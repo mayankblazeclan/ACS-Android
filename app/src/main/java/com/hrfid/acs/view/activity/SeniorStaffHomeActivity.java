@@ -6,8 +6,8 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hrfid.acs.R;
+import com.hrfid.acs.components.BaseActivity;
 import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
@@ -25,7 +26,6 @@ import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.LogoutRequest;
 import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
 import com.hrfid.acs.model.StaffItem;
-import com.hrfid.acs.service.api.userrole.LoginRequestModel;
 import com.hrfid.acs.util.AppConstants;
 import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
@@ -38,9 +38,10 @@ import java.util.ArrayList;
 /**
  * Created by MS on 08/05/19.
  */
-public class SeniorStaffHomeActivity extends AppCompatActivity {
+public class SeniorStaffHomeActivity extends BaseActivity {
 
 
+    private static final String TAG = "SeniorStaffHOME";
     GridView gridView;
     ArrayList<StaffItem> staffItemList=new ArrayList<>();
     @Override
@@ -166,6 +167,14 @@ public class SeniorStaffHomeActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.e(TAG, "OnStart () &&& Starting timer");
+        // Utils.stopHandler();  //first stop the timer and then again start it
+        //Utils.startHandler();
     }
 
 

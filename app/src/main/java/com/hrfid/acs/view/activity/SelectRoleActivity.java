@@ -1,6 +1,5 @@
 package com.hrfid.acs.view.activity;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,9 +7,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.hrfid.acs.R;
+import com.hrfid.acs.components.BaseActivity;
 import com.hrfid.acs.data.Constants;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
@@ -18,7 +17,7 @@ import com.hrfid.acs.util.Utils;
 /**
  * Created by MS on 08/05/19.
  */
-public class SelectRoleActivity extends Activity implements View.OnClickListener{
+public class SelectRoleActivity extends BaseActivity implements View.OnClickListener{
 
     private static final String TAG = "SelectRoleActivity";
     private String strUserType;
@@ -101,7 +100,7 @@ public class SelectRoleActivity extends Activity implements View.OnClickListener
     public void onBackPressed() {
         // super.onBackPressed();
 
-        Utils.createDialogTwoButtons(SelectRoleActivity.this, "Exit", true, "Are you sure you want to exit from app?", "OK", "Cancel", new DialogInterface.OnClickListener() {
+        Utils.createDialogTwoButtons(SelectRoleActivity.this, "Exit", true, "Are you sure you want to Exit ?", "OK", "Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hrfid.acs.R;
+import com.hrfid.acs.components.BaseActivity;
 import com.hrfid.acs.data.Constants;
 import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
@@ -38,7 +39,7 @@ import java.util.ArrayList;
 /**
  * Created by MS on 08/05/19.
  */
-public class LabStaffHomeActivity extends AppCompatActivity {
+public class LabStaffHomeActivity extends BaseActivity {
 
     GridView gridView;
     ArrayList<StaffItem> staffItemList=new ArrayList<>();

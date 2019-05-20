@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.hrfid.acs.R;
+import com.hrfid.acs.components.BaseActivity;
 import com.hrfid.acs.data.Constants;
 import com.hrfid.acs.pref.SharedPrefsManager;
 import com.hrfid.acs.service.api.userrole.LoginRequestModel;
@@ -31,7 +32,7 @@ import com.hrfid.acs.util.Utils;
 
 import java.util.List;
 
-public class BarcodeScanActivity extends Activity implements
+public class BarcodeScanActivity extends BaseActivity implements
         UserRoleService.UserRoleInterface {
     private final String TAG = getClass().getSimpleName();
 
