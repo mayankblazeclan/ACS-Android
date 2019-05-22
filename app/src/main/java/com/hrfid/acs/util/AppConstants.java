@@ -94,5 +94,6 @@ public class AppConstants {
     public static final String LOGIN_EVENT = "APP LOGIN";
     public static final String LOGIN_URL = "sit-stage.controlpoint.healthrfid.com/";
     public static final String LOGOUT = "App Logout";
+    public static final String GET_NOTIFICATION = "Get Notifications";
 
 }

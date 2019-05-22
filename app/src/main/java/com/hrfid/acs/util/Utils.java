@@ -12,8 +12,10 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,7 +23,9 @@ import android.widget.Toast;
 
 
 import com.hrfid.acs.R;
+import com.hrfid.acs.components.BaseActivity;
 import com.hrfid.acs.data.Constants;
+import com.hrfid.acs.view.activity.SelectRoleActivity;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -30,6 +34,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -471,76 +476,115 @@ public class Utils {
     }
 
     public static void startIdleTimeOut(final Activity activity) {
-        handler = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                // manageBackup(true,false);
-                //Utils.showAlertDialog(activity, "u r logged Out....");
+        if (handler == null) {
+            handler = new Handler();
+        } else {
+            handler.removeCallbacks(runnable);
+            handler.removeCallbacks(runnable2);
+        }
+        if (runnable == null)
+            runnable = new Runnable() {
+                @Override
+                public void run() {
+                    //do your task here
 
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
-// ...Irrelevant code for customizing the buttons and title
-                LayoutInflater inflater = activity.getLayoutInflater();
-                View dialogView = inflater.inflate(R.layout.alert_dialog_with_one_button, null);
-                dialogBuilder.setView(dialogView);
-                final AlertDialog alertDialog = dialogBuilder.create();
+                    Log.e(TAG, "User will be LOGOUT ....");
+                    final AlertDialog.Builder alertDialog1 = new AlertDialog.Builder(activity);
 
-                TextView tvDesc = (TextView) dialogView.findViewById(R.id.tv_dialog_desc);
-                tvDesc.setText("You will be logout after 5 min");
-                Button btDialogOk = (Button) dialogView.findViewById(R.id.bt_dialog_ok);
-                btDialogOk.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        alertDialog.dismiss();
-                        Utils.stopHandler();  //first stop the timer and then again start it
-                        Utils.startHandler();
+                    // Setting Dialog Title
+                    alertDialog1.setTitle("Inactive Session");
+
+                    // Setting Dialog Message
+                    alertDialog1.setMessage("You will be automatically logged out after 5 min");
+
+                    // Setting Icon to Dialog
+                    alertDialog1.setIcon(R.drawable.ic_error);
+                    // Setting Positive "Yes" Button
+                    alertDialog1.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+
+                            dialog.dismiss();
+                            Toast.makeText(activity, "OK tapped", Toast.LENGTH_LONG).show();
+                            Intent mNextActivity = new Intent(activity, SelectRoleActivity.class);
+                            activity.startActivity(mNextActivity);
+                            activity.finish();
+
+                            stop();
+                            start();
+
+                        }
+                    });
+
+
+                    // Showing Alert Message
+                    //alertDialog1.show();
+
+                    alertDialog1.show();
+                    //}
+
+                }
+            };
+
+
+        if (runnable2 == null)
+            runnable2 = new Runnable() {
+                @Override
+                public void run() {
+                    //do your task here
+
+                    Log.e(TAG, "You are LOGOUT ....");
+                    final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+
+                    // Setting Dialog Title
+                    alertDialog.setTitle("Logout");
+
+                    // Setting Dialog Message
+                    alertDialog.setMessage("You are logout, Please re-login to continue");
+
+                    // Setting Icon to Dialog
+                    alertDialog.setIcon(R.drawable.ic_error);
+                    // Setting Positive "Yes" Button
+                    alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            dialog.dismiss();
+                            Toast.makeText(activity, "Logout tapped", Toast.LENGTH_LONG).show();
+                            Intent mNextActivity = new Intent(activity, SelectRoleActivity.class);
+                            activity.startActivity(mNextActivity);
+                            activity.finish();
+
+                        }
+                    });
+
+
+                    // Showing Alert Message
+                    //alertDialog.show();
+
+                    try {
+                        alertDialog.show();
                     }
-                });
-
-                alertDialog.setCanceledOnTouchOutside(false);
-                alertDialog.show();
-            }
-        };
-
-        handler2 = new Handler();
-        runnable2 = new Runnable() {
-            @Override
-            public void run() {
-                // manageBackup(true,false);
-                //Utils.showAlertDialog(activity, "u r logged Out....");
-
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
-// ...Irrelevant code for customizing the buttons and title
-                LayoutInflater inflater = activity.getLayoutInflater();
-                View dialogView = inflater.inflate(R.layout.alert_dialog_with_one_button, null);
-                dialogBuilder.setView(dialogView);
-                final AlertDialog alertDialog = dialogBuilder.create();
-
-                TextView tvDesc = (TextView) dialogView.findViewById(R.id.tv_dialog_desc);
-                tvDesc.setText("You are logout..Please re-login");
-                Button btDialogOk = (Button) dialogView.findViewById(R.id.bt_dialog_ok);
-                btDialogOk.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        alertDialog.dismiss();
-                        Utils.stopHandler();  //first stop the timer and then again start it
-                        Utils.startHandler();
+                    catch (WindowManager.BadTokenException e) {
+                        //use a log message
+                        e.printStackTrace();
                     }
-                });
-
-                alertDialog.setCanceledOnTouchOutside(false);
-                alertDialog.show();
-            }
-        };
+                }
+            };
+        start();
     }
 
-    public static void stopHandler() {
+    public static void start() {
+        Log.e(TAG, "Timer Started");
+        handler.postDelayed(runnable, TimeUnit.MINUTES.toMillis(1));
+        handler.postDelayed(runnable2, TimeUnit.MINUTES.toMillis(2));
+    }
+
+    public static void stop() {
+        Log.e(TAG, "Timer Stopped");
         handler.removeCallbacks(runnable);
-        handler2.removeCallbacks(runnable);
-    }
-    public static void startHandler() {
-        handler.postDelayed(runnable, 1*60*1000); //for 1 minutes
-        handler2.postDelayed(runnable2, 2*60*1000); //for 2 minutes
+        handler.removeCallbacks(runnable2);
     }
 
 }

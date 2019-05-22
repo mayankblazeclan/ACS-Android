@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -23,7 +24,9 @@ import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
+import com.hrfid.acs.helpers.request.GetNotificationRequest;
 import com.hrfid.acs.helpers.request.LogoutRequest;
+import com.hrfid.acs.helpers.serverResponses.GetNofication.GetNotificationResponse;
 import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
 import com.hrfid.acs.model.StaffItem;
 import com.hrfid.acs.util.AppConstants;
@@ -56,6 +59,7 @@ public class SeniorStaffHomeActivity extends BaseActivity {
 
 
         initializeUI();
+        getNotification();
 
     }
 
@@ -169,15 +173,6 @@ public class SeniorStaffHomeActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.e(TAG, "OnStart () &&& Starting timer");
-        // Utils.stopHandler();  //first stop the timer and then again start it
-        //Utils.startHandler();
-    }
-
-
 
     //Call Logout API
     private void callLogout() {
@@ -245,5 +240,73 @@ public class SeniorStaffHomeActivity extends BaseActivity {
 
     }
 
+
+
+    //GetNotification API
+    private void getNotification()
+    {
+        CommonRequestModel commonRequestModel = new CommonRequestModel();
+        commonRequestModel.setAppName(AppConstants.APP_NAME);
+        commonRequestModel.setVersionNumber(AppConstants.APP_VERSION);
+        commonRequestModel.setDeviceType(AppConstants.APP_OS);
+        commonRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
+        commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(SeniorStaffHomeActivity.this));
+        commonRequestModel.setUserRole(new PrefManager(this).getUserRoleType());
+        commonRequestModel.setTagId(new PrefManager(this).getBarCodeValue());
+        commonRequestModel.setEvent(AppConstants.LOGOUT);
+        commonRequestModel.setUserName(new PrefManager(this).getUserName());
+
+        new NetworkingHelper(new GetNotificationRequest(SeniorStaffHomeActivity.this, true, commonRequestModel)) {
+
+            @Override
+            public void serverResponseFromApi(ApiResponse serverResponse) {
+                if (serverResponse.isSucess) {
+
+                    try {
+
+                        GetNotificationResponse commonResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, GetNotificationResponse.class);
+
+                        if (commonResponse.getStatus().getCODE() == 200) {
+
+                            if(commonResponse.getStatus().getMSG().equalsIgnoreCase("REQ_SUCCESS")){
+
+                                Logger.logError("GetNofication API success " +
+                                        commonResponse.getNotifications().get(0).getDescription());
+                                Logger.logError("GetNofication API Total Unread " +
+                                        commonResponse.getTotalUnread());
+
+
+                                Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, SelectRoleActivity.class);
+                                startActivity(mNextActivity);
+                                finish();
+
+                            }else {
+
+                                Logger.logError("GetNofication API Failure Statis" +
+                                        commonResponse.getStatus());
+                                /*Logger.logError("GetNofication API Failure " +
+                                        commonResponse.getNotifications().get(0).getDescription());*/
+
+                                Utils.showAlertDialog(SeniorStaffHomeActivity.this,  commonResponse.getStatus().getMSG());
+                            }
+
+                        }
+
+
+
+                    }
+                    catch (Exception e){
+                        Logger.logError("Exception " + e.getMessage());
+                    }
+
+                } else {
+                    Logger.logError("GetNofication API Failure " +
+                            serverResponse.errorMessageToDisplay);
+                }
+            }
+        };
+
+    }
 
 }

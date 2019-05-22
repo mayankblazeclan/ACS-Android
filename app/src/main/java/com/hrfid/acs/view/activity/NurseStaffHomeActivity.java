@@ -18,11 +18,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hrfid.acs.R;
+import com.hrfid.acs.components.BaseActivity;
 import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
+import com.hrfid.acs.helpers.request.GetNotificationRequest;
 import com.hrfid.acs.helpers.request.LogoutRequest;
+import com.hrfid.acs.helpers.serverResponses.GetNofication.GetNotificationResponse;
 import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
 import com.hrfid.acs.model.StaffItem;
 import com.hrfid.acs.util.AppConstants;
@@ -37,10 +40,11 @@ import java.util.ArrayList;
 /**
  * Created by MS on 08/05/19.
  */
-public class NurseStaffHomeActivity extends AppCompatActivity {
+public class NurseStaffHomeActivity extends BaseActivity {
 
     GridView gridView;
     ArrayList<StaffItem> staffItemList=new ArrayList<>();
+    TextView txtViewCount;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +58,7 @@ public class NurseStaffHomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         initializeUI();
+       // getNotification();
 
     }
 
@@ -112,8 +117,8 @@ public class NurseStaffHomeActivity extends AppCompatActivity {
 
         final View notificaitons = menu.findItem(R.id.action_notification).getActionView();
 
-        final TextView txtViewCount = (TextView) notificaitons.findViewById(R.id.txtCount);
-        txtViewCount.setText("10");
+        txtViewCount = (TextView) notificaitons.findViewById(R.id.txtCount);
+        getNotification();
         txtViewCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,15 +154,15 @@ public class NurseStaffHomeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    if (Utilities.isNetworkConnected(NurseStaffHomeActivity.this)) {
+                    /*if (Utilities.isNetworkConnected(NurseStaffHomeActivity.this)) {
                         callLogout();
                     } else {
                         Utils.showAlertDialog(NurseStaffHomeActivity.this, getString(R.string.no_internet_connection));
-                    }
+                    }*/
 
-                    /*Intent mNextActivity = new Intent(NurseStaffHomeActivity.this, SelectRoleActivity.class);
+                    Intent mNextActivity = new Intent(NurseStaffHomeActivity.this, SelectRoleActivity.class);
                     startActivity(mNextActivity);
-                    finish();*/
+                    finish();
                 }
             }, null);
             return true;
@@ -224,6 +229,78 @@ public class NurseStaffHomeActivity extends AppCompatActivity {
 
                 } else {
                     Logger.logError("Logout API Failure " +
+                            serverResponse.errorMessageToDisplay);
+                }
+            }
+        };
+
+    }
+
+
+
+    //GetNotification API
+    private void getNotification()
+    {
+        CommonRequestModel commonRequestModel = new CommonRequestModel();
+        commonRequestModel.setAppName(AppConstants.APP_NAME);
+        commonRequestModel.setVersionNumber(AppConstants.APP_VERSION);
+        commonRequestModel.setDeviceType(AppConstants.APP_OS);
+        commonRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
+        commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(NurseStaffHomeActivity.this));
+        commonRequestModel.setUserRole(new PrefManager(this).getUserRoleType());
+        commonRequestModel.setTagId(new PrefManager(this).getBarCodeValue());
+        commonRequestModel.setEvent(AppConstants.GET_NOTIFICATION);
+        commonRequestModel.setUserName(new PrefManager(this).getUserName());
+
+        new NetworkingHelper(new GetNotificationRequest(NurseStaffHomeActivity.this, true, commonRequestModel)) {
+
+            @Override
+            public void serverResponseFromApi(ApiResponse serverResponse) {
+                if (serverResponse.isSucess) {
+
+                    try {
+
+                        GetNotificationResponse commonResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, GetNotificationResponse.class);
+
+                        if (commonResponse.getStatus().getCODE() == 200) {
+
+                            if(commonResponse.getStatus().getMSG().equalsIgnoreCase("REQ_SUCCESS")){
+
+                                Logger.logError("GetNofication API success " +
+                                        commonResponse.getNotifications().get(0).getDescription());
+                                Logger.logError("GetNofication API Total Unread " +
+                                        commonResponse.getTotalUnread());
+
+
+                                /*Intent mNextActivity = new Intent(NurseStaffHomeActivity.this, SelectRoleActivity.class);
+                                startActivity(mNextActivity);
+                                finish();*/
+
+                                txtViewCount.setText(""+commonResponse.getTotalUnread());
+
+                            }else {
+
+                                txtViewCount.setText("");
+                                Logger.logError("GetNofication API Failure Statis" +
+                                        commonResponse.getStatus());
+                                /*Logger.logError("GetNofication API Failure " +
+                                        commonResponse.getNotifications().get(0).getDescription());*/
+
+                                Utils.showAlertDialog(NurseStaffHomeActivity.this,  commonResponse.getStatus().getMSG());
+                            }
+
+                        }
+
+
+
+                    }
+                    catch (Exception e){
+                        Logger.logError("Exception " + e.getMessage());
+                    }
+
+                } else {
+                    Logger.logError("GetNofication API Failure " +
                             serverResponse.errorMessageToDisplay);
                 }
             }

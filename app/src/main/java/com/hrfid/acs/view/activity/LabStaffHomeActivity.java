@@ -48,6 +48,7 @@ public class LabStaffHomeActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nurse_staff_home);
+       // Utils.startIdleTimeOut(LabStaffHomeActivity.this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Lab Staff");

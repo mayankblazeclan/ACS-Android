@@ -27,6 +27,14 @@ public interface APIService {
   @POST("acs/api/user/logout/")
   Call<ResponseBody> logoutApi(@Body CommonRequestModel commonRequestModel);
 
+  //  LOG OUT
+  @POST("/acs/api/getNotifications")
+  Call<ResponseBody> getNotification(@Body CommonRequestModel commonRequestModel);
+
+  //resetNotificationCount
+  @POST("/acs/api/resetNotificationCount")
+  Call<ResponseBody> resetNotificationCount(@Body CommonRequestModel commonRequestModel);
+
  /* @POST("api/facebook/fblogin")
   Call<ResponseBody> loginFBToSSOAPI(@Body RequestBody body);
 

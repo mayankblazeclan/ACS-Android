@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +18,7 @@ import com.hrfid.acs.util.Utils;
 /**
  * Created by MS on 08/05/19.
  */
-public class SelectRoleActivity extends BaseActivity implements View.OnClickListener{
+public class SelectRoleActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String TAG = "SelectRoleActivity";
     private String strUserType;

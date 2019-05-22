@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -32,7 +33,7 @@ import com.hrfid.acs.util.Utils;
 
 import java.util.List;
 
-public class BarcodeScanActivity extends BaseActivity implements
+public class BarcodeScanActivity extends AppCompatActivity implements
         UserRoleService.UserRoleInterface {
     private final String TAG = getClass().getSimpleName();
 
@@ -96,7 +97,7 @@ public class BarcodeScanActivity extends BaseActivity implements
     protected void onResume() {
         super.onResume();
         txtBarcodeNumber.setText("");
-        //txtBarcodeNumber.setText("E00401502B31ACBC");
+        txtBarcodeNumber.setText("E00401502B32123E"); //E00401502B32123E   //E00401502B31ACBC
     }
 
     private void initUI() {

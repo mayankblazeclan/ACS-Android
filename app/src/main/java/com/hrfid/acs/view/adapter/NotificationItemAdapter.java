@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hrfid.acs.R;
+import com.hrfid.acs.helpers.serverResponses.GetNofication.Notification;
 import com.hrfid.acs.util.DataModel;
 import com.hrfid.acs.view.activity.NotificationActivity;
 
@@ -18,7 +19,7 @@ import java.util.ArrayList;
  */
 public class NotificationItemAdapter  extends RecyclerView.Adapter<NotificationItemAdapter.MyViewHolder> {
 
-    private ArrayList<DataModel> dataSet;
+    private ArrayList<Notification> dataSet;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -34,7 +35,7 @@ public class NotificationItemAdapter  extends RecyclerView.Adapter<NotificationI
         }
     }
 
-    public NotificationItemAdapter(ArrayList<DataModel> data) {
+    public NotificationItemAdapter(ArrayList<Notification> data) {
         this.dataSet = data;
     }
 
@@ -57,9 +58,9 @@ public class NotificationItemAdapter  extends RecyclerView.Adapter<NotificationI
         TextView textViewVersion = holder.textViewVersion;
         ImageView imageView = holder.imageViewIcon;
 
-        textViewName.setText(dataSet.get(listPosition).getName());
-        textViewVersion.setText(dataSet.get(listPosition).getVersion());
-        imageView.setImageResource(dataSet.get(listPosition).getImage());
+        textViewName.setText(dataSet.get(listPosition).getTitle());
+        textViewVersion.setText(dataSet.get(listPosition).getCreatedOn());
+        //imageView.setImageResource(dataSet.get(listPosition).getId());
     }
 
     @Override

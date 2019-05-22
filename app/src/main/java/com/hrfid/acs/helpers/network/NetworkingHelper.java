@@ -4,7 +4,9 @@ import android.app.ProgressDialog;
 
 
 import com.hrfid.acs.helpers.request.BaseApiRequest;
+import com.hrfid.acs.helpers.request.GetNotificationRequest;
 import com.hrfid.acs.helpers.request.LogoutRequest;
+import com.hrfid.acs.helpers.request.ResetNotificationCountRequest;
 import com.hrfid.acs.helpers.serverResponses.ErrorArrayResponse;
 import com.hrfid.acs.helpers.serverResponses.ErrorObjectResponse;
 import com.hrfid.acs.util.Logger;
@@ -36,58 +38,11 @@ public abstract class NetworkingHelper {
    */
   public static final int LOGIN = 1;
   public static final int LOG_OUT = 2;
-  public static final int CELEBRITY_LIST = 3;
-  public static final int CELEBRITY_FOLLOW = 4;
-  public static final int CELEBRITY_UNFOLLOW = 5;
-  public static final int GET_PROFILE = 6;
-  public static final int SSO_HEART_BEAT = 7;
-  public static final int GET_ARTICLE_LIST = 8;
-  public static final int POST_FAVORITE_ARTICLE = 9;
-  public static final int GET_FAQ_LIST = 10;
-  public static final int GET_VIDEO_LIST = 11;
-  public static final int GET_FEED_LATEST = 12;
-  public static final int GET_FEED_TRENDING = 13;
-  public static final int RECORD_VIDEO_VIEW_COUNT = 14;
-  public static final int RECORD_ARTICLE_VIEW_COUNT = 15;
-  public static final int GET_ARTICLE_WITH_ID = 16;
-  public static final int GET_CALENDAR_LIST = 17;
-  public static final int POST_FAVORITE_VIDEO = 18;
-  public static final int GET_SEARCH_RESULT = 19;
-  public static final int GET_RECOMMENDED_LIST = 20;
-  public static final int GET_TAG_LIST = 21;
-  public static final int GET_UI_SELECTION_LIST = 22;
-  public static final int GET_VIDEO_SUBCATEGORY = 23;
-  public static final int GET_VIEW_MORE_FOR_SUB_CATEGORY = 24;
-  public static final int UPLOAD_PROFILE_PICTURE = 25;
-  public static final int GET_SUB_CATEGORY_LIST_API = 26;
-  //public static final int GET_PROFILE_PICTURE = 27;
-  public static final int ARTICLE_TAG_LIST = 27;
-  public static final int GET_NOTIFICATION_LIST = 28;
-  public static final int GET_NOTIFICATION_CELEBRITY = 29;
-  public static final int POST_NOTIFICATION_VIDEO = 30;
-  public static final int POST_ARTICLE_RATING = 31;
-  // NOTIFICATIONS BASED APIS
-  public static final int SET_DEVICE_DETAILS = 32;
-  public static final int GET_CATEGORIES_BY_DEVICE = 33;
-  public static final int SET_CATEGORY_STATUS_BY_DEVICE = 34;
-  public static final int SET_CATEGORY_STATUS = 35;
-  public static final int SET_GLOBAL_NOTIFICATION = 36;
-  public static final int GET_VIDEO_OBJECT = 37;
-  public static final int SAVED_LIST_RESULT = 38;
-  public static final int ARTICLE_CATEGORY = 39;
-  public static final int ARTICLE_VIDEO_SAVED = 40;
-  public static final int ARTICLE_DETAILS = 41;
-  public static final int UNSAVED_LIST_RESULT = 42;
-  public static final int VIDEO_LIST_BY_ID_API = 43;
-  public static final int GET_HOME_LIST = 46;
-  public static final int ARTICLE_CATEGORY_LAZY_LOAD = 47;
-  public static final int VIDEO_SUBCATEGORY_LAZY_LOAD = 48;
-  public static final int SAVED_LIST_RESULT_LAZY_LOAD = 49;
-  public static final int LIVE_STREAMING_LIST_API = 50;
-  public static final int GET_WEBVIEW_CHECK_STATUS = 51;
+  public static final int GET_NOTIFCATION = 3;
+  public static final int RESET_NOTIFCATION_COUNT = 4;
 
 
-  private Call<ResponseBody> apiInterface;
+    private Call<ResponseBody> apiInterface;
   private String TAG = "NetworkingHelper = ";
   private BaseApiRequest mCmgRequest;
   private ProgressDialog pd;
@@ -281,6 +236,18 @@ public abstract class NetworkingHelper {
         LogoutRequest logoutRequest = (LogoutRequest) cmgRequest;
         apiInterface = ApiRouter.get().getRetrofitService().logoutApi(logoutRequest.commonRequestModel);
         break;
+
+      case GET_NOTIFCATION:
+        GetNotificationRequest getNotificationRequest = (GetNotificationRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().getNotification(getNotificationRequest.commonRequestModel);
+        break;
+
+      case RESET_NOTIFCATION_COUNT:
+        ResetNotificationCountRequest resetNotificationCountRequest = (ResetNotificationCountRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().resetNotificationCount(resetNotificationCountRequest.commonRequestModel);
+        break;
+
+
       default:
         Utilities.showToast(cmgRequest.mActivity, "Initialize Request class properly!");
         break;

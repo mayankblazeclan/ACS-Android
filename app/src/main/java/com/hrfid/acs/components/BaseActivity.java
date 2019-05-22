@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -29,7 +30,96 @@ import java.util.concurrent.TimeUnit;
 
 public class BaseActivity extends AppCompatActivity {
 
+    public static final long DISCONNECT_TIMEOUT = 60000; // 5 min = 5 * 60 * 1000 ms =300000
     private static final String TAG = "BaseActivity";
+
+    private Handler disconnectHandler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            // todo
+            return true;
+        }
+    });
+
+    private Runnable disconnectCallback = new Runnable() {
+        @Override
+        public void run() {
+            // Perform any required operation on disconnect
+            //Toast.makeText(BaseActivity.this, "Logged out after 1 minutes on inactivity.", Toast.LENGTH_SHORT).show();
+
+            Log.e(TAG, "User will be LOGOUT ....");
+            new AlertDialog.Builder(BaseActivity.this)
+                    .setTitle("Inactive Session")
+                    .setMessage("You will be automatically logged out after 5 min")
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Continue with delete operation
+                            dialog.dismiss();
+                            Toast.makeText(BaseActivity.this, "OK tapped", Toast.LENGTH_LONG).show();
+                            Intent mNextActivity = new Intent(BaseActivity.this, SelectRoleActivity.class);
+                            startActivity(mNextActivity);
+                            finish();
+                        }
+                    })
+                    .setIcon(R.drawable.ic_error)
+                    .show();
+        }
+    };
+
+    private Runnable disconnectCallback2 = new Runnable() {
+        @Override
+        public void run() {
+            // Perform any required operation on disconnect
+            //Toast.makeText(BaseActivity.this, "Logged out after 1 minutes on inactivity.", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "You are LOGOUT ....");
+            new AlertDialog.Builder(BaseActivity.this)
+                    .setTitle("Logout")
+                    .setMessage("You are logout, Please re-login to continue")
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Continue with delete operation
+                            dialog.dismiss();
+                            Toast.makeText(BaseActivity.this, "Logout tapped", Toast.LENGTH_LONG).show();
+                            Intent mNextActivity = new Intent(BaseActivity.this, SelectRoleActivity.class);
+                            startActivity(mNextActivity);
+                            finish();
+                        }
+                    })
+                    .setIcon(R.drawable.ic_error)
+                    .show();
+        }
+    };
+
+    public void resetDisconnectTimer(){
+        disconnectHandler.removeCallbacks(disconnectCallback);
+        disconnectHandler.postDelayed(disconnectCallback, DISCONNECT_TIMEOUT);
+        disconnectHandler.postDelayed(disconnectCallback2, 120000);
+
+    }
+
+    public void stopDisconnectTimer(){
+        disconnectHandler.removeCallbacks(disconnectCallback);
+        disconnectHandler.removeCallbacks(disconnectCallback2);
+    }
+
+    @Override
+    public void onUserInteraction(){
+        resetDisconnectTimer();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        resetDisconnectTimer();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        stopDisconnectTimer();
+    }
+
+   /* private static final String TAG = "BaseActivity";
     private static android.os.Handler handler = new android.os.Handler();
     private static Runnable runnable = null;
     private static Runnable runnable2 = null;
@@ -66,11 +156,15 @@ public class BaseActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
-                           //dialog.dismiss();
-                           /* Toast.makeText(BaseActivity.this, "OK tapped", Toast.LENGTH_LONG).show();
+
+                           dialog.dismiss();
+                            Toast.makeText(BaseActivity.this, "OK tapped", Toast.LENGTH_LONG).show();
                             Intent mNextActivity = new Intent(BaseActivity.this, SelectRoleActivity.class);
                             startActivity(mNextActivity);
-                            finish();*/
+                            finish();
+
+                            stop();
+                            start();
 
                         }
                     });
@@ -109,6 +203,10 @@ public class BaseActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
 
                             dialog.dismiss();
+                            Toast.makeText(BaseActivity.this, "Logout tapped", Toast.LENGTH_LONG).show();
+                            Intent mNextActivity = new Intent(BaseActivity.this, SelectRoleActivity.class);
+                            startActivity(mNextActivity);
+                            finish();
 
                         }
                     });
@@ -147,6 +245,6 @@ public class BaseActivity extends AppCompatActivity {
         Log.e(TAG, "Timer Stopped");
         handler.removeCallbacks(runnable);
         handler.removeCallbacks(runnable2);
-    }
+    }*/
 
 }
