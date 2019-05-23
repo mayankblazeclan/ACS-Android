@@ -392,6 +392,7 @@ public abstract class NetworkingHelper {
           return;
         }
         String error = t.getMessage();
+          Logger.log(TAG + t.getCause());
         Logger.log(TAG + error);
         if (error != null) {
           if (error.contains("failed to connect to")) {

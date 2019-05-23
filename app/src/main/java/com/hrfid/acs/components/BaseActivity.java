@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 public class BaseActivity extends AppCompatActivity {
 
-    public static final long DISCONNECT_TIMEOUT = 60000; // 5 min = 5 * 60 * 1000 ms =300000
+    public static final long DISCONNECT_TIMEOUT = 300000; // 5 min = 5 * 60 * 1000 ms =300000  //600000
     private static final String TAG = "BaseActivity";
 
     private Handler disconnectHandler = new Handler(new Handler.Callback() {
@@ -51,14 +51,17 @@ public class BaseActivity extends AppCompatActivity {
             new AlertDialog.Builder(BaseActivity.this)
                     .setTitle("Inactive Session")
                     .setMessage("You will be automatically logged out after 5 min")
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    .setPositiveButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // Continue with delete operation
+                            stopDisconnectTimer();
+                            resetDisconnectTimer();
                             dialog.dismiss();
-                            Toast.makeText(BaseActivity.this, "OK tapped", Toast.LENGTH_LONG).show();
+
+                            /*Toast.makeText(BaseActivity.this, "OK tapped", Toast.LENGTH_LONG).show();
                             Intent mNextActivity = new Intent(BaseActivity.this, SelectRoleActivity.class);
                             startActivity(mNextActivity);
-                            finish();
+                            finish();*/
                         }
                     })
                     .setIcon(R.drawable.ic_error)
@@ -93,7 +96,7 @@ public class BaseActivity extends AppCompatActivity {
     public void resetDisconnectTimer(){
         disconnectHandler.removeCallbacks(disconnectCallback);
         disconnectHandler.postDelayed(disconnectCallback, DISCONNECT_TIMEOUT);
-        disconnectHandler.postDelayed(disconnectCallback2, 120000);
+        disconnectHandler.postDelayed(disconnectCallback2, 420000);
 
     }
 

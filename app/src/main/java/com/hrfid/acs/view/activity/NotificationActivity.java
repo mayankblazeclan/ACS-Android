@@ -10,6 +10,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import com.hrfid.acs.R;
 import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
@@ -28,6 +31,7 @@ import com.hrfid.acs.util.Utils;
 import com.hrfid.acs.view.adapter.NotificationItemAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by MS on 08/05/19.
@@ -37,7 +41,9 @@ public class NotificationActivity extends AppCompatActivity {
     private static RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private static RecyclerView recyclerView;
-    private static ArrayList<Notification> data;
+    private static List<Notification> data;
+    private LinearLayout linearLayout;
+    private TextView textView;
 
 
     static String[] nameArray = {"Senior staff has changed study schedule of Study-no/name from ‘old date’ to 'new date",
@@ -93,6 +99,9 @@ public class NotificationActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        linearLayout = findViewById(R.id.llRec);
+        textView = findViewById(R.id.txtNoNotification);
 
         /*data = new ArrayList<Notification>();
        *//* for (int i = 0; i < nameArray.length; i++) {
@@ -162,12 +171,21 @@ public class NotificationActivity extends AppCompatActivity {
 
                                // txtViewCount.setText(""+commonResponse.getTotalUnread());
 
-                                data = new ArrayList<Notification>();
-                                commonResponse.getStatus().getMSG()
-                                adapter = new NotificationItemAdapter(data);
-                                recyclerView.setAdapter(adapter);
+                                if(commonResponse.getNotifications().size()>0) {
 
-                                resetNotificationCount();
+                                    linearLayout.setVisibility(View.VISIBLE);
+                                    textView.setVisibility(View.GONE);
+                                    data = new ArrayList<Notification>();
+                                    data = commonResponse.getNotifications();
+                                    adapter = new NotificationItemAdapter(data);
+                                    recyclerView.setAdapter(adapter);
+                                }else {
+                                    linearLayout.setVisibility(View.GONE);
+                                    textView.setVisibility(View.VISIBLE);
+
+                                }
+
+                                //resetNotificationCount();
 
                             }else {
 

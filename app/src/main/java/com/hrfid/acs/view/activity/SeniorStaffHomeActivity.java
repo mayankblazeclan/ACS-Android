@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.hrfid.acs.R;
 import com.hrfid.acs.components.BaseActivity;
+import com.hrfid.acs.data.Constants;
 import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
@@ -47,6 +48,7 @@ public class SeniorStaffHomeActivity extends BaseActivity {
     private static final String TAG = "SeniorStaffHOME";
     GridView gridView;
     ArrayList<StaffItem> staffItemList=new ArrayList<>();
+    private TextView txtViewCount;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +92,7 @@ public class SeniorStaffHomeActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         // super.onBackPressed();
-        Utils.createDialogTwoButtons(SeniorStaffHomeActivity.this, "Logout", true, "Are you sure you want to logout?", "YES", "NO", new DialogInterface.OnClickListener() {
+        Utils.createDialogTwoButtons(SeniorStaffHomeActivity.this, "Logout", true, getString(R.string.logout_message), "YES", "NO", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -118,8 +120,9 @@ public class SeniorStaffHomeActivity extends BaseActivity {
 
         final View notificaitons = menu.findItem(R.id.action_notification).getActionView();
 
-        final TextView txtViewCount = (TextView) notificaitons.findViewById(R.id.txtCount);
-        txtViewCount.setText("10");
+        txtViewCount = (TextView) notificaitons.findViewById(R.id.txtCount);
+        //txtViewCount.setText("10");
+        getNotification();
         txtViewCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -251,9 +254,10 @@ public class SeniorStaffHomeActivity extends BaseActivity {
         commonRequestModel.setDeviceType(AppConstants.APP_OS);
         commonRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
         commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(SeniorStaffHomeActivity.this));
-        commonRequestModel.setUserRole(new PrefManager(this).getUserRoleType());
+        //commonRequestModel.setUserRole(new PrefManager(this).getUserRoleType());
+        commonRequestModel.setUserRole(Constants.SENIOR_STAFF);
         commonRequestModel.setTagId(new PrefManager(this).getBarCodeValue());
-        commonRequestModel.setEvent(AppConstants.LOGOUT);
+        commonRequestModel.setEvent(AppConstants.GET_NOTIFICATION);
         commonRequestModel.setUserName(new PrefManager(this).getUserName());
 
         new NetworkingHelper(new GetNotificationRequest(SeniorStaffHomeActivity.this, true, commonRequestModel)) {
@@ -277,12 +281,14 @@ public class SeniorStaffHomeActivity extends BaseActivity {
                                         commonResponse.getTotalUnread());
 
 
-                                Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, SelectRoleActivity.class);
+                                /*Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, SelectRoleActivity.class);
                                 startActivity(mNextActivity);
-                                finish();
+                                finish();*/
+                                txtViewCount.setText(""+commonResponse.getTotalUnread());
 
                             }else {
 
+                                txtViewCount.setText("");
                                 Logger.logError("GetNofication API Failure Statis" +
                                         commonResponse.getStatus());
                                 /*Logger.logError("GetNofication API Failure " +
@@ -291,6 +297,10 @@ public class SeniorStaffHomeActivity extends BaseActivity {
                                 Utils.showAlertDialog(SeniorStaffHomeActivity.this,  commonResponse.getStatus().getMSG());
                             }
 
+                        }else {
+                            Logger.logError("GetNofication API Failure for not getting 200" +
+                                    commonResponse.getStatus());
+                            txtViewCount.setText("");
                         }
 
 

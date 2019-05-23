@@ -24,7 +24,9 @@ import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
+import com.hrfid.acs.helpers.request.GetNotificationRequest;
 import com.hrfid.acs.helpers.request.LogoutRequest;
+import com.hrfid.acs.helpers.serverResponses.GetNofication.GetNotificationResponse;
 import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
 import com.hrfid.acs.model.StaffItem;
 import com.hrfid.acs.util.AppConstants;
@@ -43,6 +45,7 @@ public class LabStaffHomeActivity extends BaseActivity {
 
     GridView gridView;
     ArrayList<StaffItem> staffItemList=new ArrayList<>();
+    TextView txtViewCount;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,6 +64,7 @@ public class LabStaffHomeActivity extends BaseActivity {
 
     private void initializeUI() {
         gridView = (GridView) findViewById(R.id.simpleGridView);
+        staffItemList.add(new StaffItem("Lab \nReceipt",R.drawable.ic_nurse_guidelines));
         staffItemList.add(new StaffItem("Lab Processing",R.drawable.ic_lab_staff_lab_processing));
         staffItemList.add(new StaffItem("Storage \n",R.drawable.ic_lab_storage));
         staffItemList.add(new StaffItem("Packing & Shipping",R.drawable.ic_lab_shipping));
@@ -111,8 +115,9 @@ public class LabStaffHomeActivity extends BaseActivity {
 
         final View notificaitons = menu.findItem(R.id.action_notification).getActionView();
 
-        final TextView txtViewCount = (TextView) notificaitons.findViewById(R.id.txtCount);
-        txtViewCount.setText("10");
+         txtViewCount = (TextView) notificaitons.findViewById(R.id.txtCount);
+        //txtViewCount.setText("10");
+        getNotification();
         txtViewCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,6 +226,83 @@ public class LabStaffHomeActivity extends BaseActivity {
 
                 } else {
                     Logger.logError("Logout API Failure " +
+                            serverResponse.errorMessageToDisplay);
+                }
+            }
+        };
+
+    }
+
+
+
+    //GetNotification API
+    private void getNotification()
+    {
+        CommonRequestModel commonRequestModel = new CommonRequestModel();
+        commonRequestModel.setAppName(AppConstants.APP_NAME);
+        commonRequestModel.setVersionNumber(AppConstants.APP_VERSION);
+        commonRequestModel.setDeviceType(AppConstants.APP_OS);
+        commonRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
+        commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(LabStaffHomeActivity.this));
+        //commonRequestModel.setUserRole(new PrefManager(this).getUserRoleType());
+        commonRequestModel.setUserRole(Constants.LAB_STAFF);
+        commonRequestModel.setTagId(new PrefManager(this).getBarCodeValue());
+        commonRequestModel.setEvent(AppConstants.GET_NOTIFICATION);
+        commonRequestModel.setUserName(new PrefManager(this).getUserName());
+
+        new NetworkingHelper(new GetNotificationRequest(LabStaffHomeActivity.this, true, commonRequestModel)) {
+
+            @Override
+            public void serverResponseFromApi(ApiResponse serverResponse) {
+                if (serverResponse.isSucess) {
+
+                    try {
+
+                        GetNotificationResponse commonResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, GetNotificationResponse.class);
+
+                        if (commonResponse.getStatus().getCODE() == 200) {
+
+                            if(commonResponse.getStatus().getMSG().equalsIgnoreCase("REQ_SUCCESS")){
+
+                                Logger.logError("GetNofication API success " +
+                                        commonResponse.getNotifications().get(0).getDescription());
+                                Logger.logError("GetNofication API Total Unread " +
+                                        commonResponse.getTotalUnread());
+
+
+                                /*Intent mNextActivity = new Intent(NurseStaffHomeActivity.this, SelectRoleActivity.class);
+                                startActivity(mNextActivity);
+                                finish();*/
+
+                                txtViewCount.setText(""+commonResponse.getTotalUnread());
+
+                            }else {
+
+                                txtViewCount.setText("");
+                                Logger.logError("GetNofication API Failure Statis" +
+                                        commonResponse.getStatus());
+                                /*Logger.logError("GetNofication API Failure " +
+                                        commonResponse.getNotifications().get(0).getDescription());*/
+
+                                Utils.showAlertDialog(LabStaffHomeActivity.this,  commonResponse.getStatus().getMSG());
+                            }
+
+                        }else {
+                            Logger.logError("GetNofication API Failure for not getting 200" +
+                                    commonResponse.getStatus());
+                            txtViewCount.setText("");
+                        }
+
+
+
+                    }
+                    catch (Exception e){
+                        Logger.logError("Exception " + e.getMessage());
+                    }
+
+                } else {
+                    Logger.logError("GetNofication API Failure " +
                             serverResponse.errorMessageToDisplay);
                 }
             }

@@ -8,35 +8,40 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hrfid.acs.R;
+import com.hrfid.acs.data.Constants;
 import com.hrfid.acs.helpers.serverResponses.GetNofication.Notification;
+import com.hrfid.acs.util.AppConstants;
 import com.hrfid.acs.util.DataModel;
 import com.hrfid.acs.view.activity.NotificationActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by MS on 15/05/19.
  */
 public class NotificationItemAdapter  extends RecyclerView.Adapter<NotificationItemAdapter.MyViewHolder> {
 
-    private ArrayList<Notification> dataSet;
+    private List<Notification> notifications;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView textViewName;
-        TextView textViewVersion;
+        TextView notificationDesc;
+        TextView sentBy;
+        TextView notification_date;
         ImageView imageViewIcon;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            this.textViewName = (TextView) itemView.findViewById(R.id.textViewName);
-            this.textViewVersion = (TextView) itemView.findViewById(R.id.sent_role);
+            this.notificationDesc = (TextView) itemView.findViewById(R.id.notificationDesc);
+            this.sentBy = (TextView) itemView.findViewById(R.id.sentBy);
+            this.notification_date = (TextView) itemView.findViewById(R.id.notification_date);
             this.imageViewIcon = (ImageView) itemView.findViewById(R.id.imageView);
         }
     }
 
-    public NotificationItemAdapter(ArrayList<Notification> data) {
-        this.dataSet = data;
+    public NotificationItemAdapter(List<Notification> notifications) {
+        this.notifications = notifications;
     }
 
     @Override
@@ -45,7 +50,7 @@ public class NotificationItemAdapter  extends RecyclerView.Adapter<NotificationI
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.activity_notification_list_heading, parent, false);
 
-       // view.setOnClickListener(NotificationActivity.myOnClickListener);
+        // view.setOnClickListener(NotificationActivity.myOnClickListener);
 
         MyViewHolder myViewHolder = new MyViewHolder(view);
         return myViewHolder;
@@ -54,17 +59,35 @@ public class NotificationItemAdapter  extends RecyclerView.Adapter<NotificationI
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int listPosition) {
 
-        TextView textViewName = holder.textViewName;
-        TextView textViewVersion = holder.textViewVersion;
+        TextView notificationDesc = holder.notificationDesc;
+        TextView sentBy = holder.sentBy;
+        TextView notification_date = holder.notification_date;
         ImageView imageView = holder.imageViewIcon;
 
-        textViewName.setText(dataSet.get(listPosition).getTitle());
-        textViewVersion.setText(dataSet.get(listPosition).getCreatedOn());
+        notificationDesc.setText(notifications.get(listPosition).getDescription());
+        notification_date.setText(" / " +notifications.get(listPosition).getCreatedOn());
+        if(notifications.get(listPosition).getRole().equalsIgnoreCase(Constants.LAB_STAFF)){
+
+            sentBy.setText(Constants.LAB_STAFF);
+            imageView.setImageResource(R.drawable.ic_lab_staff);
+
+        }else if(notifications.get(listPosition).getRole().equalsIgnoreCase(Constants.TYPE_NURSE_STAFF)){
+
+            sentBy.setText(Constants.TYPE_NURSE_STAFF);
+            imageView.setImageResource(R.drawable.ic_nurse_staff);
+
+        }else if(notifications.get(listPosition).getRole().equalsIgnoreCase(Constants.SENIOR_STAFF)){
+
+            sentBy.setText(Constants.SENIOR_STAFF);
+            imageView.setImageResource(R.drawable.ic_senior_staff);
+
+        }
+
         //imageView.setImageResource(dataSet.get(listPosition).getId());
     }
 
     @Override
     public int getItemCount() {
-        return dataSet.size();
+        return notifications.size();
     }
 }

@@ -86,7 +86,7 @@ public class NurseStaffHomeActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         // super.onBackPressed();
-        Utils.createDialogTwoButtons(NurseStaffHomeActivity.this, "Logout", true, "Are you sure you want to logout?", "YES", "NO", new DialogInterface.OnClickListener() {
+        Utils.createDialogTwoButtons(NurseStaffHomeActivity.this, "Logout", true, getString(R.string.logout_message), "YES", "NO", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -150,7 +150,7 @@ public class NurseStaffHomeActivity extends BaseActivity {
         //Logout Functionality
         if (id == R.id.action_logout) {
             //Toast.makeText(SeniorStaffHomeActivity.this, "Logout tapped", Toast.LENGTH_LONG).show();
-            Utils.createDialogTwoButtons(NurseStaffHomeActivity.this, "Logout", true, "Are you sure you want to logout?", "YES", "NO", new DialogInterface.OnClickListener() {
+            Utils.createDialogTwoButtons(NurseStaffHomeActivity.this, "Logout", true, getString(R.string.logout_message), "YES", "NO", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
@@ -290,6 +290,10 @@ public class NurseStaffHomeActivity extends BaseActivity {
                                 Utils.showAlertDialog(NurseStaffHomeActivity.this,  commonResponse.getStatus().getMSG());
                             }
 
+                        }else {
+                            Logger.logError("GetNofication API Failure for not getting 200" +
+                                    commonResponse.getStatus());
+                            txtViewCount.setText("");
                         }
 
 
