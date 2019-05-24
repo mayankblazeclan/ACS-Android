@@ -71,7 +71,7 @@ class ApiRouter {
             .readTimeout(2, TimeUnit.MINUTES)
             .connectTimeout(2, TimeUnit.MINUTES)
             .addInterceptor(new LoggingInterceptor())
-            //.addInterceptor(new HeaderAddingInterceptor())
+            .addInterceptor(new HeaderAddingInterceptor())
             .addInterceptor(new AuthenticationInterceptor())
             .build();
         Retrofit retrofit = new Retrofit.Builder()

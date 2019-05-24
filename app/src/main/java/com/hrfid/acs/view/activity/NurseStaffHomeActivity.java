@@ -277,11 +277,18 @@ public class NurseStaffHomeActivity extends BaseActivity {
                                 startActivity(mNextActivity);
                                 finish();*/
 
-                                txtViewCount.setText(""+commonResponse.getTotalUnread());
+                                if(commonResponse.getTotalUnread()>0){
+                                    txtViewCount.setVisibility(View.VISIBLE);
+                                    txtViewCount.setText(""+commonResponse.getTotalUnread());
+                                }else {
+                                    txtViewCount.setVisibility(View.INVISIBLE);
+                                }
+
 
                             }else {
 
                                 txtViewCount.setText("");
+                                txtViewCount.setVisibility(View.INVISIBLE);
                                 Logger.logError("GetNofication API Failure Statis" +
                                         commonResponse.getStatus());
                                 /*Logger.logError("GetNofication API Failure " +
@@ -294,6 +301,7 @@ public class NurseStaffHomeActivity extends BaseActivity {
                             Logger.logError("GetNofication API Failure for not getting 200" +
                                     commonResponse.getStatus());
                             txtViewCount.setText("");
+                            txtViewCount.setVisibility(View.INVISIBLE);
                         }
 
 
@@ -301,9 +309,11 @@ public class NurseStaffHomeActivity extends BaseActivity {
                     }
                     catch (Exception e){
                         Logger.logError("Exception " + e.getMessage());
+                        txtViewCount.setVisibility(View.INVISIBLE);
                     }
 
                 } else {
+                    txtViewCount.setVisibility(View.INVISIBLE);
                     Logger.logError("GetNofication API Failure " +
                             serverResponse.errorMessageToDisplay);
                 }

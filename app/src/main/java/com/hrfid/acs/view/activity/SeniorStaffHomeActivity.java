@@ -61,7 +61,7 @@ public class SeniorStaffHomeActivity extends BaseActivity {
 
 
         initializeUI();
-        getNotification();
+        //getNotification();
 
     }
 
@@ -254,8 +254,8 @@ public class SeniorStaffHomeActivity extends BaseActivity {
         commonRequestModel.setDeviceType(AppConstants.APP_OS);
         commonRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
         commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(SeniorStaffHomeActivity.this));
-        //commonRequestModel.setUserRole(new PrefManager(this).getUserRoleType());
-        commonRequestModel.setUserRole(Constants.SENIOR_STAFF);
+        commonRequestModel.setUserRole(new PrefManager(this).getUserRoleType());
+        //commonRequestModel.setUserRole(Constants.SENIOR_STAFF);
         commonRequestModel.setTagId(new PrefManager(this).getBarCodeValue());
         commonRequestModel.setEvent(AppConstants.GET_NOTIFICATION);
         commonRequestModel.setUserName(new PrefManager(this).getUserName());
@@ -281,14 +281,23 @@ public class SeniorStaffHomeActivity extends BaseActivity {
                                         commonResponse.getTotalUnread());
 
 
-                                /*Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, SelectRoleActivity.class);
+                                /*Intent mNextActivity = new Intent(NurseStaffHomeActivity.this, SelectRoleActivity.class);
                                 startActivity(mNextActivity);
                                 finish();*/
-                                txtViewCount.setText(""+commonResponse.getTotalUnread());
+
+
+                                if(commonResponse.getTotalUnread()>0){
+                                    txtViewCount.setVisibility(View.VISIBLE);
+                                    txtViewCount.setText(""+commonResponse.getTotalUnread());
+                                }else {
+                                    txtViewCount.setVisibility(View.INVISIBLE);
+                                }
+
 
                             }else {
 
                                 txtViewCount.setText("");
+                                txtViewCount.setVisibility(View.INVISIBLE);
                                 Logger.logError("GetNofication API Failure Statis" +
                                         commonResponse.getStatus());
                                 /*Logger.logError("GetNofication API Failure " +
@@ -301,6 +310,7 @@ public class SeniorStaffHomeActivity extends BaseActivity {
                             Logger.logError("GetNofication API Failure for not getting 200" +
                                     commonResponse.getStatus());
                             txtViewCount.setText("");
+                            txtViewCount.setVisibility(View.INVISIBLE);
                         }
 
 
@@ -308,9 +318,11 @@ public class SeniorStaffHomeActivity extends BaseActivity {
                     }
                     catch (Exception e){
                         Logger.logError("Exception " + e.getMessage());
+                        txtViewCount.setVisibility(View.INVISIBLE);
                     }
 
                 } else {
+                    txtViewCount.setVisibility(View.INVISIBLE);
                     Logger.logError("GetNofication API Failure " +
                             serverResponse.errorMessageToDisplay);
                 }

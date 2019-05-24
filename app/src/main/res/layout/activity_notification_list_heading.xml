@@ -99,6 +99,7 @@
                         android:gravity="left"
                         android:text="  / 15-May-2019"
                         android:layout_marginRight="@dimen/activity_5dp_margin"
+                        android:layout_marginLeft="@dimen/activity_5dp_margin"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textStyle="italic"
                         android:adjustViewBounds="true" />

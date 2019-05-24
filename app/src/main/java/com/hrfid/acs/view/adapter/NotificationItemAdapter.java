@@ -1,5 +1,8 @@
 package com.hrfid.acs.view.adapter;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +15,7 @@ import com.hrfid.acs.data.Constants;
 import com.hrfid.acs.helpers.serverResponses.GetNofication.Notification;
 import com.hrfid.acs.util.AppConstants;
 import com.hrfid.acs.util.DataModel;
+import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.view.activity.NotificationActivity;
 
 import java.util.ArrayList;
@@ -23,6 +27,7 @@ import java.util.List;
 public class NotificationItemAdapter  extends RecyclerView.Adapter<NotificationItemAdapter.MyViewHolder> {
 
     private List<Notification> notifications;
+    private Context notificationActivity;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -30,6 +35,8 @@ public class NotificationItemAdapter  extends RecyclerView.Adapter<NotificationI
         TextView sentBy;
         TextView notification_date;
         ImageView imageViewIcon;
+        CardView cardView;
+
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -37,11 +44,13 @@ public class NotificationItemAdapter  extends RecyclerView.Adapter<NotificationI
             this.sentBy = (TextView) itemView.findViewById(R.id.sentBy);
             this.notification_date = (TextView) itemView.findViewById(R.id.notification_date);
             this.imageViewIcon = (ImageView) itemView.findViewById(R.id.imageView);
+            this.cardView = (CardView) itemView.findViewById(R.id.card_view);
         }
     }
 
-    public NotificationItemAdapter(List<Notification> notifications) {
+    public NotificationItemAdapter(List<Notification> notifications, NotificationActivity notificationActivity) {
         this.notifications = notifications;
+        this.notificationActivity = notificationActivity;
     }
 
     @Override
@@ -63,6 +72,7 @@ public class NotificationItemAdapter  extends RecyclerView.Adapter<NotificationI
         TextView sentBy = holder.sentBy;
         TextView notification_date = holder.notification_date;
         ImageView imageView = holder.imageViewIcon;
+        CardView cardView = holder.cardView;
 
         notificationDesc.setText(notifications.get(listPosition).getDescription());
         notification_date.setText(" / " +notifications.get(listPosition).getCreatedOn());
@@ -80,6 +90,47 @@ public class NotificationItemAdapter  extends RecyclerView.Adapter<NotificationI
 
             sentBy.setText(Constants.SENIOR_STAFF);
             imageView.setImageResource(R.drawable.ic_senior_staff);
+
+        }
+
+
+        if(new PrefManager(notificationActivity).getUserRoleType().equalsIgnoreCase(Constants.LAB_STAFF)){
+
+            if(notifications.get(listPosition).getIsReadLabStaff().equalsIgnoreCase("1")){
+
+                cardView.setCardBackgroundColor(Color.WHITE);
+
+            }else {
+
+                cardView.setCardBackgroundColor(Color.parseColor("#ffe6e6"));
+            }
+
+        }
+
+        if(new PrefManager(notificationActivity).getUserRoleType().equalsIgnoreCase(Constants.TYPE_NURSE_STAFF)){
+
+            if(notifications.get(listPosition).getIsReadNurse().equalsIgnoreCase("1")){
+
+                cardView.setCardBackgroundColor(Color.WHITE);
+
+            }else {
+
+                cardView.setCardBackgroundColor(Color.parseColor("#ffe6e6"));
+            }
+
+        }
+
+
+        if(new PrefManager(notificationActivity).getUserRoleType().equalsIgnoreCase(Constants.SENIOR_STAFF)){
+
+            if(notifications.get(listPosition).getIsReadSeniorStaff().equalsIgnoreCase("1")){
+
+                cardView.setCardBackgroundColor(Color.WHITE);
+
+            }else {
+
+                cardView.setCardBackgroundColor(Color.parseColor("#ffe6e6"));
+            }
 
         }
 

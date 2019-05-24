@@ -52,6 +52,13 @@ public class PrefManager {
         return sharedPreferences.getBoolean("isLogin", false);
     }
 
+
+    public void setUserRoleType(String userRoleType) {
+        editor.putString("userRoleType", userRoleType);
+        editor.commit();
+    }
+
+
  /*   public boolean isUserLogedOut() {
         SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         boolean isEmailEmpty = sharedPreferences.getString("Email", "").isEmpty();

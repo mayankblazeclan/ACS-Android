@@ -43,8 +43,8 @@ class LoggingInterceptor implements Interceptor {
       response = chain.proceed(request);
 
       long t2 = System.nanoTime();
-//      Logger.logError("Response for %s in %.1fms%n%s" + response.request().url());
-//      Logger.logError("Response in TIME " + (t2 - t1) / 1e6d);
+      Logger.logError("Response for %s in %.1fms%n%s" + response.request().url());
+      Logger.logError("Response in TIME " + (t2 - t1) / 1e6d);
 //      Log.e("Response for %s in %.1fms%n%s",response.request().url(),(t2 - t1) / 1e6d,request.headers());
 
       MediaType contentType = null;

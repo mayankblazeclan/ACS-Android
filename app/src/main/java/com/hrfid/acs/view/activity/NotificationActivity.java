@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hrfid.acs.R;
+import com.hrfid.acs.components.BaseActivity;
+import com.hrfid.acs.data.Constants;
 import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
@@ -36,7 +38,7 @@ import java.util.List;
 /**
  * Created by MS on 08/05/19.
  */
-public class NotificationActivity extends AppCompatActivity {
+public class NotificationActivity extends BaseActivity {
 
     private static RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -89,6 +91,8 @@ public class NotificationActivity extends AppCompatActivity {
 
         getNotification();
 
+        //resetNotificationCount();
+
     }
 
     private void initializeUI() {
@@ -139,6 +143,7 @@ public class NotificationActivity extends AppCompatActivity {
         commonRequestModel.setDeviceType(AppConstants.APP_OS);
         commonRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
         commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(NotificationActivity.this));
+        //commonRequestModel.setUserRole(Constants.LAB_STAFF);
         commonRequestModel.setUserRole(new PrefManager(this).getUserRoleType());
         commonRequestModel.setTagId(new PrefManager(this).getBarCodeValue());
         commonRequestModel.setEvent(AppConstants.GET_NOTIFICATION);
@@ -177,7 +182,7 @@ public class NotificationActivity extends AppCompatActivity {
                                     textView.setVisibility(View.GONE);
                                     data = new ArrayList<Notification>();
                                     data = commonResponse.getNotifications();
-                                    adapter = new NotificationItemAdapter(data);
+                                    adapter = new NotificationItemAdapter(data, NotificationActivity.this);
                                     recyclerView.setAdapter(adapter);
                                 }else {
                                     linearLayout.setVisibility(View.GONE);
@@ -185,7 +190,7 @@ public class NotificationActivity extends AppCompatActivity {
 
                                 }
 
-                                //resetNotificationCount();
+                                resetNotificationCount();
 
                             }else {
 

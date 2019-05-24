@@ -111,7 +111,6 @@ public class BarcodeScanActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
 
-               // txtBarcodeNumber.setText("E00401502B31ACBC");
                 if(txtBarcodeNumber.getText().length() >0 && txtBarcodeNumber.getText().length()<17){
 
                     tagId = txtBarcodeNumber.getText().toString();
@@ -151,10 +150,13 @@ public class BarcodeScanActivity extends AppCompatActivity implements
 
                 }else {
 
-                    gotoNextActivity(userRoleType);
-                   // Utilities.showToast(getApplicationContext(),"Please enter valid input");
+                    //gotoNextActivity(userRoleType);
+                    Utilities.showToast(getApplicationContext(),"Please enter valid input");
 
                 }
+
+
+                //gotoNextActivity(userRoleType);
             }
         });
 
@@ -188,6 +190,8 @@ public class BarcodeScanActivity extends AppCompatActivity implements
 
         if(userRoleType.equalsIgnoreCase(Constants.USER_ROLE_TYPE_SENIOR_STAFF)){
 
+            //new PrefManager(this).setUserRoleType(Constants.USER_ROLE_TYPE_SENIOR_STAFF);
+            //new PrefManager(this).setUserRoleType(Constants.USER_ROLE_TYPE_SENIOR_STAFF);
             //Go to next page of senior member
             Intent mNextActivity = new Intent(BarcodeScanActivity.this, SeniorStaffHomeActivity.class);
             mNextActivity.putExtra(Constants.USER_ROLE_TYPE, userRoleType);
@@ -196,6 +200,7 @@ public class BarcodeScanActivity extends AppCompatActivity implements
 
         }else if(userRoleType.equalsIgnoreCase(Constants.USER_ROLE_TYPE_NURSE_STAFF)){
 
+           // new PrefManager(this).setUserRoleType(Constants.USER_ROLE_TYPE_NURSE_STAFF);
             //Go to next page of nurse member
             Intent mNextActivity = new Intent(BarcodeScanActivity.this, NurseStaffHomeActivity.class);
             mNextActivity.putExtra(Constants.USER_ROLE_TYPE, userRoleType);
@@ -204,6 +209,7 @@ public class BarcodeScanActivity extends AppCompatActivity implements
 
         }else {
 
+            //new PrefManager(this).setUserRoleType(Constants.LAB_STAFF);
             //Go to next page of lab member
             Intent mNextActivity = new Intent(BarcodeScanActivity.this, LabStaffHomeActivity.class);
             mNextActivity.putExtra(Constants.USER_ROLE_TYPE, userRoleType);

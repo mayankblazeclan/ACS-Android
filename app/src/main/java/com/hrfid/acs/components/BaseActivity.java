@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 public class BaseActivity extends AppCompatActivity {
 
-    public static final long DISCONNECT_TIMEOUT = 300000; // 5 min = 5 * 60 * 1000 ms =300000  //600000
+    public static final long DISCONNECT_TIMEOUT = 60000; // 5 min = 5 * 60 * 1000 ms =300000  //60000
     private static final String TAG = "BaseActivity";
 
     private Handler disconnectHandler = new Handler(new Handler.Callback() {
@@ -50,7 +50,7 @@ public class BaseActivity extends AppCompatActivity {
             Log.e(TAG, "User will be LOGOUT ....");
             new AlertDialog.Builder(BaseActivity.this)
                     .setTitle("Inactive Session")
-                    .setMessage("You will be automatically logged out after 5 min")
+                    .setMessage("You will be automatically logged out after 5 minutes")
                     .setPositiveButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // Continue with delete operation
@@ -77,7 +77,7 @@ public class BaseActivity extends AppCompatActivity {
             Log.e(TAG, "You are LOGOUT ....");
             new AlertDialog.Builder(BaseActivity.this)
                     .setTitle("Logout")
-                    .setMessage("You are logout, Please re-login to continue")
+                    .setMessage("You were logged out. Please re-login to continue.")
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // Continue with delete operation
@@ -96,7 +96,7 @@ public class BaseActivity extends AppCompatActivity {
     public void resetDisconnectTimer(){
         disconnectHandler.removeCallbacks(disconnectCallback);
         disconnectHandler.postDelayed(disconnectCallback, DISCONNECT_TIMEOUT);
-        disconnectHandler.postDelayed(disconnectCallback2, 420000);
+        disconnectHandler.postDelayed(disconnectCallback2, 120000);
 
     }
 

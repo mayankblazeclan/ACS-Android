@@ -34,7 +34,7 @@ class HeaderAddingInterceptor implements Interceptor {
 //        .header("Content-Type", "text/json")
 //                    //QA site uuid
 
-          .header("x-astroid", strUserID)  //AppConstants.USER_ID   "9B6716D95245BDC9DD1C4938CA2701"
+          .header("Accept-Encoding", "identity")  //AppConstants.USER_ID   "9B6716D95245BDC9DD1C4938CA2701"
 //              .header("x-astroid", "9B6716D95245BDC9DD1C4938CA2701")  //AppConstants.USER_ID   "9B6716D95245BDC9DD1C4938CA2701"
           .method(original.method(), original.body())
           .build();
@@ -45,8 +45,8 @@ class HeaderAddingInterceptor implements Interceptor {
 //        .header("Accept", "application/json")
 //        .header("Content-Type", "text/json")
 //                    //QA site uuid
-          .header("x-astroid", strUserID)  //AppConstants.USER_ID   "9B6716D95245BDC9DD1C4938CA2701"
-          .method(original.method(), original.body())
+              .header("Accept-Encoding", "identity")
+              .method(original.method(), original.body())
           .build();
 
     }
