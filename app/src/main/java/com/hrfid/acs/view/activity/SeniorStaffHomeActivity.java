@@ -70,7 +70,7 @@ public class SeniorStaffHomeActivity extends BaseActivity {
 
 
         gridView = (GridView) findViewById(R.id.simpleGridView);
-        staffItemList.add(new StaffItem("Study Setup",R.drawable.ic_study_setup));
+        staffItemList.add(new StaffItem("Study \nSetup",R.drawable.ic_study_setup));
         staffItemList.add(new StaffItem("Inventory Setup",R.drawable.ic_senior_inventory));
         staffItemList.add(new StaffItem("Subject Onboarding",R.drawable.ic_senior_onboarding));
 
@@ -83,6 +83,18 @@ public class SeniorStaffHomeActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int i, long id) {
                 Toast.makeText(SeniorStaffHomeActivity.this, "Tapped On " + staffItemList.get(i).getTagName(), Toast.LENGTH_LONG).show();
+
+                if(i==0){
+
+                    Toast.makeText(SeniorStaffHomeActivity.this, "Tapped On Create Study", Toast.LENGTH_LONG).show();
+
+
+                }else {
+
+                    Toast.makeText(SeniorStaffHomeActivity.this, "Tapped On " + 2, Toast.LENGTH_LONG).show();
+
+                }
+
             }
         });
 
