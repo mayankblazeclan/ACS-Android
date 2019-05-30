@@ -113,29 +113,4 @@ public class SelectRoleActivity extends AppCompatActivity implements View.OnClic
         //this.finish();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.e(TAG, "OnStart () &&& Starting timer");
-        // Utils.stopHandler();  //first stop the timer and then again start it
-        //Utils.startHandler();
-    }
-
-
-   /* @Override
-    public void onUserInteraction() {
-        super.onUserInteraction();
-        Log.e(TAG, "User interacting with screen");
-
-        Utils.stopHandler();  //first stop the timer and then again start it
-        Utils.startHandler();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.e(TAG, "onResume () &&& Starting timer");
-        Utils.stopHandler();  //first stop the timer and then again start it
-        Utils.startHandler();
-    }*/
 }
