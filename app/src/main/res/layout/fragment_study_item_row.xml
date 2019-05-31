@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/bt_ok_padding"
+        android:layout_marginRight="@dimen/bt_ok_padding"
+        android:layout_marginTop="@dimen/activity_5dp_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/study_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/study_name_id"
+            android:textColor="#000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtStudy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ABC (123)"
+            android:layout_marginLeft="@dimen/margin_10dp"
+            android:textColor="@color/viewfinder_mask"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_below="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/bt_ok_padding"
+        android:layout_marginRight="@dimen/bt_ok_padding"
+        android:layout_marginTop="@dimen/activity_5dp_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/study_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/study_start_end_date"
+            android:textColor="#000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txt_start_end_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="01/06/2019 -- 30/06/2019"
+            android:layout_marginLeft="@dimen/margin_10dp"
+            android:textColor="@color/viewfinder_mask"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/bt_ok_padding"
+        android:layout_marginRight="@dimen/bt_ok_padding"
+        android:layout_marginTop="@dimen/activity_5dp_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/study_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/study_days"
+            android:textColor="#000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txt_number_of_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10dp"
+            android:text="30"
+            android:textColor="@color/viewfinder_mask"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/bt_ok_padding"
+        android:layout_marginRight="@dimen/bt_ok_padding"
+        android:layout_marginTop="@dimen/activity_5dp_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/study_status_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/study_status"
+            android:textColor="#000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txt_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10dp"
+            android:text="ACTIVE"
+            android:textColor="@color/viewfinder_mask"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/bt_ok_padding"
+        android:layout_marginRight="@dimen/bt_ok_padding"
+        android:layout_marginTop="@dimen/activity_5dp_margin"
+        android:layout_alignParentRight="true"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnModify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/design_default_color_primary"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_margin="@dimen/activity_5dp_margin"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="MODIFY"/>
+
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBCRed"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_margin="@dimen/activity_5dp_margin"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="DELETE"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_margin="@dimen/margin_10dp"
+        android:id="@+id/linearLayout41"
+        android:layout_below="@+id/linearLayout3"
+        android:background="@color/warning"/>
+
+</RelativeLayout>

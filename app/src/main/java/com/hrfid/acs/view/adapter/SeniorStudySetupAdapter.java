@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.hrfid.acs.view.fragment.CreateStudyScheduleFrgement;
+import com.hrfid.acs.view.fragment.ViewScreenStudyFragment;
 
 /**
  * Created by MS on 2019-05-30.
@@ -37,12 +38,12 @@ public class SeniorStudySetupAdapter extends FragmentStatePagerAdapter {
                     return createStudyScheduleFrgement;
 
                 case 1:
-                    CreateStudyScheduleFrgement createStudyScheduleFrgement1 = new CreateStudyScheduleFrgement();
+                    ViewScreenStudyFragment createStudyScheduleFrgement1 = new ViewScreenStudyFragment();
                     return createStudyScheduleFrgement1;
 
 
                 case 2:
-                    CreateStudyScheduleFrgement createStudyScheduleFrgement2 = new CreateStudyScheduleFrgement();
+                    ViewScreenStudyFragment createStudyScheduleFrgement2 = new ViewScreenStudyFragment();
                     return createStudyScheduleFrgement2;
 
                 default:

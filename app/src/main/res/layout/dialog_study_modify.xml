@@ -5,13 +5,22 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <LinearLayout
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="MODIFY STUDY"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:background="@color/colorBCRed"/>
+
+   <!-- <LinearLayout
         android:id="@+id/linearLayout_study_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/bt_ok_padding"
         android:layout_marginRight="@dimen/bt_ok_padding"
-        android:layout_marginTop="@dimen/bt_ok_padding"
+        android:layout_marginTop="@dimen/margin_10dp"
         android:gravity="center"
         android:layout_gravity="center"
         android:orientation="horizontal">
@@ -52,9 +61,9 @@
 
         </RadioGroup>
 
-    </LinearLayout>
+    </LinearLayout>-->
 
-   <!-- <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/linearLayout_study_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -107,7 +116,7 @@
     </LinearLayout>
 
 
- <!--   <LinearLayout
+   <!-- <LinearLayout
         android:id="@+id/linearLayout_days"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -151,12 +160,6 @@
             android:layout_marginLeft="@dimen/activity_5dp_margin"
             android:text="@string/study_status"/>
 
-        <!--<EditText
-            android:id="@+id/edtStudyStaus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter Study Status"/>-->
-
         <Spinner
             android:id="@+id/spnStatus"
             android:layout_width="match_parent"
@@ -197,21 +200,21 @@
             android:layout_height="wrap_content"
             android:gravity="center">
 
-        <ImageButton
-            android:id="@+id/btn_end_date"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/activity_5dp_margin"
-            android:background="@mipmap/ic_date_calendar"/>
+            <ImageButton
+                android:id="@+id/btn_end_date"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/activity_5dp_margin"
+                android:background="@mipmap/ic_date_calendar"/>
 
-        <TextView
-            android:id="@+id/txt_end_date"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:hint="@string/end_select_date"/>
+            <TextView
+                android:id="@+id/txt_end_date"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:hint="@string/end_select_date"/>
 
         </LinearLayout>
 
@@ -219,6 +222,7 @@
 
 
     <Button
+        android:id="@+id/btnSubmit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="SUBMIT"

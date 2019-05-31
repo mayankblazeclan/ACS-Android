@@ -89,6 +89,9 @@ public class SeniorStaffHomeActivity extends BaseActivity {
 
                     Toast.makeText(SeniorStaffHomeActivity.this, "Tapped On Create Study", Toast.LENGTH_LONG).show();
 
+                    Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, SeniorStudySetupActivity.class);
+                    startActivity(mNextActivity);
+
 
                 }else {
 
