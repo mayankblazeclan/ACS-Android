@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/tool_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorBCRed"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/app_bar"
+        android:background="@color/white">
+
+
+        <!-- <LinearLayout
+             android:id="@+id/linearLayout_study_id"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginLeft="@dimen/bt_ok_padding"
+             android:layout_marginRight="@dimen/bt_ok_padding"
+             android:layout_marginTop="@dimen/bt_ok_padding"
+             android:orientation="vertical">
+
+             <TextView
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:textColor="@color/black"
+                 android:textStyle="bold"
+                 android:textAppearance="?android:attr/textAppearanceMedium"
+                 android:layout_marginLeft="@dimen/activity_5dp_margin"
+                 android:text="@string/study_id"/>
+
+             <EditText
+                 android:id="@+id/edtStudyId"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:hint="Enter Study ID"/>
+
+         </LinearLayout>-->
+
+        <LinearLayout
+            android:id="@+id/linearLayout_study_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/bt_ok_padding"
+            android:layout_marginRight="@dimen/bt_ok_padding"
+            android:layout_marginTop="@dimen/bt_ok_padding"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_marginLeft="@dimen/activity_5dp_margin"
+                android:text="@string/screen_id"/>
+
+            <EditText
+                android:id="@+id/edtStudyName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Study ID"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/bt_ok_padding"
+            android:layout_marginRight="@dimen/bt_ok_padding"
+            android:layout_marginTop="@dimen/bt_ok_padding"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btn_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_5dp_margin"
+                android:background="@mipmap/ic_date_calendar"/>
+
+            <TextView
+                android:id="@+id/txt_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:hint="@string/text_dob"/>
+
+            <LinearLayout
+                android:id="@+id/linearLayout_study_type"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:layout_marginLeft="@dimen/bt_ok_padding"
+                android:layout_marginRight="@dimen/bt_ok_padding"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/bt_ok_padding"
+                    android:gravity="center"
+                    android:text="@string/person_gender"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/radioMale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/bt_ok_padding"
+                        android:layout_marginLeft="@dimen/bt_ok_padding"
+                        android:checked="true"
+                        android:text=" Male"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <RadioButton
+                        android:id="@+id/radioFemale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/bt_ok_padding"
+                        android:checked="false"
+                        android:text="  Female"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <!-- <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:gravity="center">
+
+                 <ImageButton
+                     android:id="@+id/btn_end_date"
+                     android:layout_width="wrap_content"
+                     android:layout_height="match_parent"
+                     android:layout_margin="@dimen/activity_5dp_margin"
+                     android:background="@mipmap/ic_date_calendar"/>
+
+                 <TextView
+                     android:id="@+id/txt_end_date"
+                     android:layout_width="wrap_content"
+                     android:layout_height="match_parent"
+                     android:textStyle="bold"
+                     android:gravity="center"
+                     android:textAppearance="?android:attr/textAppearanceMedium"
+                     android:hint="@string/end_select_date"/>
+
+             </LinearLayout>-->
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/bt_ok_padding"
+            android:layout_marginRight="@dimen/bt_ok_padding"
+            android:layout_marginTop="@dimen/bt_ok_padding"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_marginLeft="@dimen/activity_5dp_margin"
+                android:text="@string/blood_group"/>
+
+            <!--<EditText
+                android:id="@+id/edtStudyStaus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Study Status"/>-->
+
+           <!-- <Spinner
+                android:id="@+id/spnBloodGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_5dp_margin"/>-->
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spnBloodGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/spinner_background"
+                android:layout_margin="@dimen/activity_5dp_margin" />
+
+        </LinearLayout>
+
+
+
+
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout_days"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/bt_ok_padding"
+            android:layout_marginRight="@dimen/bt_ok_padding"
+            android:layout_marginTop="@dimen/bt_ok_padding"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_marginLeft="@dimen/activity_5dp_margin"
+                android:text="@string/study_id"/>
+
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spnStatusId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/spinner_background"
+                android:layout_margin="@dimen/activity_5dp_margin" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout_date2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/bt_ok_padding"
+            android:layout_marginRight="@dimen/bt_ok_padding"
+            android:layout_marginTop="@dimen/bt_ok_padding"
+            android:orientation="horizontal">
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_senior_inventory_barcode"/>
+
+            <Button
+                android:id="@+id/btn_start_date2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GENERATE BARCODE"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:padding="@dimen/activity_5dp_margin"
+                android:layout_margin="@dimen/activity_5dp_margin"
+                android:background="@color/colorBCRed"/>
+
+
+            <!--    <TextView
+                    android:id="@+id/txt_start_date2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:hint="@string/text_dob"/>-->
+
+        </LinearLayout>
+
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SUBMIT"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_margin="@dimen/bt_ok_padding"
+            android:background="@color/colorBCRed"/>
+
+    </LinearLayout>
+</RelativeLayout>

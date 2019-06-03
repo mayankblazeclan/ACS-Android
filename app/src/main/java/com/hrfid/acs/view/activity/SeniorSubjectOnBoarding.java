@@ -17,7 +17,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,24 +38,27 @@ import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
 import com.hrfid.acs.view.adapter.SeniorStudySetupAdapter;
-import com.hrfid.acs.view.adapter.StaffItemAdapter;
 
 import java.util.ArrayList;
 
 /**
  * Created by MS on 2019-05-30.
  */
-public class SeniorStudySetupActivity extends BaseActivity {
+public class SeniorSubjectOnBoarding extends BaseActivity implements AdapterView.OnItemSelectedListener {
 
-    private static final String TAG = "SeniorStudySetupActivity";
+    private static final String TAG = "SeniorSubjectOnBoarding";
+    String[] spnBloodGroup = {"O+","B-","B+", "A+", "A-"};
+
+    String[] spnStudyID = {"10012","10011","10010", "10015", "10016"};
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_senior_study_setup);
+        setContentView(R.layout.activity_senior_on_boarding);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        toolbar.setTitle("Study Setup");
+        toolbar.setTitle("Subject Onboarding");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -67,47 +72,29 @@ public class SeniorStudySetupActivity extends BaseActivity {
         });
 
 
-
         initializeUI();
-        //getNotification();
-
     }
 
     private void initializeUI() {
 
-        //Tab Layout for Tabs
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Create Study"));
-        tabLayout.addTab(tabLayout.newTab().setText("View  Screen Scheduled Study"));
-        tabLayout.addTab(tabLayout.newTab().setText("View Trial Scheduled Study"));
-        tabLayout.setTabTextColors(    ContextCompat.getColor(this, R.color.black),
-                ContextCompat.getColor(this, R.color.white));
-        //tabLayout.addTab(tabLayout.newTab().setText("Contact"));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        final ViewPager viewPager =(ViewPager)findViewById(R.id.view_pager);
-        SeniorStudySetupAdapter tabsAdapter = new SeniorStudySetupAdapter(getSupportFragmentManager(), tabLayout.getTabCount(), "FromSMS");
-        viewPager.setAdapter(tabsAdapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-                if(tab.getPosition() ==1 || tab.getPosition()==2){
-                    final InputMethodManager imm = (InputMethodManager)getSystemService(
-                            Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
-                }
+        //Getting the instance of Spinner and applying OnItemSelectedListener on it
+        Spinner spnBloodGroups = (Spinner) findViewById(R.id.spnBloodGroup);
+        spnBloodGroups.setOnItemSelectedListener(this);
 
-            }
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+        Spinner spnStudyIDs = (Spinner) findViewById(R.id.spnStatusId);
+        spnStudyIDs.setOnItemSelectedListener(this);
 
-            }
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+        //Creating the ArrayAdapter instance having the country list
+        ArrayAdapter bloodGroupAdp = new ArrayAdapter(SeniorSubjectOnBoarding.this,android.R.layout.simple_spinner_item,spnBloodGroup);
+        bloodGroupAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //Setting the ArrayAdapter data on the Spinner
+        spnBloodGroups.setAdapter(bloodGroupAdp);
 
-            }
-        });
+
+        //Creating the ArrayAdapter instance having the country list
+        ArrayAdapter studyIdAdp = new ArrayAdapter(SeniorSubjectOnBoarding.this,android.R.layout.simple_spinner_item, spnStudyID);
+        studyIdAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnStudyIDs.setAdapter(studyIdAdp);
 
     }
 
@@ -132,14 +119,14 @@ public class SeniorStudySetupActivity extends BaseActivity {
         //Logout Functionality
         if (id == R.id.action_logout) {
             //Toast.makeText(SeniorStaffHomeActivity.this, "Logout tapped", Toast.LENGTH_LONG).show();
-            Utils.createDialogTwoButtons(SeniorStudySetupActivity.this, getString(R.string.settings_logout), true, getString(R.string.logout_message), getString(R.string.dlg_yes_text), getString(R.string.dlg_no_text), new DialogInterface.OnClickListener() {
+            Utils.createDialogTwoButtons(SeniorSubjectOnBoarding.this, getString(R.string.settings_logout), true, getString(R.string.logout_message), getString(R.string.dlg_yes_text), getString(R.string.dlg_no_text), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    if (Utilities.isNetworkConnected(SeniorStudySetupActivity.this)) {
+                    if (Utilities.isNetworkConnected(SeniorSubjectOnBoarding.this)) {
                         callLogout();
                     } else {
-                        Utils.showAlertDialog(SeniorStudySetupActivity.this, getString(R.string.no_internet_connection));
+                        Utils.showAlertDialog(SeniorSubjectOnBoarding.this, getString(R.string.no_internet_connection));
                     }
 
 
@@ -165,13 +152,13 @@ public class SeniorStudySetupActivity extends BaseActivity {
         commonRequestModel.setVersionNumber(AppConstants.APP_VERSION);
         commonRequestModel.setDeviceType(AppConstants.APP_OS);
         commonRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
-        commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(SeniorStudySetupActivity.this));
+        commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(SeniorSubjectOnBoarding.this));
         commonRequestModel.setUserRole(new PrefManager(this).getUserRoleType());
         commonRequestModel.setTagId(new PrefManager(this).getBarCodeValue());
         commonRequestModel.setEvent(AppConstants.LOGOUT);
         commonRequestModel.setUserName(new PrefManager(this).getUserName());
 
-        new NetworkingHelper(new LogoutRequest(SeniorStudySetupActivity.this, true, commonRequestModel)) {
+        new NetworkingHelper(new LogoutRequest(SeniorSubjectOnBoarding.this, true, commonRequestModel)) {
 
             @Override
             public void serverResponseFromApi(ApiResponse serverResponse) {
@@ -192,7 +179,7 @@ public class SeniorStudySetupActivity extends BaseActivity {
                                         commonResponse.getResponse().get(0).getMessage());
 
 
-                                Intent mNextActivity = new Intent(SeniorStudySetupActivity.this, SelectRoleActivity.class);
+                                Intent mNextActivity = new Intent(SeniorSubjectOnBoarding.this, SelectRoleActivity.class);
                                 startActivity(mNextActivity);
                                 finish();
 
@@ -203,7 +190,7 @@ public class SeniorStudySetupActivity extends BaseActivity {
                                 Logger.logError("Logout API Failure " +
                                         commonResponse.getResponse().get(0).getMessage());
 
-                                Utils.showAlertDialog(SeniorStudySetupActivity.this,  commonResponse.getResponse().get(0).getMessage());
+                                Utils.showAlertDialog(SeniorSubjectOnBoarding.this,  commonResponse.getResponse().get(0).getMessage());
                             }
 
                         }
@@ -236,5 +223,15 @@ public class SeniorStudySetupActivity extends BaseActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Toast.makeText(SeniorSubjectOnBoarding.this,spnBloodGroup[position] , Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

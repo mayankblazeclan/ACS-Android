@@ -157,11 +157,18 @@
             android:layout_height="wrap_content"
             android:hint="Enter Study Status"/>-->
 
-        <Spinner
+        <!--<Spinner
             android:id="@+id/spnStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_5dp_margin"/>
+            android:layout_margin="@dimen/activity_5dp_margin"/>-->
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/spnStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/spinner_background"
+            android:layout_margin="@dimen/activity_5dp_margin" />
 
     </LinearLayout>
 

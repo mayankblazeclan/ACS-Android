@@ -1,5 +1,6 @@
 package com.hrfid.acs.view.adapter;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -23,6 +26,7 @@ import com.hrfid.acs.util.Utils;
 import com.hrfid.acs.view.activity.SeniorStaffHomeActivity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by MS on 2019-05-31.
@@ -127,6 +131,12 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
 
     private void showModifyDialog() {
 
+        ImageButton btnStartDatePicker, btnEndDatePicker;
+        final TextView txtStartDate, txtEndDate;
+        final int[] mYear = new int[1];
+        final int[] mMonth = new int[1];
+        final int[] mDay = new int[1];
+
         // Create custom dialog object
         final Dialog dialog = new Dialog(context);
         // Include dialog.xml file
@@ -141,6 +151,68 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
         spin.setAdapter(aa);
+
+        btnStartDatePicker=(ImageButton)dialog.findViewById(R.id.btn_start_date);
+        txtStartDate=(TextView)dialog.findViewById(R.id.txt_start_date);
+
+        btnEndDatePicker=(ImageButton)dialog.findViewById(R.id.btn_end_date);
+        txtEndDate=(TextView)dialog.findViewById(R.id.txt_end_date);
+
+        btnEndDatePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+               // dialog.dismiss();
+
+                // Get Current Date
+                final Calendar c = Calendar.getInstance();
+                mYear[0] = c.get(Calendar.YEAR);
+                mMonth[0] = c.get(Calendar.MONTH);
+                mDay[0] = c.get(Calendar.DAY_OF_MONTH);
+
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(context,
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+
+                                txtEndDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                            }
+                        }, mYear[0], mMonth[0], mDay[0]);
+                datePickerDialog.show();
+            }
+        });
+
+
+        btnStartDatePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+
+                // Get Current Date
+                final Calendar c = Calendar.getInstance();
+                mYear[0] = c.get(Calendar.YEAR);
+                mMonth[0] = c.get(Calendar.MONTH);
+                mDay[0] = c.get(Calendar.DAY_OF_MONTH);
+
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(context,
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+
+                                txtStartDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                            }
+                        }, mYear[0], mMonth[0], mDay[0]);
+                datePickerDialog.show();
+            }
+        });
 
         // Set dialog title
         //--- dialog.setTitle("MODIFY STUDY");
@@ -162,9 +234,8 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
                 dialog.dismiss();
             }
         });
-
-
     }
+
 
     private void showDeleteDialog() {
 

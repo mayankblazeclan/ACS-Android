@@ -222,11 +222,14 @@
     <string name="study_days">DAYS</string>
     <string name="study_status">STUDY STATUS</string>
     <string name="study_type">STUDY TYPE</string>
-    <string name="start_select_date">Pelase Select Start Date</string>
-    <string name="end_select_date">Pelase Select End Date</string>
+    <string name="start_select_date">Please Select Start Date</string>
+    <string name="end_select_date">Please Select End Date</string>
     <string name="study_name_id">STUDY NAME (ID)</string>
     <string name="study_start_end_date">START DATE -- END DATE</string>
     <string name="study_delete">DELETE STUDY</string>
     <string name="delete_study_message">\Are you sure you want to delete this study ?\</string>
+    <string name="person_gender">Gender</string>
+    <string name="screen_id">Screen ID</string>
+    <string name="text_dob">Please Select Date of Birth</string>
 
 </resources>

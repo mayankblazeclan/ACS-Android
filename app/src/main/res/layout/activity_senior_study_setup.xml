@@ -29,7 +29,7 @@
         android:elevation="6dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:tabIndicatorColor="@color/warning"
+        app:tabIndicatorColor="@color/white"
         app:tabIndicatorHeight="@dimen/activity_5dp_margin"
         app:tabTextColor="@color/colorPrimary" />
 
