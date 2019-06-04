@@ -1,25 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_layout"
-    android:background="@color/white"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/tool_bar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorBCRed"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-    </android.support.design.widget.AppBarLayout>
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:orientation="vertical"
@@ -71,6 +55,7 @@
                 android:textStyle="bold"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_marginLeft="@dimen/activity_5dp_margin"
+                android:textAllCaps="true"
                 android:text="@string/screen_id"/>
 
             <EditText
@@ -188,6 +173,46 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayout_statusg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/bt_ok_padding"
+            android:layout_marginRight="@dimen/bt_ok_padding"
+            android:layout_marginTop="@dimen/bt_ok_padding"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_marginLeft="@dimen/activity_5dp_margin"
+                android:textAllCaps="true"
+                android:text="GROUP"/>
+
+            <!--<EditText
+                android:id="@+id/edtStudyStaus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Study Status"/>-->
+
+            <!-- <Spinner
+                 android:id="@+id/spnBloodGroup"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_margin="@dimen/activity_5dp_margin"/>-->
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spnGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/spinner_background"
+                android:layout_margin="@dimen/activity_5dp_margin" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/linearLayout_gender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -203,6 +228,7 @@
                 android:textStyle="bold"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_marginLeft="@dimen/activity_5dp_margin"
+                android:textAllCaps="true"
                 android:text="@string/person_gender"/>
 
             <!--<EditText
@@ -242,6 +268,7 @@
                 android:textStyle="bold"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_marginLeft="@dimen/activity_5dp_margin"
+                android:textAllCaps="true"
                 android:text="@string/blood_group"/>
 
             <!--<EditText
@@ -250,11 +277,11 @@
                 android:layout_height="wrap_content"
                 android:hint="Enter Study Status"/>-->
 
-           <!-- <Spinner
-                android:id="@+id/spnBloodGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_5dp_margin"/>-->
+            <!-- <Spinner
+                 android:id="@+id/spnBloodGroup"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_margin="@dimen/activity_5dp_margin"/>-->
 
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/spnBloodGroup"
@@ -353,4 +380,5 @@
             android:background="@color/colorBCRed"/>
 
     </LinearLayout>
-</RelativeLayout>
+
+</LinearLayout>

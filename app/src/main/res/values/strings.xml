@@ -231,5 +231,7 @@
     <string name="person_gender">Gender</string>
     <string name="screen_id">Screen ID</string>
     <string name="text_dob">Please Select Date of Birth</string>
+    <string name="txt_dob">DOB</string>
+    <string name="subject_status">Subject Status</string>
 
 </resources>

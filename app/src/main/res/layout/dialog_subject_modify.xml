@@ -1,25 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_layout"
-    android:background="@color/white"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/tool_bar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorBCRed"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-    </android.support.design.widget.AppBarLayout>
+        android:text="MODIFY SUBJECT"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:background="@color/colorBCRed"/>
 
     <LinearLayout
         android:orientation="vertical"
@@ -71,13 +64,14 @@
                 android:textStyle="bold"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_marginLeft="@dimen/activity_5dp_margin"
+                android:textAllCaps="true"
                 android:text="@string/screen_id"/>
 
             <EditText
                 android:id="@+id/edtStudyName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter Study ID"/>
+                android:hint="ABC1234"/>
 
         </LinearLayout>
 
@@ -105,7 +99,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:hint="@string/text_dob"/>
+                android:hint="01-06-1990"/>
 
             <!--<LinearLayout
                 android:id="@+id/linearLayout_study_type"
@@ -188,6 +182,46 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayout_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/bt_ok_padding"
+            android:layout_marginRight="@dimen/bt_ok_padding"
+            android:layout_marginTop="@dimen/bt_ok_padding"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_marginLeft="@dimen/activity_5dp_margin"
+                android:textAllCaps="true"
+                android:text="GROUP"/>
+
+            <!--<EditText
+                android:id="@+id/edtStudyStaus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Study Status"/>-->
+
+            <!-- <Spinner
+                 android:id="@+id/spnBloodGroup"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_margin="@dimen/activity_5dp_margin"/>-->
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spnGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/spinner_background"
+                android:layout_margin="@dimen/activity_5dp_margin" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/linearLayout_gender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -203,6 +237,7 @@
                 android:textStyle="bold"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_marginLeft="@dimen/activity_5dp_margin"
+                android:textAllCaps="true"
                 android:text="@string/person_gender"/>
 
             <!--<EditText
@@ -242,6 +277,7 @@
                 android:textStyle="bold"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_marginLeft="@dimen/activity_5dp_margin"
+                android:textAllCaps="true"
                 android:text="@string/blood_group"/>
 
             <!--<EditText
@@ -250,11 +286,11 @@
                 android:layout_height="wrap_content"
                 android:hint="Enter Study Status"/>-->
 
-           <!-- <Spinner
-                android:id="@+id/spnBloodGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_5dp_margin"/>-->
+            <!-- <Spinner
+                 android:id="@+id/spnBloodGroup"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_margin="@dimen/activity_5dp_margin"/>-->
 
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/spnBloodGroup"
@@ -265,7 +301,34 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/linearLayout_study_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/bt_ok_padding"
+            android:layout_marginRight="@dimen/bt_ok_padding"
+            android:layout_marginTop="@dimen/bt_ok_padding"
+            android:orientation="vertical">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_marginLeft="@dimen/activity_5dp_margin"
+                android:text="@string/study_id"/>
+
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spnStudyId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/spinner_background"
+                android:layout_margin="@dimen/activity_5dp_margin" />
+
+
+        </LinearLayout>
 
 
 
@@ -286,7 +349,8 @@
                 android:textStyle="bold"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_marginLeft="@dimen/activity_5dp_margin"
-                android:text="@string/study_id"/>
+                android:textAllCaps="true"
+                android:text="@string/subject_status"/>
 
 
             <android.support.v7.widget.AppCompatSpinner
@@ -330,27 +394,52 @@
                 android:background="@color/colorBCRed"/>
 
 
-            <!--    <TextView
-                    android:id="@+id/txt_start_date2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:hint="@string/text_dob"/>-->
+            <TextView
+                android:id="@+id/txt_start_date2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:visibility="invisible"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:hint="@string/text_dob"/>
 
         </LinearLayout>
 
 
-
-        <Button
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="SUBMIT"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:layout_margin="@dimen/bt_ok_padding"
-            android:background="@color/colorBCRed"/>
+            android:layout_margin="@dimen/activity_5dp_margin"
+            android:weightSum="2"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnSubmit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SUBMIT"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_margin="@dimen/activity_5dp_margin"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_weight="1"
+                android:background="@color/colorBCRed"/>
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CANCEL"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_margin="@dimen/activity_5dp_margin"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:background="@color/black"/>
+
+        </LinearLayout>
 
     </LinearLayout>
-</RelativeLayout>
+
+</LinearLayout>

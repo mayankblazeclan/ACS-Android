@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardBackgroundColor="@color/color_white"
+    card_view:cardCornerRadius="10dp"
+    card_view:cardElevation="5dp"
+    card_view:cardUseCompatPadding="true">
+
+<RelativeLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/bt_ok_padding"
+        android:layout_marginRight="@dimen/bt_ok_padding"
+        android:layout_marginTop="@dimen/activity_5dp_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/study_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/screen_id"
+            android:textColor="#000"
+            android:textAllCaps="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/txtStudy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ABC (123)"
+            android:layout_marginLeft="@dimen/margin_10dp"
+            android:textColor="@color/viewfinder_mask"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_below="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/bt_ok_padding"
+        android:layout_marginRight="@dimen/bt_ok_padding"
+        android:layout_marginTop="@dimen/activity_5dp_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/study_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_dob"
+            android:textColor="#000"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/txt_start_end_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="01/06/1990"
+            android:layout_marginLeft="@dimen/margin_10dp"
+            android:textColor="@color/viewfinder_mask"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout312"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/bt_ok_padding"
+        android:layout_marginRight="@dimen/bt_ok_padding"
+        android:layout_marginTop="@dimen/activity_5dp_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/study_day134"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GROUP"
+            android:textColor="#000"
+            android:textAllCaps="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/txt_number_of_day133"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10dp"
+            android:text=" G1"
+            android:textColor="@color/viewfinder_mask"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_below="@+id/linearLayout312"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/bt_ok_padding"
+        android:layout_marginRight="@dimen/bt_ok_padding"
+        android:layout_marginTop="@dimen/activity_5dp_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/study_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/person_gender"
+            android:textColor="#000"
+            android:textAllCaps="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/txt_number_of_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10dp"
+            android:text="MALE"
+            android:textColor="@color/viewfinder_mask"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout31"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/bt_ok_padding"
+        android:layout_marginRight="@dimen/bt_ok_padding"
+        android:layout_marginTop="@dimen/activity_5dp_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/study_day13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/blood_group"
+            android:textColor="#000"
+            android:textAllCaps="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/txt_number_of_day13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10dp"
+            android:text=" O+"
+            android:textColor="@color/viewfinder_mask"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout321"
+        android:layout_below="@+id/linearLayout31"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/bt_ok_padding"
+        android:layout_marginRight="@dimen/bt_ok_padding"
+        android:layout_marginTop="@dimen/activity_5dp_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/study_day123"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/study_id"
+            android:textColor="#000"
+            android:textAllCaps="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/txt_number_of_day123"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10dp"
+            android:text="10012"
+            android:textColor="@color/viewfinder_mask"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_below="@+id/linearLayout321"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/bt_ok_padding"
+        android:layout_marginRight="@dimen/bt_ok_padding"
+        android:layout_marginTop="@dimen/activity_5dp_margin"
+        android:layout_marginBottom="@dimen/activity_5dp_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/study_status_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/subject_status"
+            android:textColor="#000"
+            android:textAllCaps="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/txt_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10dp"
+            android:text="ACTIVE"
+            android:textColor="@color/viewfinder_mask"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/bt_ok_padding"
+        android:layout_marginRight="@dimen/bt_ok_padding"
+        android:layout_marginTop="@dimen/bt_ok_padding"
+        android:gravity="center"
+        android:layout_alignParentRight="true"
+        android:orientation="vertical">
+
+
+        <Button
+            android:id="@+id/btnModify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_margin="@dimen/activity_5dp_margin"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="MODIFY"/>
+
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBCRed"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_margin="@dimen/activity_5dp_margin"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="DELETE"/>
+
+        <Button
+            android:id="@+id/btnMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_margin="@dimen/activity_5dp_margin"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="MAP"/>
+
+    </LinearLayout>
+
+
+<!--    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_margin="@dimen/margin_10dp"
+        android:id="@+id/linearLayout41"
+        android:layout_below="@+id/linearLayout3"
+        android:background="@color/warning"/>-->
+
+</RelativeLayout>
+
+</android.support.v7.widget.CardView>

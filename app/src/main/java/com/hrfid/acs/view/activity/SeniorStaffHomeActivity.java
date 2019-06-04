@@ -97,7 +97,7 @@ public class SeniorStaffHomeActivity extends BaseActivity {
 
                     Toast.makeText(SeniorStaffHomeActivity.this, "Tapped OnBoarding", Toast.LENGTH_LONG).show();
 
-                    Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, SeniorSubjectOnBoarding.class);
+                    Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, SeniorSubjectOnBoardingActivity.class);
                     startActivity(mNextActivity);
 
 

@@ -47,10 +47,12 @@ import java.util.ArrayList;
 public class SeniorSubjectOnBoarding extends BaseActivity implements AdapterView.OnItemSelectedListener {
 
     private static final String TAG = "SeniorSubjectOnBoarding";
+
     String[] spnBloodGroup = {"O+","B-","B+", "A+", "A-"};
 
     String[] spnStudyID = {"10012","10011","10010", "10015", "10016"};
 
+    String[] spnGender = {"Male","Female","Other"};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,6 +86,10 @@ public class SeniorSubjectOnBoarding extends BaseActivity implements AdapterView
         Spinner spnStudyIDs = (Spinner) findViewById(R.id.spnStatusId);
         spnStudyIDs.setOnItemSelectedListener(this);
 
+
+        Spinner spnPersonGender = (Spinner) findViewById(R.id.spnPersonGender);
+        spnPersonGender.setOnItemSelectedListener(this);
+
         //Creating the ArrayAdapter instance having the country list
         ArrayAdapter bloodGroupAdp = new ArrayAdapter(SeniorSubjectOnBoarding.this,android.R.layout.simple_spinner_item,spnBloodGroup);
         bloodGroupAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -95,6 +101,10 @@ public class SeniorSubjectOnBoarding extends BaseActivity implements AdapterView
         ArrayAdapter studyIdAdp = new ArrayAdapter(SeniorSubjectOnBoarding.this,android.R.layout.simple_spinner_item, spnStudyID);
         studyIdAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnStudyIDs.setAdapter(studyIdAdp);
+
+        ArrayAdapter genderAdp = new ArrayAdapter(SeniorSubjectOnBoarding.this,android.R.layout.simple_spinner_item, spnGender);
+        genderAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnPersonGender.setAdapter(genderAdp);
 
     }
 
