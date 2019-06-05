@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 
 
 import com.hrfid.acs.helpers.request.BaseApiRequest;
+import com.hrfid.acs.helpers.request.CreateScheduleRequest;
 import com.hrfid.acs.helpers.request.GetNotificationRequest;
 import com.hrfid.acs.helpers.request.LogoutRequest;
 import com.hrfid.acs.helpers.request.ResetNotificationCountRequest;
@@ -40,6 +41,7 @@ public abstract class NetworkingHelper {
   public static final int LOG_OUT = 2;
   public static final int GET_NOTIFCATION = 3;
   public static final int RESET_NOTIFCATION_COUNT = 4;
+  public static final int CREATE_SCHEDULE = 5;
 
 
     private Call<ResponseBody> apiInterface;
@@ -247,6 +249,10 @@ public abstract class NetworkingHelper {
         apiInterface = ApiRouter.get().getRetrofitService().resetNotificationCount(resetNotificationCountRequest.commonRequestModel);
         break;
 
+      case CREATE_SCHEDULE:
+        CreateScheduleRequest createScheduleRequest = (CreateScheduleRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().createSchedule(createScheduleRequest.createScheduleModel);
+        break;
 
       default:
         Utilities.showToast(cmgRequest.mActivity, "Initialize Request class properly!");

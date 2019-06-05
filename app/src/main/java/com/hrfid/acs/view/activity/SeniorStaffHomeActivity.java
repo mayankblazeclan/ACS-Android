@@ -83,11 +83,11 @@ public class SeniorStaffHomeActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int i, long id) {
-                Toast.makeText(SeniorStaffHomeActivity.this, "Tapped On " + staffItemList.get(i).getTagName(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(SeniorStaffHomeActivity.this, "Tapped On " + staffItemList.get(i).getTagName(), Toast.LENGTH_LONG).show();
 
                 if(i==0){
 
-                    Toast.makeText(SeniorStaffHomeActivity.this, "Tapped On Create Study", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(SeniorStaffHomeActivity.this, "Tapped On Create Study", Toast.LENGTH_LONG).show();
 
                     Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, SeniorStudySetupActivity.class);
                     startActivity(mNextActivity);
@@ -95,7 +95,7 @@ public class SeniorStaffHomeActivity extends BaseActivity {
 
                 } else if(i==1){
 
-                    Toast.makeText(SeniorStaffHomeActivity.this, "Tapped OnBoarding", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(SeniorStaffHomeActivity.this, "Tapped OnBoarding", Toast.LENGTH_LONG).show();
 
                     Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, SeniorSubjectOnBoardingActivity.class);
                     startActivity(mNextActivity);
@@ -151,7 +151,7 @@ public class SeniorStaffHomeActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 txtViewCount.setVisibility(View.GONE);
-                Toast.makeText(SeniorStaffHomeActivity.this, "Notification tapped", Toast.LENGTH_LONG).show();
+                //Toast.makeText(SeniorStaffHomeActivity.this, "Notification tapped", Toast.LENGTH_LONG).show();
                 Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, NotificationActivity.class);
                 startActivity(mNextActivity);
             }
@@ -160,7 +160,7 @@ public class SeniorStaffHomeActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 txtViewCount.setVisibility(View.GONE);
-                Toast.makeText(SeniorStaffHomeActivity.this, "Notification tapped", Toast.LENGTH_LONG).show();
+                //Toast.makeText(SeniorStaffHomeActivity.this, "Notification tapped", Toast.LENGTH_LONG).show();
                 Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, NotificationActivity.class);
                 startActivity(mNextActivity);
             }

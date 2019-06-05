@@ -34,7 +34,7 @@
             android:id="@+id/radioGroup">
 
             <RadioButton
-                android:id="@+id/radioMale"
+                android:id="@+id/radioScreen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" Screen"
@@ -43,7 +43,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <RadioButton
-                android:id="@+id/radioFemale"
+                android:id="@+id/radioTrail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="  Trial"
@@ -105,33 +105,6 @@
             android:hint="Enter Study Name"/>
 
     </LinearLayout>
-
-
- <!--   <LinearLayout
-        android:id="@+id/linearLayout_days"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/bt_ok_padding"
-        android:layout_marginRight="@dimen/bt_ok_padding"
-        android:layout_marginTop="@dimen/bt_ok_padding"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_marginLeft="@dimen/activity_5dp_margin"
-            android:text="@string/study_days"/>
-
-        <EditText
-            android:id="@+id/edtStudyDays"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter Number of Days"/>
-
-    </LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/linearLayout_status"
@@ -226,6 +199,7 @@
 
 
     <Button
+        android:id="@+id/btnSubmit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="SUBMIT"

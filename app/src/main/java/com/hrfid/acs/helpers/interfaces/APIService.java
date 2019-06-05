@@ -2,6 +2,8 @@ package com.hrfid.acs.helpers.interfaces;
 
 
 import com.hrfid.acs.helpers.request.CommonRequestModel;
+import com.hrfid.acs.helpers.request.CreateScheduleModel;
+import com.hrfid.acs.helpers.request.CreateScheduleRequest;
 import com.hrfid.acs.helpers.request.LogoutRequest;
 
 import java.util.Map;
@@ -34,6 +36,10 @@ public interface APIService {
   //resetNotificationCount
   @POST("/acs/api/resetNotificationCount")
   Call<ResponseBody> resetNotificationCount(@Body CommonRequestModel commonRequestModel);
+
+  //createSchedule
+  @POST("/acs/api/createSchedule")
+  Call<ResponseBody> createSchedule(@Body CreateScheduleModel createScheduleModel);
 
  /* @POST("api/facebook/fblogin")
   Call<ResponseBody> loginFBToSSOAPI(@Body RequestBody body);

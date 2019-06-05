@@ -1,8 +1,11 @@
 package com.hrfid.acs.view.fragment;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +15,34 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hrfid.acs.R;
+import com.hrfid.acs.data.Constants;
+import com.hrfid.acs.helpers.network.ApiResponse;
+import com.hrfid.acs.helpers.network.JsonParser;
+import com.hrfid.acs.helpers.network.NetworkingHelper;
+import com.hrfid.acs.helpers.request.CommonRequestModel;
+import com.hrfid.acs.helpers.request.CreateScheduleModel;
+import com.hrfid.acs.helpers.request.CreateScheduleRequest;
+import com.hrfid.acs.helpers.request.LogoutRequest;
+import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
+import com.hrfid.acs.util.AppConstants;
+import com.hrfid.acs.util.Logger;
+import com.hrfid.acs.util.PrefManager;
+import com.hrfid.acs.util.Utilities;
+import com.hrfid.acs.util.Utils;
+import com.hrfid.acs.view.activity.SelectRoleActivity;
+import com.hrfid.acs.view.activity.SeniorStudySetupActivity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by MS on 2019-05-30.
@@ -26,11 +50,17 @@ import java.util.Calendar;
 public class CreateStudyScheduleFrgement extends Fragment implements View.OnClickListener,
         AdapterView.OnItemSelectedListener {
 
-    ImageButton btnStartDatePicker, btnEndDatePicker;
-    TextView txtStartDate, txtEndDate;
+    private ImageButton btnStartDatePicker, btnEndDatePicker;
+    private TextView txtStartDate, txtEndDate;
     private int mYear, mMonth, mDay;
-
-    String[] status = {"ACTIVE","INACTIVE","INPROGRESS"};
+    private Button btnSubmit;
+    private EditText edtStudyName;
+    private String startDate ="";
+    private String endDate = "";
+    private Spinner spnStudyStatus;
+    private String[] status = {"INPROGRESS", "ACTIVE","INACTIVE"};
+    private RadioButton rbScreen, rbTrial;
+    private int isTrail =0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,22 +70,17 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
 
         initViews(v);
 
-        // callPublishSMS(true);
-
         return v;
     }
 
     private void initViews(View v) {
 
-        //Getting the instance of Spinner and applying OnItemSelectedListener on it
-        Spinner spin = (Spinner) v.findViewById(R.id.spnStatus);
-        spin.setOnItemSelectedListener(this);
+        spnStudyStatus = (Spinner) v.findViewById(R.id.spnStatus);
+        spnStudyStatus.setOnItemSelectedListener(this);
 
-        //Creating the ArrayAdapter instance having the country list
         ArrayAdapter aa = new ArrayAdapter(getActivity(),android.R.layout.simple_spinner_item,status);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //Setting the ArrayAdapter data on the Spinner
-        spin.setAdapter(aa);
+        spnStudyStatus.setAdapter(aa);
 
         btnStartDatePicker=(ImageButton)v.findViewById(R.id.btn_start_date);
         txtStartDate=(TextView)v.findViewById(R.id.txt_start_date);
@@ -63,8 +88,15 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
         btnEndDatePicker=(ImageButton)v.findViewById(R.id.btn_end_date);
         txtEndDate=(TextView)v.findViewById(R.id.txt_end_date);
 
+        btnSubmit=(Button) v.findViewById(R.id.btnSubmit);
+        edtStudyName = v.findViewById(R.id.edtStudyName);
+
+        rbScreen = (RadioButton) v.findViewById(R.id.radioScreen);
+        rbTrial = (RadioButton) v.findViewById(R.id.radioTrail);
+
         btnStartDatePicker.setOnClickListener(this);
         btnEndDatePicker.setOnClickListener(this);
+        btnSubmit.setOnClickListener(this);
     }
 
     @Override
@@ -72,8 +104,7 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
 
         if (v == btnStartDatePicker) {
 
-            // Get Current Date
-            final Calendar c = Calendar.getInstance();
+            final Calendar c = new GregorianCalendar();
             mYear = c.get(Calendar.YEAR);
             mMonth = c.get(Calendar.MONTH);
             mDay = c.get(Calendar.DAY_OF_MONTH);
@@ -86,7 +117,35 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
                         public void onDateSet(DatePicker view, int year,
                                               int monthOfYear, int dayOfMonth) {
 
-                            txtStartDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                            //txtStartDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                           // txtStartDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                            //startDate =txtStartDate.getText().toString();
+
+                            String fmonth;
+
+                            int month;
+                            if (monthOfYear < 10 && dayOfMonth < 10) {
+
+                                fmonth = "0" + monthOfYear;
+                                month = Integer.parseInt(fmonth) + 1;
+                                String fDate = "0" + dayOfMonth;
+                                String paddedMonth = String.format("%02d", month);
+                                //editText.setText(fDate + "/" + paddedMonth + "/" + year);
+
+
+                                txtStartDate.setText(year + "-" + paddedMonth + "-" + fDate);
+                                startDate =txtStartDate.getText().toString();
+
+                            } else {
+
+                                fmonth = "0" + monthOfYear;
+                                month = Integer.parseInt(fmonth) + 1;
+                                String paddedMonth = String.format("%02d", month);
+                                //editText.setText(dayOfMonth + "/" + paddedMonth + "/" + year);
+
+                                txtStartDate.setText(year + "-" + paddedMonth + "-" + dayOfMonth);
+                                startDate =txtStartDate.getText().toString();
+                            }
 
                         }
                     }, mYear, mMonth, mDay);
@@ -96,7 +155,6 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
 
         if (v == btnEndDatePicker) {
 
-            // Get Current Date
             final Calendar c = Calendar.getInstance();
             mYear = c.get(Calendar.YEAR);
             mMonth = c.get(Calendar.MONTH);
@@ -110,11 +168,86 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
                         public void onDateSet(DatePicker view, int year,
                                               int monthOfYear, int dayOfMonth) {
 
-                            txtEndDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                            String fmonth;
+
+                            int month;
+                            if (monthOfYear < 10 && dayOfMonth < 10) {
+
+                                fmonth = "0" + monthOfYear;
+                                month = Integer.parseInt(fmonth) + 1;
+                                String fDate = "0" + dayOfMonth;
+                                String paddedMonth = String.format("%02d", month);
+                                //editText.setText(fDate + "/" + paddedMonth + "/" + year);
+
+
+                                txtEndDate.setText(year + "-" + paddedMonth + "-" + fDate);
+                                endDate =txtEndDate.getText().toString();
+
+                            } else {
+
+                                fmonth = "0" + monthOfYear;
+                                month = Integer.parseInt(fmonth) + 1;
+                                String paddedMonth = String.format("%02d", month);
+                                //editText.setText(dayOfMonth + "/" + paddedMonth + "/" + year);
+
+                                txtEndDate.setText(year + "-" + paddedMonth + "-" + dayOfMonth);
+                                endDate =txtEndDate.getText().toString();
+                            }
+
+
+
+                           // txtEndDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                            //txtEndDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                            //endDate =txtEndDate.getText().toString();
 
                         }
                     }, mYear, mMonth, mDay);
             datePickerDialog.show();
+        }
+
+        if(v==btnSubmit){
+
+            if(edtStudyName.getText().toString().length() != 0){
+
+                if(!txtStartDate.getText().toString().equalsIgnoreCase("")
+                        && !txtEndDate.getText().toString().equalsIgnoreCase("")){
+
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+                    Date date1 = null;
+                    Date date2 = null;
+                    try {
+                        date1 = format.parse(startDate);
+                        date2 = format.parse(endDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (date1.compareTo(date2) <= 0) {
+                        //Toast.makeText(getActivity(),"All Date OK.. RUN API.." , Toast.LENGTH_SHORT).show();
+                        if(rbTrial.isChecked()){
+                            isTrail=1;
+                        }else{
+                            isTrail =0;
+                        }
+
+                        callStudySetup(edtStudyName.getText().toString(), startDate, endDate, spnStudyStatus.getSelectedItem().toString(), isTrail);
+                    }else {
+
+                        Toast.makeText(getActivity(),"End Date Cannot Be Smaller Than Start Date" , Toast.LENGTH_SHORT).show();
+                    }
+
+                }else {
+
+                    Toast.makeText(getActivity(),"Please Select Both the Dates.." , Toast.LENGTH_SHORT).show();
+                }
+
+
+            }else {
+                Toast.makeText(getActivity(),"Please Enter STUDY NAME" , Toast.LENGTH_SHORT).show();
+            }
+
+
         }
 
     }
@@ -122,10 +255,104 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
     //Performing action onItemSelected and onNothing selected
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
-        Toast.makeText(getActivity(),status[position] , Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getActivity(),status[position] , Toast.LENGTH_SHORT).show();
+
+
     }
     @Override
     public void onNothingSelected(AdapterView<?> arg0) {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        edtStudyName.setText("");
+        txtStartDate.setText("");
+    }
+
+    //Call Logout API
+    private void callStudySetup(String studyName, String startDate, String endDate, String status, int isTrail) {
+        CreateScheduleModel createScheduleModel = new CreateScheduleModel();
+        createScheduleModel.setAppName(AppConstants.APP_NAME);
+        createScheduleModel.setVersionNumber(AppConstants.APP_VERSION);
+        createScheduleModel.setDeviceType(AppConstants.APP_OS);
+        createScheduleModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
+        createScheduleModel.setDeviceNumber(Utilities.getDeviceUniqueId(getActivity()));
+        createScheduleModel.setUserRole(new PrefManager(getActivity()).getUserRoleType());
+        createScheduleModel.setTagId(new PrefManager(getActivity()).getBarCodeValue());
+        createScheduleModel.setEvent(AppConstants.CREATE_SCHEDULE);
+        createScheduleModel.setUserName(new PrefManager(getActivity()).getUserName());
+        createScheduleModel.setName(studyName);
+        createScheduleModel.setStartDate(startDate);
+        createScheduleModel.setEndDate(endDate);
+        createScheduleModel.setStatus(status);
+        createScheduleModel.setActivity(AppConstants.ACTIVITY);
+        createScheduleModel.setIsTrial(isTrail);
+
+        new NetworkingHelper(new CreateScheduleRequest(getActivity(), true, createScheduleModel)) {
+
+            @Override
+            public void serverResponseFromApi(ApiResponse serverResponse) {
+                if (serverResponse.isSucess) {
+
+                    try {
+
+                        CommonResponse commonResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, CommonResponse.class);
+
+                        if (commonResponse.getStatus().getCODE() == 200) {
+
+                            if(commonResponse.getResponse().get(0).isStatus()){
+
+                                Logger.logError("createSchedule API success " +
+                                        commonResponse.getResponse().get(0).isStatus());
+                                Logger.logError("createSchedule API success " +
+                                        commonResponse.getResponse().get(0).getMessage());
+
+
+                                /*Intent mNextActivity = new Intent(getActivity(), SelectRoleActivity.class);
+                                startActivity(mNextActivity);
+                                getActivity().finish();*/
+
+                                Utils.showAlertDialog(getActivity(),  commonResponse.getResponse().get(0).getMessage());
+                                edtStudyName.setText("");
+                                txtStartDate.setText("");
+                                txtEndDate.setText("");
+
+                            }else {
+
+                                Logger.logError("createSchedule API Failure " +
+                                        commonResponse.getResponse().get(0).isStatus());
+                                Logger.logError("createSchedule API Failure " +
+                                        commonResponse.getResponse().get(0).getMessage());
+
+                                Utils.showAlertDialog(getActivity(),  commonResponse.getResponse().get(0).getMessage());
+                            }
+
+                        }else {
+
+                            Logger.logError("createSchedule API Failure " +
+                                    commonResponse.getResponse().get(0).isStatus());
+                            Logger.logError("createSchedule API Failure " +
+                                    commonResponse.getResponse().get(0).getMessage());
+
+                            Utils.showAlertDialog(getActivity(),  commonResponse.getResponse().get(0).getMessage());
+                        }
+
+
+
+                    }
+                    catch (Exception e){
+                        Logger.logError("Exception " + e.getMessage());
+                    }
+
+                } else {
+                    Logger.logError("createSchedule API Failure " +
+                            serverResponse.errorMessageToDisplay);
+                }
+            }
+        };
+
     }
 }

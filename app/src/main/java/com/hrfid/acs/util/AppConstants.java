@@ -48,6 +48,8 @@ public class AppConstants {
     public static final String API_KENTICO = "KENTICO";
     public static final String API_ASTRO = "ASTRO";
     public static final String TEXT_GEMPAK_P = "hotspot@faq";
+    public static final String CREATE_SCHEDULE = "create study schedule";
+    public static final String ACTIVITY = "ACTIVITY";
     public static String API_TO_HIT = "";
 
     //ACS Constant

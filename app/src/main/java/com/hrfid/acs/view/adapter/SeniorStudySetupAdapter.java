@@ -30,7 +30,7 @@ public class SeniorStudySetupAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position){
-        if(frmPage.equalsIgnoreCase("FromSMS")){
+        if(frmPage.equalsIgnoreCase("FromStudySetup")){
 
             switch (position) {
                 case 0:
