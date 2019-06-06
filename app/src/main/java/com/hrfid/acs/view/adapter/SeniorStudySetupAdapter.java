@@ -1,5 +1,6 @@
 package com.hrfid.acs.view.adapter;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -16,12 +17,12 @@ import com.hrfid.acs.view.fragment.ViewScreenStudyFragment;
  */
 public class SeniorStudySetupAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
-    private String frmPage;
+   // private String frmPage;
 
-    public SeniorStudySetupAdapter(FragmentManager fm, int NoofTabs, String fromSMS){
+    public SeniorStudySetupAdapter(FragmentManager fm, int NoofTabs){
         super(fm);
         this.mNumOfTabs = NoofTabs;
-        this.frmPage = fromSMS;
+        //this.frmPage = fromSMS;
     }
     @Override
     public int getCount() {
@@ -30,28 +31,30 @@ public class SeniorStudySetupAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position){
-        if(frmPage.equalsIgnoreCase("FromStudySetup")){
 
             switch (position) {
                 case 0:
                     CreateStudyScheduleFrgement createStudyScheduleFrgement = new CreateStudyScheduleFrgement();
                     return createStudyScheduleFrgement;
 
-                case 1:
-                    ViewScreenStudyFragment createStudyScheduleFrgement1 = new ViewScreenStudyFragment();
-                    return createStudyScheduleFrgement1;
 
+                case 1:
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("isFromScreening", true);
+                    ViewScreenStudyFragment viewScreenStudyFragment = new ViewScreenStudyFragment();
+                    viewScreenStudyFragment.setArguments(bundle);
+                    return viewScreenStudyFragment;
 
                 case 2:
-                    ViewScreenStudyFragment createStudyScheduleFrgement2 = new ViewScreenStudyFragment();
-                    return createStudyScheduleFrgement2;
+                    Bundle bundle1 = new Bundle();
+                    bundle1.putBoolean("isFromScreening", false);
+                    ViewScreenStudyFragment viewScreenStudyFragment1 = new ViewScreenStudyFragment();
+                    viewScreenStudyFragment1.setArguments(bundle1);
+                    return viewScreenStudyFragment1;
 
                 default:
                     return null;
             }
-
-        }
-        return null;
 
     }
 

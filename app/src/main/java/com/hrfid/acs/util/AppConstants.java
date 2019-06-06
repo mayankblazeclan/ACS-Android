@@ -48,7 +48,6 @@ public class AppConstants {
     public static final String API_KENTICO = "KENTICO";
     public static final String API_ASTRO = "ASTRO";
     public static final String TEXT_GEMPAK_P = "hotspot@faq";
-    public static final String CREATE_SCHEDULE = "create study schedule";
     public static final String ACTIVITY = "ACTIVITY";
     public static String API_TO_HIT = "";
 
@@ -56,9 +55,12 @@ public class AppConstants {
     public static final String APP_NAME = "ACS";
     public static final String APP_VERSION = "1.0";
     public static final String APP_OS = "Android";
-    public static final String LOGIN_EVENT = "APP LOGIN";
+    public static final String LOGIN_EVENT = "App Login";
     public static final String LOGIN_URL = "sit-stage.controlpoint.healthrfid.com/";
     public static final String LOGOUT = "App Logout";
     public static final String GET_NOTIFICATION = "Get Notifications";
+    public static final String CREATE_SCHEDULE = "Create Study Schedule";
+    public static final String GET_SCHEDULE = "Study Schedule List";
+    public static final String MODIFY_ACTIVITY = "Modify Study Schedule";
 
 }

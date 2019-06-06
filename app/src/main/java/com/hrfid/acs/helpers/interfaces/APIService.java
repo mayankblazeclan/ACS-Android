@@ -5,6 +5,7 @@ import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.CreateScheduleModel;
 import com.hrfid.acs.helpers.request.CreateScheduleRequest;
 import com.hrfid.acs.helpers.request.LogoutRequest;
+import com.hrfid.acs.helpers.serverResponses.models.ModifyScheduleRequestModel;
 
 import java.util.Map;
 
@@ -40,6 +41,14 @@ public interface APIService {
   //createSchedule
   @POST("/acs/api/createSchedule")
   Call<ResponseBody> createSchedule(@Body CreateScheduleModel createScheduleModel);
+
+  //getStudySchedule
+  @POST("/acs/api/getStudySchedule")
+  Call<ResponseBody> getStudySchedule(@Body CommonRequestModel commonRequestModel);
+
+  //modifySchedule
+  @POST("/acs/api/modifySchedule")
+  Call<ResponseBody> modifySchedule(@Body ModifyScheduleRequestModel modifyScheduleRequestModel);
 
  /* @POST("api/facebook/fblogin")
   Call<ResponseBody> loginFBToSSOAPI(@Body RequestBody body);

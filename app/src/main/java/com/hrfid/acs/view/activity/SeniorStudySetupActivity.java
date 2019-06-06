@@ -85,7 +85,7 @@ public class SeniorStudySetupActivity extends BaseActivity {
         //tabLayout.addTab(tabLayout.newTab().setText("Contact"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         final ViewPager viewPager =(ViewPager)findViewById(R.id.view_pager);
-        SeniorStudySetupAdapter tabsAdapter = new SeniorStudySetupAdapter(getSupportFragmentManager(), tabLayout.getTabCount(), "FromStudySetup");
+        SeniorStudySetupAdapter tabsAdapter = new SeniorStudySetupAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(tabsAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

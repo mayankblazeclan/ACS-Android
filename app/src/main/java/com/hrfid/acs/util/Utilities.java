@@ -608,5 +608,20 @@ public class Utilities {
         return null;
     }
 
+
+    public static String splitDateFromDesired(String inputDate) {
+        try {
+
+            String[] arr = inputDate.split("T", 0);
+            for (String w : arr) {
+              //  System.out.println("Splitted Text :"+w);
+            }
+            return arr[0];
+        } catch (Exception e) {
+            Logger.logError("splitDateFromDesired..ERROR " + e.getMessage());
+        }
+        return null;
+    }
+
 }
 

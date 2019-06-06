@@ -6,7 +6,9 @@ import android.app.ProgressDialog;
 import com.hrfid.acs.helpers.request.BaseApiRequest;
 import com.hrfid.acs.helpers.request.CreateScheduleRequest;
 import com.hrfid.acs.helpers.request.GetNotificationRequest;
+import com.hrfid.acs.helpers.request.GetScheduleRequest;
 import com.hrfid.acs.helpers.request.LogoutRequest;
+import com.hrfid.acs.helpers.request.ModifyScheduleRequest;
 import com.hrfid.acs.helpers.request.ResetNotificationCountRequest;
 import com.hrfid.acs.helpers.serverResponses.ErrorArrayResponse;
 import com.hrfid.acs.helpers.serverResponses.ErrorObjectResponse;
@@ -42,6 +44,8 @@ public abstract class NetworkingHelper {
   public static final int GET_NOTIFCATION = 3;
   public static final int RESET_NOTIFCATION_COUNT = 4;
   public static final int CREATE_SCHEDULE = 5;
+  public static final int GET_SCHEDULE = 6;
+  public static final int MODIFY_SCHEDULE = 7;
 
 
     private Call<ResponseBody> apiInterface;
@@ -252,6 +256,16 @@ public abstract class NetworkingHelper {
       case CREATE_SCHEDULE:
         CreateScheduleRequest createScheduleRequest = (CreateScheduleRequest) cmgRequest;
         apiInterface = ApiRouter.get().getRetrofitService().createSchedule(createScheduleRequest.createScheduleModel);
+        break;
+
+      case GET_SCHEDULE:
+        GetScheduleRequest getScheduleRequest = (GetScheduleRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().getStudySchedule(getScheduleRequest.commonRequestModel);
+        break;
+
+      case MODIFY_SCHEDULE:
+        ModifyScheduleRequest modifyScheduleRequest = (ModifyScheduleRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().modifySchedule(modifyScheduleRequest.createScheduleModel);
         break;
 
       default:

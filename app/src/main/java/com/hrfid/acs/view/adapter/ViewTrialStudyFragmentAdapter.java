@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,8 +25,6 @@ import com.hrfid.acs.R;
 import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
-import com.hrfid.acs.helpers.request.CreateScheduleModel;
-import com.hrfid.acs.helpers.request.CreateScheduleRequest;
 import com.hrfid.acs.helpers.request.ModifyScheduleRequest;
 import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
 import com.hrfid.acs.helpers.serverResponses.models.ModifyScheduleRequestModel;
@@ -38,11 +34,9 @@ import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
-import com.hrfid.acs.view.activity.SeniorStaffHomeActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -50,16 +44,14 @@ import java.util.List;
 /**
  * Created by MS on 2019-05-31.
  */
-public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScreenStudyFragmentAdapter.MyViewHolder> implements AdapterView.OnItemSelectedListener {
+public class ViewTrialStudyFragmentAdapter extends RecyclerView.Adapter<ViewTrialStudyFragmentAdapter.MyViewHolder> implements AdapterView.OnItemSelectedListener {
 
     List<StudyList> studyLists;
-   // String[] status = { "ACTIVE", "INACTIVE", "INPROGRESS"};
+    String[] status = new String[0];
     Context context;
     private boolean isFromScreening;
-    String[] status = new String[0];
 
-
-    public ViewScreenStudyFragmentAdapter(Context context, List<StudyList> studyLists, boolean isFromScreening) {
+    public ViewTrialStudyFragmentAdapter(Context context, List<StudyList> studyLists, boolean isFromScreening) {
         this.context = context;
         this.studyLists = studyLists;
         this.isFromScreening = isFromScreening;
@@ -69,15 +61,16 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
         // infalte the item Layout
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_study_item_row, parent, false);
         // set the view's size, margins, paddings and layout parameters
-        MyViewHolder vh = new MyViewHolder(v, this); // pass the view to View Holder
+        MyViewHolder vh = new MyViewHolder(v); // pass the view to View Holder
         return vh;
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 
+
         if(studyLists != null) {
-            if(studyLists.get(position).getIsTrial().equalsIgnoreCase("0")) {
+            if(studyLists.get(position).getIsTrial().equalsIgnoreCase("1")) {
                 holder.txtStudy.setText(studyLists.get(position).getName().trim()
                         + " " + "(" + studyLists.get(position).getId() + ")");
 
@@ -112,7 +105,6 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
             @Override
             public void onClick(View v) {
                 showDeleteDialog();
-                context.rem
             }
         });*/
     }
@@ -123,11 +115,9 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
         TextView txt_number_of_day;
         TextView txtStatus;
         Button btnModify, btnDelete;
-        ViewScreenStudyFragmentAdapter viewScreenStudyFragmentAdapter;
 
-        public MyViewHolder(View itemView, final ViewScreenStudyFragmentAdapter viewScreenStudyFragmentAdapter) {
+        public MyViewHolder(View itemView) {
             super(itemView);
-            this.viewScreenStudyFragmentAdapter = viewScreenStudyFragmentAdapter;
             // get the reference of item view's
             txtStudy = (TextView) itemView.findViewById(R.id.txtStudy);
             txt_start_end_date = itemView.findViewById(R.id.txt_start_end_date);
@@ -135,20 +125,7 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
             txtStatus = itemView.findViewById(R.id.txt_status);
             btnModify = (Button) itemView.findViewById(R.id.btnModify);
             btnDelete = (Button) itemView.findViewById(R.id.btnDelete);
-
-            btnDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    viewScreenStudyFragmentAdapter.removeItem(getAdapterPosition());
-                }
-            });
         }
-    }
-
-    public void removeItem(int position) {
-        studyLists.remove(position);
-        notifyItemRemoved(position);
-        // Add whatever you want to do when removing an Item
     }
 
     private void showModifyDialog(final StudyList studyList) {
@@ -217,7 +194,7 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
 
-                               // txtEndDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                // txtEndDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
 
 
                                 String fmonth;
@@ -271,7 +248,7 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
 
-                               // txtStartDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                // txtStartDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
 
                                 String fmonth;
                                 int month;
@@ -365,31 +342,6 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
 
     }
 
-
-    private void showDeleteDialog() {
-
-        Utils.createDialogTwoButtons(
-                context, context.getString(R.string.study_delete),
-                true, context.getString(R.string.delete_study_message),
-                context.getString(R.string.dlg_yes_text),
-                context.getString(R.string.dlg_no_text), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        //CALL DELETE API
-                        dialog.dismiss();
-                    }
-                }, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        dialog.dismiss();
-
-                    }
-                });
-    }
-
-
     private void callModifySetupAPI(String studyName, String startDate, String endDate, String status, int id) {
 
         ModifyScheduleRequestModel modifyScheduleRequestModel = new ModifyScheduleRequestModel();
@@ -407,7 +359,7 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
         modifyScheduleRequestModel.setEndDate(endDate);
         modifyScheduleRequestModel.setStatus(status);
         modifyScheduleRequestModel.setActivity(AppConstants.MODIFY_ACTIVITY);
-        modifyScheduleRequestModel.setIsTrial(0);
+        modifyScheduleRequestModel.setIsTrial(1);
         modifyScheduleRequestModel.setId(id);
 
         new NetworkingHelper(new ModifyScheduleRequest((Activity) context, true, modifyScheduleRequestModel)) {
@@ -431,8 +383,11 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
                                         commonResponse.getResponse().get(0).getMessage());
 
 
+                                /*Intent mNextActivity = new Intent(getActivity(), SelectRoleActivity.class);
+                                startActivity(mNextActivity);
+                                getActivity().finish();*/
+
                                 Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
-                                //viewScreenStudyFragmentAdapter.notifyDataSetChanged();
 
 
                             }else {
@@ -470,6 +425,31 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
         };
 
     }
+
+
+    private void showDeleteDialog() {
+
+        Utils.createDialogTwoButtons(
+                context, context.getString(R.string.study_delete),
+                true, context.getString(R.string.delete_study_message),
+                context.getString(R.string.dlg_yes_text),
+                context.getString(R.string.dlg_no_text), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        //CALL DELETE API
+                        dialog.dismiss();
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                });
+    }
+
 
 }
 

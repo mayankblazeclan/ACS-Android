@@ -122,7 +122,6 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
                             //startDate =txtStartDate.getText().toString();
 
                             String fmonth;
-
                             int month;
                             if (monthOfYear < 10 && dayOfMonth < 10) {
 
@@ -169,7 +168,6 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
                                               int monthOfYear, int dayOfMonth) {
 
                             String fmonth;
-
                             int month;
                             if (monthOfYear < 10 && dayOfMonth < 10) {
 
@@ -271,7 +269,7 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
         txtStartDate.setText("");
     }
 
-    //Call Logout API
+    //Call callStudySetup API
     private void callStudySetup(String studyName, String startDate, String endDate, String status, int isTrail) {
         CreateScheduleModel createScheduleModel = new CreateScheduleModel();
         createScheduleModel.setAppName(AppConstants.APP_NAME);
