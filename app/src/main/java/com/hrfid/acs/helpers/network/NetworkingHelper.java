@@ -3,8 +3,11 @@ package com.hrfid.acs.helpers.network;
 import android.app.ProgressDialog;
 
 
+import com.hrfid.acs.helpers.request.AddSubjectRequest;
 import com.hrfid.acs.helpers.request.BaseApiRequest;
 import com.hrfid.acs.helpers.request.CreateScheduleRequest;
+import com.hrfid.acs.helpers.request.DeleteScheduleRequest;
+import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.request.GetNotificationRequest;
 import com.hrfid.acs.helpers.request.GetScheduleRequest;
 import com.hrfid.acs.helpers.request.LogoutRequest;
@@ -46,6 +49,9 @@ public abstract class NetworkingHelper {
   public static final int CREATE_SCHEDULE = 5;
   public static final int GET_SCHEDULE = 6;
   public static final int MODIFY_SCHEDULE = 7;
+  public static final int DELETE_SCHEDULE = 8;
+  public static final int GET_ALL_STUDY_ID = 9;
+  public static final int ADD_SUBJECT_ONBOARDING = 10;
 
 
     private Call<ResponseBody> apiInterface;
@@ -59,184 +65,10 @@ public abstract class NetworkingHelper {
 
 
   public NetworkingHelper(BaseApiRequest cmgRequest) {
-
     mCmgRequest = cmgRequest;
-
-    //EventBus.getDefault().register(this);
-
     apiInterface = null;
 
     switch (cmgRequest.apiToCall) {
-
-      /*case LOGIN:
-        LoginRequestModel loginRequest = (LoginRequestModel) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService()
-            .loginToWebSSOAPI(loginRequest.map);
-        break;
-      case SSO_HEART_BEAT:
-        SSOHeartBeatRequest ssoHeartBeatRequest = (SSOHeartBeatRequest) cmgRequest;
-
-        apiInterface = ApiRouter.get().getRetrofitService()
-            .getHeartBeatAPI(ssoHeartBeatRequest.map);
-        break;
-
-      case GET_HOME_LIST:
-        apiInterface = ApiRouter.get().getRetrofitService().getHomeListAPI();
-
-        break;
-
-      case GET_ARTICLE_LIST:
-        apiInterface = ApiRouter.get().getRetrofitService().getArticleListAPI();
-        break;
-
-      case POST_FAVORITE_ARTICLE:
-
-        RequestFavoriteArticle requestFavoriteArticle = (RequestFavoriteArticle) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService()
-            .postFavoriteArticleAPI(requestFavoriteArticle.articleNo);
-        break;
-
-      case SAVED_LIST_RESULT:
-        apiInterface = ApiRouter.get().getRetrofitService().getSavedListAPI();
-        break;
-
-      case GET_CALENDAR_LIST:
-        apiInterface = ApiRouter.get().getRetrofitService().getCalendarAPI();
-        break;
-
-      case UNSAVED_LIST_RESULT:
-        // apiInterface = ApiRouter.get().getRetrofitService().getUnSavedListAPI();
-
-        UnsavedListRequest unsavedListRequest = (UnsavedListRequest) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService()
-            .getUnSavedListAPI(unsavedListRequest.id, unsavedListRequest.contentType);
-        break;
-      case ARTICLE_CATEGORY:
-
-        ArticleCategoryListRequest articleCategoryListRequest = (ArticleCategoryListRequest) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService()
-            .getArticleCategoryAPI(String.valueOf(articleCategoryListRequest.articleNo));
-        break;
-
-      case GET_VIDEO_SUBCATEGORY:
-
-        VideoCategoryListRequest videoCategoryListRequest = (VideoCategoryListRequest) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService()
-            .getVideoCategoryAPI(String.valueOf(videoCategoryListRequest.videoId));
-        break;
-
-      case GET_VIDEO_LIST:
-        apiInterface = ApiRouter.get().getRetrofitService().getVideoListAPI();
-        break;
-
-      case ARTICLE_VIDEO_SAVED:
-
-        ArticleVideoSavedRequest articleVideoSavedRequest = (ArticleVideoSavedRequest) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService()
-            .postArticleVideoSavedAPI(articleVideoSavedRequest.id,
-                articleVideoSavedRequest.contentType);
-        break;
-
-      case ARTICLE_DETAILS:
-        RequestArticleDetails requestArticleIDAPI = (RequestArticleDetails) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService()
-            .getArticleWithIDAPI(requestArticleIDAPI.articleID);
-        break;
-
-      case GET_TAG_LIST:
-        RequestTagsAPI requestTagsAPI = (RequestTagsAPI) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService()
-            .getTagsList(requestTagsAPI.mTagName);
-        break;
-
-      case ARTICLE_TAG_LIST:
-        ArticleTagsRequest articleTagsRequest = (ArticleTagsRequest) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService()
-                .getArticleTagsList(articleTagsRequest.mTagName);
-        break;
-
-      case LOG_OUT:
-        SignOutRequest logoutRequest = (SignOutRequest) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService().logoutToSSOAPI(logoutRequest.map);
-        break;
-
-      case VIDEO_LIST_BY_ID_API:
-
-        VideoListByIDApiRequest videoListByIDApiRequest = (VideoListByIDApiRequest) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService()
-            .getVideoListByID(videoListByIDApiRequest.mPageCount, videoListByIDApiRequest.mMediaID,
-                videoListByIDApiRequest.mCategoryID);
-        break;
-
-      case GET_SEARCH_RESULT:
-        SearchResultRequest requestSearchAPI = (SearchResultRequest) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService()
-            .getSearchResultAPI(requestSearchAPI.mStrSearchText);
-        break;
-
-      case ARTICLE_CATEGORY_LAZY_LOAD:
-
-        ArticleCategoryListLazyLoadRequest articleCategoryListLazyLoadRequest = (ArticleCategoryListLazyLoadRequest) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService()
-            .getArticleCategoryLazyLoadAPI(String.valueOf(articleCategoryListLazyLoadRequest.page),
-                String.valueOf(articleCategoryListLazyLoadRequest.categoryId));
-        break;
-
-      case VIDEO_SUBCATEGORY_LAZY_LOAD:
-        VideoCategoryListLazyLoadRequest videoCategoryListLazyLoadRequest = (VideoCategoryListLazyLoadRequest) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService()
-            .getVideoCategoryLazyLoadAPI(String.valueOf(videoCategoryListLazyLoadRequest.page),
-                String.valueOf(videoCategoryListLazyLoadRequest.categoryId));
-        break;
-
-      case SAVED_LIST_RESULT_LAZY_LOAD:
-        SavedListLazyLoadRequest savedListLazyLoadRequest = (SavedListLazyLoadRequest) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService()
-            .getSavedListLazyLoadAPI(String.valueOf(savedListLazyLoadRequest.page),
-                String.valueOf(savedListLazyLoadRequest.pagesize));
-        break;
-
-      case GET_FAQ_LIST:
-        RequestFAQAPI requestFAQAPI = (RequestFAQAPI) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService().getFAQListAPI(requestFAQAPI.mURL);
-        break;
-
-      case LIVE_STREAMING_LIST_API:
-        LiveStreamingListRequest liveStreamingListRequest = (LiveStreamingListRequest) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService().getLiveStreamingListAPI();
-        break;
-
-      case SET_DEVICE_DETAILS:
-        SetDeviceDetailsRequest setDeviceDetailsRequest = (SetDeviceDetailsRequest) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService().setDeviceDetailsAPI(setDeviceDetailsRequest.setDeviceDetailsRequestModel);
-        break;
-
-      case GET_CATEGORIES_BY_DEVICE:
-        GetCategoriesByDeviceRequest getCategoriesByDeviceRequest = (GetCategoriesByDeviceRequest) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService().getCategoriesByDevice(getCategoriesByDeviceRequest.getCategoriesByDeviceRequestModel);
-        break;
-
-      case SET_CATEGORY_STATUS_BY_DEVICE:
-        SetCategoryStatusByDeviceRequest setCategoryStatusByDevice = (SetCategoryStatusByDeviceRequest) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService().setCategoryStatusByDevice(setCategoryStatusByDevice.setCategoryStatusByDeviceRequestModel);
-        break;
-
-      case SET_CATEGORY_STATUS:
-        SetCategoryStatusRequest setCategoryStatusRequest = (SetCategoryStatusRequest) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService().setCategoryStatus(setCategoryStatusRequest.setCategoryStatusRequestModel);
-        break;
-
-
-      case SET_GLOBAL_NOTIFICATION:
-        SetGlobalNotificationRequest setGlobalNotificationRequest = (SetGlobalNotificationRequest) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService().setGlobalNotification(setGlobalNotificationRequest.setGlobalNotificationRequestModel);
-        break;
-
-      case GET_WEBVIEW_CHECK_STATUS:
-        RequestWebviewCheckerAPI requestWebviewCheckerAPI = (RequestWebviewCheckerAPI) cmgRequest;
-        apiInterface = ApiRouter.get().getRetrofitService().getFAQListAPI(requestWebviewCheckerAPI.mURL);
-        break;*/
-
 
       case LOG_OUT:
         LogoutRequest logoutRequest = (LogoutRequest) cmgRequest;
@@ -266,6 +98,21 @@ public abstract class NetworkingHelper {
       case MODIFY_SCHEDULE:
         ModifyScheduleRequest modifyScheduleRequest = (ModifyScheduleRequest) cmgRequest;
         apiInterface = ApiRouter.get().getRetrofitService().modifySchedule(modifyScheduleRequest.createScheduleModel);
+        break;
+
+      case DELETE_SCHEDULE:
+        DeleteScheduleRequest deleteScheduleRequest = (DeleteScheduleRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().deleteStudySchedule(deleteScheduleRequest.deleteScheduleRequestModel);
+        break;
+
+      case GET_ALL_STUDY_ID:
+        GetAllStudyIdRequest getAllStudyIdRequest = (GetAllStudyIdRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().getStudyIds(getAllStudyIdRequest.commonRequestModel);
+        break;
+
+      case ADD_SUBJECT_ONBOARDING:
+        AddSubjectRequest addSubjectRequest = (AddSubjectRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().subjectOnboard(addSubjectRequest.addSubjectRequestModel);
         break;
 
       default:

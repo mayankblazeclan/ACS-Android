@@ -1,10 +1,12 @@
 package com.hrfid.acs.helpers.interfaces;
 
 
+import com.hrfid.acs.helpers.request.AddSubjectRequestModel;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.CreateScheduleModel;
 import com.hrfid.acs.helpers.request.CreateScheduleRequest;
 import com.hrfid.acs.helpers.request.LogoutRequest;
+import com.hrfid.acs.helpers.serverResponses.models.DeleteScheduleRequestModel;
 import com.hrfid.acs.helpers.serverResponses.models.ModifyScheduleRequestModel;
 
 import java.util.Map;
@@ -49,6 +51,18 @@ public interface APIService {
   //modifySchedule
   @POST("/acs/api/modifySchedule")
   Call<ResponseBody> modifySchedule(@Body ModifyScheduleRequestModel modifyScheduleRequestModel);
+
+  //deleteStudySchedule
+  @POST("/acs/api/deleteStudySchedule")
+  Call<ResponseBody> deleteStudySchedule(@Body DeleteScheduleRequestModel deleteScheduleRequestModel);
+
+  //getStudyIds
+  @POST("/acs/api/getStudyIds")
+  Call<ResponseBody> getStudyIds(@Body CommonRequestModel commonRequestModel);
+
+  //getStudyIds
+  @POST("/acs/api/subjectOnboard")
+  Call<ResponseBody> subjectOnboard(@Body AddSubjectRequestModel addSubjectRequestModel);
 
  /* @POST("api/facebook/fblogin")
   Call<ResponseBody> loginFBToSSOAPI(@Body RequestBody body);

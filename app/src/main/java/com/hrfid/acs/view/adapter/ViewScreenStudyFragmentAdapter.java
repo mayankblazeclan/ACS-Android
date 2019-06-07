@@ -27,10 +27,15 @@ import com.hrfid.acs.R;
 import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
+import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.CreateScheduleModel;
 import com.hrfid.acs.helpers.request.CreateScheduleRequest;
+import com.hrfid.acs.helpers.request.DeleteScheduleRequest;
+import com.hrfid.acs.helpers.request.GetScheduleRequest;
 import com.hrfid.acs.helpers.request.ModifyScheduleRequest;
 import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
+import com.hrfid.acs.helpers.serverResponses.models.DeleteScheduleRequestModel;
+import com.hrfid.acs.helpers.serverResponses.models.GetScheduleResponse;
 import com.hrfid.acs.helpers.serverResponses.models.ModifyScheduleRequestModel;
 import com.hrfid.acs.helpers.serverResponses.models.StudyList;
 import com.hrfid.acs.util.AppConstants;
@@ -57,13 +62,18 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
     Context context;
     private boolean isFromScreening;
     String[] status = new String[0];
+    private RecyclerView recyclerView;
+    private List<StudyList> listScreen =null;
+    private List<StudyList> listTrial = null;
 
-
-    public ViewScreenStudyFragmentAdapter(Context context, List<StudyList> studyLists, boolean isFromScreening) {
+    public ViewScreenStudyFragmentAdapter(Context context, List<StudyList> studyLists, boolean isFromScreening, RecyclerView recyclerView) {
         this.context = context;
         this.studyLists = studyLists;
         this.isFromScreening = isFromScreening;
+        this.recyclerView = recyclerView;
     }
+
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // infalte the item Layout
@@ -139,7 +149,9 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
             btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    viewScreenStudyFragmentAdapter.removeItem(getAdapterPosition());
+                    //viewScreenStudyFragmentAdapter.removeItem(getAdapterPosition());
+
+                    showDeleteDialog(studyLists.get(getAdapterPosition()).getId(), viewScreenStudyFragmentAdapter, getAdapterPosition());
                 }
             });
         }
@@ -148,7 +160,6 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
     public void removeItem(int position) {
         studyLists.remove(position);
         notifyItemRemoved(position);
-        // Add whatever you want to do when removing an Item
     }
 
     private void showModifyDialog(final StudyList studyList) {
@@ -348,6 +359,15 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
                 }
             }
         });
+
+        Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+            }
+        });
     }
 
     @Override
@@ -357,7 +377,7 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(context,status[position] , Toast.LENGTH_SHORT).show();
+       // Toast.makeText(context,status[position] , Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -366,7 +386,7 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
     }
 
 
-    private void showDeleteDialog() {
+    private void showDeleteDialog(final int id, final ViewScreenStudyFragmentAdapter viewScreenStudyFragmentAdapter, final int adapterPosition) {
 
         Utils.createDialogTwoButtons(
                 context, context.getString(R.string.study_delete),
@@ -377,7 +397,8 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
                     public void onClick(DialogInterface dialog, int which) {
 
                         //CALL DELETE API
-                        dialog.dismiss();
+                        callDeleteScheduleAPI(id, viewScreenStudyFragmentAdapter, adapterPosition);
+                       // dialog.dismiss();
                     }
                 }, new DialogInterface.OnClickListener() {
                     @Override
@@ -464,6 +485,184 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
 
                 } else {
                     Logger.logError("modifySchedule API Failure4 " +
+                            serverResponse.errorMessageToDisplay);
+                }
+            }
+        };
+
+    }
+
+
+
+    private void callDeleteScheduleAPI(int id, final ViewScreenStudyFragmentAdapter viewScreenStudyFragmentAdapter, final int adapterPosition) {
+
+        DeleteScheduleRequestModel deleteScheduleRequestModel = new DeleteScheduleRequestModel();
+        deleteScheduleRequestModel.setAppName(AppConstants.APP_NAME);
+        deleteScheduleRequestModel.setVersionNumber(AppConstants.APP_VERSION);
+        deleteScheduleRequestModel.setDeviceType(AppConstants.APP_OS);
+        deleteScheduleRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
+        deleteScheduleRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(context));
+        deleteScheduleRequestModel.setUserRole(new PrefManager(context).getUserRoleType());
+        deleteScheduleRequestModel.setTagId(new PrefManager(context).getBarCodeValue());
+        deleteScheduleRequestModel.setEvent(AppConstants.DELETE_ACTIVITY);
+        deleteScheduleRequestModel.setUserName(new PrefManager(context).getUserName());
+        deleteScheduleRequestModel.setId(String.valueOf(id));
+
+        new NetworkingHelper(new DeleteScheduleRequest((Activity) context, true, deleteScheduleRequestModel)) {
+
+            @Override
+            public void serverResponseFromApi(ApiResponse serverResponse) {
+                if (serverResponse.isSucess) {
+
+                    try {
+
+                        CommonResponse commonResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, CommonResponse.class);
+
+                        if (commonResponse.getStatus().getCODE() == 200) {
+
+                            if(commonResponse.getResponse().get(0).isStatus()){
+
+                                Logger.logError("deleteStudySchedule API success " +
+                                        commonResponse.getResponse().get(0).isStatus());
+                                Logger.logError("deleteStudySchedule API success " +
+                                        commonResponse.getResponse().get(0).getMessage());
+
+
+                                Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
+                                /*viewScreenStudyFragmentAdapter.removeItem(adapterPosition);
+                                viewScreenStudyFragmentAdapter.notifyDataSetChanged();*/
+                                getScheduleDetails();
+
+
+                            }else {
+
+                                Logger.logError("deleteStudySchedule API Failure1 " +
+                                        commonResponse.getResponse().get(0).isStatus());
+                                Logger.logError("deleteStudySchedule API Failure2 " +
+                                        commonResponse.getResponse().get(0).getMessage());
+
+                                Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
+                            }
+
+                        }else {
+
+                            Logger.logError("deleteStudySchedule API Failure3 " +
+                                    commonResponse.getResponse().get(0).isStatus());
+                            Logger.logError("deleteStudySchedule API Failure4 " +
+                                    commonResponse.getResponse().get(0).getMessage());
+
+                            Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
+                        }
+
+
+
+                    }
+                    catch (Exception e){
+                        Logger.logError("deleteStudySchedule Exception " + e.getMessage());
+                    }
+
+                } else {
+                    Logger.logError("deleteStudySchedule API Failure4 " +
+                            serverResponse.errorMessageToDisplay);
+                }
+            }
+        };
+
+    }
+
+
+
+    //Call getScheduleDetails API
+    private void getScheduleDetails() {
+        CommonRequestModel commonRequestModel = new CommonRequestModel();
+        commonRequestModel.setAppName(AppConstants.APP_NAME);
+        commonRequestModel.setVersionNumber(AppConstants.APP_VERSION);
+        commonRequestModel.setDeviceType(AppConstants.APP_OS);
+        commonRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
+        commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(context));
+        commonRequestModel.setUserRole(new PrefManager(context).getUserRoleType());
+        commonRequestModel.setTagId(new PrefManager(context).getBarCodeValue());
+        commonRequestModel.setEvent(AppConstants.GET_SCHEDULE);
+        commonRequestModel.setUserName(new PrefManager(context).getUserName());
+
+        new NetworkingHelper(new GetScheduleRequest((Activity)context, true,
+                commonRequestModel)) {
+
+            @Override
+            public void serverResponseFromApi(ApiResponse serverResponse) {
+                if (serverResponse.isSucess) {
+
+                    try {
+
+                        GetScheduleResponse getScheduleResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, GetScheduleResponse.class);
+
+                        if (getScheduleResponse.getStatus().getCODE() == 200) {
+
+                            if(getScheduleResponse.getStudyList().size() > 0){
+
+                                Logger.logError("getScheduleDetails API success status " +
+                                        getScheduleResponse.getStatus());
+                                Logger.logError("getScheduleDetails API success getStudyList" +
+                                        getScheduleResponse.getStudyList());
+
+                                listScreen = new ArrayList<>();
+                                listTrial = new ArrayList<>();
+
+                                for (int i = 0; i < getScheduleResponse.getStudyList().size(); i++) {
+                                    if(getScheduleResponse.getStudyList().get(i).getIsTrial()
+                                            .equalsIgnoreCase("0")){
+                                        listScreen.add(getScheduleResponse.getStudyList().get(i));
+                                    }else if(getScheduleResponse.getStudyList().get(i).getIsTrial()
+                                            .equalsIgnoreCase("1")) {
+                                        listTrial.add(getScheduleResponse.getStudyList().get(i));
+                                    }else {
+                                    }
+
+                                }
+
+                                if(isFromScreening == true){
+                                    ViewScreenStudyFragmentAdapter customAdapter
+                                            = new ViewScreenStudyFragmentAdapter(context,
+                                            listScreen, isFromScreening, recyclerView);
+                                    recyclerView.setAdapter(customAdapter);
+
+                                }else {
+                                    ViewTrialStudyFragmentAdapter viewTrialStudyFragmentAdapter
+                                            = new ViewTrialStudyFragmentAdapter(context,
+                                            listTrial, isFromScreening, recyclerView);
+                                    recyclerView.setAdapter(viewTrialStudyFragmentAdapter);
+                                }
+                            }else {
+
+                                Logger.logError("getScheduleDetails API Failure " +
+                                        "getStudyList" +
+                                        getScheduleResponse.getStudyList());
+
+                                Utils.showAlertDialog((Activity) context,  "NO DATA IN STUDY");
+                            }
+
+                        }else {
+
+                            Logger.logError("getScheduleDetails API Failure " +
+                                    getScheduleResponse.getStatus().getCODE());
+                            Logger.logError("getScheduleDetails API Failure " +
+                                    getScheduleResponse.getStatus().getMSG());
+
+                            Utils.showAlertDialog((Activity)context,  getScheduleResponse.getStatus()
+                                    .getMSG());
+                        }
+
+
+
+                    }
+                    catch (Exception e){
+                        Logger.logError("Exception " + e.getMessage());
+                    }
+
+                } else {
+                    Logger.logError("getScheduleDetails API Failure " +
                             serverResponse.errorMessageToDisplay);
                 }
             }

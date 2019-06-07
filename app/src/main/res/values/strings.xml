@@ -233,5 +233,10 @@
     <string name="text_dob">Please Select Date of Birth</string>
     <string name="txt_dob">DOB</string>
     <string name="subject_status">Subject Status</string>
+    <string name="no_data_available">No Data Available</string>
+    <string-array name="type_string">
+        <item>Barcode</item>
+    </string-array>
+    <string name="type_prompt">Select Type</string>
 
 </resources>

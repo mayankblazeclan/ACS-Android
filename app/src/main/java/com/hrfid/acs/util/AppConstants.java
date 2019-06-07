@@ -49,6 +49,7 @@ public class AppConstants {
     public static final String API_ASTRO = "ASTRO";
     public static final String TEXT_GEMPAK_P = "hotspot@faq";
     public static final String ACTIVITY = "ACTIVITY";
+    public static final String INQUEUE = "INQUEUE";
     public static String API_TO_HIT = "";
 
     //ACS Constant
@@ -59,8 +60,11 @@ public class AppConstants {
     public static final String LOGIN_URL = "sit-stage.controlpoint.healthrfid.com/";
     public static final String LOGOUT = "App Logout";
     public static final String GET_NOTIFICATION = "Get Notifications";
+    public static final String READ_NOTIFICATION = "Read Notifications";
     public static final String CREATE_SCHEDULE = "Create Study Schedule";
     public static final String GET_SCHEDULE = "Study Schedule List";
     public static final String MODIFY_ACTIVITY = "Modify Study Schedule";
+    public static final String DELETE_ACTIVITY = "Delete Study Schedule";
+    public static final String ADD_SUBJECT = "Subject Onboarding";
 
 }

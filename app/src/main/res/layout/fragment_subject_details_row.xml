@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:text="ABC (123)"
             android:layout_marginLeft="@dimen/margin_10dp"
-            android:textColor="@color/viewfinder_mask"
+            android:textColor="@color/gray"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:text="01/06/1990"
             android:layout_marginLeft="@dimen/margin_10dp"
-            android:textColor="@color/viewfinder_mask"
+            android:textColor="@color/gray"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_10dp"
             android:text=" G1"
-            android:textColor="@color/viewfinder_mask"
+            android:textColor="@color/gray"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
@@ -130,7 +130,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_10dp"
             android:text="MALE"
-            android:textColor="@color/viewfinder_mask"
+            android:textColor="@color/gray"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
@@ -162,7 +162,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_10dp"
             android:text=" O+"
-            android:textColor="@color/viewfinder_mask"
+            android:textColor="@color/gray"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
@@ -192,7 +192,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_10dp"
             android:text="10012"
-            android:textColor="@color/viewfinder_mask"
+            android:textColor="@color/gray"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
@@ -223,7 +223,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_10dp"
             android:text="ACTIVE"
-            android:textColor="@color/viewfinder_mask"
+            android:textColor="@color/gray"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>

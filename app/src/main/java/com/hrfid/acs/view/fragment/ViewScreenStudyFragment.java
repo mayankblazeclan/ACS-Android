@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hrfid.acs.R;
@@ -47,6 +48,8 @@ public class ViewScreenStudyFragment extends Fragment {
     private boolean isFromScreening;
     private List<StudyList> listScreen =null;
     private List<StudyList> listTrial = null;
+    private LinearLayout linearLayout;
+    private TextView textView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,6 +69,9 @@ public class ViewScreenStudyFragment extends Fragment {
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        linearLayout = v.findViewById(R.id.llRec);
+        textView = v.findViewById(R.id.txtNoData);
     }
 
 
@@ -99,6 +105,9 @@ public class ViewScreenStudyFragment extends Fragment {
 
                             if(getScheduleResponse.getStudyList().size() > 0){
 
+                                linearLayout.setVisibility(View.VISIBLE);
+                                textView.setVisibility(View.GONE);
+
                                 Logger.logError("getScheduleDetails API success status " +
                                         getScheduleResponse.getStatus());
                                 Logger.logError("getScheduleDetails API success getStudyList" +
@@ -120,22 +129,41 @@ public class ViewScreenStudyFragment extends Fragment {
                                 }
 
                                 if(isFromScreening == true){
-                                    ViewScreenStudyFragmentAdapter customAdapter
-                                            = new ViewScreenStudyFragmentAdapter(getContext(),
-                                            listScreen, isFromScreening);
-                                    recyclerView.setAdapter(customAdapter);
+                                    if(listScreen.size() >0) {
+                                        linearLayout.setVisibility(View.VISIBLE);
+                                        textView.setVisibility(View.GONE);
 
+                                        ViewScreenStudyFragmentAdapter customAdapter
+                                                = new ViewScreenStudyFragmentAdapter(getContext(),
+                                                listScreen, isFromScreening, recyclerView);
+                                        recyclerView.setAdapter(customAdapter);
+                                    }else {
+                                        linearLayout.setVisibility(View.GONE);
+                                        textView.setVisibility(View.VISIBLE);
+                                    }
                                 }else {
-                                    ViewTrialStudyFragmentAdapter viewTrialStudyFragmentAdapter
-                                            = new ViewTrialStudyFragmentAdapter(getContext(),
-                                            listTrial, isFromScreening);
-                                    recyclerView.setAdapter(viewTrialStudyFragmentAdapter);
+                                    if(listTrial.size() >0) {
+
+                                        linearLayout.setVisibility(View.VISIBLE);
+                                        textView.setVisibility(View.GONE);
+
+                                        ViewTrialStudyFragmentAdapter viewTrialStudyFragmentAdapter
+                                                = new ViewTrialStudyFragmentAdapter(getContext(),
+                                                listTrial, isFromScreening, recyclerView);
+                                        recyclerView.setAdapter(viewTrialStudyFragmentAdapter);
+                                    }else {
+                                        linearLayout.setVisibility(View.GONE);
+                                        textView.setVisibility(View.VISIBLE);
+                                    }
                                 }
                             }else {
 
                                 Logger.logError("getScheduleDetails API Failure " +
                                         "getStudyList" +
                                         getScheduleResponse.getStudyList());
+
+                                linearLayout.setVisibility(View.GONE);
+                                textView.setVisibility(View.VISIBLE);
 
                                 Utils.showAlertDialog(getActivity(),  "NO DATA IN STUDY");
                             }

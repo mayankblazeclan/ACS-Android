@@ -36,8 +36,8 @@ public class SubjectOnBoardingAdapter extends FragmentStatePagerAdapter {
                     return addSubjectFragment;
 
                 case 1:
-                    SubjectDetailsFragment createStudyScheduleFrgement1 = new SubjectDetailsFragment();
-                    return createStudyScheduleFrgement1;
+                    SubjectDetailsFragment subjectDetailsFragment = new SubjectDetailsFragment();
+                    return subjectDetailsFragment;
 
 
                 default:

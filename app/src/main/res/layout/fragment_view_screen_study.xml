@@ -5,8 +5,25 @@
     android:layout_height="match_parent"
     tools:context=".view.activity.SeniorStudySetupActivity">
 
+    <LinearLayout
+        android:id="@+id/llRec"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:orientation="vertical">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtNoData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/no_data_available"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/activity_5dp_margin"
+        android:gravity="center"/>
+
 </RelativeLayout>

@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:text="ABC (123)"
             android:layout_marginLeft="@dimen/margin_10dp"
-            android:textColor="@color/viewfinder_mask"
+            android:textColor="@color/gray"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:text="01/06/2019 -- 30/06/2019"
             android:layout_marginLeft="@dimen/margin_10dp"
-            android:textColor="@color/viewfinder_mask"
+            android:textColor="@color/gray"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_10dp"
             android:text=""
-            android:textColor="@color/viewfinder_mask"
+            android:textColor="@color/gray"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
@@ -129,7 +129,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_10dp"
             android:text="ACTIVE"
-            android:textColor="@color/viewfinder_mask"
+            android:textColor="@color/gray"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>

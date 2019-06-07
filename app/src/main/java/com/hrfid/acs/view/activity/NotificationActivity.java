@@ -47,26 +47,6 @@ public class NotificationActivity extends BaseActivity {
     private LinearLayout linearLayout;
     private TextView textView;
 
-
-    static String[] nameArray = {"Senior staff has changed study schedule of Study-no/name from ‘old date’ to 'new date",
-            "Outside time window from Lab receipt to centrifuge",
-            "The tube is missing/extra",
-            "Out of range sample processing requirements (e.g. if tube needs to clot/spin immediately/spun within 30 mins/frozen immediately) -- an alert is needed if something is going out of time window or about to be spun too early)",
-            "Outside time window from centrifuge to aliquot",
-            "Draw tubes do not match the aliquot tubes - alert if miss-matched/extra/missing",
-            "Outside time window from to aliquot to fridge or freezer",
-            "Needing to be frozen/refrigerated (e.g. if something needs to be frozen within 30 minutes of centrifugation)",
-            "Outside time window from Lab receipt to fridge or freezer",
-            "Outside time window from Nursing to Lab"};
-
-    static String[] versionArray = {"Nurse", "Lab Staff", "Nurse", "Lab Staff", "Nurse", "Lab Staff", "Nurse", "Lab Staff", "Nurse", "Senior Staff"};
-
-    static Integer[] drawableArray = {R.drawable.ic_nurse_staff, R.drawable.ic_lab_staff, R.drawable.ic_nurse_staff,
-            R.drawable.ic_lab_staff, R.drawable.ic_nurse_staff, R.drawable.ic_lab_staff, R.drawable.ic_nurse_staff,
-            R.drawable.ic_lab_staff, R.drawable.ic_nurse_staff, R.drawable.ic_senior_staff};
-
-    static Integer[] id_ = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

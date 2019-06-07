@@ -53,6 +53,7 @@ dependencies {
     //implementation files('libs/cw-deviceapi20171026.jar')
     //implementation files('libs/IGLBarDecoder.jar')
     //implementation files('libs/MobileOcrEngine.jar')
-    implementation 'me.dm7.barcodescanner:zxing:1.9'
+    implementation files('libs/core-3.3.3.jar')
+    //implementation 'me.dm7.barcodescanner:zxing:1.9'
     implementation 'com.jayway.android.robotium:robotium-solo:5.4.1'
 }

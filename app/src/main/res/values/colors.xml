@@ -14,4 +14,5 @@
     <color name="colorBCRed">#d50000</color>
     <color name="green">#039c10</color>
     <color name="color_white">#FFFFFF</color>
+    <color name="colorBackground">#e8e8e8</color>
 </resources>

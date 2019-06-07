@@ -98,13 +98,18 @@ public class SeniorStudySetupActivity extends BaseActivity {
                     imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
                 }
 
+                Logger.logError("onTabSelected " + tab.getPosition());
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
 
+                Logger.logError("onTabUnselected " + tab.getPosition());
+
             }
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+
+                Logger.logError("onTabReselected " + tab.getPosition());
 
             }
         });

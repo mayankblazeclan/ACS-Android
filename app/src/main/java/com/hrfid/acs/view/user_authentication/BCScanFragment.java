@@ -1,3 +1,4 @@
+/*
 package com.hrfid.acs.view.user_authentication;
 
 import android.content.Context;
@@ -19,12 +20,14 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 //import au.com.healthrfid.pathologyapp.R;
 //import au.com.healthrfid.pathologyapp.utils.Constants;
 
+*/
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link BCScanFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- */
+ *//*
+
 public class BCScanFragment extends Fragment implements ZXingScannerView.ResultHandler {
 
     private final String TAG = getClass().getSimpleName();
@@ -128,3 +131,4 @@ public class BCScanFragment extends Fragment implements ZXingScannerView.ResultH
 
 
 }
+*/

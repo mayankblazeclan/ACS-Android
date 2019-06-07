@@ -227,15 +227,33 @@
 
     </LinearLayout>
 
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="2">
     <Button
         android:id="@+id/btnSubmit"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="SUBMIT"
         android:textColor="@color/white"
         android:textStyle="bold"
+        android:layout_weight="1"
         android:layout_margin="@dimen/bt_ok_padding"
         android:background="@color/colorBCRed"/>
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CANCEL"
+        android:textColor="@color/white"
+        android:layout_weight="1"
+        android:textStyle="bold"
+        android:layout_margin="@dimen/bt_ok_padding"
+        android:background="@color/black"/>
+
+</LinearLayout>
 
 </LinearLayout>
