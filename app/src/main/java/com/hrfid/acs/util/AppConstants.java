@@ -66,5 +66,6 @@ public class AppConstants {
     public static final String MODIFY_ACTIVITY = "Modify Study Schedule";
     public static final String DELETE_ACTIVITY = "Delete Study Schedule";
     public static final String ADD_SUBJECT = "Subject Onboarding";
+    public static final String GET_SUBJECT = "Subject List";
 
 }

@@ -64,6 +64,10 @@ public interface APIService {
   @POST("/acs/api/subjectOnboard")
   Call<ResponseBody> subjectOnboard(@Body AddSubjectRequestModel addSubjectRequestModel);
 
+  //getAllSubjects
+  @POST("/acs/api/getAllSubjects")
+  Call<ResponseBody> getAllSubjects(@Body CommonRequestModel commonRequestModel);
+
  /* @POST("api/facebook/fblogin")
   Call<ResponseBody> loginFBToSSOAPI(@Body RequestBody body);
 

@@ -10,6 +10,7 @@ import com.hrfid.acs.helpers.request.DeleteScheduleRequest;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.request.GetNotificationRequest;
 import com.hrfid.acs.helpers.request.GetScheduleRequest;
+import com.hrfid.acs.helpers.request.GetSubjectDetailsRequest;
 import com.hrfid.acs.helpers.request.LogoutRequest;
 import com.hrfid.acs.helpers.request.ModifyScheduleRequest;
 import com.hrfid.acs.helpers.request.ResetNotificationCountRequest;
@@ -52,6 +53,7 @@ public abstract class NetworkingHelper {
   public static final int DELETE_SCHEDULE = 8;
   public static final int GET_ALL_STUDY_ID = 9;
   public static final int ADD_SUBJECT_ONBOARDING = 10;
+  public static final int GET_SUBJECT_DETAILS = 11;
 
 
     private Call<ResponseBody> apiInterface;
@@ -113,6 +115,11 @@ public abstract class NetworkingHelper {
       case ADD_SUBJECT_ONBOARDING:
         AddSubjectRequest addSubjectRequest = (AddSubjectRequest) cmgRequest;
         apiInterface = ApiRouter.get().getRetrofitService().subjectOnboard(addSubjectRequest.addSubjectRequestModel);
+        break;
+
+      case GET_SUBJECT_DETAILS:
+        GetSubjectDetailsRequest getSubjectDetailsRequest = (GetSubjectDetailsRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().getAllSubjects(getSubjectDetailsRequest.commonRequestModel);
         break;
 
       default:

@@ -1,6 +1,5 @@
 package com.hrfid.acs.view.adapter;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,24 +11,24 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hrfid.acs.R;
+import com.hrfid.acs.helpers.serverResponses.models.GetSubjectDetails.StudyList;
+import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by MS on 2019-05-31.
  */
 public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAdapter.MyViewHolder> implements AdapterView.OnItemSelectedListener {
 
-    ArrayList personNames;
+    //ArrayList personNames;
     String[] status = { "APPROVED", "REJECTED", "INPROGRESS"};
     Context context;
 
@@ -41,9 +40,11 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
     String[] spnGroup = {"G1","G2","G3", "G4", "G5"};
 
-    public SubjectDetailsAdapter(Context context, ArrayList personNames) {
+    List<StudyList> studyLists;
+
+    public SubjectDetailsAdapter(Context context, List<StudyList> studyLists) {
         this.context = context;
-        this.personNames = personNames;
+        this.studyLists = studyLists;
     }
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -69,7 +70,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
             }
         });*/
 
-      if( position ==1 || position ==4 || position ==7) {
+     /* if( position ==1 || position ==4 || position ==7) {
 
           holder.txtStatus.setText("APPROVED");
           holder.txtStatus.setTextColor(Color.parseColor("#5AA105"));
@@ -82,7 +83,29 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
           holder.txtStatus.setText("INPROGRESS");
           holder.txtStatus.setTextColor(Color.parseColor("#F9980B"));
-      }
+      }*/
+
+
+        if(studyLists != null) {
+
+            holder.txtScreenId.setText(studyLists.get(position).getScreenId().trim());
+            holder.txtDob.setText
+                    (Utilities.splitDateFromDesired(studyLists.get(position).getDob()));
+            holder.txtGroup.setText("" + studyLists.get(position).getGroupId());
+            holder.txtGender.setText("" + studyLists.get(position).getGender());
+            holder.txtStudyId.setText("" + studyLists.get(position).getStudyId());
+            if (studyLists.get(position).getStatus().equalsIgnoreCase("ACTIVE")) {
+                holder.txtStatus.setText("ACTIVE");
+                holder.txtStatus.setTextColor(Color.parseColor("#5AA105"));
+            } else if (studyLists.get(position).getStatus().equalsIgnoreCase("INACTIVE")) {
+                holder.txtStatus.setText("INACTIVE");
+                holder.txtStatus.setTextColor(Color.RED);
+            } else {
+                holder.txtStatus.setText("INPROGRESS");
+                holder.txtStatus.setTextColor(Color.parseColor("#F9980B"));
+            }
+
+        }
 
         holder.btnModify.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,12 +129,12 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
     @Override
     public int getItemCount() {
-        return personNames.size();
+        return studyLists.size();
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-      //  Toast.makeText(context,status[position] , Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(context,status[position] , Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -120,16 +143,26 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView name;// init the item view's
+        TextView txtScreenId;
+        TextView txtGroup;
+        TextView txtDob;
         TextView txtStatus;
         Button btnModify, btnDelete;
+        TextView txtGender;
+        TextView txtStudyId;
+
+
         public MyViewHolder(View itemView) {
             super(itemView);
             // get the reference of item view's
-            name = (TextView) itemView.findViewById(R.id.study_date);
+            txtScreenId = (TextView) itemView.findViewById(R.id.txtScreenId);
             btnModify = (Button) itemView.findViewById(R.id.btnModify);
             btnDelete = (Button) itemView.findViewById(R.id.btnDelete);
             txtStatus = itemView.findViewById(R.id.txt_status);
+            txtGroup = (TextView) itemView.findViewById(R.id.txtGroup);
+            txtDob = itemView.findViewById(R.id.txtDob);
+            txtGender = itemView.findViewById(R.id.txtGender);
+            txtStudyId = itemView.findViewById(R.id.txtStudyId);
         }
     }
 
