@@ -321,7 +321,7 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
             @Override
             public void onClick(View v) {
                 // Close dialog
-                dialog.dismiss();
+                //dialog.dismiss();
 
                 if(editText.getText().toString().length() != 0){
 
@@ -341,21 +341,34 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
 
                         if (date1.compareTo(date2) <= 0) {
 
-                            callModifySetupAPI(editText.getText().toString(), txtStartDate.getText().toString(), txtEndDate.getText().toString(), spin.getSelectedItem().toString(), studyList.getId());
+                            Calendar cal = Calendar.getInstance();
+                            Date sysDate = cal.getTime();
+
+                            if(date1.compareTo(sysDate) >0 && date2.compareTo(sysDate) >0) {
+
+                                callModifySetupAPI(editText.getText().toString(), txtStartDate.getText().toString(), txtEndDate.getText().toString(), spin.getSelectedItem().toString(), studyList.getId());
+                                dialog.dismiss();
+
+                            }else {
+
+                                Toast.makeText(context,"Selected Wrong Date",Toast.LENGTH_SHORT).show();
+                            }
+
+                           // callModifySetupAPI(editText.getText().toString(), txtStartDate.getText().toString(), txtEndDate.getText().toString(), spin.getSelectedItem().toString(), studyList.getId());
 
                         }else {
 
-                            Toast.makeText(context,"End Date Cannot Be Smaller Than Start Date" , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context,"Study End Date cannot be smaller than Study Start Date" , Toast.LENGTH_SHORT).show();
                         }
 
                     }else {
 
-                        Toast.makeText(context,"Please Select Both the Dates.." , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"Please select Study Dates" , Toast.LENGTH_SHORT).show();
                     }
 
 
                 }else {
-                    Toast.makeText(context,"Please Enter STUDY NAME" , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"Please enter Study Name" , Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -453,6 +466,7 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
 
 
                                 Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
+                                getScheduleDetails();
                                 //viewScreenStudyFragmentAdapter.notifyDataSetChanged();
 
 

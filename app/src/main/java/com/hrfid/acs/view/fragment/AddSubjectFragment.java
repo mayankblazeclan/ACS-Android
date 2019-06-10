@@ -38,8 +38,11 @@ import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -148,7 +151,7 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
 
             case R.id.spnStatusId :
                 //Your Action Here.
-                Toast.makeText(getContext(), parent.getSelectedItem().toString() , Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), parent.getSelectedItem().toString() , Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -230,17 +233,48 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
 
             if(!txt_date_of_birth.getText().toString().equalsIgnoreCase("")){
 
-                callAddSubjectOnBoardingAPI(edtStudyName.getText().toString(),
+
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+                Date date1 = null;
+                try {
+                    date1 = format.parse(txt_date_of_birth.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                    Calendar cal = Calendar.getInstance();
+                    Date sysDate = cal.getTime();
+
+                    if(date1.compareTo(sysDate) >0) {
+
+
+                        Toast.makeText(getActivity(),"Please select correct Date of Birth",Toast.LENGTH_SHORT).show();
+
+                    }else {
+
+
+                        callAddSubjectOnBoardingAPI(edtStudyName.getText().toString(),
+                                txt_date_of_birth.getText().toString(),
+                                spnPersonGender.getSelectedItem().toString(),
+                                spnGroups.getSelectedItem().toString(),
+                                spnStudyIDs.getSelectedItem().toString());
+                    }
+
+
+
+
+               /* callAddSubjectOnBoardingAPI(edtStudyName.getText().toString(),
                         txt_date_of_birth.getText().toString(),
                         spnPersonGender.getSelectedItem().toString(),
                         spnGroups.getSelectedItem().toString(),
-                        spnStudyIDs.getSelectedItem().toString());
+                        spnStudyIDs.getSelectedItem().toString());*/
 
             }else {
                 Toast.makeText(getContext(),"Please Select Date Of Birth" , Toast.LENGTH_SHORT).show();
             }
         }else {
-            Toast.makeText(getContext(),"Please Enter SCREEN ID" , Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"Please enter Screen ID" , Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -262,7 +296,7 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
                 imageView.setImageBitmap(bitmap);
             }
         }else {
-            Toast.makeText(getContext(),"Please Enter SCREEN ID" , Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"Please enter Screen ID" , Toast.LENGTH_SHORT).show();
         }
     }
 

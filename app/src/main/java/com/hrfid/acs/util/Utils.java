@@ -332,6 +332,8 @@ public class Utils {
         alertDialog.show();
     }
 
+
+
 /*    public static void showAlertDialogSuccessOrFaill(Activity activity, String title, String titleTextColor, String msg, int drawable, boolean isCancelable) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
 // ...Irrelevant code for customizing the buttons and title

@@ -103,7 +103,7 @@ public class SeniorStaffHomeActivity extends BaseActivity {
 
                 }else {
 
-                    Toast.makeText(SeniorStaffHomeActivity.this, "Tapped On " + 2, Toast.LENGTH_LONG).show();
+                   // Toast.makeText(SeniorStaffHomeActivity.this, "Tapped On " + 2, Toast.LENGTH_LONG).show();
 
                 }
 

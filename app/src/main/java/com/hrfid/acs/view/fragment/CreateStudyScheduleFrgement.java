@@ -1,5 +1,6 @@
 package com.hrfid.acs.view.fragment;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Build;
@@ -36,6 +37,7 @@ import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
 import com.hrfid.acs.view.activity.SelectRoleActivity;
+import com.hrfid.acs.view.activity.SeniorStaffHomeActivity;
 import com.hrfid.acs.view.activity.SeniorStudySetupActivity;
 
 import java.text.ParseException;
@@ -223,26 +225,36 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
 
                     if (date1.compareTo(date2) <= 0) {
                         //Toast.makeText(getActivity(),"All Date OK.. RUN API.." , Toast.LENGTH_SHORT).show();
-                        if(rbTrial.isChecked()){
-                            isTrail=1;
-                        }else{
-                            isTrail =0;
-                        }
+                        Calendar cal = Calendar.getInstance();
+                        Date sysDate = cal.getTime();
 
-                        callStudySetup(edtStudyName.getText().toString(), startDate, endDate, spnStudyStatus.getSelectedItem().toString(), isTrail);
+                        if(date1.compareTo(sysDate) >0 && date2.compareTo(sysDate) >0) {
+
+                            if (rbTrial.isChecked()) {
+                                isTrail = 1;
+                            } else {
+                                isTrail = 0;
+                            }
+
+                            callStudySetup(edtStudyName.getText().toString(), startDate, endDate, spnStudyStatus.getSelectedItem().toString(), isTrail);
+
+                        }else {
+
+                            Toast.makeText(getActivity(),"Selected Wrong Date",Toast.LENGTH_SHORT).show();
+                        }
                     }else {
 
-                        Toast.makeText(getActivity(),"End Date Cannot Be Smaller Than Start Date" , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(),"Study End Date cannot be smaller than Study Start Date" , Toast.LENGTH_SHORT).show();
                     }
 
                 }else {
 
-                    Toast.makeText(getActivity(),"Please Select Both the Dates.." , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"Please select Study Dates" , Toast.LENGTH_SHORT).show();
                 }
 
 
             }else {
-                Toast.makeText(getActivity(),"Please Enter STUDY NAME" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"Please enter Study Name" , Toast.LENGTH_SHORT).show();
             }
 
 
@@ -313,7 +325,33 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
                                 startActivity(mNextActivity);
                                 getActivity().finish();*/
 
-                                Utils.showAlertDialog(getActivity(),  commonResponse.getResponse().get(0).getMessage());
+                                //Utils.showAlertDialog(getActivity(),  commonResponse.getResponse().get(0).getMessage());
+
+
+                                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+                                // ...Irrelevant code for customizing the buttons and title
+                                LayoutInflater inflater = getActivity().getLayoutInflater();
+                                View dialogView = inflater.inflate(R.layout.alert_dialog_with_one_button, null);
+                                dialogBuilder.setView(dialogView);
+                                final AlertDialog alertDialog = dialogBuilder.create();
+
+                                TextView tvDesc = (TextView) dialogView.findViewById(R.id.tv_dialog_desc);
+                                tvDesc.setText(commonResponse.getResponse().get(0).getMessage());
+                                Button btDialogOk = (Button) dialogView.findViewById(R.id.bt_dialog_ok);
+                                btDialogOk.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        alertDialog.dismiss();
+                                        Intent mNextActivity = new Intent(getActivity(), SeniorStudySetupActivity.class);
+                                        startActivity(mNextActivity);
+                                        getActivity().finish();
+                                    }
+                                });
+
+                                alertDialog.setCanceledOnTouchOutside(false);
+                                alertDialog.show();
+
                                 edtStudyName.setText("");
                                 txtStartDate.setText("");
                                 txtEndDate.setText("");
