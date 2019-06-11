@@ -52,7 +52,13 @@ public class CreateScheduleModel {
     private String activity;
     @SerializedName("isTrial")
     @Expose
-    private Integer isTrial;
+    private int isTrial;
+    @SerializedName("studyId")
+    @Expose
+    private String studyId;
+    @SerializedName("docCode")
+    @Expose
+    private String docCode;
 
     public String getAppName() {
         return appName;
@@ -166,12 +172,28 @@ public class CreateScheduleModel {
         this.activity = activity;
     }
 
-    public Integer getIsTrial() {
+    public int getIsTrial() {
         return isTrial;
     }
 
-    public void setIsTrial(Integer isTrial) {
+    public void setIsTrial(int isTrial) {
         this.isTrial = isTrial;
+    }
+
+    public String getStudyId() {
+        return studyId;
+    }
+
+    public void setStudyId(String studyId) {
+        this.studyId = studyId;
+    }
+
+    public String getDocCode() {
+        return docCode;
+    }
+
+    public void setDocCode(String docCode) {
+        this.docCode = docCode;
     }
 
 }

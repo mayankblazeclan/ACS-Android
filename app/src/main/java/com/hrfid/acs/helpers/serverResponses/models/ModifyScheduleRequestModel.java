@@ -54,6 +54,12 @@ public class ModifyScheduleRequestModel {
     @SerializedName("id")
     @Expose
     private int id;
+    @SerializedName("studyId")
+    @Expose
+    private String studyId;
+    @SerializedName("docCode")
+    @Expose
+    private String docCode;
 
     public String getAppName() {
         return appName;
@@ -181,6 +187,22 @@ public class ModifyScheduleRequestModel {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getStudyId() {
+        return studyId;
+    }
+
+    public void setStudyId(String studyId) {
+        this.studyId = studyId;
+    }
+
+    public String getDocCode() {
+        return docCode;
+    }
+
+    public void setDocCode(String docCode) {
+        this.docCode = docCode;
     }
 
 }

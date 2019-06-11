@@ -107,6 +107,59 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout_study_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/bt_ok_padding"
+        android:layout_marginRight="@dimen/bt_ok_padding"
+        android:layout_marginTop="@dimen/bt_ok_padding"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_marginLeft="@dimen/activity_5dp_margin"
+            android:text="@string/study_id"/>
+
+        <EditText
+            android:id="@+id/edtStudyID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Study ID"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout_doc_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/bt_ok_padding"
+        android:layout_marginRight="@dimen/bt_ok_padding"
+        android:layout_marginTop="@dimen/bt_ok_padding"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_marginLeft="@dimen/activity_5dp_margin"
+            android:text="@string/doctor_code"/>
+
+        <EditText
+            android:id="@+id/edtDocCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Doctor Code"/>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/linearLayout_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -30,21 +30,15 @@ public class StudyList {
     @SerializedName("is_trial")
     @Expose
     private String isTrial;
-    @SerializedName("created_on")
-    @Expose
-    private String createdOn;
-    @SerializedName("created_by")
-    @Expose
-    private String createdBy;
-    @SerializedName("updated_on")
-    @Expose
-    private String updatedOn;
-    @SerializedName("updated_by")
-    @Expose
-    private String updatedBy;
     @SerializedName("is_deleted")
     @Expose
     private int isDeleted;
+    @SerializedName("study_id")
+    @Expose
+    private String studyId;
+    @SerializedName("doc_code")
+    @Expose
+    private String docCode;
 
     public int getId() {
         return id;
@@ -110,38 +104,6 @@ public class StudyList {
         this.isTrial = isTrial;
     }
 
-    public String getCreatedOn() {
-        return createdOn;
-    }
-
-    public void setCreatedOn(String createdOn) {
-        this.createdOn = createdOn;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public String getUpdatedOn() {
-        return updatedOn;
-    }
-
-    public void setUpdatedOn(String updatedOn) {
-        this.updatedOn = updatedOn;
-    }
-
-    public String getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
     public int getIsDeleted() {
         return isDeleted;
     }
@@ -150,4 +112,19 @@ public class StudyList {
         this.isDeleted = isDeleted;
     }
 
+    public String getStudyId() {
+        return studyId;
+    }
+
+    public void setStudyId(String studyId) {
+        this.studyId = studyId;
+    }
+
+    public String getDocCode() {
+        return docCode;
+    }
+
+    public void setDocCode(String docCode) {
+        this.docCode = docCode;
+    }
 }

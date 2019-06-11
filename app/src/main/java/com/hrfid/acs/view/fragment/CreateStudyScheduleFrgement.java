@@ -63,6 +63,8 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
     private String[] status = {"INPROGRESS", "ACTIVE","INACTIVE"};
     private RadioButton rbScreen, rbTrial;
     private int isTrail =0;
+    private EditText edtDocCode;
+    private EditText edtStudyId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,6 +94,9 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
 
         btnSubmit=(Button) v.findViewById(R.id.btnSubmit);
         edtStudyName = v.findViewById(R.id.edtStudyName);
+
+        edtDocCode = v.findViewById(R.id.edtDocCode);
+        edtStudyId = v.findViewById(R.id.edtStudyID);
 
         rbScreen = (RadioButton) v.findViewById(R.id.radioScreen);
         rbTrial = (RadioButton) v.findViewById(R.id.radioTrail);
@@ -209,6 +214,10 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
 
             if(edtStudyName.getText().toString().length() != 0){
 
+                if(edtStudyId.getText().toString().length() !=0){
+
+                    if(edtDocCode.getText().toString().length() !=0){
+
                 if(!txtStartDate.getText().toString().equalsIgnoreCase("")
                         && !txtEndDate.getText().toString().equalsIgnoreCase("")){
 
@@ -236,11 +245,11 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
                                 isTrail = 0;
                             }
 
-                            callStudySetup(edtStudyName.getText().toString(), startDate, endDate, spnStudyStatus.getSelectedItem().toString(), isTrail);
+                            callStudySetup(edtStudyName.getText().toString(), edtStudyId.getText().toString(), edtDocCode.getText().toString(), startDate, endDate, spnStudyStatus.getSelectedItem().toString(), isTrail);
 
                         }else {
 
-                            Toast.makeText(getActivity(),"Selected Wrong Date",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(),"Study with past date cannot be scheduled",Toast.LENGTH_SHORT).show();
                         }
                     }else {
 
@@ -252,6 +261,13 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
                     Toast.makeText(getActivity(),"Please select Study Dates" , Toast.LENGTH_SHORT).show();
                 }
 
+                    }else {
+                        Toast.makeText(getActivity(),"Please enter Doctor Code" , Toast.LENGTH_SHORT).show();
+                    }
+
+                }else {
+                    Toast.makeText(getActivity(),"Please enter Study ID" , Toast.LENGTH_SHORT).show();
+                }
 
             }else {
                 Toast.makeText(getActivity(),"Please enter Study Name" , Toast.LENGTH_SHORT).show();
@@ -282,7 +298,7 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
     }
 
     //Call callStudySetup API
-    private void callStudySetup(String studyName, String startDate, String endDate, String status, int isTrail) {
+    private void callStudySetup(String studyName, String studyId, String strDocCode, String startDate, String endDate, String status, int isTrail) {
         CreateScheduleModel createScheduleModel = new CreateScheduleModel();
         createScheduleModel.setAppName(AppConstants.APP_NAME);
         createScheduleModel.setVersionNumber(AppConstants.APP_VERSION);
@@ -299,6 +315,8 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
         createScheduleModel.setStatus(status);
         createScheduleModel.setActivity(AppConstants.ACTIVITY);
         createScheduleModel.setIsTrial(isTrail);
+        createScheduleModel.setStudyId(studyId);
+        createScheduleModel.setDocCode(strDocCode);
 
         new NetworkingHelper(new CreateScheduleRequest(getActivity(), true, createScheduleModel)) {
 

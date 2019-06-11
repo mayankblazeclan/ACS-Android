@@ -622,7 +622,7 @@ public class Utilities {
     public static String splitDateFromDesired(String inputDate) {
         try {
 
-            String[] arr = inputDate.split("T", 0);
+            String[] arr = inputDate.split(" ", 0);
             for (String w : arr) {
               //  System.out.println("Splitted Text :"+w);
             }

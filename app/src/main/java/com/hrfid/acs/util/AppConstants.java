@@ -8,8 +8,12 @@ public class AppConstants {
     //  Staging Data
 
     public static final String ENDPOINT_URL_ASTRO = "https://loginstg.astro.com.my/";
-    public static final String ENDPOINT_URL = "http://10.30.10.110:8080/";
-    //public static final String ENDPOINT_URL = "htps://sit-stage-test.controlpoint.healthrfid.com/";
+    //public static final String ENDPOINT_URL = "http://10.30.10.110:8080/";
+    //public static final String LOGIN_URL = "10.30.10.110:8080/";
+    public static final String ENDPOINT_URL = "https://sit-stage-test.controlpoint.healthrfid.com/";
+    public static final String LOGIN_URL = "sit-stage.controlpoint.healthrfid.com/";
+
+
     public static final String ENDPOINT_URL_ASTRO_FAQ = "http://support.astro.com.my/rest/content/site/Astrohelpsupport/en-us/all/read-watch-listen-shop/";
     public static final String ENDPOINT_URL_ASTRO_WEBVIEW_CHECKER = "http://stg-hotspot.pink.cat/rest/";
     public static final String TEXT_HOTSPOT_WEBVIEW_CHECKER_USER = "hotspotapi";
@@ -57,7 +61,7 @@ public class AppConstants {
     public static final String APP_VERSION = "1.0";
     public static final String APP_OS = "Android";
     public static final String LOGIN_EVENT = "App Login";
-    public static final String LOGIN_URL = "sit-stage.controlpoint.healthrfid.com/";
+
     public static final String LOGOUT = "App Logout";
     public static final String GET_NOTIFICATION = "Get Notifications";
     public static final String READ_NOTIFICATION = "Read Notifications";

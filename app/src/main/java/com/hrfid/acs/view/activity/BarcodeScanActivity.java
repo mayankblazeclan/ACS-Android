@@ -131,8 +131,8 @@ public class BarcodeScanActivity extends AppCompatActivity implements
                 if (Utilities.isNetworkConnected(BarcodeScanActivity.this)) {
 
                     //Calling Login API ....
-                    String url = "10.30.10.110:8080/";
-                    //String url = AppConstants.LOGIN_URL;
+                    //String url = "10.30.10.110:8080/";
+                    String url = AppConstants.LOGIN_URL;
                     if (!TextUtils.isEmpty(tagId) && Constants.USER_CARD_TAG_LENGHT != tagId.length() - 1) {
                         mProgressBarLayout.setVisibility(View.VISIBLE);
                         mService.ApiCallGetUserRole(url, loginRequestModel);

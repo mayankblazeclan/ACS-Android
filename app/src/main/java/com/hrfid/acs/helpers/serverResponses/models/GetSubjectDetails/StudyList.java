@@ -12,7 +12,7 @@ public class StudyList {
     @SerializedName("screen_id")
     @Expose
     private String screenId;
-    @SerializedName("dob")
+    @SerializedName("DOB")
     @Expose
     private String dob;
     @SerializedName("group_id")

@@ -89,13 +89,14 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
         if(studyLists != null) {
             if(studyLists.get(position).getIsTrial().equalsIgnoreCase("0")) {
                 holder.txtStudy.setText(studyLists.get(position).getName().trim()
-                        + " " + "(" + studyLists.get(position).getId() + ")");
+                        + " " + "(" + studyLists.get(position).getStudyId() + ")");
 
                 holder.txt_start_end_date.setText
                         (Utilities.splitDateFromDesired(studyLists.get(position).getStartDate())
                                 + " - " + Utilities.splitDateFromDesired(studyLists.get(position)
                                 .getEndDate()));
                 holder.txt_number_of_day.setText("" + studyLists.get(position).getTotalDays());
+                holder.txtDocCode.setText(""+studyLists.get(position).getDocCode());
 
                 //holder.txt_number_of_day.setText("" + studyLists.get(position).getIsTrial());
                 if (studyLists.get(position).getStatus().equalsIgnoreCase("ACTIVE")) {
@@ -132,6 +133,7 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
         TextView txt_start_end_date;
         TextView txt_number_of_day;
         TextView txtStatus;
+        TextView txtDocCode;
         Button btnModify, btnDelete;
         ViewScreenStudyFragmentAdapter viewScreenStudyFragmentAdapter;
 
@@ -143,6 +145,7 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
             txt_start_end_date = itemView.findViewById(R.id.txt_start_end_date);
             txt_number_of_day = itemView.findViewById(R.id.txt_number_of_day);
             txtStatus = itemView.findViewById(R.id.txt_status);
+            txtDocCode = itemView.findViewById(R.id.txtDocCode);
             btnModify = (Button) itemView.findViewById(R.id.btnModify);
             btnDelete = (Button) itemView.findViewById(R.id.btnDelete);
 
@@ -169,6 +172,8 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
         final int[] mYear = new int[1];
         final int[] mMonth = new int[1];
         final int[] mDay = new int[1];
+        final EditText edtDocCode;
+        final EditText edtStudyId;
 
         // Create custom dialog object
         final Dialog dialog = new Dialog(context);
@@ -199,6 +204,11 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
 
         final EditText editText =  dialog.findViewById(R.id.edtStudyName);
         editText.setText(studyList.getName());
+
+        edtDocCode = dialog.findViewById(R.id.edtDocCode);
+        edtDocCode.setText(studyList.getDocCode());
+        edtStudyId = dialog.findViewById(R.id.edtStudyId);
+        edtStudyId.setText(studyList.getStudyId());
 
         btnStartDatePicker=(ImageButton)dialog.findViewById(R.id.btn_start_date);
         txtStartDate=(TextView)dialog.findViewById(R.id.txt_start_date);
@@ -325,47 +335,60 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
 
                 if(editText.getText().toString().length() != 0){
 
-                    if(!txtStartDate.getText().toString().equalsIgnoreCase("")
-                            && !txtEndDate.getText().toString().equalsIgnoreCase("")){
 
-                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    if(edtStudyId.getText().toString().length() !=0){
 
-                        Date date1 = null;
-                        Date date2 = null;
-                        try {
-                            date1 = format.parse(txtStartDate.getText().toString());
-                            date2 = format.parse(txtEndDate.getText().toString());
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
+                        if(edtDocCode.getText().toString().length() !=0) {
 
-                        if (date1.compareTo(date2) <= 0) {
 
-                            Calendar cal = Calendar.getInstance();
-                            Date sysDate = cal.getTime();
+                            if (!txtStartDate.getText().toString().equalsIgnoreCase("")
+                                    && !txtEndDate.getText().toString().equalsIgnoreCase("")) {
 
-                            if(date1.compareTo(sysDate) >0 && date2.compareTo(sysDate) >0) {
+                                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-                                callModifySetupAPI(editText.getText().toString(), txtStartDate.getText().toString(), txtEndDate.getText().toString(), spin.getSelectedItem().toString(), studyList.getId());
-                                dialog.dismiss();
+                                Date date1 = null;
+                                Date date2 = null;
+                                try {
+                                    date1 = format.parse(txtStartDate.getText().toString());
+                                    date2 = format.parse(txtEndDate.getText().toString());
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
 
-                            }else {
+                                if (date1.compareTo(date2) <= 0) {
 
-                                Toast.makeText(context,"Selected Wrong Date",Toast.LENGTH_SHORT).show();
+                                    Calendar cal = Calendar.getInstance();
+                                    Date sysDate = cal.getTime();
+
+                                    if (date1.compareTo(sysDate) > 0 && date2.compareTo(sysDate) > 0) {
+
+                                        callModifySetupAPI(editText.getText().toString(), edtStudyId.getText().toString(), edtDocCode.getText().toString(), txtStartDate.getText().toString(), txtEndDate.getText().toString(), spin.getSelectedItem().toString(), studyList.getId());
+                                        dialog.dismiss();
+
+                                    } else {
+
+                                        Toast.makeText(context, "Study with past date cannot be scheduled", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    // callModifySetupAPI(editText.getText().toString(), txtStartDate.getText().toString(), txtEndDate.getText().toString(), spin.getSelectedItem().toString(), studyList.getId());
+
+                                } else {
+
+                                    Toast.makeText(context, "Study End Date cannot be smaller than Study Start Date", Toast.LENGTH_SHORT).show();
+                                }
+
+                            } else {
+
+                                Toast.makeText(context, "Please select Study Dates", Toast.LENGTH_SHORT).show();
                             }
 
-                           // callModifySetupAPI(editText.getText().toString(), txtStartDate.getText().toString(), txtEndDate.getText().toString(), spin.getSelectedItem().toString(), studyList.getId());
-
                         }else {
-
-                            Toast.makeText(context,"Study End Date cannot be smaller than Study Start Date" , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context,"Please enter Doctor Code" , Toast.LENGTH_SHORT).show();
                         }
 
                     }else {
-
-                        Toast.makeText(context,"Please select Study Dates" , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"Please enter Study ID" , Toast.LENGTH_SHORT).show();
                     }
-
 
                 }else {
                     Toast.makeText(context,"Please enter Study Name" , Toast.LENGTH_SHORT).show();
@@ -424,7 +447,7 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
     }
 
 
-    private void callModifySetupAPI(String studyName, String startDate, String endDate, String status, int id) {
+    private void callModifySetupAPI(String studyName, String strStudyId, String strDoctorCode, String startDate, String endDate, String status, int id) {
 
         ModifyScheduleRequestModel modifyScheduleRequestModel = new ModifyScheduleRequestModel();
         modifyScheduleRequestModel.setAppName(AppConstants.APP_NAME);
@@ -443,6 +466,8 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
         modifyScheduleRequestModel.setActivity(AppConstants.MODIFY_ACTIVITY);
         modifyScheduleRequestModel.setIsTrial(0);
         modifyScheduleRequestModel.setId(id);
+        modifyScheduleRequestModel.setDocCode(strDoctorCode);
+        modifyScheduleRequestModel.setStudyId(strStudyId);
 
         new NetworkingHelper(new ModifyScheduleRequest((Activity) context, true, modifyScheduleRequestModel)) {
 
