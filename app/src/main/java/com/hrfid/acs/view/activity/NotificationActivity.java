@@ -214,7 +214,7 @@ public class NotificationActivity extends BaseActivity {
         commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(NotificationActivity.this));
         commonRequestModel.setUserRole(new PrefManager(this).getUserRoleType());
         commonRequestModel.setTagId(new PrefManager(this).getBarCodeValue());
-        commonRequestModel.setEvent(AppConstants.GET_NOTIFICATION);
+        commonRequestModel.setEvent(AppConstants.READ_NOTIFICATION);
         commonRequestModel.setUserName(new PrefManager(this).getUserName());
 
         new NetworkingHelper(new ResetNotificationCountRequest(NotificationActivity.this, true, commonRequestModel)) {

@@ -87,7 +87,7 @@ public class BarcodeScanActivity extends AppCompatActivity implements
             if (extras != null) {
                 userRoleType = extras.getString(Constants.USER_ROLE_TYPE);
                 Logger.log("userRoleType :"+userRoleType);
-                Utilities.showToast(getApplicationContext(),userRoleType);
+               // Utilities.showToast(getApplicationContext(),userRoleType);
             }
         }
 
@@ -97,7 +97,7 @@ public class BarcodeScanActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         txtBarcodeNumber.setText("");
-        txtBarcodeNumber.setText("E00401502B32123E"); //E00401502B32123E   //E00401502B31ACBC
+        //txtBarcodeNumber.setText("E00401502B32123E"); //E00401502B32123E   //E00401502B31ACBC
     }
 
     private void initUI() {
