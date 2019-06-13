@@ -1,9 +1,11 @@
 package com.hrfid.acs.view.adapter;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,16 +13,28 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.hrfid.acs.R;
+import com.hrfid.acs.helpers.network.ApiResponse;
+import com.hrfid.acs.helpers.network.JsonParser;
+import com.hrfid.acs.helpers.network.NetworkingHelper;
+import com.hrfid.acs.helpers.request.CommonRequestModel;
+import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
+import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetSubjectDetails.StudyList;
+import com.hrfid.acs.util.AppConstants;
+import com.hrfid.acs.util.Logger;
+import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -30,6 +44,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
     //ArrayList personNames;
     String[] status = { "APPROVED", "REJECTED", "INPROGRESS"};
+
     Context context;
 
     String[] spnBloodGroup = {"O+","B-","B+", "A+", "A-"};
@@ -41,10 +56,12 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
     String[] spnGroup = {"G1","G2","G3", "G4", "G5"};
 
     List<StudyList> studyLists;
+    private  List<Integer> lists;
 
-    public SubjectDetailsAdapter(Context context, List<StudyList> studyLists) {
+    public SubjectDetailsAdapter(Context context, List<StudyList> studyLists, List<Integer> lists) {
         this.context = context;
         this.studyLists = studyLists;
+        this.lists = lists;
     }
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -111,7 +128,9 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
             @Override
             public void onClick(View v) {
 
-                showModifyDialog();
+                //showModifyDialog();
+
+                showModifyDialog(studyLists.get(position), lists);
             }
         });
 
@@ -166,22 +185,31 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         }
     }
 
-    private void showModifyDialog() {
+    private void showModifyDialog(final StudyList studyList, List<Integer> lists) {
 
-        ImageButton btnStartDatePicker, btnEndDatePicker;
-        final TextView txtStartDate, txtEndDate;
+        final ImageButton txt_dob;
+        final TextView txtStartDate, txtDob;
         final int[] mYear = new int[1];
         final int[] mMonth = new int[1];
         final int[] mDay = new int[1];
+        final EditText edtScreenId;
+
+
 
         // Create custom dialog object
         final Dialog dialog = new Dialog(context);
         // Include dialog.xml file
         dialog.setContentView(R.layout.dialog_subject_modify);
 
-        //Getting the instance of Spinner and applying OnItemSelectedListener on it
+
+        //Adding value for ScreenID
+
+        edtScreenId = dialog.findViewById(R.id.edtScreenId);
+        edtScreenId.setText(studyList.getScreenId());
+
+  /*      //Getting the instance of Spinner and applying OnItemSelectedListener on it
         Spinner spnBloodGroups = (Spinner) dialog.findViewById(R.id.spnBloodGroup);
-        spnBloodGroups.setOnItemSelectedListener(this);
+        spnBloodGroups.setOnItemSelectedListener(this);*/
 
         Spinner spnStudyIDs = (Spinner) dialog.findViewById(R.id.spnStudyId);
         spnStudyIDs.setOnItemSelectedListener(this);
@@ -195,37 +223,63 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         Spinner spnStatus = (Spinner) dialog.findViewById(R.id.spnStatusId);
         spnStatus.setOnItemSelectedListener(this);
 
+
+        if(studyList.getStatus().equalsIgnoreCase("ACTIVE")){
+            status = new String[]{"ACTIVE", "INACTIVE", "INPROGRESS"};
+        }else if(studyList.getStatus().equalsIgnoreCase("INACTIVE")){
+            status = new String[]{"INACTIVE", "ACTIVE", "INPROGRESS"};
+        }else if(studyList.getStatus().equalsIgnoreCase("INPROGRESS")){
+            status = new String[]{"INPROGRESS", "INACTIVE", "ACTIVE"};
+        }else {
+
+        }
+
         //Creating the ArrayAdapter instance having the country list
+        ArrayAdapter adpStatus = new ArrayAdapter(context,android.R.layout.simple_spinner_item, status);
+        adpStatus.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnStatus.setAdapter(adpStatus);
+
+
+       /* //Creating the ArrayAdapter instance having the country list
         ArrayAdapter bloodGroupAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item,spnBloodGroup);
         bloodGroupAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
-        spnBloodGroups.setAdapter(bloodGroupAdp);
+        spnBloodGroups.setAdapter(bloodGroupAdp);*/
 
+        if(studyList.getGender().equalsIgnoreCase("MALE")){
+            spnGender = new String[]{"MALE", "FEMALE", "OTHER"};
+        }else if(studyList.getGender().equalsIgnoreCase("FEMALE")){
+            spnGender = new String[]{"FEMALE", "MALE", "OTHER"};
+        }else if(studyList.getGender().equalsIgnoreCase("OTHER")){
+            spnGender = new String[]{"OTHER", "MALE", "FEMALE"};
+        }else {
 
-        //Creating the ArrayAdapter instance having the country list
-        ArrayAdapter studyIdAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, spnStudyID);
-        studyIdAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnStudyIDs.setAdapter(studyIdAdp);
+        }
 
         ArrayAdapter genderAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, spnGender);
         genderAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnPersonGender.setAdapter(genderAdp);
 
-        ArrayAdapter statusAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, status);
-        statusAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnStatus.setAdapter(statusAdp);
+
+        //Creating the ArrayAdapter instance having the country list
+        ArrayAdapter studyIdAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, lists);
+        studyIdAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnStudyIDs.setAdapter(studyIdAdp);
+
 
         ArrayAdapter groupAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, spnGroup);
         groupAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnGroups.setAdapter(groupAdp);
-        /*btnEndDatePicker=(ImageButton)dialog.findViewById(R.id.btn_end_date);
-        txtEndDate=(TextView)dialog.findViewById(R.id.txt_end_date);*/
 
+        txt_dob=(ImageButton)dialog.findViewById(R.id.btn_dob);
+        txtDob=(TextView)dialog.findViewById(R.id.txt_dob);
+        txtDob.setText(Utilities.splitDateFromDesired(studyList.getDob()));
 
-     /*   btnStartDatePicker.setOnClickListener(new View.OnClickListener() {
+        txt_dob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Close dialog
+                // dialog.dismiss();
 
                 // Get Current Date
                 final Calendar c = Calendar.getInstance();
@@ -241,22 +295,39 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
 
-                                txtStartDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                // txtEndDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+
+                                String fmonth;
+                                int month;
+                                if (monthOfYear < 10 && dayOfMonth < 10) {
+
+                                    fmonth = "0" + monthOfYear;
+                                    month = Integer.parseInt(fmonth) + 1;
+                                    String fDate = "0" + dayOfMonth;
+                                    String paddedMonth = String.format("%02d", month);
+                                    //editText.setText(fDate + "/" + paddedMonth + "/" + year);
+
+
+                                    txtDob.setText(year + "-" + paddedMonth + "-" + fDate);
+                                    //endDate =txtEndDate.getText().toString();
+
+                                } else {
+
+                                    fmonth = "0" + monthOfYear;
+                                    month = Integer.parseInt(fmonth) + 1;
+                                    String paddedMonth = String.format("%02d", month);
+                                    //editText.setText(dayOfMonth + "/" + paddedMonth + "/" + year);
+
+                                    txtDob.setText(year + "-" + paddedMonth + "-" + dayOfMonth);
+                                    //endDate =txtEndDate.getText().toString();
+                                }
 
                             }
                         }, mYear[0], mMonth[0], mDay[0]);
                 datePickerDialog.show();
             }
-        });*/
-
-        // Set dialog title
-        //--- dialog.setTitle("MODIFY STUDY");
-
-        // set values for custom dialog components - text, image and button
-        /*TextView text = (TextView) dialog.findViewById(R.id.textDialog);
-        text.setText("Custom dialog Android example.");
-        ImageView image = (ImageView) dialog.findViewById(R.id.imageDialog);
-        image.setImageResource(R.drawable.image0);*/
+        });
 
         dialog.show();
 
@@ -294,7 +365,6 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
                     }
                 });
     }
-
 
 }
 

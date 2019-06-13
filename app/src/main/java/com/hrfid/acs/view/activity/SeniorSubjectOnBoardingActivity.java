@@ -88,7 +88,7 @@ public class SeniorSubjectOnBoardingActivity extends BaseActivity {
         //tabLayout.addTab(tabLayout.newTab().setText("Contact"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         viewPager =(ViewPager)findViewById(R.id.view_pager);
-        SubjectOnBoardingAdapter tabsAdapter = new SubjectOnBoardingAdapter(getSupportFragmentManager(), tabLayout.getTabCount(), "FromSMS");
+        SubjectOnBoardingAdapter tabsAdapter = new SubjectOnBoardingAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(tabsAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

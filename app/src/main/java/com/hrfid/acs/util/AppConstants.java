@@ -8,12 +8,12 @@ public class AppConstants {
     //  Staging Data
 
     public static final String ENDPOINT_URL_ASTRO = "https://loginstg.astro.com.my/";
-    //public static final String ENDPOINT_URL = "http://10.30.10.110:8080/";
-    //public static final String LOGIN_URL = "10.30.10.110:8080/";
+    public static final String ENDPOINT_URL = "http://10.30.10.110:8080/";
+    public static final String LOGIN_URL = "10.30.10.110:8080/";
 
    //For STAGING (SIT)
-    public static final String ENDPOINT_URL = "https://sit-stage-test.controlpoint.healthrfid.com/";
-    public static final String LOGIN_URL = "sit-stage.controlpoint.healthrfid.com/";
+    /*public static final String ENDPOINT_URL = "https://sit-stage-test.controlpoint.healthrfid.com/";
+    public static final String LOGIN_URL = "sit-stage.controlpoint.healthrfid.com/";*/
 
     // UAT URL
    // public static final String ENDPOINT_URL = "https://uat-api.controlpoint.healthrfid.com/";

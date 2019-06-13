@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,8 +17,10 @@ import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
+import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.request.GetScheduleRequest;
 import com.hrfid.acs.helpers.request.GetSubjectDetailsRequest;
+import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetScheduleResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetSubjectDetails.GetSubjectDetailsResponse;
 import com.hrfid.acs.util.AppConstants;
@@ -31,19 +34,17 @@ import com.hrfid.acs.view.adapter.ViewTrialStudyFragmentAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by MS on 2019-05-30.
  */
 public class SubjectDetailsFragment extends Fragment {
 
-    ArrayList personNames = new ArrayList<>(Arrays.asList("Person 1", "Person 2", "Person 3",
-            "Person 4", "Person 5", "Person 6", "Person 7"));
-
     private LinearLayout linearLayout;
     private TextView textView;
     private  RecyclerView recyclerView;
-
+    private  List<Integer> lists = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,7 +123,9 @@ public class SubjectDetailsFragment extends Fragment {
                                 Logger.logError("getSubjectOnboardingDetails API success getStudyList" +
                                         getSubjectDetailsResponse.getStudyList());
 
-                                SubjectDetailsAdapter customAdapter = new SubjectDetailsAdapter(getContext(), getSubjectDetailsResponse.getStudyList());
+                                getAllStudyID();
+
+                                SubjectDetailsAdapter customAdapter = new SubjectDetailsAdapter(getContext(), getSubjectDetailsResponse.getStudyList(), lists);
                                 recyclerView.setAdapter(customAdapter);
 
 
@@ -158,6 +161,76 @@ public class SubjectDetailsFragment extends Fragment {
 
                 } else {
                     Logger.logError("getSubjectOnboardingDetails API Failure " +
+                            serverResponse.errorMessageToDisplay);
+                }
+            }
+        };
+
+    }
+
+
+    //getAllStudyID API
+    private void getAllStudyID()
+    {
+        final CommonRequestModel commonRequestModel = new CommonRequestModel();
+        commonRequestModel.setAppName(AppConstants.APP_NAME);
+        commonRequestModel.setVersionNumber(AppConstants.APP_VERSION);
+        commonRequestModel.setDeviceType(AppConstants.APP_OS);
+        commonRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
+        commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(getContext()));
+        commonRequestModel.setUserRole(new PrefManager(getContext()).getUserRoleType());
+        commonRequestModel.setTagId(new PrefManager(getContext()).getBarCodeValue());
+        //commonRequestModel.setEvent(AppConstants.GET_NOTIFICATION);
+        commonRequestModel.setUserName(new PrefManager(getContext()).getUserName());
+
+        new NetworkingHelper(new GetAllStudyIdRequest(getActivity(), true, commonRequestModel)) {
+
+            @Override
+            public void serverResponseFromApi(ApiResponse serverResponse) {
+                if (serverResponse.isSucess) {
+
+                    try {
+
+                        GetAllStudyIdResponse commonResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, GetAllStudyIdResponse.class);
+
+                        if (commonResponse.getStatus().getCODE() == 200) {
+
+                            if(commonResponse.getStatus().getMSG().equalsIgnoreCase("REQ_SUCCESS")){
+
+                                Logger.logError("getStudyIds API success " +
+                                        commonResponse.getStudyList());
+
+                                if(commonResponse.getStudyList().size()>0) {
+
+
+
+                                    for (int i = 0; i < commonResponse.getStudyList().size(); i++) {
+
+                                        lists.add(commonResponse.getStudyList().get(i).getValue());
+
+                                    }
+
+
+                                }else {
+                                    Logger.logError("No STUDY_LIST FOUND :" + "No STUDY_LIST FOUND");
+                                }
+
+
+                            }else {
+
+                                Utils.showAlertDialog(getActivity(),  commonResponse.getStatus().getMSG());
+                            }
+
+                        }
+
+                    }
+                    catch (Exception e){
+                        Logger.logError("Exception " + e.getMessage());
+                    }
+
+                } else {
+                    Logger.logError("getStudyIds API Failure " +
                             serverResponse.errorMessageToDisplay);
                 }
             }

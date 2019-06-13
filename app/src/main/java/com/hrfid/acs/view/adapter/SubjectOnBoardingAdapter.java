@@ -16,10 +16,10 @@ public class SubjectOnBoardingAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
     private String frmPage;
 
-    public SubjectOnBoardingAdapter(FragmentManager fm, int NoofTabs, String fromSMS){
+    public SubjectOnBoardingAdapter(FragmentManager fm, int NoofTabs){
         super(fm);
         this.mNumOfTabs = NoofTabs;
-        this.frmPage = fromSMS;
+        //this.frmPage = fromSMS;
     }
     @Override
     public int getCount() {
@@ -28,8 +28,6 @@ public class SubjectOnBoardingAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position){
-        if(frmPage.equalsIgnoreCase("FromSMS")){
-
             switch (position) {
                 case 0:
                     AddSubjectFragment addSubjectFragment = new AddSubjectFragment();
@@ -44,8 +42,8 @@ public class SubjectOnBoardingAdapter extends FragmentStatePagerAdapter {
                     return null;
             }
 
-        }
-        return null;
+
+        //return null;
 
     }
 

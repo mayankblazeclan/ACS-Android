@@ -68,7 +68,7 @@
                 android:text="@string/screen_id"/>
 
             <EditText
-                android:id="@+id/edtStudyName"
+                android:id="@+id/edtScreenId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="ABC1234"/>
@@ -86,14 +86,14 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/btn_start_date"
+                android:id="@+id/btn_dob"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_5dp_margin"
                 android:background="@mipmap/ic_date_calendar"/>
 
             <TextView
-                android:id="@+id/txt_start_date"
+                android:id="@+id/txt_dob"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textStyle="bold"
@@ -260,7 +260,7 @@
                 android:layout_margin="@dimen/activity_5dp_margin" />
 
         </LinearLayout>
-
+<!--
         <LinearLayout
             android:id="@+id/linearLayout_status"
             android:layout_width="match_parent"
@@ -280,17 +280,17 @@
                 android:textAllCaps="true"
                 android:text="@string/blood_group"/>
 
-            <!--<EditText
+            &lt;!&ndash;<EditText
                 android:id="@+id/edtStudyStaus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter Study Status"/>-->
+                android:hint="Enter Study Status"/>&ndash;&gt;
 
-            <!-- <Spinner
+            &lt;!&ndash; <Spinner
                  android:id="@+id/spnBloodGroup"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
-                 android:layout_margin="@dimen/activity_5dp_margin"/>-->
+                 android:layout_margin="@dimen/activity_5dp_margin"/>&ndash;&gt;
 
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/spnBloodGroup"
@@ -299,7 +299,7 @@
                 android:background="@drawable/spinner_background"
                 android:layout_margin="@dimen/activity_5dp_margin" />
 
-        </LinearLayout>
+        </LinearLayout>-->
 
         <LinearLayout
             android:id="@+id/linearLayout_study_id"
