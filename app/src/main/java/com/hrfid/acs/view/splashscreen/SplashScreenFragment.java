@@ -10,9 +10,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,7 +30,6 @@ import com.hrfid.acs.R;
 import com.hrfid.acs.data.Constants;
 import com.hrfid.acs.util.LoggerLocal;
 import com.hrfid.acs.util.Utils;
-import com.hrfid.acs.view.activity.SelectRoleActivity;
 import com.hrfid.acs.view.dialog.AlertDialogFragment;
 import com.hrfid.acs.view.dialog.AlertDialogInterface;
 
@@ -37,10 +38,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SplashScreenFragment extends Fragment implements AlertDialogInterface {
+public class SplashScreenFragment extends Fragment implements SplashScreenTasks.View, AlertDialogInterface {
     private final String TAG = getClass().getSimpleName();
 
-    //private SplashScreenTasks.Presenter mPresenter;
+    private SplashScreenTasks.Presenter mPresenter;
 
     Animation uptodown, downtoup, fadeIn;
     ProgressBar pb_custom_color;
@@ -95,7 +96,7 @@ public class SplashScreenFragment extends Fragment implements AlertDialogInterfa
             public void run() {
                 bg3.setVisibility(View.VISIBLE);
             }
-        }, 1000);
+        }, 800);
 
         handlerLogin.postDelayed(new Runnable() {
             @Override
@@ -105,28 +106,22 @@ public class SplashScreenFragment extends Fragment implements AlertDialogInterfa
                 logoContainer.setAnimation(fadeIn);
                 pb_custom_color.setAnimation(fadeIn);
 
-               // mPresenter.loadProcess(Constants.CHECK_CONN_TASK);
-
-                Intent mNextActivity = new Intent(getActivity(), SelectRoleActivity.class);
-                mNextActivity.putExtra(Constants.REG_ACTIVITY_FRAG, Constants.REG_SERVER_FRAG);
-                startActivity(mNextActivity);
-                getActivity().finish();
-
+                mPresenter.loadProcess(Constants.CHECK_CONN_TASK);
             }
-        }, 3000);
+        }, 1000);
         return root;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-       // mPresenter.subscribe();
+        mPresenter.subscribe();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-      //  mPresenter.unsubscribe();
+        mPresenter.unsubscribe();
     }
 
     @Override
@@ -143,14 +138,14 @@ public class SplashScreenFragment extends Fragment implements AlertDialogInterfa
     @Override
     public void onDetach() {
         super.onDetach();
-        //mListener = null;
+        mListener = null;
     }
 
- /*   @Override
+    @Override
     public void setPresenter(SplashScreenTasks.Presenter presenter) {
         mPresenter = presenter;
-    }*/
-/*
+    }
+
     @Override
     public void showDialog(String activity, int task) {
         mTask = task;
@@ -170,7 +165,7 @@ public class SplashScreenFragment extends Fragment implements AlertDialogInterfa
         mDialog.setTargetFragment(this, 0);
         mDialog.setCancelable(false);
         mDialog.show(getFragmentManager(), activity);
-    }*/
+    }
 
     @Override
     public void doPositiveClick() {
@@ -183,7 +178,7 @@ public class SplashScreenFragment extends Fragment implements AlertDialogInterfa
                 }*/
             } else {
                 mDialog.dismiss();
-               // mPresenter.loadProcess(mTask);
+                mPresenter.loadProcess(mTask);
             }
         }
     }
@@ -196,15 +191,15 @@ public class SplashScreenFragment extends Fragment implements AlertDialogInterfa
                 mListener.nextActivity(Constants.CLOSE_ACTIVITY);
             } else {
                 mDialog.dismiss();
-               // mPresenter.loadProcess(mTask);
+                mPresenter.loadProcess(mTask);
             }
         }
     }
-/*
+
     @Override
     public void nextActivity(int activity) {
         mListener.nextActivity(activity);
-    }*/
+    }
 
     //Permission check
 

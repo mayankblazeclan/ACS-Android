@@ -43,7 +43,7 @@ import java.util.List;
 public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAdapter.MyViewHolder> implements AdapterView.OnItemSelectedListener {
 
     //ArrayList personNames;
-    String[] status = { "APPROVED", "REJECTED", "INPROGRESS"};
+    String[] status = { "APPROVED", "REJECTED", "IN_QUEUE"};
 
     Context context;
 
@@ -57,6 +57,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
     List<StudyList> studyLists;
     private  List<Integer> lists;
+    private  List<Integer> listSpinnerStudyID;
 
     public SubjectDetailsAdapter(Context context, List<StudyList> studyLists, List<Integer> lists) {
         this.context = context;
@@ -98,7 +99,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
           holder.txtStatus.setTextColor(Color.RED);
       }else {
 
-          holder.txtStatus.setText("INPROGRESS");
+          holder.txtStatus.setText("IN_QUEUE");
           holder.txtStatus.setTextColor(Color.parseColor("#F9980B"));
       }*/
 
@@ -118,7 +119,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
                 holder.txtStatus.setText("INACTIVE");
                 holder.txtStatus.setTextColor(Color.RED);
             } else {
-                holder.txtStatus.setText("INPROGRESS");
+                holder.txtStatus.setText("IN_QUEUE");
                 holder.txtStatus.setTextColor(Color.parseColor("#F9980B"));
             }
 
@@ -194,6 +195,8 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         final int[] mDay = new int[1];
         final EditText edtScreenId;
 
+        listSpinnerStudyID = new ArrayList<>();
+        listSpinnerStudyID.add(studyList.getStudyId());
 
 
         // Create custom dialog object
@@ -225,13 +228,18 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
 
         if(studyList.getStatus().equalsIgnoreCase("ACTIVE")){
-            status = new String[]{"ACTIVE", "INACTIVE", "INPROGRESS"};
+            status = new String[]{"ACTIVE", "INACTIVE", "IN_QUEUE"};
         }else if(studyList.getStatus().equalsIgnoreCase("INACTIVE")){
-            status = new String[]{"INACTIVE", "ACTIVE", "INPROGRESS"};
-        }else if(studyList.getStatus().equalsIgnoreCase("INPROGRESS")){
-            status = new String[]{"INPROGRESS", "INACTIVE", "ACTIVE"};
+            status = new String[]{"INACTIVE", "ACTIVE", "IN_QUEUE"};
+        }else if(studyList.getStatus().equalsIgnoreCase("INQUEUE")){
+            status = new String[]{"IN_QUEUE", "INACTIVE", "ACTIVE"};
         }else {
 
+        }
+
+        if(listSpinnerStudyID.get(0).equals(status)){
+
+            Logger.log("Element found :"+status);
         }
 
         //Creating the ArrayAdapter instance having the country list
@@ -331,9 +339,20 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
         dialog.show();
 
-        Button declineButton = (Button) dialog.findViewById(R.id.btnSubmit);
+        Button btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
         // if decline button is clicked, close the custom dialog
-        declineButton.setOnClickListener(new View.OnClickListener() {
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                dialog.dismiss();
+            }
+        });
+
+
+        Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
+        // if decline button is clicked, close the custom dialog
+        btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Close dialog

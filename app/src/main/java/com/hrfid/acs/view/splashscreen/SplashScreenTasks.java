@@ -1,6 +1,7 @@
 package com.hrfid.acs.view.splashscreen;
 
 
+import android.support.annotation.NonNull;
 import com.hrfid.acs.view.BasePresenter;
 import com.hrfid.acs.view.BaseView;
 

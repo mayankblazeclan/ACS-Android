@@ -1,0 +1,79 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.registration.DeviceConfigurationActivity">
+
+    <include android:id="@+id/top_bar"
+        layout="@layout/top_bar" />
+
+    <LinearLayout
+        android:id="@+id/apiUrl_linearlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="70dp">
+        <TextView
+            android:id="@+id/txtApiUrlDeviceSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_api_url"
+            android:textSize="20sp" />
+        <EditText
+            android:id="@+id/editApiUrlDeviceSettings"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textNoSuggestions"
+            android:singleLine="true"
+            android:textSize="30sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/port_linearlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/apiUrl_linearlayout"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <!--<ImageButton-->
+    <!--android:id="@+id/textConnection_image_button"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/port_linearlayout"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:layout_marginTop="40dp"-->
+    <!--android:background="@drawable/btn_test_connection_selector" />-->
+
+
+    <Button
+        android:id="@+id/bt_connect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/port_linearlayout"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/rounded_button_red"
+        android:text="@string/str_connect"
+        android:textColor="#FFF"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="18dp"/>
+
+
+    <include
+        layout="@layout/progressbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</RelativeLayout>

@@ -11,6 +11,7 @@ import com.hrfid.acs.data.SharedPreferenceManager;
 import com.hrfid.acs.pref.SharedPrefsManager;
 import com.hrfid.acs.util.FragmentUtils;
 import com.hrfid.acs.util.LoggerLocal;
+import com.hrfid.acs.view.activity.SelectRoleActivity;
 
 
 public class SplashScreenActivity extends AppCompatActivity implements SplashScreenFragment.SplashScreenInterface {
@@ -22,7 +23,6 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
         setContentView(R.layout.activity_splash_screen);
 
 
-
         SplashScreenFragment splashScreenFragment =
                 (SplashScreenFragment) getSupportFragmentManager().findFragmentById(R.id.splashscreen_frame);
 
@@ -32,12 +32,12 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
                     getSupportFragmentManager(), splashScreenFragment, R.id.splashscreen_frame, true);
         }
 
-        //SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(this);
+        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(this);
 
-        //new SplashScreenPresenter(this, SplashScreenActivity.this, splashScreenFragment, sharedPreferenceManager);
+        new SplashScreenPresenter(this, SplashScreenActivity.this, splashScreenFragment, sharedPreferenceManager);
 
-       // SharedPrefsManager spfManager = new SharedPrefsManager();
-        //LoggerLocal.error(TAG, "in OnCreate spm register ="+spfManager.isRegistered(this));
+        SharedPrefsManager spfManager = new SharedPrefsManager();
+        LoggerLocal.error(TAG, "in OnCreate spm register ="+spfManager.isRegistered(this));
 
     }
 
@@ -45,24 +45,28 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
     public void nextActivity(int nextActivity) {
         Intent mNextActivity = null;
         switch (nextActivity) {
-           /* case Constants.REGISTRATION_ACTIVITY:
-                mNextActivity = new Intent(SplashScreenActivity.this, RegistrationActivity.class);
+           case Constants.REGISTRATION_ACTIVITY:
+                mNextActivity = new Intent(SplashScreenActivity.this, SelectRoleActivity.class);
                 mNextActivity.putExtra(Constants.REG_ACTIVITY_FRAG, Constants.REG_SERVER_FRAG);
                 break;
 
             case Constants.MAIN_ACTIVITY:
-                mNextActivity = new Intent(SplashScreenActivity.this, MainActivity.class);
+                mNextActivity = new Intent(SplashScreenActivity.this, SelectRoleActivity.class);
                 mNextActivity.putExtra(Constants.MAIN_ACTIVITY_FRAG, Constants.MAIN_SERVER_FRAG);
                 break;
 
-            case Constants.USER_AUTH_ACTIVITY:
+            case Constants.DEVICE_REGISTRATION_ACTIVITY:
+                mNextActivity = new Intent(SplashScreenActivity.this, SelectRoleActivity.class);
+                mNextActivity.putExtra(Constants.REG_ACTIVITY_FRAG, Constants.REG_SERVER_FRAG);
+                break;
+
+             /*case Constants.USER_AUTH_ACTIVITY:
                 mNextActivity = new Intent(SplashScreenActivity.this, UserAuthActivity.class);
                 break;
 
             case Constants.DEVICE_REGISTRATION_ACTIVITY:
                 mNextActivity = new Intent(SplashScreenActivity.this, DeviceConfigurationActivity.class);
                 mNextActivity.putExtra(Constants.REG_ACTIVITY_FRAG, Constants.REG_SERVER_FRAG);
-
                 break;
             case Constants.DEVICE_RFID_SCAN_ACTIVITY:
                 mNextActivity = new Intent(SplashScreenActivity.this, BarcodeScanActivity.class);

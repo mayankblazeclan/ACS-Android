@@ -55,7 +55,7 @@ public class SplashScreenPresenter implements SplashScreenTasks.Presenter {
     private void checkNetworkConnection() {
         if (ConnectivityReceiver.isConnected()) {
             // Next Step Is Device Registered
-        //    checkDeviceRegistered();
+            checkDeviceRegistered();
         } else {
             mView.showDialog(Constants.DLG_INTERNET_CONNECTION, Constants.CHECK_CONN_TASK);
         }

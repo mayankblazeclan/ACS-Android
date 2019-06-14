@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:theme="@style/CustomTopBar"
+    app:popupTheme="@style/CustomPopup"
+    android:id="@+id/header"
+    android:background="@color/customColorPrimary">
+
+    <com.healthrfid.blood.control.components.FontAwesomeIcons
+        android:id="@+id/top_bar_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/icon_back"
+        android:textSize="20sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/top_bar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:layout_marginLeft="30dp"
+        android:text="Settings" />
+
+    <com.healthrfid.blood.control.components.FontAwesomeIcons
+        android:id="@+id/top_bar_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/icon_menu"
+        android:layout_marginEnd="20dp"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:layout_gravity="end" />
+
+</android.support.v7.widget.Toolbar>

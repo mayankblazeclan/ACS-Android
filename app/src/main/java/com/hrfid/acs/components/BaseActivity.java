@@ -32,6 +32,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public static final long DISCONNECT_TIMEOUT = 300000; // 5 min = 5 * 60 * 1000 ms =300000  //60000
     private static final String TAG = "BaseActivity";
+    protected static int GRAVITY = 0;
 
     private Handler disconnectHandler = new Handler(new Handler.Callback() {
         @Override
@@ -120,6 +121,63 @@ public class BaseActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
         stopDisconnectTimer();
+    }
+
+
+    public void toolbarSetup(int title, boolean isBack, boolean isSettings) {
+        Toolbar mToolbar = findViewById(R.id.header);
+
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
+        TextView mTopbarTV = (TextView) mToolbar.findViewById(R.id.top_bar_title);
+        mTopbarTV.setText(title);
+
+        if (isBack) {
+            FontAwesomeIcons mBack = (FontAwesomeIcons) mToolbar.findViewById(R.id.top_bar_back);
+            mBack.setVisibility(View.VISIBLE);
+           // mBack.setOnClickListener(__ -> );
+            mBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    finish();
+                }
+            });
+        }
+
+        if (isSettings) {
+            FontAwesomeIcons mSetting = (FontAwesomeIcons) mToolbar.findViewById(R.id.top_bar_settings);
+            mSetting.setVisibility(View.VISIBLE);
+           // mSetting.setOnClickListener(__ -> showSettings());
+            mSetting.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    showSettings();
+                }
+            });
+        }
+    }
+
+
+    /**
+     * Show Settings Activity
+     */
+    private void showSettings() {
+        Intent mSettingsActivity = new Intent(getApplicationContext(), SelectRoleActivity.class);
+        startActivity(mSettingsActivity);
+    }
+
+    /**
+     * This method will set the toast message
+     * @param msg
+     */
+    public void showToastMessage(String msg){
+        //set the toast message to the center of the screen
+        Toast toast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT);
+        toast.setGravity(GRAVITY, 0, 0);
+        toast.show();
     }
 
    /* private static final String TAG = "BaseActivity";
