@@ -11,7 +11,10 @@ import com.hrfid.acs.data.SharedPreferenceManager;
 import com.hrfid.acs.pref.SharedPrefsManager;
 import com.hrfid.acs.util.FragmentUtils;
 import com.hrfid.acs.util.LoggerLocal;
+import com.hrfid.acs.view.activity.BarcodeScanActivity;
+import com.hrfid.acs.view.activity.NotificationActivity;
 import com.hrfid.acs.view.activity.SelectRoleActivity;
+import com.hrfid.acs.view.registration.DeviceConfigurationActivity;
 
 
 public class SplashScreenActivity extends AppCompatActivity implements SplashScreenFragment.SplashScreenInterface {
@@ -46,7 +49,7 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
         Intent mNextActivity = null;
         switch (nextActivity) {
            case Constants.REGISTRATION_ACTIVITY:
-                mNextActivity = new Intent(SplashScreenActivity.this, SelectRoleActivity.class);
+                mNextActivity = new Intent(SplashScreenActivity.this, BarcodeScanActivity.class);
                 mNextActivity.putExtra(Constants.REG_ACTIVITY_FRAG, Constants.REG_SERVER_FRAG);
                 break;
 
@@ -56,7 +59,7 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
                 break;
 
             case Constants.DEVICE_REGISTRATION_ACTIVITY:
-                mNextActivity = new Intent(SplashScreenActivity.this, SelectRoleActivity.class);
+                mNextActivity = new Intent(SplashScreenActivity.this, DeviceConfigurationActivity.class);
                 mNextActivity.putExtra(Constants.REG_ACTIVITY_FRAG, Constants.REG_SERVER_FRAG);
                 break;
 

@@ -21,15 +21,18 @@ import android.widget.Toast;
 import com.hrfid.acs.R;
 import com.hrfid.acs.components.BaseActivity;
 import com.hrfid.acs.components.FontAwesomeIcons;
+import com.hrfid.acs.data.Constants;
 import com.hrfid.acs.interfaces.ServerDetails;
 import com.hrfid.acs.pref.SharedPrefsManager;
 import com.hrfid.acs.server.ServerDetailsImpl;
 import com.hrfid.acs.service.api.comfigration.ConfigurationApi;
 import com.hrfid.acs.service.api.comfigration.ConfigurationDevice;
 import com.hrfid.acs.util.LoggerLocal;
+import com.hrfid.acs.view.activity.NotificationActivity;
 import com.hrfid.acs.view.activity.SelectRoleActivity;
 import com.hrfid.acs.view.dialog.AlertDialogFragment;
 import com.hrfid.acs.view.dialog.AlertDialogInterface;
+import com.hrfid.acs.view.licenses.LicenseKeyActivity;
 
 public class DeviceConfigurationActivity extends BaseActivity implements
         View.OnClickListener, AlertDialogInterface,
@@ -89,7 +92,12 @@ public class DeviceConfigurationActivity extends BaseActivity implements
         mCurrServerVersion = mPref.getServerVersion(this);
         mProgressBarLayout = (RelativeLayout) findViewById(R.id.progressbar_relativelayout);
         mEtApiUrlDeviceSettings = (EditText) findViewById(R.id.editApiUrlDeviceSettings);
-        mEtApiUrlDeviceSettings.setText(mPref.getApiUrl(this));
+
+        if(!mPref.getApiUrl(this).equalsIgnoreCase("") || !mPref.getApiUrl(this).isEmpty()) {
+            mEtApiUrlDeviceSettings.setText(mPref.getApiUrl(this));
+        }else {
+            mEtApiUrlDeviceSettings.setText("10.30.10.110:8080/");
+        }
 
         //button
         mImgBtnTestConnection = (Button) findViewById(R.id.bt_connect);
@@ -251,9 +259,12 @@ public class DeviceConfigurationActivity extends BaseActivity implements
             mPref.setApiUrl(getApplicationContext(), mApiUrl);
             //     Utils.showAlertDialog(this, getString(R.string.alert_message_configure_success));
 
-            Intent intent = new Intent(DeviceConfigurationActivity.this, SelectRoleActivity.class);
-            startActivity(intent);
+            /*Intent intent = new Intent(DeviceConfigurationActivity.this, NotificationActivity.class);
+            startActivity(intent);*/
 
+            Intent intent = new Intent(DeviceConfigurationActivity.this, LicenseKeyActivity.class);
+            intent.putExtra(Constants.KEY_ORG_ID,"1");
+            startActivity(intent);
 
         } catch (Exception e) {
             e.printStackTrace();

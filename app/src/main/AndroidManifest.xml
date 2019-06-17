@@ -31,6 +31,15 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".view.registration.DeviceConfigurationActivity"
+            android:configChanges="orientation|screenSize"
+            />
+
+        <activity
+            android:name=".view.licenses.LicenseKeyActivity"
+            android:configChanges="orientation|screenSize"
+            />
 
         <activity
             android:name=".view.activity.SelectRoleActivity"

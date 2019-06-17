@@ -23,67 +23,47 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
         android:orientation="vertical">
 
-
-        <Button
-            android:id="@+id/btnCreateStudy"
+        <GridView
+            android:id="@+id/simpleGridView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorBCRed"
-            android:layout_margin="@dimen/bt_ok_padding"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:text="@string/btn_create_study"/>
+            android:layout_height="match_parent"
+            android:numColumns="2"/>
+
+        <!-- <Button
+             android:id="@+id/btnViewStudy"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:background="@color/colorBCRed"
+             android:layout_margin="@dimen/bt_ok_padding"
+             android:textColor="@color/white"
+             android:textSize="24sp"
+             android:textStyle="bold"
+             android:text="@string/btn_view_study"/>
 
 
-        <Button
-            android:id="@+id/btnCreateInventory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorBCRed"
-            android:layout_margin="@dimen/bt_ok_padding"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:text="@string/btn_create_inventory"/>
+         <Button
+             android:id="@+id/btnCalendar"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:background="@color/colorBCRed"
+             android:layout_margin="@dimen/bt_ok_padding"
+             android:textColor="@color/white"
+             android:textSize="24sp"
+             android:textStyle="bold"
+             android:text="@string/btn_calendar"/>
 
-        <Button
-            android:id="@+id/btnCreateSubject"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorBCRed"
-            android:layout_margin="@dimen/bt_ok_padding"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:text="@string/btn_create_subjects"/>
-
-
-        <Button
-            android:id="@+id/btnCalendar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorBCRed"
-            android:layout_margin="@dimen/bt_ok_padding"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:text="@string/btn_calendar"/>
-
-        <Button
-            android:id="@+id/btnBarcode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorBCRed"
-            android:layout_margin="@dimen/bt_ok_padding"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:text="@string/btn_barcode"/>
+         <Button
+             android:id="@+id/btnBarcode"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:background="@color/colorBCRed"
+             android:layout_margin="@dimen/bt_ok_padding"
+             android:textColor="@color/white"
+             android:textSize="24sp"
+             android:textStyle="bold"
+             android:text="@string/btn_barcode"/>-->
 
 
     </LinearLayout>

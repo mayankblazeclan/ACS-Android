@@ -50,7 +50,7 @@ public class LabStaffHomeActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nurse_staff_home);
+        setContentView(R.layout.activity_lab_staff_home);
        // Utils.startIdleTimeOut(LabStaffHomeActivity.this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -65,9 +65,9 @@ public class LabStaffHomeActivity extends BaseActivity {
     private void initializeUI() {
         gridView = (GridView) findViewById(R.id.simpleGridView);
         staffItemList.add(new StaffItem("Lab \nReceipt",R.drawable.ic_nurse_guidelines));
-        staffItemList.add(new StaffItem("Lab Processing",R.drawable.ic_lab_staff_lab_processing));
+        staffItemList.add(new StaffItem("Lab \nProcessing",R.drawable.ic_lab_staff_lab_processing));
         staffItemList.add(new StaffItem("Storage \n",R.drawable.ic_lab_storage));
-        staffItemList.add(new StaffItem("Packing & Shipping",R.drawable.ic_lab_shipping));
+        staffItemList.add(new StaffItem("Packing \n& Shipping",R.drawable.ic_lab_shipping));
 
         StaffItemAdapter staffItemAdapter=new StaffItemAdapter(this,R.layout.activity_staff_grid_items, staffItemList);
         gridView.setAdapter(staffItemAdapter);

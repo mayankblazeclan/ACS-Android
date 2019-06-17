@@ -8,7 +8,7 @@
     android:id="@+id/header"
     android:background="@color/customColorPrimary">
 
-    <com.healthrfid.blood.control.components.FontAwesomeIcons
+    <com.hrfid.acs.components.FontAwesomeIcons
         android:id="@+id/top_bar_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
         android:layout_marginLeft="30dp"
         android:text="Settings" />
 
-    <com.healthrfid.blood.control.components.FontAwesomeIcons
+    <com.hrfid.acs.components.FontAwesomeIcons
         android:id="@+id/top_bar_settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -41,7 +41,7 @@
                 android:layout_gravity="bottom|center"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:textAllCaps="true"
                 android:text="@string/role_type_nurse_staff"/>
 

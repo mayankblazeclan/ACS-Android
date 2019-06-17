@@ -67,10 +67,11 @@ public class SplashScreenPresenter implements SplashScreenTasks.Presenter {
 
         if (mPrefs.getValue(SharedPref.REGISTERED, false)) {
             // GO TO Main Activity
-            mView.nextActivity(Constants.DEVICE_RFID_SCAN_ACTIVITY);
+            mView.nextActivity(Constants.MAIN_ACTIVITY);
             LoggerLocal.error("SplashScreenPresenter","is register in if=="+mPrefs.getValue(SharedPref.REGISTERED, false));
         } else {
-            mView.showDialog(Constants.DLG_DEV_NOT_REGISTERED, Constants.CHECK_REGISTRATION_TASK);
+            //mView.showDialog(Constants.DLG_DEV_NOT_REGISTERED, Constants.CHECK_REGISTRATION_TASK);
+            mView.nextActivity(Constants.DEVICE_REGISTRATION_ACTIVITY);
             LoggerLocal.error("SplashScreenPresenter","is register  in else=="+mPrefs.getValue(SharedPref.REGISTERED, false));
         }
     }

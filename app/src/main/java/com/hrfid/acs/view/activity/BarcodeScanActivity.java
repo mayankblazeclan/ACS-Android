@@ -202,7 +202,7 @@ public class BarcodeScanActivity extends AppCompatActivity implements
 
            // new PrefManager(this).setUserRoleType(Constants.USER_ROLE_TYPE_NURSE_STAFF);
             //Go to next page of nurse member
-            Intent mNextActivity = new Intent(BarcodeScanActivity.this, NurseStaffHomeActivity.class);
+            Intent mNextActivity = new Intent(BarcodeScanActivity.this, LabStaffHomeActivity.class);
             mNextActivity.putExtra(Constants.USER_ROLE_TYPE, userRoleType);
             startActivity(mNextActivity);
             finish();

@@ -51,7 +51,7 @@ public class ConfigurationApi {
 
     public interface ConfigureDeviceAPI {
 
-        @GET("/api/healthcheck/")
+        @GET("/acs/api/healthcheck/")
         Observable<ConfigurationDevice> getConfigurationDeviceAPI();
 //        Observable<RegisterBloodData> postRegisterBloodData(@Field("org_id") String org_id , @Field("blood_component_id") String blood_component_id, @Field("donation_id") String donation_id, @Field("group_code") String group_code, @Field("group_name") String group_name, @Field("expiry_date_time") String expiry_date_time, @Field("special_testing_code") String special_testing_code, @Field("user_id") String user_id, @Field("created_on") String created_on, @Field("component_code") String component_code, @Field("component_name") String component_name, @Field("is_registered") int is_registered);
     }
