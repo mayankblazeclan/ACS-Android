@@ -45,7 +45,7 @@ class ApiRouter {
             .addInterceptor(new HeaderAddingInterceptor())
             .build();
         Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(AppConstants.ENDPOINT_URL_ASTRO)
+            .baseUrl(AppConstants.ENDPOINT_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build();

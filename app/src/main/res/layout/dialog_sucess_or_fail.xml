@@ -41,7 +41,9 @@ android:layout_margin="10dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="26dp"
         android:layout_marginBottom="8dp"
-        android:textAlignment="textStart"
+        android:text="@string/doctor_code"
+        android:gravity="center"
+        android:textStyle="bold"
         android:textColor="@color/black"
         android:textSize="@dimen/tv_alert_dialog_size" />
 

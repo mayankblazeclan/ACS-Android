@@ -101,6 +101,22 @@ public class SeniorStaffHomeActivity extends BaseActivity {
                     startActivity(mNextActivity);
 
 
+                } else if(i==2){
+
+                    Toast.makeText(SeniorStaffHomeActivity.this, "Tapped on TSU", Toast.LENGTH_SHORT).show();
+
+                    /*Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, SeniorSubjectOnBoardingActivity.class);
+                    startActivity(mNextActivity);*/
+
+
+                } else if(i==3){
+
+                    //Toast.makeText(SeniorStaffHomeActivity.this, "Tapped on 3", Toast.LENGTH_SHORT).show();
+
+                    Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, InventorySetupActivity.class);
+                    startActivity(mNextActivity);
+
+
                 }else {
 
                    // Toast.makeText(SeniorStaffHomeActivity.this, "Tapped On " + 2, Toast.LENGTH_LONG).show();

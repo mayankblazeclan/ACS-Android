@@ -1,15 +1,22 @@
 package com.hrfid.acs.util;
 
+import com.hrfid.acs.HRFIDACSApplication;
+import com.hrfid.acs.pref.SharedPrefsManager;
+
 /**
  * Created by Akshay Kalpe on 15/04/17.
  */
 public class AppConstants {
 
+    private static SharedPrefsManager spfManager  = new SharedPrefsManager();
     //  Staging Data
 
-    public static final String ENDPOINT_URL_ASTRO = "https://loginstg.astro.com.my/";
-    public static final String ENDPOINT_URL = "http://10.30.10.110:8080/";
-    public static final String LOGIN_URL = "10.30.10.110:8080/";
+    //public static final String ENDPOINT_URL_ASTRO = "https://loginstg.astro.com.my/";
+    //public static final String LOGIN_URL = "10.30.10.110:8080/";
+    //public static final String ENDPOINT_URL = "http://10.30.10.110:8080/";
+
+    public static final String LOGIN_URL = spfManager.getApiUrl(HRFIDACSApplication.getInstance().getApplicationContext())+"/";
+    public static final String ENDPOINT_URL = "http://"+LOGIN_URL;
 
    //For STAGING (SIT)
     /*public static final String ENDPOINT_URL = "https://sit-stage-test.controlpoint.healthrfid.com/";

@@ -29,7 +29,7 @@ public interface APIService {
 
 
   //  LOG OUT
-  @POST("acs/api/user/logout/")
+  @POST("/acs/api/user/logout/")
   Call<ResponseBody> logoutApi(@Body CommonRequestModel commonRequestModel);
 
   //  LOG OUT

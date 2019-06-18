@@ -25,7 +25,11 @@ import android.widget.Toast;
 import com.hrfid.acs.R;
 import com.hrfid.acs.components.BaseActivity;
 import com.hrfid.acs.data.Constants;
+import com.hrfid.acs.view.activity.BarcodeScanActivity;
+import com.hrfid.acs.view.activity.LabStaffHomeActivity;
+import com.hrfid.acs.view.activity.NurseStaffHomeActivity;
 import com.hrfid.acs.view.activity.SelectRoleActivity;
+import com.hrfid.acs.view.activity.SeniorStaffHomeActivity;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -588,5 +592,103 @@ public class Utils {
         handler.removeCallbacks(runnable);
         handler.removeCallbacks(runnable2);
     }
+
+    public static void showAlertDialogSuccessOrFaill(final Activity activity, String title, String titleTextColor, String msg, int drawable, boolean isCancelable,final String userRoleType) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
+// ...Irrelevant code for customizing the buttons and title
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_sucess_or_fail, null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setCancelable(false);
+        final AlertDialog alertDialog = dialogBuilder.create();
+//drawable = R.drawable.ic_check_circle_green;
+
+        ImageView icon = (ImageView) dialogView.findViewById(R.id.iv_icon);
+        icon.setImageResource(drawable);
+
+        TextView tvTitle = (TextView) dialogView.findViewById(R.id.tv_dialog_title);
+        tvTitle.setTextColor(Color.parseColor(titleTextColor));
+        tvTitle.setText(title);
+
+        TextView tvDesc = (TextView) dialogView.findViewById(R.id.tv_dialog_desc);
+        tvDesc.setText(msg);
+       /* Button btDialogOk = (Button) dialogView.findViewById(R.id.bt_dialog_ok);
+        btDialogOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });*/
+
+        /*if (isCancelable) {
+            alertDialog.setCanceledOnTouchOutside(true);
+        } else {
+            alertDialog.setCanceledOnTouchOutside(false);
+        }*/
+        alertDialog.show();
+
+        //Handled close dialog after time interval
+
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (alertDialog.isShowing()) {
+                    alertDialog.dismiss();
+                    /*activity.startActivity(new Intent(activity, BarcodeScanActivity.class));
+                    activity.finish();*/
+                    gotoNextActivity(userRoleType,activity);
+                    activity.finish();
+
+
+                }
+            }
+        };
+
+
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                handler.removeCallbacks(runnable);
+            }
+        });
+
+        handler.postDelayed(runnable, TIME_TO_DISMISS);
+    }
+
+
+    private static void gotoNextActivity(String userRoleType, Activity activity) {
+
+        if(userRoleType.equalsIgnoreCase(Constants.USER_ROLE_TYPE_SENIOR_STAFF)){
+
+            //new PrefManager(this).setUserRoleType(Constants.USER_ROLE_TYPE_SENIOR_STAFF);
+            //new PrefManager(this).setUserRoleType(Constants.USER_ROLE_TYPE_SENIOR_STAFF);
+            //Go to next page of senior member
+            Intent mNextActivity = new Intent(activity, SeniorStaffHomeActivity.class);
+            mNextActivity.putExtra(Constants.USER_ROLE_TYPE, userRoleType);
+            activity.startActivity(mNextActivity);
+            activity.finish();
+
+        }else if(userRoleType.equalsIgnoreCase(Constants.USER_ROLE_TYPE_NURSE_STAFF)){
+
+            // new PrefManager(this).setUserRoleType(Constants.USER_ROLE_TYPE_NURSE_STAFF);
+            //Go to next page of nurse member
+            Intent mNextActivity = new Intent(activity, NurseStaffHomeActivity.class);
+            mNextActivity.putExtra(Constants.USER_ROLE_TYPE, userRoleType);
+            activity.startActivity(mNextActivity);
+            activity.finish();
+
+        }else {
+
+            //new PrefManager(this).setUserRoleType(Constants.LAB_STAFF);
+            //Go to next page of lab member
+            Intent mNextActivity = new Intent(activity, LabStaffHomeActivity.class);
+            mNextActivity.putExtra(Constants.USER_ROLE_TYPE, userRoleType);
+            activity.startActivity(mNextActivity);
+            activity.finish();
+
+        }
+    }
+
 
 }

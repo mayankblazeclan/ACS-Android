@@ -233,7 +233,10 @@ public class BarcodeScanActivity extends AppCompatActivity implements
             if (mUserRole.equalsIgnoreCase(userRoleType)) {
 
                 saveLoginDetails(mUserName, mUserRole, true, tagId);;
-                gotoNextActivity(userRoleType);
+                //gotoNextActivity(userRoleType);
+
+                Utils.showAlertDialogSuccessOrFaill(BarcodeScanActivity.this, getString(R.string.success) ,"#039c10", mUserRole.toUpperCase() + " SUCCESSFULLY LOGGED IN \n",  R.drawable.ic_check_circle_green, true, userRoleType);
+
 
             }else {
                 txtBarcodeNumber.setText("");

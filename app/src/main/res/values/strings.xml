@@ -239,5 +239,6 @@
     </string-array>
     <string name="type_prompt">Select Type</string>
     <string name="doctor_code">DOCTOR CODE</string>
+    <string name="visit">Visit</string>
 
 </resources>
