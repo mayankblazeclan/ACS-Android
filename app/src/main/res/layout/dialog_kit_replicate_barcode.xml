@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="50dp"
+    tools:context=".view.activity.InventorySetupActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="REPLICATE BARCODE"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:background="@color/colorBCRed"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_margin="15dp"
+        android:textAllCaps="true"
+        android:text="@string/study_id"/>
+
+    <TextView
+        android:id="@+id/et_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="@dimen/activity_5dp_margin"
+        android:layout_marginBottom="@dimen/activity_5dp_margin"
+        android:hint="Enter the barcode ID/Scan the barcode" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/margin_10dp"
+        android:weightSum="3">
+
+       <!-- <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="0"
+            android:layout_marginTop="15dp"
+            android:text="Qty (central)" />-->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_marginLeft="@dimen/activity_5dp_margin"
+            android:textAllCaps="true"
+            android:text="Qty (central)"/>
+
+      <!--  <Spinner
+            android:id="@+id/sp_qtyc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:spinnerMode="dialog"
+            android:layout_marginRight="20dp"
+            android:padding="10dp"
+            android:layout_weight="2"
+            android:gravity="center_horizontal" />-->
+
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/sp_qtyc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/spinner_background"
+            android:layout_margin="@dimen/activity_5dp_margin" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/margin_10dp"
+        android:weightSum="3">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_marginLeft="@dimen/activity_5dp_margin"
+            android:textAllCaps="true"
+            android:text="Qty (Local)"/>
+      <!--  <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="0"
+            android:layout_marginTop="15dp"
+            android:text="Qty (local)" />-->
+
+        <!--<Spinner
+            android:id="@+id/sp_qtyl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:spinnerMode="dialog"
+            android:padding="10dp"
+            android:layout_weight="2"
+            android:layout_marginRight="20dp"
+            android:gravity="center_horizontal"
+            />-->
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/sp_qtyl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/spinner_background"
+            android:layout_margin="@dimen/activity_5dp_margin" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_10dp"
+        android:weightSum="2"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btn_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SUBMIT"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_margin="@dimen/activity_5dp_margin"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_weight="1"
+            android:background="@color/colorBCRed"/>
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CANCEL"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_margin="@dimen/activity_5dp_margin"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@color/black"/>
+
+    </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

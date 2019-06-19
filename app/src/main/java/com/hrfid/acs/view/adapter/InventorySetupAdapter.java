@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.hrfid.acs.view.fragment.AddKitFragment;
 import com.hrfid.acs.view.fragment.AddSubjectFragment;
+import com.hrfid.acs.view.fragment.KitDetailsFragment;
 import com.hrfid.acs.view.fragment.SubjectDetailsFragment;
 
 /**
@@ -33,8 +34,8 @@ public class InventorySetupAdapter extends FragmentStatePagerAdapter {
                     return addKitFragment;
 
                 case 1:
-                    SubjectDetailsFragment subjectDetailsFragment = new SubjectDetailsFragment();
-                    return subjectDetailsFragment;
+                    KitDetailsFragment kitDetailsFragment = new KitDetailsFragment();
+                    return kitDetailsFragment;
 
 
                 default:

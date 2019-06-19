@@ -1,5 +1,6 @@
 package com.hrfid.acs.view.adapter;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -24,8 +25,16 @@ import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
+import com.hrfid.acs.helpers.request.DeleteScheduleRequest;
+import com.hrfid.acs.helpers.request.DeleteSubjectRequest;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
+import com.hrfid.acs.helpers.request.GetSubjectDetailsRequest;
+import com.hrfid.acs.helpers.request.MapSubjectDetailsRequest;
+import com.hrfid.acs.helpers.request.MapSubjectRequestModel;
+import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
+import com.hrfid.acs.helpers.serverResponses.models.DeleteScheduleRequestModel;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
+import com.hrfid.acs.helpers.serverResponses.models.GetSubjectDetails.GetSubjectDetailsResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetSubjectDetails.StudyList;
 import com.hrfid.acs.util.AppConstants;
 import com.hrfid.acs.util.Logger;
@@ -58,11 +67,13 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
     List<StudyList> studyLists;
     private  List<Integer> lists;
     private  List<Integer> listSpinnerStudyID;
+    private RecyclerView recyclerView;
 
-    public SubjectDetailsAdapter(Context context, List<StudyList> studyLists, List<Integer> lists) {
+    public SubjectDetailsAdapter(Context context, List<StudyList> studyLists, List<Integer> lists, RecyclerView recyclerView) {
         this.context = context;
         this.studyLists = studyLists;
         this.lists = lists;
+        this.recyclerView = recyclerView;
     }
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -112,8 +123,8 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
             holder.txtGroup.setText("" + studyLists.get(position).getGroupId());
             holder.txtGender.setText("" + studyLists.get(position).getGender());
             holder.txtStudyId.setText("" + studyLists.get(position).getStudyId());
-            if (studyLists.get(position).getStatus().equalsIgnoreCase("ACTIVE")) {
-                holder.txtStatus.setText("ACTIVE");
+            if (studyLists.get(position).getStatus().equalsIgnoreCase("In_Screening")) {
+                holder.txtStatus.setText("In_Screening");
                 holder.txtStatus.setTextColor(Color.parseColor("#5AA105"));
             } else if (studyLists.get(position).getStatus().equalsIgnoreCase("INACTIVE")) {
                 holder.txtStatus.setText("INACTIVE");
@@ -121,6 +132,17 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
             } else {
                 holder.txtStatus.setText("IN_QUEUE");
                 holder.txtStatus.setTextColor(Color.parseColor("#F9980B"));
+            }
+
+            if(studyLists.get(position).getIsMapped() == 1){
+
+                holder.btnMap.setVisibility(View.GONE);
+                holder.btnDelete.setVisibility(View.GONE);
+
+            }else {
+
+                holder.btnMap.setVisibility(View.VISIBLE);
+                holder.btnDelete.setVisibility(View.VISIBLE);
             }
 
         }
@@ -139,12 +161,97 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
             @Override
             public void onClick(View v) {
 
-                showDeleteDialog();
+                //showDeleteDialog();
+
+                showDeleteDialog(studyLists.get(position).getId());
+            }
+        });
+
+        holder.btnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                callSubjectMapAPI(studyLists.get(position).getId());
             }
         });
     }
 
+    private void callSubjectMapAPI(int ID) {
 
+        MapSubjectRequestModel mapSubjectRequestModel = new MapSubjectRequestModel();
+        mapSubjectRequestModel.setAppName(AppConstants.APP_NAME);
+        mapSubjectRequestModel.setVersionNumber(AppConstants.APP_VERSION);
+        mapSubjectRequestModel.setDeviceType(AppConstants.APP_OS);
+        mapSubjectRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
+        mapSubjectRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(context));
+        mapSubjectRequestModel.setUserRole(new PrefManager(context).getUserRoleType());
+        mapSubjectRequestModel.setTagId(new PrefManager(context).getBarCodeValue());
+        mapSubjectRequestModel.setEvent(AppConstants.MAP_SUBJECT);
+        mapSubjectRequestModel.setUserName(new PrefManager(context).getUserName());
+        mapSubjectRequestModel.setIsMapped(1);
+        mapSubjectRequestModel.setStatus("In_Screening");
+        mapSubjectRequestModel.setId(Integer.valueOf(ID));
+
+        new NetworkingHelper(new MapSubjectDetailsRequest(context, true,
+                mapSubjectRequestModel)) {
+
+            @Override
+            public void serverResponseFromApi(ApiResponse serverResponse) {
+                if (serverResponse.isSucess) {
+
+                    try {
+
+                        CommonResponse commonResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, CommonResponse.class);
+
+                        if (commonResponse.getStatus().getCODE() == 200) {
+
+                            if(commonResponse.getResponse().get(0).isStatus()){
+
+                                Logger.logError("mapSubject API success " +
+                                        commonResponse.getResponse().get(0).isStatus());
+                                Logger.logError("mapSubject API success " +
+                                        commonResponse.getResponse().get(0).getMessage());
+
+                                Utils.showAlertDialog((Activity)context,  commonResponse.getResponse().get(0).getMessage());
+                                getSubjectOnboardingDetails();
+
+
+                            }else {
+
+                                Logger.logError("subjectOnboard API Failure " +
+                                        commonResponse.getResponse().get(0).isStatus());
+                                Logger.logError("subjectOnboard API Failure " +
+                                        commonResponse.getResponse().get(0).getMessage());
+
+                                Utils.showAlertDialog((Activity)context,  commonResponse.getResponse().get(0).getMessage());
+                            }
+
+                        }else {
+
+                            Logger.logError("subjectOnboard API Failure " +
+                                    commonResponse.getResponse().get(0).isStatus());
+                            Logger.logError("subjectOnboard API Failure " +
+                                    commonResponse.getResponse().get(0).getMessage());
+
+                            Utils.showAlertDialog((Activity)context,  commonResponse.getResponse().get(0).getMessage());
+                        }
+
+
+
+                    }
+                    catch (Exception e){
+                        Logger.logError("mapSubject Exception " + e.getMessage());
+                    }
+
+                } else {
+                    Logger.logError("mapSubject API Failure " +
+                            serverResponse.errorMessageToDisplay);
+                }
+            }
+        };
+
+    }
 
 
     @Override
@@ -170,6 +277,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         Button btnModify, btnDelete;
         TextView txtGender;
         TextView txtStudyId;
+        Button btnMap;
 
 
         public MyViewHolder(View itemView) {
@@ -183,6 +291,16 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
             txtDob = itemView.findViewById(R.id.txtDob);
             txtGender = itemView.findViewById(R.id.txtGender);
             txtStudyId = itemView.findViewById(R.id.txtStudyId);
+            btnMap = itemView.findViewById(R.id.btnMap);
+
+            btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //viewScreenStudyFragmentAdapter.removeItem(getAdapterPosition());
+
+                    showDeleteDialog(studyLists.get(getAdapterPosition()).getId());
+                }
+            });
         }
     }
 
@@ -362,7 +480,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
     }
 
 
-    private void showDeleteDialog() {
+    /*private void showDeleteDialog() {
 
         Utils.createDialogTwoButtons(
                 context, context.getString(R.string.study_delete),
@@ -383,6 +501,193 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
                     }
                 });
+    }
+*/
+
+    //Call getSubjectOnboardingDetails API
+    private void getSubjectOnboardingDetails() {
+        CommonRequestModel commonRequestModel = new CommonRequestModel();
+        commonRequestModel.setAppName(AppConstants.APP_NAME);
+        commonRequestModel.setVersionNumber(AppConstants.APP_VERSION);
+        commonRequestModel.setDeviceType(AppConstants.APP_OS);
+        commonRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
+        commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(context));
+        commonRequestModel.setUserRole(new PrefManager(context).getUserRoleType());
+        commonRequestModel.setTagId(new PrefManager(context).getBarCodeValue());
+        commonRequestModel.setEvent(AppConstants.GET_SUBJECT);
+        commonRequestModel.setUserName(new PrefManager(context).getUserName());
+
+        new NetworkingHelper(new GetSubjectDetailsRequest((Activity) context, true,
+                commonRequestModel)) {
+
+            @Override
+            public void serverResponseFromApi(ApiResponse serverResponse) {
+                if (serverResponse.isSucess) {
+
+                    try {
+
+                        GetSubjectDetailsResponse getSubjectDetailsResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, GetSubjectDetailsResponse.class);
+
+                        if (getSubjectDetailsResponse.getStatus().getCODE() == 200) {
+
+                            if(getSubjectDetailsResponse.getStudyList().size() > 0){
+
+                               // linearLayout.setVisibility(View.VISIBLE);
+                                //textView.setVisibility(View.GONE);
+
+                                Logger.logError("getSubjectOnboardingDetails API success status " +
+                                        getSubjectDetailsResponse.getStatus());
+                                Logger.logError("getSubjectOnboardingDetails API success getStudyList" +
+                                        getSubjectDetailsResponse.getStudyList());
+
+                                //getAllStudyID();
+
+                                SubjectDetailsAdapter customAdapter = new SubjectDetailsAdapter(context, getSubjectDetailsResponse.getStudyList(), lists, recyclerView);
+                                recyclerView.setAdapter(customAdapter);
+
+
+                            }else {
+
+                                Logger.logError("getSubjectOnboardingDetails API Failure " +
+                                        "getStudyList" +
+                                        getSubjectDetailsResponse.getStudyList());
+
+                               // linearLayout.setVisibility(View.GONE);
+                                //textView.setVisibility(View.VISIBLE);
+
+                                Utils.showAlertDialog((Activity) context,  "NO DATA IN STUDY");
+                            }
+
+                        }else {
+
+                            Logger.logError("getSubjectOnboardingDetails API Failure " +
+                                    getSubjectDetailsResponse.getStatus().getCODE());
+                            Logger.logError("getSubjectOnboardingDetails API Failure " +
+                                    getSubjectDetailsResponse.getStatus().getMSG());
+
+                            Utils.showAlertDialog((Activity) context,  getSubjectDetailsResponse.getStatus()
+                                    .getMSG());
+                        }
+
+
+
+                    }
+                    catch (Exception e){
+                        Logger.logError("getSubjectOnboardingDetails Exception " + e.getMessage());
+                    }
+
+                } else {
+                    Logger.logError("getSubjectOnboardingDetails API Failure " +
+                            serverResponse.errorMessageToDisplay);
+                }
+            }
+        };
+
+    }
+
+
+    private void showDeleteDialog(final int id) {
+
+        Utils.createDialogTwoButtons(
+                context, context.getString(R.string.subject_delete),
+                true, context.getString(R.string.delete_subject_message),
+                context.getString(R.string.dlg_yes_text),
+                context.getString(R.string.dlg_no_text), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        //CALL DELETE API
+                        callDeleteSubjectAPI(id);
+                        // dialog.dismiss();
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                });
+    }
+
+
+
+    private void callDeleteSubjectAPI(int id) {
+
+        DeleteScheduleRequestModel deleteScheduleRequestModel = new DeleteScheduleRequestModel();
+        deleteScheduleRequestModel.setAppName(AppConstants.APP_NAME);
+        deleteScheduleRequestModel.setVersionNumber(AppConstants.APP_VERSION);
+        deleteScheduleRequestModel.setDeviceType(AppConstants.APP_OS);
+        deleteScheduleRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
+        deleteScheduleRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(context));
+        deleteScheduleRequestModel.setUserRole(new PrefManager(context).getUserRoleType());
+        deleteScheduleRequestModel.setTagId(new PrefManager(context).getBarCodeValue());
+        deleteScheduleRequestModel.setEvent(AppConstants.DELETE_SUBJECT);
+        deleteScheduleRequestModel.setUserName(new PrefManager(context).getUserName());
+        deleteScheduleRequestModel.setId(String.valueOf(id));
+
+        new NetworkingHelper(new DeleteSubjectRequest((Activity) context, true, deleteScheduleRequestModel)) {
+
+            @Override
+            public void serverResponseFromApi(ApiResponse serverResponse) {
+                if (serverResponse.isSucess) {
+
+                    try {
+
+                        CommonResponse commonResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, CommonResponse.class);
+
+                        if (commonResponse.getStatus().getCODE() == 200) {
+
+                            if(commonResponse.getResponse().get(0).isStatus()){
+
+                                Logger.logError("deleteStudySchedule API success " +
+                                        commonResponse.getResponse().get(0).isStatus());
+                                Logger.logError("deleteStudySchedule API success " +
+                                        commonResponse.getResponse().get(0).getMessage());
+
+
+                                Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
+                                /*viewScreenStudyFragmentAdapter.removeItem(adapterPosition);
+                                viewScreenStudyFragmentAdapter.notifyDataSetChanged();*/
+                                getSubjectOnboardingDetails();
+
+
+                            }else {
+
+                                Logger.logError("deleteStudySchedule API Failure1 " +
+                                        commonResponse.getResponse().get(0).isStatus());
+                                Logger.logError("deleteStudySchedule API Failure2 " +
+                                        commonResponse.getResponse().get(0).getMessage());
+
+                                Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
+                            }
+
+                        }else {
+
+                            Logger.logError("deleteStudySchedule API Failure3 " +
+                                    commonResponse.getResponse().get(0).isStatus());
+                            Logger.logError("deleteStudySchedule API Failure4 " +
+                                    commonResponse.getResponse().get(0).getMessage());
+
+                            Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
+                        }
+
+
+
+                    }
+                    catch (Exception e){
+                        Logger.logError("deleteStudySchedule Exception " + e.getMessage());
+                    }
+
+                } else {
+                    Logger.logError("deleteStudySchedule API Failure4 " +
+                            serverResponse.errorMessageToDisplay);
+                }
+            }
+        };
+
     }
 
 }

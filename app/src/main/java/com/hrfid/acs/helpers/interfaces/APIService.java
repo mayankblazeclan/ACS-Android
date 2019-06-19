@@ -6,6 +6,7 @@ import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.CreateScheduleModel;
 import com.hrfid.acs.helpers.request.CreateScheduleRequest;
 import com.hrfid.acs.helpers.request.LogoutRequest;
+import com.hrfid.acs.helpers.request.MapSubjectRequestModel;
 import com.hrfid.acs.helpers.serverResponses.models.DeleteScheduleRequestModel;
 import com.hrfid.acs.helpers.serverResponses.models.ModifyScheduleRequestModel;
 
@@ -67,6 +68,14 @@ public interface APIService {
   //getAllSubjects
   @POST("/acs/api/getAllSubjects")
   Call<ResponseBody> getAllSubjects(@Body CommonRequestModel commonRequestModel);
+
+  //mapSubjects
+  @POST("/acs/api/mapSubject")
+  Call<ResponseBody> mapSubject(@Body MapSubjectRequestModel mapSubjectRequestModel);
+
+  //deleteSubject
+  @POST("/acs/api/deleteSubject")
+  Call<ResponseBody> deleteSubject(@Body DeleteScheduleRequestModel deleteScheduleRequestModel);
 
  /* @POST("api/facebook/fblogin")
   Call<ResponseBody> loginFBToSSOAPI(@Body RequestBody body);

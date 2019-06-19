@@ -27,6 +27,7 @@ import com.hrfid.acs.pref.SharedPrefsManager;
 import com.hrfid.acs.server.ServerDetailsImpl;
 import com.hrfid.acs.service.api.comfigration.ConfigurationApi;
 import com.hrfid.acs.service.api.comfigration.ConfigurationDevice;
+import com.hrfid.acs.util.AppConstants;
 import com.hrfid.acs.util.LoggerLocal;
 import com.hrfid.acs.view.activity.NotificationActivity;
 import com.hrfid.acs.view.activity.SelectRoleActivity;
@@ -96,7 +97,7 @@ public class DeviceConfigurationActivity extends BaseActivity implements
         if(!mPref.getApiUrl(this).equalsIgnoreCase("") || !mPref.getApiUrl(this).isEmpty()) {
             mEtApiUrlDeviceSettings.setText(mPref.getApiUrl(this));
         }else {
-            mEtApiUrlDeviceSettings.setText("10.30.10.110:8080/");
+            mEtApiUrlDeviceSettings.setText(AppConstants.URL);
         }
 
         //button

@@ -7,11 +7,14 @@ import com.hrfid.acs.helpers.request.AddSubjectRequest;
 import com.hrfid.acs.helpers.request.BaseApiRequest;
 import com.hrfid.acs.helpers.request.CreateScheduleRequest;
 import com.hrfid.acs.helpers.request.DeleteScheduleRequest;
+import com.hrfid.acs.helpers.request.DeleteSubjectRequest;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.request.GetNotificationRequest;
 import com.hrfid.acs.helpers.request.GetScheduleRequest;
 import com.hrfid.acs.helpers.request.GetSubjectDetailsRequest;
 import com.hrfid.acs.helpers.request.LogoutRequest;
+import com.hrfid.acs.helpers.request.MapSubjectDetailsRequest;
+import com.hrfid.acs.helpers.request.MapSubjectRequestModel;
 import com.hrfid.acs.helpers.request.ModifyScheduleRequest;
 import com.hrfid.acs.helpers.request.ResetNotificationCountRequest;
 import com.hrfid.acs.helpers.serverResponses.ErrorArrayResponse;
@@ -54,6 +57,8 @@ public abstract class NetworkingHelper {
   public static final int GET_ALL_STUDY_ID = 9;
   public static final int ADD_SUBJECT_ONBOARDING = 10;
   public static final int GET_SUBJECT_DETAILS = 11;
+  public static final int MAP_SUBJECT_DETAILS = 12;
+  public static final int DELETE_SUBJECT = 13;
 
 
     private Call<ResponseBody> apiInterface;
@@ -120,6 +125,16 @@ public abstract class NetworkingHelper {
       case GET_SUBJECT_DETAILS:
         GetSubjectDetailsRequest getSubjectDetailsRequest = (GetSubjectDetailsRequest) cmgRequest;
         apiInterface = ApiRouter.get().getRetrofitService().getAllSubjects(getSubjectDetailsRequest.commonRequestModel);
+        break;
+
+      case MAP_SUBJECT_DETAILS:
+        MapSubjectDetailsRequest mapSubjectDetailsRequest = (MapSubjectDetailsRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().mapSubject(mapSubjectDetailsRequest.mapSubjectRequestModel);
+        break;
+
+      case DELETE_SUBJECT:
+        DeleteSubjectRequest deleteSubjectRequest = (DeleteSubjectRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().deleteSubject(deleteSubjectRequest.deleteScheduleRequestModel);
         break;
 
       default:

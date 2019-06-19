@@ -1,6 +1,8 @@
 package com.hrfid.acs.view.fragment;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,6 +39,9 @@ import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
+import com.hrfid.acs.view.activity.SeniorStudySetupActivity;
+import com.hrfid.acs.view.activity.SeniorSubjectOnBoardingActivity;
+import com.hrfid.acs.view.adapter.SubjectOnBoardingAdapter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -341,7 +346,31 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
                                 Logger.logError("subjectOnboard API success " +
                                         commonResponse.getResponse().get(0).getMessage());
 
-                                Utils.showAlertDialog(getActivity(),  commonResponse.getResponse().get(0).getMessage());
+                                //Utils.showAlertDialog(getActivity(),  commonResponse.getResponse().get(0).getMessage());
+
+                                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+                                // ...Irrelevant code for customizing the buttons and title
+                                LayoutInflater inflater = getActivity().getLayoutInflater();
+                                View dialogView = inflater.inflate(R.layout.alert_dialog_with_one_button, null);
+                                dialogBuilder.setView(dialogView);
+                                final AlertDialog alertDialog = dialogBuilder.create();
+
+                                TextView tvDesc = (TextView) dialogView.findViewById(R.id.tv_dialog_desc);
+                                tvDesc.setText(commonResponse.getResponse().get(0).getMessage());
+                                Button btDialogOk = (Button) dialogView.findViewById(R.id.bt_dialog_ok);
+                                btDialogOk.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        alertDialog.dismiss();
+                                        Intent mNextActivity = new Intent(getActivity(), SeniorSubjectOnBoardingActivity.class);
+                                        startActivity(mNextActivity);
+                                        getActivity().finish();
+                                    }
+                                });
+
+                                alertDialog.setCanceledOnTouchOutside(false);
+                                alertDialog.show();
                                 edtStudyName.setText("");
                                 txt_date_of_birth.setText("");
 

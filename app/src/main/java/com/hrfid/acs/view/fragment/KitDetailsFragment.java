@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,28 +17,24 @@ import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
-import com.hrfid.acs.helpers.request.GetScheduleRequest;
 import com.hrfid.acs.helpers.request.GetSubjectDetailsRequest;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
-import com.hrfid.acs.helpers.serverResponses.models.GetScheduleResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetSubjectDetails.GetSubjectDetailsResponse;
 import com.hrfid.acs.util.AppConstants;
 import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
+import com.hrfid.acs.view.adapter.KitDetailsAdapter;
 import com.hrfid.acs.view.adapter.SubjectDetailsAdapter;
-import com.hrfid.acs.view.adapter.ViewScreenStudyFragmentAdapter;
-import com.hrfid.acs.view.adapter.ViewTrialStudyFragmentAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by MS on 2019-05-30.
  */
-public class SubjectDetailsFragment extends Fragment {
+public class KitDetailsFragment extends Fragment {
 
     private LinearLayout linearLayout;
     private TextView textView;
@@ -125,7 +120,7 @@ public class SubjectDetailsFragment extends Fragment {
 
                                 getAllStudyID();
 
-                                SubjectDetailsAdapter customAdapter = new SubjectDetailsAdapter(getActivity(), getSubjectDetailsResponse.getStudyList(), lists, recyclerView);
+                                KitDetailsAdapter customAdapter = new KitDetailsAdapter(getContext(), getSubjectDetailsResponse.getStudyList(), lists);
                                 recyclerView.setAdapter(customAdapter);
 
 

@@ -43,6 +43,7 @@ public class BarcodeScanActivity extends AppCompatActivity implements
     private String tagId;
     private String mUserRole = "";
     private String mUserName = "";
+    private String mUserEmail = "";
     private boolean isTagIdValid = false;
     private UserRoleService mService;
     private RelativeLayout mProgressBarLayout;
@@ -227,6 +228,8 @@ public class BarcodeScanActivity extends AppCompatActivity implements
                 mUserRole = "" + userRole.get(i).getUserRole();
                 isTagIdValid = userRole.get(i).isTagIdValid();
                 mUserName = "" + userRole.get(i).getUserName();
+                mUserEmail = "" + userRole.get(i).getFullName();
+
             }
         }
         if(isTagIdValid) {
@@ -235,7 +238,7 @@ public class BarcodeScanActivity extends AppCompatActivity implements
                 saveLoginDetails(mUserName, mUserRole, true, tagId);;
                 //gotoNextActivity(userRoleType);
 
-                Utils.showAlertDialogSuccessOrFaill(BarcodeScanActivity.this, getString(R.string.success) ,"#039c10", mUserRole.toUpperCase() + " SUCCESSFULLY LOGGED IN \n",  R.drawable.ic_check_circle_green, true, userRoleType);
+                Utils.showAlertDialogSuccessOrFaill(BarcodeScanActivity.this, getString(R.string.success) ,"#039c10", mUserEmail.toUpperCase() + " SUCCESSFULLY LOGGED IN \n",  R.drawable.ic_check_circle_green, true, userRoleType);
 
 
             }else {

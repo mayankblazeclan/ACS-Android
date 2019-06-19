@@ -227,7 +227,9 @@
     <string name="study_name_id">STUDY NAME (ID)</string>
     <string name="study_start_end_date">START DATE -- END DATE</string>
     <string name="study_delete">DELETE STUDY</string>
+    <string name="subject_delete">DELETE SUBJECT</string>
     <string name="delete_study_message">\Are you sure you want to delete this study ?\</string>
+    <string name="delete_subject_message">\Are you sure you want to delete this subject ?\</string>
     <string name="person_gender">Gender</string>
     <string name="screen_id">Screen ID</string>
     <string name="text_dob">Please Select Date of Birth</string>
@@ -240,5 +242,6 @@
     <string name="type_prompt">Select Type</string>
     <string name="doctor_code">DOCTOR CODE</string>
     <string name="visit">Visit</string>
+    <string name="kit_status">KIT STATUS</string>
 
 </resources>

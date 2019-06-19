@@ -1,13 +1,17 @@
 package com.hrfid.acs.view.fragment;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,6 +19,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,11 +35,14 @@ import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
+import com.hrfid.acs.helpers.serverResponses.models.GetSubjectDetails.StudyList;
 import com.hrfid.acs.util.AppConstants;
 import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
+import com.hrfid.acs.view.barcode.ReplicateActivity;
+import com.hrfid.acs.view.barcode.ShowReplicateListActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -70,6 +78,7 @@ public class AddKitFragment extends Fragment  implements AdapterView.OnItemSelec
     private  Spinner spnStudyIDs;
     private Spinner spnGroups;
     private  Spinner spnPersonGender;
+    private Button btnReplicate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -109,6 +118,9 @@ public class AddKitFragment extends Fragment  implements AdapterView.OnItemSelec
         edtStudyName = v.findViewById(R.id.edtStudyName);
         imageView = (ImageView) v.findViewById(R.id.barcode_image);
         txt_date_of_birth = v.findViewById(R.id.txt_start_date);
+
+        btnReplicate = v.findViewById(R.id.btn_replicate);
+        btnReplicate.setOnClickListener(this);
 
 /*        btnDateOfBirth =(ImageButton)v.findViewById(R.id.btn_date_of_birth);
         btnDateOfBirth.setOnClickListener(this);*/
@@ -151,6 +163,7 @@ public class AddKitFragment extends Fragment  implements AdapterView.OnItemSelec
                 //Your Action Here.
                 //Toast.makeText(getContext(), parent.getSelectedItem().toString() , Toast.LENGTH_SHORT).show();
                 break;
+
         }
     }
 
@@ -174,6 +187,16 @@ public class AddKitFragment extends Fragment  implements AdapterView.OnItemSelec
 
             case R.id.btn_date_of_birth:
                 selectDOB();
+                break;
+
+            case R.id.btn_replicate :
+
+                if(edtStudyName.getText().toString().length()>0) {
+                    //Your dialog
+                    showReplicateDialog();
+                }else {
+                    Toast.makeText(getContext(), "Enter Study ID " , Toast.LENGTH_SHORT).show();
+                }
                 break;
 
         }
@@ -380,6 +403,8 @@ public class AddKitFragment extends Fragment  implements AdapterView.OnItemSelec
     }
 
 
+
+
     //getAllStudyID API
     private void getAllStudyID()
     {
@@ -451,4 +476,68 @@ public class AddKitFragment extends Fragment  implements AdapterView.OnItemSelec
         };
 
     }
+
+
+
+
+
+    private void showReplicateDialog() {
+
+        final TextView et_text;
+        final Button btn_submit;
+        final Button btnCancel;
+        final Spinner sp_qtyc, sp_qtyl;
+
+
+        // Create custom dialog object
+        final Dialog dialog = new Dialog(getContext());
+        // Include dialog.xml file
+        dialog.setContentView(R.layout.dialog_kit_replicate_barcode);
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Window window = dialog.getWindow();
+        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+
+        et_text = dialog.findViewById(R.id.et_text);
+        btn_submit = dialog.findViewById(R.id.btn_submit);
+        btnCancel = dialog.findViewById(R.id.btnCancel);
+        sp_qtyc = dialog.findViewById(R.id.sp_qtyc);
+        sp_qtyl = dialog.findViewById(R.id.sp_qtyl);
+        et_text.setText(edtStudyName.getText().toString());
+
+        String[] items = new String[]{"1 ", "2", "3 ", "4", "5 ", "6",
+                "7 ", "8", "9 ", "10"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, items);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp_qtyc.setAdapter(adapter);
+        sp_qtyl.setAdapter(adapter);
+
+
+        btn_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (et_text.getText().toString().equals("")) {
+                    Toast.makeText(getContext(), "Please Enter Text", Toast.LENGTH_LONG).show();
+                } else {
+                    Intent i = new Intent(getActivity(), ShowReplicateListActivity.class);
+                    i.putExtra("qtyc", sp_qtyc.getSelectedItem().toString());
+                    i.putExtra("qtyl", sp_qtyl.getSelectedItem().toString());
+                    i.putExtra("text", et_text.getText().toString());
+                    startActivity(i);
+                }
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
 }

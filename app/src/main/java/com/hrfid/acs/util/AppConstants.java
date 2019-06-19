@@ -8,6 +8,8 @@ import com.hrfid.acs.pref.SharedPrefsManager;
  */
 public class AppConstants {
 
+
+    public static final String URL = "sit-stage-test.controlpoint.healthrfid.com/";
     private static SharedPrefsManager spfManager  = new SharedPrefsManager();
     //  Staging Data
 
@@ -66,7 +68,7 @@ public class AppConstants {
     public static final String API_ASTRO = "ASTRO";
     public static final String TEXT_GEMPAK_P = "hotspot@faq";
     public static final String ACTIVITY = "ACTIVITY";
-    public static final String INQUEUE = "INQUEUE";
+    public static final String INQUEUE = "In_Queue";
     public static String API_TO_HIT = "";
 
     //ACS Constant
@@ -84,5 +86,8 @@ public class AppConstants {
     public static final String DELETE_ACTIVITY = "Delete Study Schedule";
     public static final String ADD_SUBJECT = "Subject Onboarding";
     public static final String GET_SUBJECT = "Subject List";
+    public static final String MAP_SUBJECT = "Map Subject";
+    public static final String DELETE_SUBJECT = "Delete Subject";
+
 
 }

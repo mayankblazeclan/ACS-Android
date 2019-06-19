@@ -16,6 +16,9 @@ public class UserRole {
     @SerializedName("userName")
     @Expose
     private String userName;
+    @SerializedName("fullName")
+    @Expose
+    private String fullName;
 
     public void setUserRole(String userRole) {
         this.userRole = userRole;
@@ -38,5 +41,13 @@ public class UserRole {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }
