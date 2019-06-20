@@ -243,5 +243,7 @@
     <string name="doctor_code">DOCTOR CODE</string>
     <string name="visit">Visit</string>
     <string name="kit_status">KIT STATUS</string>
+    <string name="subject_mapping">SUBJECT MAPPING</string>
+    <string name="alert_mapping" >\Are you sure you want to map this subject ?\</string>
 
 </resources>

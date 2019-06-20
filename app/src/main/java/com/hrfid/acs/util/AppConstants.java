@@ -9,7 +9,8 @@ import com.hrfid.acs.pref.SharedPrefsManager;
 public class AppConstants {
 
 
-    public static final String URL = "sit-stage-test.controlpoint.healthrfid.com/";
+   // public static final String URL = "sit-stage-test.controlpoint.healthrfid.com/";
+    public static final String URL = "10.30.10.110:8080/";
     private static SharedPrefsManager spfManager  = new SharedPrefsManager();
     //  Staging Data
 
@@ -88,6 +89,7 @@ public class AppConstants {
     public static final String GET_SUBJECT = "Subject List";
     public static final String MAP_SUBJECT = "Map Subject";
     public static final String DELETE_SUBJECT = "Delete Subject";
+    public static final String MODIFY_SUBJECT = "Modify Subject";
 
 
 }

@@ -9,6 +9,7 @@ import com.hrfid.acs.helpers.request.LogoutRequest;
 import com.hrfid.acs.helpers.request.MapSubjectRequestModel;
 import com.hrfid.acs.helpers.serverResponses.models.DeleteScheduleRequestModel;
 import com.hrfid.acs.helpers.serverResponses.models.ModifyScheduleRequestModel;
+import com.hrfid.acs.helpers.serverResponses.models.ModifySubjectRequestModel;
 
 import java.util.Map;
 
@@ -76,6 +77,10 @@ public interface APIService {
   //deleteSubject
   @POST("/acs/api/deleteSubject")
   Call<ResponseBody> deleteSubject(@Body DeleteScheduleRequestModel deleteScheduleRequestModel);
+
+  //deleteSubject
+  @POST("/acs/api/modifySubject")
+  Call<ResponseBody> modifySubject(@Body ModifySubjectRequestModel modifySubjectRequestModel);
 
  /* @POST("api/facebook/fblogin")
   Call<ResponseBody> loginFBToSSOAPI(@Body RequestBody body);

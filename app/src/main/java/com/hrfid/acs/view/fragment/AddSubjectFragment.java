@@ -34,6 +34,7 @@ import com.hrfid.acs.helpers.request.CreateScheduleRequest;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
+import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList;
 import com.hrfid.acs.util.AppConstants;
 import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
@@ -73,10 +74,11 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
     private TextView txt_date_of_birth;
     private ImageButton btnDateOfBirth;
     private int mYear, mMonth, mDay;
-    private String startDate ="";
+    private String spnSelectedStudyID ="";
     private  Spinner spnStudyIDs;
     private Spinner spnGroups;
     private  Spinner spnPersonGender;
+    private  List<StudyList> listStudy = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -156,7 +158,8 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
 
             case R.id.spnStatusId :
                 //Your Action Here.
-                //Toast.makeText(getContext(), parent.getSelectedItem().toString() , Toast.LENGTH_SHORT).show();
+                spnSelectedStudyID = String.valueOf(listStudy.get(position).getValue());
+                Toast.makeText(getContext(), spnSelectedStudyID , Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -214,7 +217,7 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
 
 
                             txt_date_of_birth.setText(year + "-" + paddedMonth + "-" + fDate);
-                            startDate = txt_date_of_birth.getText().toString();
+                            //startDate = txt_date_of_birth.getText().toString();
 
                         } else {
 
@@ -224,7 +227,7 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
                             //editText.setText(dayOfMonth + "/" + paddedMonth + "/" + year);
 
                             txt_date_of_birth.setText(year + "-" + paddedMonth + "-" + dayOfMonth);
-                            startDate = txt_date_of_birth.getText().toString();
+                            //startDate = txt_date_of_birth.getText().toString();
                         }
 
                     }
@@ -263,7 +266,7 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
                                 txt_date_of_birth.getText().toString(),
                                 spnPersonGender.getSelectedItem().toString(),
                                 spnGroups.getSelectedItem().toString(),
-                                spnStudyIDs.getSelectedItem().toString());
+                                spnSelectedStudyID);
                     }
 
 
@@ -443,13 +446,15 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
                                 Logger.logError("getStudyIds API success " +
                                         commonResponse.getStudyList());
 
+                                listStudy = commonResponse.getStudyList();
+
                                 if(commonResponse.getStudyList().size()>0) {
 
-                                    List<Integer> lists = new ArrayList<>();
+                                    List<String> lists = new ArrayList<>();
 
                                     for (int i = 0; i < commonResponse.getStudyList().size(); i++) {
 
-                                        lists.add(commonResponse.getStudyList().get(i).getValue());
+                                        lists.add(commonResponse.getStudyList().get(i).getLabel());
 
                                     }
 

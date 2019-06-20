@@ -16,6 +16,7 @@ import com.hrfid.acs.helpers.request.LogoutRequest;
 import com.hrfid.acs.helpers.request.MapSubjectDetailsRequest;
 import com.hrfid.acs.helpers.request.MapSubjectRequestModel;
 import com.hrfid.acs.helpers.request.ModifyScheduleRequest;
+import com.hrfid.acs.helpers.request.ModifySubjectRequest;
 import com.hrfid.acs.helpers.request.ResetNotificationCountRequest;
 import com.hrfid.acs.helpers.serverResponses.ErrorArrayResponse;
 import com.hrfid.acs.helpers.serverResponses.ErrorObjectResponse;
@@ -59,6 +60,7 @@ public abstract class NetworkingHelper {
   public static final int GET_SUBJECT_DETAILS = 11;
   public static final int MAP_SUBJECT_DETAILS = 12;
   public static final int DELETE_SUBJECT = 13;
+  public static final int MODIFY_SUBJECT = 14;
 
 
     private Call<ResponseBody> apiInterface;
@@ -135,6 +137,12 @@ public abstract class NetworkingHelper {
       case DELETE_SUBJECT:
         DeleteSubjectRequest deleteSubjectRequest = (DeleteSubjectRequest) cmgRequest;
         apiInterface = ApiRouter.get().getRetrofitService().deleteSubject(deleteSubjectRequest.deleteScheduleRequestModel);
+        break;
+
+        //modifySubject
+      case MODIFY_SUBJECT:
+        ModifySubjectRequest modifySubjectRequest = (ModifySubjectRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().modifySubject(modifySubjectRequest.modifySubjectRequestModel);
         break;
 
       default:

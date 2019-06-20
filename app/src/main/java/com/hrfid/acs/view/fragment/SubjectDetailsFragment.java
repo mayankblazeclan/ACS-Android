@@ -21,6 +21,7 @@ import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.request.GetScheduleRequest;
 import com.hrfid.acs.helpers.request.GetSubjectDetailsRequest;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
+import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList;
 import com.hrfid.acs.helpers.serverResponses.models.GetScheduleResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetSubjectDetails.GetSubjectDetailsResponse;
 import com.hrfid.acs.util.AppConstants;
@@ -44,7 +45,8 @@ public class SubjectDetailsFragment extends Fragment {
     private LinearLayout linearLayout;
     private TextView textView;
     private  RecyclerView recyclerView;
-    private  List<Integer> lists = new ArrayList<>();
+    //private  List<Integer> lists = new ArrayList<>();
+    private  List<StudyList> listStudy = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -125,7 +127,7 @@ public class SubjectDetailsFragment extends Fragment {
 
                                 getAllStudyID();
 
-                                SubjectDetailsAdapter customAdapter = new SubjectDetailsAdapter(getActivity(), getSubjectDetailsResponse.getStudyList(), lists, recyclerView);
+                                SubjectDetailsAdapter customAdapter = new SubjectDetailsAdapter(getActivity(), getSubjectDetailsResponse.getStudyList(), listStudy, recyclerView);
                                 recyclerView.setAdapter(customAdapter);
 
 
@@ -204,10 +206,11 @@ public class SubjectDetailsFragment extends Fragment {
                                 if(commonResponse.getStudyList().size()>0) {
 
 
+                                    listStudy = commonResponse.getStudyList();
 
                                     for (int i = 0; i < commonResponse.getStudyList().size(); i++) {
 
-                                        lists.add(commonResponse.getStudyList().get(i).getValue());
+                                       // lists.add(commonResponse.getStudyList().get(i).getValue());
 
                                     }
 

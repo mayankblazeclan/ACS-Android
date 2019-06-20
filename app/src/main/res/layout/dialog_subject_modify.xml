@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="50dp"
     android:orientation="vertical">
 
     <Button
@@ -71,7 +72,8 @@
                 android:id="@+id/edtScreenId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="ABC1234"/>
+                android:textColor="@color/black"
+                android:hint=""/>
 
         </LinearLayout>
 
@@ -99,7 +101,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:hint="01-06-1990"/>
+                android:hint=""/>
 
             <!--<LinearLayout
                 android:id="@+id/linearLayout_study_type"
@@ -221,7 +223,7 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <!--<LinearLayout
             android:id="@+id/linearLayout_gender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -240,17 +242,17 @@
                 android:textAllCaps="true"
                 android:text="@string/person_gender"/>
 
-            <!--<EditText
+            &lt;!&ndash;<EditText
                 android:id="@+id/edtStudyStaus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter Study Status"/>-->
+                android:hint="Enter Study Status"/>&ndash;&gt;
 
-            <!-- <Spinner
+            &lt;!&ndash; <Spinner
                  android:id="@+id/spnBloodGroup"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
-                 android:layout_margin="@dimen/activity_5dp_margin"/>-->
+                 android:layout_margin="@dimen/activity_5dp_margin"/>&ndash;&gt;
 
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/spnPersonGender"
@@ -259,7 +261,7 @@
                 android:background="@drawable/spinner_background"
                 android:layout_margin="@dimen/activity_5dp_margin" />
 
-        </LinearLayout>
+        </LinearLayout>-->
 <!--
         <LinearLayout
             android:id="@+id/linearLayout_status"
@@ -331,7 +333,7 @@
         </LinearLayout>
 
 
-
+<!--
 
         <LinearLayout
             android:id="@+id/linearLayout_days"
@@ -361,10 +363,10 @@
                 android:layout_margin="@dimen/activity_5dp_margin" />
 
 
-        </LinearLayout>
+        </LinearLayout>-->
 
 
-        <LinearLayout
+        <!--<LinearLayout
             android:id="@+id/linearLayout_date2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -404,13 +406,13 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:hint="@string/text_dob"/>
 
-        </LinearLayout>
+        </LinearLayout>-->
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_5dp_margin"
+            android:layout_margin="@dimen/margin_10dp"
             android:weightSum="2"
             android:gravity="center">
 

@@ -15,6 +15,9 @@ public class StudyList {
     @SerializedName("value")
     @Expose
     private int value;
+    @SerializedName("studyId")
+    @Expose
+    private String studyId;
 
     public String getLabel() {
         return label;
@@ -38,6 +41,15 @@ public class StudyList {
 
     public void setValue(int value) {
         this.value = value;
+    }
+
+
+    public String getStudyId() {
+        return studyId;
+    }
+
+    public void setStudyId(String studyId) {
+        this.studyId = studyId;
     }
 
 }
