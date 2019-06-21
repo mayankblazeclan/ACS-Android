@@ -11,7 +11,7 @@ public class AppConstants {
 
    // public static final String URL = "sit-stage-test.controlpoint.healthrfid.com/";
     public static final String URL = "10.30.10.110:8080/";
-    private static SharedPrefsManager spfManager  = new SharedPrefsManager();
+ private static SharedPrefsManager spfManager  = new SharedPrefsManager();
     //  Staging Data
 
     //public static final String ENDPOINT_URL_ASTRO = "https://loginstg.astro.com.my/";
@@ -90,6 +90,9 @@ public class AppConstants {
     public static final String MAP_SUBJECT = "Map Subject";
     public static final String DELETE_SUBJECT = "Delete Subject";
     public static final String MODIFY_SUBJECT = "Modify Subject";
+
+ public static final String SUBJECT_APPROVE = "Approve Subject";
+ public static final String SUBJECT_REJECT = "Reject Subject";
 
 
 }

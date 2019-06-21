@@ -4,7 +4,7 @@ package com.hrfid.acs.helpers.serverResponses.models.GetSubjectDetails;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class StudyList {
+public class SubjectList {
 
     @SerializedName("id")
     @Expose
@@ -14,7 +14,7 @@ public class StudyList {
     private String screenId;
     @SerializedName("DOB")
     @Expose
-    private String dob;
+    private String dOB;
     @SerializedName("group_id")
     @Expose
     private String groupId;
@@ -24,6 +24,9 @@ public class StudyList {
     @SerializedName("study_id")
     @Expose
     private int studyId;
+    @SerializedName("study_name")
+    @Expose
+    private String studyName;
     @SerializedName("gen_barcode_val")
     @Expose
     private String genBarcodeVal;
@@ -33,21 +36,15 @@ public class StudyList {
     @SerializedName("is_mapped")
     @Expose
     private int isMapped;
-    @SerializedName("is_delete")
+    @SerializedName("is_approved")
     @Expose
-    private int isDelete;
-    @SerializedName("created_at")
+    private Object isApproved;
+    @SerializedName("is_approved_study")
     @Expose
-    private String createdAt;
-    @SerializedName("created_by")
+    private Object isApprovedStudy;
+    @SerializedName("study_title")
     @Expose
-    private String createdBy;
-    @SerializedName("updated_at")
-    @Expose
-    private String updatedAt;
-    @SerializedName("updated_by")
-    @Expose
-    private String updatedBy;
+    private String studyTitle;
 
     public int getId() {
         return id;
@@ -65,12 +62,12 @@ public class StudyList {
         this.screenId = screenId;
     }
 
-    public String getDob() {
-        return dob;
+    public String getDOB() {
+        return dOB;
     }
 
-    public void setDob(String dob) {
-        this.dob = dob;
+    public void setDOB(String dOB) {
+        this.dOB = dOB;
     }
 
     public String getGroupId() {
@@ -97,6 +94,14 @@ public class StudyList {
         this.studyId = studyId;
     }
 
+    public String getStudyName() {
+        return studyName;
+    }
+
+    public void setStudyName(String studyName) {
+        this.studyName = studyName;
+    }
+
     public String getGenBarcodeVal() {
         return genBarcodeVal;
     }
@@ -121,44 +126,28 @@ public class StudyList {
         this.isMapped = isMapped;
     }
 
-    public int getIsDelete() {
-        return isDelete;
+    public Object getIsApproved() {
+        return isApproved;
     }
 
-    public void setIsDelete(int isDelete) {
-        this.isDelete = isDelete;
+    public void setIsApproved(Object isApproved) {
+        this.isApproved = isApproved;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
+    public Object getIsApprovedStudy() {
+        return isApprovedStudy;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
+    public void setIsApprovedStudy(Object isApprovedStudy) {
+        this.isApprovedStudy = isApprovedStudy;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
+    public String getStudyTitle() {
+        return studyTitle;
     }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public String getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
+    public void setStudyTitle(String studyTitle) {
+        this.studyTitle = studyTitle;
     }
 
 }

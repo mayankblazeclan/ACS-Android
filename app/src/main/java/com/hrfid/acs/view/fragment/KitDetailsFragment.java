@@ -108,27 +108,27 @@ public class KitDetailsFragment extends Fragment {
 
                         if (getSubjectDetailsResponse.getStatus().getCODE() == 200) {
 
-                            if(getSubjectDetailsResponse.getStudyList().size() > 0){
+                            if(getSubjectDetailsResponse.getSubjectList().size() > 0){
 
                                 linearLayout.setVisibility(View.VISIBLE);
                                 textView.setVisibility(View.GONE);
 
                                 Logger.logError("getSubjectOnboardingDetails API success status " +
                                         getSubjectDetailsResponse.getStatus());
-                                Logger.logError("getSubjectOnboardingDetails API success getStudyList" +
-                                        getSubjectDetailsResponse.getStudyList());
+                                Logger.logError("getSubjectOnboardingDetails API success getSubjectList" +
+                                        getSubjectDetailsResponse.getSubjectList());
 
                                 getAllStudyID();
 
-                                KitDetailsAdapter customAdapter = new KitDetailsAdapter(getContext(), getSubjectDetailsResponse.getStudyList(), lists);
+                                KitDetailsAdapter customAdapter = new KitDetailsAdapter(getContext(), getSubjectDetailsResponse.getSubjectList(), lists);
                                 recyclerView.setAdapter(customAdapter);
 
 
                             }else {
 
                                 Logger.logError("getSubjectOnboardingDetails API Failure " +
-                                        "getStudyList" +
-                                        getSubjectDetailsResponse.getStudyList());
+                                        "getSubjectList" +
+                                        getSubjectDetailsResponse.getSubjectList());
 
                                 linearLayout.setVisibility(View.GONE);
                                 textView.setVisibility(View.VISIBLE);

@@ -56,6 +56,8 @@ public class SubjectDetailsFragment extends Fragment {
 
         initViews(v);
 
+        getAllStudyID();
+
         getSubjectOnboardingDetails();
 
         return v;
@@ -115,7 +117,7 @@ public class SubjectDetailsFragment extends Fragment {
 
                         if (getSubjectDetailsResponse.getStatus().getCODE() == 200) {
 
-                            if(getSubjectDetailsResponse.getStudyList().size() > 0){
+                            if(getSubjectDetailsResponse.getSubjectList().size() > 0){
 
                                 linearLayout.setVisibility(View.VISIBLE);
                                 textView.setVisibility(View.GONE);
@@ -123,11 +125,11 @@ public class SubjectDetailsFragment extends Fragment {
                                 Logger.logError("getSubjectOnboardingDetails API success status " +
                                         getSubjectDetailsResponse.getStatus());
                                 Logger.logError("getSubjectOnboardingDetails API success getStudyList" +
-                                        getSubjectDetailsResponse.getStudyList());
+                                        getSubjectDetailsResponse.getSubjectList());
 
                                 getAllStudyID();
 
-                                SubjectDetailsAdapter customAdapter = new SubjectDetailsAdapter(getActivity(), getSubjectDetailsResponse.getStudyList(), listStudy, recyclerView);
+                                SubjectDetailsAdapter customAdapter = new SubjectDetailsAdapter(getActivity(), getSubjectDetailsResponse.getSubjectList(), listStudy, recyclerView);
                                 recyclerView.setAdapter(customAdapter);
 
 
@@ -135,7 +137,7 @@ public class SubjectDetailsFragment extends Fragment {
 
                                 Logger.logError("getSubjectOnboardingDetails API Failure " +
                                         "getStudyList" +
-                                        getSubjectDetailsResponse.getStudyList());
+                                        getSubjectDetailsResponse.getSubjectList());
 
                                 linearLayout.setVisibility(View.GONE);
                                 textView.setVisibility(View.VISIBLE);
@@ -211,6 +213,7 @@ public class SubjectDetailsFragment extends Fragment {
                                     for (int i = 0; i < commonResponse.getStudyList().size(); i++) {
 
                                        // lists.add(commonResponse.getStudyList().get(i).getValue());
+                                       // listStudy.add(commonResponse.getStudyList());
 
                                     }
 

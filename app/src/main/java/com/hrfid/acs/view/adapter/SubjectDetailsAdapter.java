@@ -29,20 +29,15 @@ import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
-import com.hrfid.acs.helpers.request.DeleteScheduleRequest;
 import com.hrfid.acs.helpers.request.DeleteSubjectRequest;
-import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.request.GetSubjectDetailsRequest;
 import com.hrfid.acs.helpers.request.MapSubjectDetailsRequest;
 import com.hrfid.acs.helpers.request.MapSubjectRequestModel;
-import com.hrfid.acs.helpers.request.ModifyScheduleRequest;
 import com.hrfid.acs.helpers.request.ModifySubjectRequest;
 import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
 import com.hrfid.acs.helpers.serverResponses.models.DeleteScheduleRequestModel;
-import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetSubjectDetails.GetSubjectDetailsResponse;
-import com.hrfid.acs.helpers.serverResponses.models.GetSubjectDetails.StudyList;
-import com.hrfid.acs.helpers.serverResponses.models.ModifyScheduleRequestModel;
+import com.hrfid.acs.helpers.serverResponses.models.GetSubjectDetails.SubjectList;
 import com.hrfid.acs.helpers.serverResponses.models.ModifySubjectRequestModel;
 import com.hrfid.acs.util.AppConstants;
 import com.hrfid.acs.util.Logger;
@@ -63,19 +58,20 @@ import java.util.List;
 public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAdapter.MyViewHolder> implements AdapterView.OnItemSelectedListener {
 
     //ArrayList personNames;
-    String[] status = { "APPROVED", "REJECTED", "IN_QUEUE"};
+   // String[] status = { "APPROVED", "REJECTED", "IN_QUEUE"};
     Context context;
-    String[] spnGender = {"Male","Female","Other"};
-    String[] spnGroup = {"G1","G2","G3", "G4", "G5"};
+    String[] spnGroupName = {"G1","G2","G3", "G4", "G5"};
+    private String spnSelectedStudyID ="";
+    private String spnSelectedStudyValue ="";
 
-    List<StudyList> studyLists;
+    List<SubjectList> subjectLists;
     private  List<com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList> listStudyID;
-    private  List<Integer> listSpinnerStudyID;
+    //private  List<Integer> listSpinnerStudyID;
     private RecyclerView recyclerView;
 
-    public SubjectDetailsAdapter(Context context, List<StudyList> studyLists, List<com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList> lists, RecyclerView recyclerView) {
+    public SubjectDetailsAdapter(Context context, List<SubjectList> subjectLists, List<com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList> lists, RecyclerView recyclerView) {
         this.context = context;
-        this.studyLists = studyLists;
+        this.subjectLists = subjectLists;
         this.listStudyID = lists;
         this.recyclerView = recyclerView;
     }
@@ -119,34 +115,52 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
       }*/
 
 
-        if(studyLists != null) {
+        if(subjectLists != null) {
 
-            holder.txtScreenId.setText(studyLists.get(position).getScreenId().trim());
+            holder.txtScreenId.setText(subjectLists.get(position).getScreenId().trim());
             holder.txtDob.setText
-                    (Utilities.splitDateFromDesired(studyLists.get(position).getDob()));
-            holder.txtGroup.setText("" + studyLists.get(position).getGroupId());
-            holder.txtGender.setText("" + studyLists.get(position).getGender());
-            holder.txtStudyId.setText("" + studyLists.get(position).getStudyId());
-            if (studyLists.get(position).getStatus().equalsIgnoreCase("In_Screening")) {
+                    (Utilities.splitDateFromDesired(subjectLists.get(position).getDOB()));
+            holder.txtGroup.setText("" + subjectLists.get(position).getGroupId());
+            holder.txtGender.setText("" + subjectLists.get(position).getGender());
+            holder.txtStudyId.setText("" +subjectLists.get(position).getStudyTitle()+ "("+ subjectLists.get(position).getStudyName()+")");
+
+
+            if (subjectLists.get(position).getStatus().equalsIgnoreCase("In_Screening")) {
                 holder.txtStatus.setText("In_Screening");
                 holder.txtStatus.setTextColor(Color.parseColor("#5AA105"));
-            } else if (studyLists.get(position).getStatus().equalsIgnoreCase("INACTIVE")) {
-                holder.txtStatus.setText("INACTIVE");
+            } else if (subjectLists.get(position).getStatus().equalsIgnoreCase("In_Trial")) {
+                holder.txtStatus.setText("In_Trial");
+                holder.txtStatus.setTextColor(Color.BLUE);
+            } else if (subjectLists.get(position).getStatus().equalsIgnoreCase("Rejected")) {
+                holder.txtStatus.setText("Rejected");
                 holder.txtStatus.setTextColor(Color.RED);
-            } else {
+            }else {
                 holder.txtStatus.setText("In_Queue");
                 holder.txtStatus.setTextColor(Color.parseColor("#F9980B"));
             }
 
-            if(studyLists.get(position).getIsMapped() == 1){
+            if(subjectLists.get(position).getIsMapped() == 1){
 
                 holder.btnMap.setVisibility(View.GONE);
                 holder.btnDelete.setVisibility(View.GONE);
 
-            }else {
+            }
+            else {
 
+                holder.btnModify.setVisibility(View.VISIBLE);
                 holder.btnMap.setVisibility(View.VISIBLE);
                 holder.btnDelete.setVisibility(View.VISIBLE);
+            }
+
+            if(subjectLists.get(position).getStatus().equalsIgnoreCase("In_Trial")
+             || subjectLists.get(position).getStatus().equalsIgnoreCase("Rejected")){
+
+                holder.btnMap.setVisibility(View.GONE);
+                holder.btnDelete.setVisibility(View.GONE);
+                holder.btnModify.setVisibility(View.GONE);
+
+            }else {
+
             }
 
         }
@@ -159,13 +173,13 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
                // showModifyDialog(studyLists.get(position), lists);
 
-                if(studyLists.get(position).getIsMapped() == 1){
+                if(subjectLists.get(position).getIsMapped() == 1){
 
-                    showModifyDialogWithMapped(studyLists.get(position), listStudyID);
+                    showModifyDialogWithMapped(subjectLists.get(position), listStudyID);
 
                 }else {
 
-                    showModifyDialog(studyLists.get(position), listStudyID);
+                    showModifyDialog(subjectLists.get(position), listStudyID);
                 }
             }
         });
@@ -176,7 +190,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
                 //showDeleteDialog();
 
-                showDeleteDialog(studyLists.get(position).getId());
+                showDeleteDialog(subjectLists.get(position).getId());
             }
         });
 
@@ -195,7 +209,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
                                 dialog.dismiss();
                                 //CALL MAP API
-                                callSubjectMapAPI(studyLists.get(position).getId());
+                                callSubjectMapAPI(subjectLists.get(position).getId());
 
                             }
                         }, new DialogInterface.OnClickListener() {
@@ -291,12 +305,37 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
     @Override
     public int getItemCount() {
-        return studyLists.size();
+        return subjectLists.size();
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         //  Toast.makeText(context,status[position] , Toast.LENGTH_SHORT).show();
+
+        switch(parent.getId()){
+            case R.id.spnGroup:
+                //Your Action Here.spnGroups.getSelectedItem().toString() spnStatusId
+                //Toast.makeText(context, parent.getSelectedItem().toString() , Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.spnStatusId:
+                //Your Action Here.spnGroups.getSelectedItem().toString() spnStatusId
+               // Toast.makeText(context, parent.getSelectedItem().toString() , Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.spnStudyId :
+                //Your Action Here.
+                if(position !=0) {
+                    spnSelectedStudyID = String.valueOf(listStudyID.get(position - 1).getStudyId());
+                    spnSelectedStudyValue = String.valueOf(listStudyID.get(position - 1).getValue());
+                    //Toast.makeText(context, spnSelectedStudyID, Toast.LENGTH_SHORT).show();
+                }else {
+                    spnSelectedStudyID = String.valueOf(listStudyID.get(position).getStudyId());
+                    spnSelectedStudyValue = String.valueOf(listStudyID.get(position).getValue());
+                    //Toast.makeText(context, spnSelectedStudyID, Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
     }
 
     @Override
@@ -333,18 +372,18 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
                 public void onClick(View v) {
                     //viewScreenStudyFragmentAdapter.removeItem(getAdapterPosition());
 
-                    showDeleteDialog(studyLists.get(getAdapterPosition()).getId());
+                    showDeleteDialog(subjectLists.get(getAdapterPosition()).getId());
                 }
             });
         }
     }
 
-    private void showModifyDialogWithMapped(final StudyList studyList, List<com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList> lists) {
+    private void showModifyDialogWithMapped(final SubjectList studyList, List<com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList> lists) {
 
         final EditText edtScreenId;
 
-        listSpinnerStudyID = new ArrayList<>();
-        listSpinnerStudyID.add(studyList.getStudyId());
+       /* listSpinnerStudyID = new ArrayList<>();
+        listSpinnerStudyID.add(studyList.getStudyId());*/
 
 
         // Create custom dialog object
@@ -363,13 +402,16 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         edtScreenId.setText(studyList.getScreenId());
         edtScreenId.setEnabled(false);
 
-        Spinner spnStatus = (Spinner) dialog.findViewById(R.id.spnStatusId);
+         final Spinner spnStatus = (Spinner) dialog.findViewById(R.id.spnStatusId);
         spnStatus.setOnItemSelectedListener(this);
 
-
+        String[] status;
         if(studyList.getStatus().equalsIgnoreCase("In_Screening")){
             status = new String[]{"APPROVE", "REJECT"};
-        }/*else if(studyList.getStatus().equalsIgnoreCase("INACTIVE")){
+        }else {
+            status = new String[]{"APPROVE", "REJECT"};
+        }
+            /*else if(studyList.getStatus().equalsIgnoreCase("INACTIVE")){
             status = new String[]{"INACTIVE", "In_Screening", "In_Queue"};
         }else if(studyList.getStatus().equalsIgnoreCase("INQUEUE")){
             status = new String[]{"In_Queue", "INACTIVE", "In_Screening"};
@@ -377,10 +419,11 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
         }*/
 
-        if(listSpinnerStudyID.get(0).equals(status)){
+
+    /*    if(listSpinnerStudyID.get(0).equals(status)){
 
             Logger.log("Element found :"+status);
-        }
+        }*/
 
         //Creating the ArrayAdapter instance having the country list
         ArrayAdapter adpStatus = new ArrayAdapter(context,android.R.layout.simple_spinner_item, status);
@@ -396,6 +439,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
             public void onClick(View v) {
                 // Close dialog
                 dialog.dismiss();
+                callModifySubjectWithMappedAPI(studyList, spnStatus.getSelectedItem().toString());
             }
         });
 
@@ -411,7 +455,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         });
     }
 
-    private void showModifyDialog(final StudyList studyList, List<com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList> lists) {
+    private void showModifyDialog(final SubjectList subjectList, List<com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList> lists) {
 
         final ImageButton txt_dob;
         final TextView txtDob;
@@ -420,8 +464,8 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         final int[] mDay = new int[1];
         final EditText edtScreenId;
 
-        listSpinnerStudyID = new ArrayList<>();
-        listSpinnerStudyID.add(studyList.getStudyId());
+        /*listSpinnerStudyID = new ArrayList<>();
+        listSpinnerStudyID.add(studyList.getStudyId());*/
 
 
         // Create custom dialog object
@@ -437,7 +481,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         //Adding value for ScreenID
 
         edtScreenId = dialog.findViewById(R.id.edtScreenId);
-        edtScreenId.setText(studyList.getScreenId());
+        edtScreenId.setText(subjectList.getScreenId());
         edtScreenId.setEnabled(false);
 
   /*      //Getting the instance of Spinner and applying OnItemSelectedListener on it
@@ -456,7 +500,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         //Spinner spnStatus = (Spinner) dialog.findViewById(R.id.spnStatusId);
         //spnStatus.setOnItemSelectedListener(this);
 
-
+/*
         if(studyList.getStatus().equalsIgnoreCase("ACTIVE")){
             status = new String[]{"ACTIVE", "INACTIVE", "IN_QUEUE"};
         }else if(studyList.getStatus().equalsIgnoreCase("INACTIVE")){
@@ -465,12 +509,12 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
             status = new String[]{"IN_QUEUE", "INACTIVE", "ACTIVE"};
         }else {
 
-        }
+        }*/
 
-        if(listSpinnerStudyID.get(0).equals(status)){
+       /* if(listSpinnerStudyID.get(0).equals(status)){
 
             Logger.log("Element found :"+status);
-        }
+        }*/
 
         //Creating the ArrayAdapter instance having the country list
         /*ArrayAdapter adpStatus = new ArrayAdapter(context,android.R.layout.simple_spinner_item, status);
@@ -484,7 +528,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         //Setting the ArrayAdapter data on the Spinner
         spnBloodGroups.setAdapter(bloodGroupAdp);*/
 
-        if(studyList.getGender().equalsIgnoreCase("MALE")){
+     /*   if(studyList.getGender().equalsIgnoreCase("MALE")){
             spnGender = new String[]{"MALE", "FEMALE", "OTHER"};
         }else if(studyList.getGender().equalsIgnoreCase("FEMALE")){
             spnGender = new String[]{"FEMALE", "MALE", "OTHER"};
@@ -493,17 +537,35 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         }else {
 
         }
-
+*/
      /*   ArrayAdapter genderAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, spnGender);
         genderAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnPersonGender.setAdapter(genderAdp);*/
 
         List<String> lists1 = new ArrayList<>();
+        String s = subjectList.getStudyTitle()+ "("+String.valueOf(subjectList.getStudyName())+")";
+
+        lists1.add(s);
+        //System.out.println("listStudyID (1) :" + String.valueOf(subjectList.getStudyName()));
 
         for (int i = 0; i < listStudyID.size(); i++) {
+            if (!s.equalsIgnoreCase(listStudyID.get(i).getLabel())) {
+                lists1.add(listStudyID.get(i).getLabel());
+                //System.out.println("listStudyID name :" + listStudyID.get(i).getLabel());
+            }
+        }
 
-            lists1.add(listStudyID.get(i).getLabel());
 
+        List<String> listsGroup = new ArrayList<>();
+
+        listsGroup.add(subjectList.getGroupId());
+        //System.out.println("listsGroup (1) :" + String.valueOf(subjectList.getStudyName()));
+
+        for (int i = 0; i < 5; i++) {
+                if(!subjectList.getGroupId().equalsIgnoreCase(spnGroupName[i])) {
+                    listsGroup.add(spnGroupName[i]);
+                   // System.out.println("spnGroupName[i] Group :" + spnGroupName[i]);
+                }
         }
 
 
@@ -513,13 +575,13 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         spnStudyIDs.setAdapter(studyIdAdp);
 
 
-        ArrayAdapter groupAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, spnGroup);
+        ArrayAdapter groupAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, listsGroup);
         groupAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnGroups.setAdapter(groupAdp);
 
         txt_dob=(ImageButton)dialog.findViewById(R.id.btn_dob);
         txtDob=(TextView)dialog.findViewById(R.id.txt_dob);
-        txtDob.setText(Utilities.splitDateFromDesired(studyList.getDob()));
+        txtDob.setText(Utilities.splitDateFromDesired(subjectList.getDOB()));
 
         txt_dob.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -583,7 +645,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
             @Override
             public void onClick(View v) {
                 // Close dialog
-                dialog.dismiss();
+
 
                // callModifySubjectAPI(String studyName, String strStudyId, String strDoctorCode, String startDate, String endDate, String status, int id)
 
@@ -604,13 +666,12 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
                     if(date1.compareTo(sysDate) >0) {
 
-
                         Toast.makeText(context,"Please select correct Date of Birth",Toast.LENGTH_SHORT).show();
 
                     }else {
 
-
-                        callModifySubjectAPI(studyList, spnGroups.getSelectedItem().toString(), spnStudyIDs.getSelectedItem().toString());
+                        dialog.dismiss();
+                        callModifySubjectAPI(subjectList, spnGroups.getSelectedItem().toString(), spnStudyIDs.getSelectedItem().toString(), spnSelectedStudyID, spnSelectedStudyValue, txtDob.getText().toString());
                     }
 
                 }else {
@@ -632,31 +693,6 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
             }
         });
     }
-
-
-    /*private void showDeleteDialog() {
-
-        Utils.createDialogTwoButtons(
-                context, context.getString(R.string.study_delete),
-                true, context.getString(R.string.delete_study_message),
-                context.getString(R.string.dlg_yes_text),
-                context.getString(R.string.dlg_no_text), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        //CALL DELETE API
-                        dialog.dismiss();
-                    }
-                }, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        dialog.dismiss();
-
-                    }
-                });
-    }
-*/
 
     //Call getSubjectOnboardingDetails API
     private void getSubjectOnboardingDetails() {
@@ -685,7 +721,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
                         if (getSubjectDetailsResponse.getStatus().getCODE() == 200) {
 
-                            if(getSubjectDetailsResponse.getStudyList().size() > 0){
+                            if(getSubjectDetailsResponse.getSubjectList().size() > 0){
 
                                // linearLayout.setVisibility(View.VISIBLE);
                                 //textView.setVisibility(View.GONE);
@@ -693,11 +729,11 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
                                 Logger.logError("getSubjectOnboardingDetails API success status " +
                                         getSubjectDetailsResponse.getStatus());
                                 Logger.logError("getSubjectOnboardingDetails API success getStudyList" +
-                                        getSubjectDetailsResponse.getStudyList());
+                                        getSubjectDetailsResponse.getSubjectList());
 
                                 //getAllStudyID();
 
-                                SubjectDetailsAdapter customAdapter = new SubjectDetailsAdapter(context, getSubjectDetailsResponse.getStudyList(), listStudyID, recyclerView);
+                                SubjectDetailsAdapter customAdapter = new SubjectDetailsAdapter(context, getSubjectDetailsResponse.getSubjectList(), listStudyID, recyclerView);
                                 recyclerView.setAdapter(customAdapter);
 
 
@@ -705,7 +741,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
                                 Logger.logError("getSubjectOnboardingDetails API Failure " +
                                         "getStudyList" +
-                                        getSubjectDetailsResponse.getStudyList());
+                                        getSubjectDetailsResponse.getSubjectList());
 
                                // linearLayout.setVisibility(View.GONE);
                                 //textView.setVisibility(View.VISIBLE);
@@ -847,7 +883,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
 
 
-    private void callModifySubjectAPI(StudyList studyList, String groupItem, String studyIdSelected) {
+    private void callModifySubjectAPI(SubjectList studyList, String spnGroups, String spnStudyIDLabel, String studyID, String spnSelectedStudyValue, String dob) {
 
         ModifySubjectRequestModel modifySubjectRequestModel = new ModifySubjectRequestModel();
         modifySubjectRequestModel.setAppName(AppConstants.APP_NAME);
@@ -862,11 +898,11 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
         modifySubjectRequestModel.setStatus(studyList.getStatus());
         modifySubjectRequestModel.setId(studyList.getId());
-        modifySubjectRequestModel.setStudyId(studyIdSelected);
-        modifySubjectRequestModel.setGroup(groupItem);
+        modifySubjectRequestModel.setStudyId(spnSelectedStudyValue);
+        modifySubjectRequestModel.setGroup(spnGroups);
         modifySubjectRequestModel.setIsMapped(studyList.getIsMapped());
-        modifySubjectRequestModel.setStudyName(studyList.getScreenId());
-        modifySubjectRequestModel.setDob(studyList.getDob());
+        modifySubjectRequestModel.setStudyName(studyID);
+        modifySubjectRequestModel.setDob(dob);
         //modifySubjectRequestModel.setIsApproved("");
 
         new NetworkingHelper(new ModifySubjectRequest((Activity) context, true, modifySubjectRequestModel)) {
@@ -913,6 +949,105 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
                                     commonResponse.getResponse().get(0).getMessage());
 
                             Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
+                        }
+
+
+
+                    }
+                    catch (Exception e){
+                        Logger.logError("modifySubject Exception " + e.getMessage());
+                    }
+
+                } else {
+                    Logger.logError("modifySubject API Failure4 " +
+                            serverResponse.errorMessageToDisplay);
+                }
+            }
+        };
+
+    }
+
+
+
+
+    private void callModifySubjectWithMappedAPI(SubjectList studyList, String spnStatus) {
+
+        ModifySubjectRequestModel modifySubjectRequestModel = new ModifySubjectRequestModel();
+        modifySubjectRequestModel.setAppName(AppConstants.APP_NAME);
+        modifySubjectRequestModel.setVersionNumber(AppConstants.APP_VERSION);
+        modifySubjectRequestModel.setDeviceType(AppConstants.APP_OS);
+        modifySubjectRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
+        modifySubjectRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(context));
+        modifySubjectRequestModel.setUserRole(new PrefManager(context).getUserRoleType());
+        modifySubjectRequestModel.setTagId(new PrefManager(context).getBarCodeValue());
+
+        modifySubjectRequestModel.setUserName(new PrefManager(context).getUserName());
+
+       // modifySubjectRequestModel.setStatus(spnStatus);
+        modifySubjectRequestModel.setId(studyList.getId());
+        modifySubjectRequestModel.setGroup(studyList.getGroupId());
+        modifySubjectRequestModel.setIsMapped(studyList.getIsMapped());
+        modifySubjectRequestModel.setDob(studyList.getDOB());
+
+
+        modifySubjectRequestModel.setStudyName(""+studyList.getStudyName());
+        modifySubjectRequestModel.setStudyId(String.valueOf(studyList.getStudyId()));
+
+        if(spnStatus.equalsIgnoreCase("APPROVE")){
+            modifySubjectRequestModel.setIsApproved("1");
+            modifySubjectRequestModel.setStatus("In_Trial");
+            modifySubjectRequestModel.setEvent(AppConstants.SUBJECT_APPROVE);
+        }else {
+            modifySubjectRequestModel.setIsApproved("0");
+            modifySubjectRequestModel.setStatus("Rejected");
+            modifySubjectRequestModel.setEvent(AppConstants.SUBJECT_REJECT);
+        }
+        //modifySubjectRequestModel.setIsApproved("");
+
+        new NetworkingHelper(new ModifySubjectRequest((Activity) context, true, modifySubjectRequestModel)) {
+
+            @Override
+            public void serverResponseFromApi(ApiResponse serverResponse) {
+                if (serverResponse.isSucess) {
+
+                    try {
+
+                        CommonResponse commonResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, CommonResponse.class);
+
+                        if (commonResponse.getStatus().getCODE() == 200) {
+
+                            if(commonResponse.getResponse().get(0).isStatus()){
+
+                                Logger.logError("modifySubject API success " +
+                                        commonResponse.getResponse().get(0).isStatus());
+                                Logger.logError("modifySubject API success " +
+                                        commonResponse.getResponse().get(0).getMessage());
+
+
+                                Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
+                                getSubjectOnboardingDetails();
+                                //viewScreenStudyFragmentAdapter.notifyDataSetChanged();
+
+
+                            }else {
+
+                                Logger.logError("modifySubject API Failure1 " +
+                                        commonResponse.getResponse().get(0).isStatus());
+                                Logger.logError("modifySubject API Failure2 " +
+                                        commonResponse.getResponse().get(0).getMessage());
+
+                                Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
+                            }
+
+                        }else {
+
+                            Logger.logError("modifySubject API Failure3 " +
+                                    commonResponse.getResponse().get(0).isStatus());
+                            Logger.logError("modifySubject API Failure4 " +
+                                    commonResponse.getResponse().get(0).getMessage());
+
+                            Utils.showAlertDialog((Activity) context,  commonResponse.getStatus().geteRROR());
                         }
 
 

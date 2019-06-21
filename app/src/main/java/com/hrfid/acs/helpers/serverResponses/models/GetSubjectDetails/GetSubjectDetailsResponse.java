@@ -10,9 +10,9 @@ public class GetSubjectDetailsResponse {
     @SerializedName("status")
     @Expose
     private Status status;
-    @SerializedName("studyList")
+    @SerializedName("subjectList")
     @Expose
-    private List<StudyList> studyList = null;
+    private List<SubjectList> subjectList = null;
 
     public Status getStatus() {
         return status;
@@ -22,12 +22,12 @@ public class GetSubjectDetailsResponse {
         this.status = status;
     }
 
-    public List<StudyList> getStudyList() {
-        return studyList;
+    public List<SubjectList> getSubjectList() {
+        return subjectList;
     }
 
-    public void setStudyList(List<StudyList> studyList) {
-        this.studyList = studyList;
+    public void setSubjectList(List<SubjectList> subjectList) {
+        this.subjectList = subjectList;
     }
 
 }

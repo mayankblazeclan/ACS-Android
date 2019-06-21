@@ -182,10 +182,12 @@ public class LicenseKeyActivity extends BaseActivity implements
             case Constants.DEVICE_RFID_SCAN_ACTIVITY:
                 Intent intent = new Intent(LicenseKeyActivity.this, SelectRoleActivity.class);
                 startActivity(intent);
+                finish();
                 break;
             case Constants.MAIN_ACTIVITY:
                 Intent intentDeviceName = new Intent(LicenseKeyActivity.this, SelectRoleActivity.class);
                 startActivity(intentDeviceName);
+                finish();
                 break;
         }
 

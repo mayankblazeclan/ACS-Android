@@ -51,8 +51,8 @@ public class SeniorSubjectOnBoardingActivity extends BaseActivity {
 
     private static final String TAG = "SeniorSubjectOnBoardingActivity";
     ViewPager viewPager;
-    SearchView searchView;
-    MenuItem searchViewItem;
+    //SearchView searchView;
+   // MenuItem searchViewItem;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,11 +100,11 @@ public class SeniorSubjectOnBoardingActivity extends BaseActivity {
                             Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
 
-                    searchView.setVisibility(View.VISIBLE);
-                    searchViewItem.setVisible(true);
+                   // searchView.setVisibility(View.VISIBLE);
+                   // searchViewItem.setVisible(true);
                 }else {
-                    searchView.setVisibility(View.INVISIBLE);
-                    searchViewItem.setVisible(false);
+                   // searchView.setVisibility(View.INVISIBLE);
+                   // searchViewItem.setVisible(false);
                 }
 
             }
@@ -114,11 +114,11 @@ public class SeniorSubjectOnBoardingActivity extends BaseActivity {
                     final InputMethodManager imm = (InputMethodManager)getSystemService(
                             Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
-                    searchView.setVisibility(View.VISIBLE);
-                    searchViewItem.setVisible(true);
+                   // searchView.setVisibility(View.VISIBLE);
+                   // searchViewItem.setVisible(true);
                 }else {
-                    searchView.setVisibility(View.INVISIBLE);
-                    searchViewItem.setVisible(false);
+                   // searchView.setVisibility(View.INVISIBLE);
+                    //searchViewItem.setVisible(false);
                 }
 
             }
@@ -128,11 +128,11 @@ public class SeniorSubjectOnBoardingActivity extends BaseActivity {
                     final InputMethodManager imm = (InputMethodManager)getSystemService(
                             Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
-                    searchView.setVisibility(View.VISIBLE);
-                    searchViewItem.setVisible(true);
+                   // searchView.setVisibility(View.VISIBLE);
+                    //searchViewItem.setVisible(true);
                 }else {
-                    searchView.setVisibility(View.INVISIBLE);
-                    searchViewItem.setVisible(false);
+                   // searchView.setVisibility(View.INVISIBLE);
+                  //  searchViewItem.setVisible(false);
                 }
 
             }
@@ -148,7 +148,9 @@ public class SeniorSubjectOnBoardingActivity extends BaseActivity {
         notificaitons.setVisibility(View.GONE);
         menu.findItem(R.id.action_notification).setVisible(false);
         return true;*/
+        getMenuInflater().inflate(R.menu.menu_with_search_logout, menu);
 
+         /*
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_with_search_logout, menu);
         searchViewItem = menu.findItem(R.id.app_bar_search);
@@ -158,15 +160,15 @@ public class SeniorSubjectOnBoardingActivity extends BaseActivity {
         searchClose.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
         searchView.setVisibility(View.INVISIBLE);
         searchViewItem.setVisible(false);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+      searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searchView.clearFocus();
-             /*   if(list.contains(query)){
+                if(list.contains(query)){
                     adapter.getFilter().filter(query);
                 }else{
                     Toast.makeText(MainActivity.this, "No Match found",Toast.LENGTH_LONG).show();
-                }*/
+                }
                 return false;
 
             }
@@ -176,7 +178,7 @@ public class SeniorSubjectOnBoardingActivity extends BaseActivity {
                 //adapter.getFilter().filter(newText);
                 return false;
             }
-        });
+        });*/
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -190,6 +192,23 @@ public class SeniorSubjectOnBoardingActivity extends BaseActivity {
         int id = item.getItemId();
         //Logout Functionality
         if (id == R.id.action_logout) {
+            //Toast.makeText(SeniorStaffHomeActivity.this, "Logout tapped", Toast.LENGTH_LONG).show();
+            Utils.createDialogTwoButtons(SeniorSubjectOnBoardingActivity.this, getString(R.string.settings_logout), true, getString(R.string.logout_message), getString(R.string.dlg_yes_text), getString(R.string.dlg_no_text), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    if (Utilities.isNetworkConnected(SeniorSubjectOnBoardingActivity.this)) {
+                        callLogout();
+                    } else {
+                        Utils.showAlertDialog(SeniorSubjectOnBoardingActivity.this, getString(R.string.no_internet_connection));
+                    }
+
+                }
+            }, null);
+            return true;
+        }
+
+        if (id == R.id.app_bar_search) {
             //Toast.makeText(SeniorStaffHomeActivity.this, "Logout tapped", Toast.LENGTH_LONG).show();
             Utils.createDialogTwoButtons(SeniorSubjectOnBoardingActivity.this, getString(R.string.settings_logout), true, getString(R.string.logout_message), getString(R.string.dlg_yes_text), getString(R.string.dlg_no_text), new DialogInterface.OnClickListener() {
                 @Override

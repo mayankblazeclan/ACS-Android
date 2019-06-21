@@ -159,7 +159,7 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
             case R.id.spnStatusId :
                 //Your Action Here.
                 spnSelectedStudyID = String.valueOf(listStudy.get(position).getValue());
-                Toast.makeText(getContext(), spnSelectedStudyID , Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getContext(), spnSelectedStudyID , Toast.LENGTH_SHORT).show();
                 break;
         }
     }

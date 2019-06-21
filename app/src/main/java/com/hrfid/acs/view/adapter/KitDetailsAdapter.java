@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.hrfid.acs.R;
-import com.hrfid.acs.helpers.serverResponses.models.GetSubjectDetails.StudyList;
+import com.hrfid.acs.helpers.serverResponses.models.GetSubjectDetails.SubjectList;
 import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
@@ -46,11 +45,11 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
 
     String[] spnGroup = {"G1","G2","G3", "G4", "G5"};
 
-    List<StudyList> studyLists;
+    List<SubjectList> studyLists;
     private  List<Integer> lists;
     private  List<Integer> listSpinnerStudyID;
 
-    public KitDetailsAdapter(Context context, List<StudyList> studyLists, List<Integer> lists) {
+    public KitDetailsAdapter(Context context, List<SubjectList> studyLists, List<Integer> lists) {
         this.context = context;
         this.studyLists = studyLists;
         this.lists = lists;
@@ -177,7 +176,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         }
     }
 
-    private void showModifyDialog(final StudyList studyList, List<Integer> lists) {
+    private void showModifyDialog(final SubjectList studyList, List<Integer> lists) {
 
         final ImageButton txt_dob;
         final TextView txtStartDate, txtDob;
@@ -272,7 +271,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
 
         txt_dob=(ImageButton)dialog.findViewById(R.id.btn_dob);
         txtDob=(TextView)dialog.findViewById(R.id.txt_dob);
-        txtDob.setText(Utilities.splitDateFromDesired(studyList.getDob()));
+        txtDob.setText(Utilities.splitDateFromDesired(studyList.getDOB()));
 
         txt_dob.setOnClickListener(new View.OnClickListener() {
             @Override
