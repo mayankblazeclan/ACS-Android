@@ -12,12 +12,14 @@ import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.request.GetNotificationRequest;
 import com.hrfid.acs.helpers.request.GetScheduleRequest;
 import com.hrfid.acs.helpers.request.GetSubjectDetailsRequest;
+import com.hrfid.acs.helpers.request.IdentifySubjectRequest;
 import com.hrfid.acs.helpers.request.LogoutRequest;
 import com.hrfid.acs.helpers.request.MapSubjectDetailsRequest;
 import com.hrfid.acs.helpers.request.MapSubjectRequestModel;
 import com.hrfid.acs.helpers.request.ModifyScheduleRequest;
 import com.hrfid.acs.helpers.request.ModifySubjectRequest;
 import com.hrfid.acs.helpers.request.ResetNotificationCountRequest;
+import com.hrfid.acs.helpers.request.SearchSubjectRequest;
 import com.hrfid.acs.helpers.serverResponses.ErrorArrayResponse;
 import com.hrfid.acs.helpers.serverResponses.ErrorObjectResponse;
 import com.hrfid.acs.util.Logger;
@@ -61,6 +63,8 @@ public abstract class NetworkingHelper {
   public static final int MAP_SUBJECT_DETAILS = 12;
   public static final int DELETE_SUBJECT = 13;
   public static final int MODIFY_SUBJECT = 14;
+  public static final int SEARCH_SUBJECT_ONBOARDING = 15;
+  public static final int IDENTIFY_SUBJECT_ONBOARDING = 16;
 
 
     private Call<ResponseBody> apiInterface;
@@ -143,6 +147,18 @@ public abstract class NetworkingHelper {
       case MODIFY_SUBJECT:
         ModifySubjectRequest modifySubjectRequest = (ModifySubjectRequest) cmgRequest;
         apiInterface = ApiRouter.get().getRetrofitService().modifySubject(modifySubjectRequest.modifySubjectRequestModel);
+        break;
+
+      //searchSubject
+      case SEARCH_SUBJECT_ONBOARDING:
+        SearchSubjectRequest searchSubjectRequest = (SearchSubjectRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().searchSubject(searchSubjectRequest.searchSubjectRequestModel);
+        break;
+
+      //verifySubjectBarcode
+      case IDENTIFY_SUBJECT_ONBOARDING:
+        IdentifySubjectRequest identifySubjectRequest = (IdentifySubjectRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().verifySubjectBarcode(identifySubjectRequest.searchSubjectRequestModel);
         break;
 
       default:

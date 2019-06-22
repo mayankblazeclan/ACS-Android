@@ -26,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hrfid.acs.R;
@@ -63,8 +64,8 @@ public class SeniorSubjectOnBoardingActivity extends BaseActivity {
         toolbar.setTitle("Subject OnBoarding");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setHomeButtonEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,6 +151,18 @@ public class SeniorSubjectOnBoardingActivity extends BaseActivity {
         return true;*/
         getMenuInflater().inflate(R.menu.menu_with_search_logout, menu);
 
+       /* final View searchView = menu.findItem(R.id.app_bar_search).getActionView();
+
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               // txtViewCount.setVisibility(View.GONE);
+                //Toast.makeText(SeniorStaffHomeActivity.this, "Notification tapped", Toast.LENGTH_LONG).show();
+                Intent mNextActivity = new Intent(SeniorSubjectOnBoardingActivity.this, SearchSubjectActivity.class);
+                startActivity(mNextActivity);
+            }
+        });*/
+
          /*
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_with_search_logout, menu);
@@ -180,7 +193,9 @@ public class SeniorSubjectOnBoardingActivity extends BaseActivity {
             }
         });*/
 
-        return super.onCreateOptionsMenu(menu);
+       // return super.onCreateOptionsMenu(menu);
+
+        return true;
     }
 
 
@@ -210,18 +225,8 @@ public class SeniorSubjectOnBoardingActivity extends BaseActivity {
 
         if (id == R.id.app_bar_search) {
             //Toast.makeText(SeniorStaffHomeActivity.this, "Logout tapped", Toast.LENGTH_LONG).show();
-            Utils.createDialogTwoButtons(SeniorSubjectOnBoardingActivity.this, getString(R.string.settings_logout), true, getString(R.string.logout_message), getString(R.string.dlg_yes_text), getString(R.string.dlg_no_text), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                    if (Utilities.isNetworkConnected(SeniorSubjectOnBoardingActivity.this)) {
-                        callLogout();
-                    } else {
-                        Utils.showAlertDialog(SeniorSubjectOnBoardingActivity.this, getString(R.string.no_internet_connection));
-                    }
-
-                }
-            }, null);
+            Intent mNextActivity = new Intent(SeniorSubjectOnBoardingActivity.this, IdentifySubjectActivity.class);
+            startActivity(mNextActivity);
             return true;
         }
 
@@ -303,9 +308,9 @@ public class SeniorSubjectOnBoardingActivity extends BaseActivity {
         this.finish();
     }
 
-    @Override
+   /* @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
-    }
+    }*/
 }

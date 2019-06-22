@@ -5,8 +5,10 @@ import com.hrfid.acs.helpers.request.AddSubjectRequestModel;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.CreateScheduleModel;
 import com.hrfid.acs.helpers.request.CreateScheduleRequest;
+import com.hrfid.acs.helpers.request.IdentifySubjectRequestModel;
 import com.hrfid.acs.helpers.request.LogoutRequest;
 import com.hrfid.acs.helpers.request.MapSubjectRequestModel;
+import com.hrfid.acs.helpers.request.SearchSubjectRequestModel;
 import com.hrfid.acs.helpers.serverResponses.models.DeleteScheduleRequestModel;
 import com.hrfid.acs.helpers.serverResponses.models.ModifyScheduleRequestModel;
 import com.hrfid.acs.helpers.serverResponses.models.ModifySubjectRequestModel;
@@ -81,6 +83,14 @@ public interface APIService {
   //deleteSubject
   @POST("/acs/api/modifySubject")
   Call<ResponseBody> modifySubject(@Body ModifySubjectRequestModel modifySubjectRequestModel);
+
+  //searchSubject
+  @POST("/acs/api/searchSubject")
+  Call<ResponseBody> searchSubject(@Body SearchSubjectRequestModel searchSubjectRequestModel);
+
+  //verifySubjectBarcode
+  @POST("/acs/api/verifySubjectBarcode")
+  Call<ResponseBody> verifySubjectBarcode(@Body IdentifySubjectRequestModel identifySubjectRequestModel);
 
  /* @POST("api/facebook/fblogin")
   Call<ResponseBody> loginFBToSSOAPI(@Body RequestBody body);

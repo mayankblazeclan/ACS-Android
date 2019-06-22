@@ -25,32 +25,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:layout_gravity="center"
-android:gravity="center"
+        android:weightSum="3"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_10dp"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_marginLeft="@dimen/activity_5dp_margin"
-            android:text="@string/study_id"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_margin="@dimen/activity_5dp_margin"
+                android:text="@string/study_id"/>
 
 
-        <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/spnStudyId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/spinner_background"
-            android:layout_margin="@dimen/activity_5dp_margin" />
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spnStudyId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/spinner_background"
+                android:layout_margin="@dimen/activity_5dp_margin" />
 
         </LinearLayout>
 
@@ -58,15 +59,17 @@ android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_10dp"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_marginLeft="@dimen/activity_5dp_margin"
+                android:layout_margin="@dimen/activity_5dp_margin"
                 android:textAllCaps="true"
                 android:text="@string/group"/>
 
@@ -81,13 +84,17 @@ android:gravity="center"
         </LinearLayout>
 
         <Button
+            android:id="@+id/btnSubmit"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/colorBCRed"
             android:textSize="20sp"
-            android:layout_margin="@dimen/margin_10dp"
+            android:padding="@dimen/margin_10dp"
             android:textColor="@color/white"
             android:textStyle="bold"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_gravity="center"
             android:text="SEARCH"/>
 
     </LinearLayout>
@@ -96,7 +103,7 @@ android:gravity="center"
         android:id="@+id/llRec"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"
+        android:visibility="gone"
         android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
@@ -109,10 +116,10 @@ android:gravity="center"
     </LinearLayout>
 
     <TextView
-        android:id="@+id/txtNoNotification"
+        android:id="@+id/txtNoData"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/no_notification_to_display"
+        android:text="@string/no_data_available"
         android:layout_gravity="center"
         android:layout_margin="@dimen/activity_5dp_margin"
         android:visibility="gone"

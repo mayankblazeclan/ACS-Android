@@ -72,13 +72,22 @@ public class NurseStaffHomeActivity extends BaseActivity {
 
         StaffItemAdapter staffItemAdapter=new StaffItemAdapter(this,R.layout.activity_staff_grid_items, staffItemList);
         gridView.setAdapter(staffItemAdapter);
-
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int i, long id) {
-                Toast.makeText(NurseStaffHomeActivity.this, "Tapped On " + staffItemList.get(i).getTagName(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(NurseStaffHomeActivity.this, "Tapped On " + staffItemList.get(i).getTagName(), Toast.LENGTH_LONG).show();
+
+                if(i==0){
+
+                    //Toast.makeText(SeniorStaffHomeActivity.this, "Tapped On Create Study", Toast.LENGTH_LONG).show();
+
+                    Intent mNextActivity = new Intent(NurseStaffHomeActivity.this, IdentifySubjectActivity.class);
+                    startActivity(mNextActivity);
+
+
+                }
             }
         });
     }
