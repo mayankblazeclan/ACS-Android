@@ -44,8 +44,8 @@ public class InventorySetupActivity extends BaseActivity {
 
     private static final String TAG = "InventorySetupActivity";
     ViewPager viewPager;
-    SearchView searchView;
-    MenuItem searchViewItem;
+    //SearchView searchView;
+    //MenuItem searchViewItem;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,11 +93,11 @@ public class InventorySetupActivity extends BaseActivity {
                             Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
 
-                    searchView.setVisibility(View.VISIBLE);
-                    searchViewItem.setVisible(true);
+                   // searchView.setVisibility(View.VISIBLE);
+                  //  searchViewItem.setVisible(true);
                 }else {
-                    searchView.setVisibility(View.INVISIBLE);
-                    searchViewItem.setVisible(false);
+                  //  searchView.setVisibility(View.INVISIBLE);
+                  //  searchViewItem.setVisible(false);
                 }
 
             }
@@ -107,11 +107,11 @@ public class InventorySetupActivity extends BaseActivity {
                     final InputMethodManager imm = (InputMethodManager)getSystemService(
                             Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
-                    searchView.setVisibility(View.VISIBLE);
-                    searchViewItem.setVisible(true);
+                  //  searchView.setVisibility(View.VISIBLE);
+                   // searchViewItem.setVisible(true);
                 }else {
-                    searchView.setVisibility(View.INVISIBLE);
-                    searchViewItem.setVisible(false);
+                   // searchView.setVisibility(View.INVISIBLE);
+                   // searchViewItem.setVisible(false);
                 }
 
             }
@@ -121,11 +121,11 @@ public class InventorySetupActivity extends BaseActivity {
                     final InputMethodManager imm = (InputMethodManager)getSystemService(
                             Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
-                    searchView.setVisibility(View.VISIBLE);
-                    searchViewItem.setVisible(true);
+                   // searchView.setVisibility(View.VISIBLE);
+                   // searchViewItem.setVisible(true);
                 }else {
-                    searchView.setVisibility(View.INVISIBLE);
-                    searchViewItem.setVisible(false);
+                  //  searchView.setVisibility(View.INVISIBLE);
+                  //  searchViewItem.setVisible(false);
                 }
 
             }
@@ -135,6 +135,8 @@ public class InventorySetupActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_with_search_logout, menu);
         // Inflate the menu; this adds items to the action bar if it is present.
         /*getMenuInflater().inflate(R.menu.menu_main, menu);
         final View notificaitons = menu.findItem(R.id.action_notification).getActionView();
@@ -142,7 +144,7 @@ public class InventorySetupActivity extends BaseActivity {
         menu.findItem(R.id.action_notification).setVisible(false);
         return true;*/
 
-        MenuInflater inflater = getMenuInflater();
+       /* MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_with_search_logout, menu);
         searchViewItem = menu.findItem(R.id.app_bar_search);
         searchView = (SearchView) MenuItemCompat.getActionView(searchViewItem);
@@ -155,11 +157,11 @@ public class InventorySetupActivity extends BaseActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searchView.clearFocus();
-             /*   if(list.contains(query)){
+             *//*   if(list.contains(query)){
                     adapter.getFilter().filter(query);
                 }else{
                     Toast.makeText(MainActivity.this, "No Match found",Toast.LENGTH_LONG).show();
-                }*/
+                }*//*
                 return false;
 
             }
@@ -169,9 +171,10 @@ public class InventorySetupActivity extends BaseActivity {
                 //adapter.getFilter().filter(newText);
                 return false;
             }
-        });
+        });*/
 
-        return super.onCreateOptionsMenu(menu);
+        //return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
 

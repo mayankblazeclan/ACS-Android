@@ -127,16 +127,16 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
             if (subjectLists.get(position).getStatus().equalsIgnoreCase("In_Screening")) {
                 holder.txtStatus.setText("In_Screening");
-                holder.txtStatus.setTextColor(Color.parseColor("#5AA105"));
+                holder.txtStatus.setTextColor(Color.parseColor("#F9980B"));
             } else if (subjectLists.get(position).getStatus().equalsIgnoreCase("In_Trial")) {
                 holder.txtStatus.setText("In_Trial");
-                holder.txtStatus.setTextColor(Color.BLUE);
+                holder.txtStatus.setTextColor(Color.parseColor("#5AA105"));
             } else if (subjectLists.get(position).getStatus().equalsIgnoreCase("Rejected")) {
                 holder.txtStatus.setText("Rejected");
                 holder.txtStatus.setTextColor(Color.RED);
             }else {
                 holder.txtStatus.setText("In_Queue");
-                holder.txtStatus.setTextColor(Color.parseColor("#F9980B"));
+                holder.txtStatus.setTextColor(Color.parseColor("#5dade2"));
             }
 
             if(subjectLists.get(position).getIsMapped() == 1){
@@ -152,8 +152,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
                 holder.btnDelete.setVisibility(View.VISIBLE);
             }
 
-            if(subjectLists.get(position).getStatus().equalsIgnoreCase("In_Trial")
-             || subjectLists.get(position).getStatus().equalsIgnoreCase("Rejected")){
+            if(subjectLists.get(position).getStatus().equalsIgnoreCase("Rejected")){
 
                 holder.btnMap.setVisibility(View.GONE);
                 holder.btnDelete.setVisibility(View.GONE);
@@ -175,7 +174,12 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
                 if(subjectLists.get(position).getIsMapped() == 1){
 
-                    showModifyDialogWithMapped(subjectLists.get(position), listStudyID);
+                    if(subjectLists.get(position).getStatus().equalsIgnoreCase("In_Trial")){
+
+                        showModifyDialogWithMapped_InTrial(subjectLists.get(position), listStudyID);
+                    }else {
+                        showModifyDialogWithMapped(subjectLists.get(position), listStudyID);
+                    }
 
                 }else {
 
@@ -378,7 +382,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         }
     }
 
-    private void showModifyDialogWithMapped(final SubjectList studyList, List<com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList> lists) {
+    private void showModifyDialogWithMapped(final SubjectList subjectList, List<com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList> lists) {
 
         final EditText edtScreenId;
 
@@ -399,17 +403,17 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         //Adding value for ScreenID
 
         edtScreenId = dialog.findViewById(R.id.edtScreenId);
-        edtScreenId.setText(studyList.getScreenId());
+        edtScreenId.setText(subjectList.getScreenId());
         edtScreenId.setEnabled(false);
 
          final Spinner spnStatus = (Spinner) dialog.findViewById(R.id.spnStatusId);
         spnStatus.setOnItemSelectedListener(this);
 
         String[] status;
-        if(studyList.getStatus().equalsIgnoreCase("In_Screening")){
-            status = new String[]{"APPROVE", "REJECT"};
+        if(subjectList.getStatus().equalsIgnoreCase("In_Screening")){
+            status = new String[]{"--", "APPROVE", "REJECT"};
         }else {
-            status = new String[]{"APPROVE", "REJECT"};
+            status = new String[]{"--", "APPROVE", "REJECT"};
         }
             /*else if(studyList.getStatus().equalsIgnoreCase("INACTIVE")){
             status = new String[]{"INACTIVE", "In_Screening", "In_Queue"};
@@ -425,10 +429,30 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
             Logger.log("Element found :"+status);
         }*/
 
+        final Spinner spnGroups = (Spinner) dialog.findViewById(R.id.spnGroup);
+        spnGroups.setOnItemSelectedListener(this);
+
+        List<String> listsGroup = new ArrayList<>();
+
+        listsGroup.add(subjectList.getGroupId());
+        //System.out.println("listsGroup (1) :" + String.valueOf(subjectList.getStudyName()));
+
+        for (int i = 0; i < 5; i++) {
+            if(!subjectList.getGroupId().equalsIgnoreCase(spnGroupName[i])) {
+                listsGroup.add(spnGroupName[i]);
+                // System.out.println("spnGroupName[i] Group :" + spnGroupName[i]);
+            }
+        }
+
         //Creating the ArrayAdapter instance having the country list
         ArrayAdapter adpStatus = new ArrayAdapter(context,android.R.layout.simple_spinner_item, status);
         adpStatus.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnStatus.setAdapter(adpStatus);
+
+
+        ArrayAdapter groupAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, listsGroup);
+        groupAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnGroups.setAdapter(groupAdp);
 
         dialog.show();
 
@@ -439,7 +463,91 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
             public void onClick(View v) {
                 // Close dialog
                 dialog.dismiss();
-                callModifySubjectWithMappedAPI(studyList, spnStatus.getSelectedItem().toString());
+                callModifySubjectWithMappedAPI(subjectList, spnStatus.getSelectedItem().toString(), spnGroups.getSelectedItem().toString(), "In_Screening");
+            }
+        });
+
+
+        Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
+        // if decline button is clicked, close the custom dialog
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                dialog.dismiss();
+            }
+        });
+    }
+
+
+    private void showModifyDialogWithMapped_InTrial(final SubjectList subjectList, List<com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList> lists) {
+
+        final EditText edtScreenId;
+
+       /* listSpinnerStudyID = new ArrayList<>();
+        listSpinnerStudyID.add(studyList.getStudyId());*/
+
+
+        // Create custom dialog object
+        final Dialog dialog = new Dialog(context);
+        // Include dialog.xml file
+        dialog.setContentView(R.layout.dialog_subject_modify_with_mapped_in_trial);
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Window window = dialog.getWindow();
+        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+
+        //Adding value for ScreenID
+
+        edtScreenId = dialog.findViewById(R.id.edtScreenId);
+        edtScreenId.setText(subjectList.getScreenId());
+        edtScreenId.setEnabled(false);
+
+
+            /*else if(studyList.getStatus().equalsIgnoreCase("INACTIVE")){
+            status = new String[]{"INACTIVE", "In_Screening", "In_Queue"};
+        }else if(studyList.getStatus().equalsIgnoreCase("INQUEUE")){
+            status = new String[]{"In_Queue", "INACTIVE", "In_Screening"};
+        }else {
+
+        }*/
+
+
+    /*    if(listSpinnerStudyID.get(0).equals(status)){
+
+            Logger.log("Element found :"+status);
+        }*/
+
+        final Spinner spnGroups = (Spinner) dialog.findViewById(R.id.spnGroup);
+        spnGroups.setOnItemSelectedListener(this);
+
+        List<String> listsGroup = new ArrayList<>();
+
+        listsGroup.add(subjectList.getGroupId());
+        //System.out.println("listsGroup (1) :" + String.valueOf(subjectList.getStudyName()));
+
+        for (int i = 0; i < 5; i++) {
+            if(!subjectList.getGroupId().equalsIgnoreCase(spnGroupName[i])) {
+                listsGroup.add(spnGroupName[i]);
+                // System.out.println("spnGroupName[i] Group :" + spnGroupName[i]);
+            }
+        }
+
+        ArrayAdapter groupAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, listsGroup);
+        groupAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnGroups.setAdapter(groupAdp);
+
+        dialog.show();
+
+        Button btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
+        // if decline button is clicked, close the custom dialog
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                dialog.dismiss();
+                callModifySubjectWithMappedAPI(subjectList, "--", spnGroups.getSelectedItem().toString(), "In_Trial");
             }
         });
 
@@ -970,7 +1078,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
 
 
-    private void callModifySubjectWithMappedAPI(SubjectList studyList, String spnStatus) {
+    private void callModifySubjectWithMappedAPI(SubjectList studyList, String spnStatus, String groupValue, String statusValue) {
 
         ModifySubjectRequestModel modifySubjectRequestModel = new ModifySubjectRequestModel();
         modifySubjectRequestModel.setAppName(AppConstants.APP_NAME);
@@ -985,7 +1093,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
        // modifySubjectRequestModel.setStatus(spnStatus);
         modifySubjectRequestModel.setId(studyList.getId());
-        modifySubjectRequestModel.setGroup(studyList.getGroupId());
+        modifySubjectRequestModel.setGroup(groupValue);
         modifySubjectRequestModel.setIsMapped(studyList.getIsMapped());
         modifySubjectRequestModel.setDob(studyList.getDOB());
 
@@ -997,7 +1105,11 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
             modifySubjectRequestModel.setIsApproved("1");
             modifySubjectRequestModel.setStatus("In_Trial");
             modifySubjectRequestModel.setEvent(AppConstants.SUBJECT_APPROVE);
-        }else {
+        }else if(spnStatus.equalsIgnoreCase("--")){
+            //modifySubjectRequestModel.setIsApproved("1");
+            modifySubjectRequestModel.setStatus(statusValue);
+            modifySubjectRequestModel.setEvent(AppConstants.MODIFY_SUBJECT);
+        }else  {
             modifySubjectRequestModel.setIsApproved("0");
             modifySubjectRequestModel.setStatus("Rejected");
             modifySubjectRequestModel.setEvent(AppConstants.SUBJECT_REJECT);

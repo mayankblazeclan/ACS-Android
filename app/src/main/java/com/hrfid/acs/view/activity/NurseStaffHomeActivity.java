@@ -83,6 +83,15 @@ public class NurseStaffHomeActivity extends BaseActivity {
 
                     //Toast.makeText(SeniorStaffHomeActivity.this, "Tapped On Create Study", Toast.LENGTH_LONG).show();
 
+                   // Intent mNextActivity = new Intent(NurseStaffHomeActivity.this, IdentifySubjectActivity.class);
+                   // startActivity(mNextActivity);
+
+
+                }
+                if(i==1){
+
+                    //Toast.makeText(SeniorStaffHomeActivity.this, "Tapped On Create Study", Toast.LENGTH_LONG).show();
+
                     Intent mNextActivity = new Intent(NurseStaffHomeActivity.this, IdentifySubjectActivity.class);
                     startActivity(mNextActivity);
 

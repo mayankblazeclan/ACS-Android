@@ -225,7 +225,7 @@ public class SeniorSubjectOnBoardingActivity extends BaseActivity {
 
         if (id == R.id.app_bar_search) {
             //Toast.makeText(SeniorStaffHomeActivity.this, "Logout tapped", Toast.LENGTH_LONG).show();
-            Intent mNextActivity = new Intent(SeniorSubjectOnBoardingActivity.this, IdentifySubjectActivity.class);
+            Intent mNextActivity = new Intent(SeniorSubjectOnBoardingActivity.this, SearchSubjectActivity.class);
             startActivity(mNextActivity);
             return true;
         }

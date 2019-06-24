@@ -24,6 +24,9 @@ public class SubjectList {
     @SerializedName("study_id")
     @Expose
     private int studyId;
+    @SerializedName("study_name")
+    @Expose
+    private String studyName;
     @SerializedName("gen_barcode_val")
     @Expose
     private String genBarcodeVal;
@@ -33,9 +36,15 @@ public class SubjectList {
     @SerializedName("is_mapped")
     @Expose
     private int isMapped;
-    @SerializedName("is_delete")
+    @SerializedName("is_approved")
     @Expose
-    private int isDelete;
+    private Object isApproved;
+    @SerializedName("is_approved_study")
+    @Expose
+    private Object isApprovedStudy;
+    @SerializedName("study_title")
+    @Expose
+    private String studyTitle;
 
     public int getId() {
         return id;
@@ -85,6 +94,14 @@ public class SubjectList {
         this.studyId = studyId;
     }
 
+    public String getStudyName() {
+        return studyName;
+    }
+
+    public void setStudyName(String studyName) {
+        this.studyName = studyName;
+    }
+
     public String getGenBarcodeVal() {
         return genBarcodeVal;
     }
@@ -109,12 +126,28 @@ public class SubjectList {
         this.isMapped = isMapped;
     }
 
-    public int getIsDelete() {
-        return isDelete;
+    public Object getIsApproved() {
+        return isApproved;
     }
 
-    public void setIsDelete(int isDelete) {
-        this.isDelete = isDelete;
+    public void setIsApproved(Object isApproved) {
+        this.isApproved = isApproved;
+    }
+
+    public Object getIsApprovedStudy() {
+        return isApprovedStudy;
+    }
+
+    public void setIsApprovedStudy(Object isApprovedStudy) {
+        this.isApprovedStudy = isApprovedStudy;
+    }
+
+    public String getStudyTitle() {
+        return studyTitle;
+    }
+
+    public void setStudyTitle(String studyTitle) {
+        this.studyTitle = studyTitle;
     }
 
 }

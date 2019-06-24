@@ -145,7 +145,7 @@ public class SearchSubjectActivity extends BaseActivity  implements AdapterView.
             case R.id.spnStudyId :
                 //Your Action Here.
                 spnSelectedStudyID = String.valueOf(listStudy.get(position).getValue());
-                Toast.makeText(SearchSubjectActivity.this, spnSelectedStudyID , Toast.LENGTH_SHORT).show();
+               // Toast.makeText(SearchSubjectActivity.this, spnSelectedStudyID , Toast.LENGTH_SHORT).show();
                 break;
         }
     }

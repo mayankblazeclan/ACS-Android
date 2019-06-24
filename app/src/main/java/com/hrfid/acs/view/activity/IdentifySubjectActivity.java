@@ -116,7 +116,7 @@ public class IdentifySubjectActivity extends BaseActivity {
                                 Logger.logError("identifySubject API Failure " +
                                         identifySubjectResponse.getStatus());
 
-                                Utils.showAlertDialog(IdentifySubjectActivity.this,  identifySubjectResponse.getStatus().getMSG());
+                                Utils.showAlertDialog(IdentifySubjectActivity.this,  identifySubjectResponse.getStatus().geteRROR());
                             }
 
                         }else {
@@ -126,7 +126,7 @@ public class IdentifySubjectActivity extends BaseActivity {
                             Logger.logError("identifySubject API Failure " +
                                     identifySubjectResponse.getStatus().getCODE());
 
-                            Utils.showAlertDialog(IdentifySubjectActivity.this,  identifySubjectResponse.getStatus().getMSG());
+                            Utils.showAlertDialog(IdentifySubjectActivity.this,  identifySubjectResponse.getStatus().geteRROR());
                         }
 
 
@@ -173,10 +173,11 @@ public class IdentifySubjectActivity extends BaseActivity {
 
         if(subjectList!=null){
 
-            textView.setText("TITLE :" +subjectList.get(0).getGenBarcodeVal());
+            //textView.setText("TITLE :" +subjectList.get(0).getGenBarcodeVal());
+            textView.setText("");
             textView1.setText("GROUP :"+subjectList.get(0).getGroupId());
             textView2.setText("SCREEN ID :"+subjectList.get(0).getScreenId());
-            textView3.setText("STUDY ID :"+subjectList.get(0).getStudyId());
+            textView3.setText("STUDY ID : "+subjectList.get(0).getStudyTitle()+" ("+subjectList.get(0).getStudyName()+")");
             textView4.setText("DOB :"+subjectList.get(0).getDOB());
             textView5.setText("GENDER :"+subjectList.get(0).getGender());
             textView6.setText("STATUS :"+subjectList.get(0).getStatus());

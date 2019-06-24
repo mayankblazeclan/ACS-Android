@@ -229,7 +229,7 @@
     <string name="study_delete">DELETE STUDY</string>
     <string name="subject_delete">DELETE SUBJECT</string>
     <string name="delete_study_message">\Are you sure you want to delete this study ?\</string>
-    <string name="delete_subject_message">\Are you sure you want to delete this subject ?\</string>
+    <string name="delete_subject_message">\Are you sure you want to Delete this Subject ?\</string>
     <string name="person_gender">Gender</string>
     <string name="screen_id">Screen ID</string>
     <string name="text_dob">Please Select Date of Birth</string>
@@ -244,8 +244,9 @@
     <string name="visit">Visit</string>
     <string name="kit_status">KIT STATUS</string>
     <string name="subject_mapping">SUBJECT MAPPING</string>
-    <string name="alert_mapping" >\Are you sure you want to map this subject ?\</string>
+    <string name="alert_mapping" >\Are you sure you want to Map this Subject ?\</string>
     <string name="group">Group</string>
     <string name="submit">SUBMIT</string>
+    <string name="no_search_data">No relevant record found. Please modify the filter parameters.</string>
 
 </resources>
