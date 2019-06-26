@@ -12,8 +12,10 @@
     <dimen name="tv_alert_dialog_size">18sp</dimen>
     <dimen name="bt_ok_size">20dp</dimen>
     <dimen name="margin_10dp">10dp</dimen>
-
+    <dimen name="margin_40dp">40dp</dimen>
+    <dimen name="margin_30dp">30dp</dimen>
     <dimen name="bt_ok_padding">20dp</dimen>
+    <dimen name="margin_50dp">50dp</dimen>
 
 
 </resources>

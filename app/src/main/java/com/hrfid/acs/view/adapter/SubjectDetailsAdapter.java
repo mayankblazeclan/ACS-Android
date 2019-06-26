@@ -16,11 +16,13 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -571,10 +573,8 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         final int[] mMonth = new int[1];
         final int[] mDay = new int[1];
         final EditText edtScreenId;
-
-        /*listSpinnerStudyID = new ArrayList<>();
-        listSpinnerStudyID.add(studyList.getStudyId());*/
-
+        final Switch aSwitchOptionalData;
+        final LinearLayout ll_optional_data;
 
         // Create custom dialog object
         final Dialog dialog = new Dialog(context);
@@ -591,64 +591,11 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         edtScreenId = dialog.findViewById(R.id.edtScreenId);
         edtScreenId.setText(subjectList.getScreenId());
         edtScreenId.setEnabled(false);
-
-  /*      //Getting the instance of Spinner and applying OnItemSelectedListener on it
-        Spinner spnBloodGroups = (Spinner) dialog.findViewById(R.id.spnBloodGroup);
-        spnBloodGroups.setOnItemSelectedListener(this);*/
-
         final Spinner spnStudyIDs = (Spinner) dialog.findViewById(R.id.spnStudyId);
         spnStudyIDs.setOnItemSelectedListener(this);
 
         final Spinner spnGroups = (Spinner) dialog.findViewById(R.id.spnGroup);
         spnGroups.setOnItemSelectedListener(this);
-
-       /* Spinner spnPersonGender = (Spinner) dialog.findViewById(R.id.spnPersonGender);
-        spnPersonGender.setOnItemSelectedListener(this);
-*/
-        //Spinner spnStatus = (Spinner) dialog.findViewById(R.id.spnStatusId);
-        //spnStatus.setOnItemSelectedListener(this);
-
-/*
-        if(studyList.getStatus().equalsIgnoreCase("ACTIVE")){
-            status = new String[]{"ACTIVE", "INACTIVE", "IN_QUEUE"};
-        }else if(studyList.getStatus().equalsIgnoreCase("INACTIVE")){
-            status = new String[]{"INACTIVE", "ACTIVE", "IN_QUEUE"};
-        }else if(studyList.getStatus().equalsIgnoreCase("INQUEUE")){
-            status = new String[]{"IN_QUEUE", "INACTIVE", "ACTIVE"};
-        }else {
-
-        }*/
-
-       /* if(listSpinnerStudyID.get(0).equals(status)){
-
-            Logger.log("Element found :"+status);
-        }*/
-
-        //Creating the ArrayAdapter instance having the country list
-        /*ArrayAdapter adpStatus = new ArrayAdapter(context,android.R.layout.simple_spinner_item, status);
-        adpStatus.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnStatus.setAdapter(adpStatus);*/
-
-
-       /* //Creating the ArrayAdapter instance having the country list
-        ArrayAdapter bloodGroupAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item,spnBloodGroup);
-        bloodGroupAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //Setting the ArrayAdapter data on the Spinner
-        spnBloodGroups.setAdapter(bloodGroupAdp);*/
-
-     /*   if(studyList.getGender().equalsIgnoreCase("MALE")){
-            spnGender = new String[]{"MALE", "FEMALE", "OTHER"};
-        }else if(studyList.getGender().equalsIgnoreCase("FEMALE")){
-            spnGender = new String[]{"FEMALE", "MALE", "OTHER"};
-        }else if(studyList.getGender().equalsIgnoreCase("OTHER")){
-            spnGender = new String[]{"OTHER", "MALE", "FEMALE"};
-        }else {
-
-        }
-*/
-     /*   ArrayAdapter genderAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, spnGender);
-        genderAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnPersonGender.setAdapter(genderAdp);*/
 
         List<String> lists1 = new ArrayList<>();
         String s = subjectList.getStudyTitle()+ "("+String.valueOf(subjectList.getStudyName())+")";
@@ -690,6 +637,23 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         txt_dob=(ImageButton)dialog.findViewById(R.id.btn_dob);
         txtDob=(TextView)dialog.findViewById(R.id.txt_dob);
         txtDob.setText(Utilities.splitDateFromDesired(subjectList.getDOB()));
+
+
+        ll_optional_data =(LinearLayout) dialog.findViewById(R.id.ll_optional_data);
+        ll_optional_data.setVisibility(View.GONE);
+
+        aSwitchOptionalData = (Switch) dialog.findViewById(R.id.switch1);
+        aSwitchOptionalData.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // The toggle is enabled
+                    ll_optional_data.setVisibility(View.VISIBLE);
+                } else {
+                    // The toggle is disabled
+                    ll_optional_data.setVisibility(View.GONE);
+                }
+            }
+        });
 
         txt_dob.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -13,11 +13,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,6 +82,8 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
     private Spinner spnGroups;
     private  Spinner spnPersonGender;
     private  List<StudyList> listStudy = new ArrayList<>();
+    private Switch aSwitchOptionalData;
+    private LinearLayout ll_optional_data;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -131,6 +136,9 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
 
         //Creating the ArrayAdapter instance having the country list
 
+        ll_optional_data =(LinearLayout) v.findViewById(R.id.ll_optional_data);
+       ll_optional_data.setVisibility(View.GONE);
+
 
         ArrayAdapter genderAdp = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item, spnGender);
         genderAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -139,6 +147,21 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
         ArrayAdapter groupAdp = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item, spnGroup);
         groupAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnGroups.setAdapter(groupAdp);
+
+        aSwitchOptionalData = (Switch) v.findViewById(R.id.switch1);
+        aSwitchOptionalData.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // The toggle is enabled
+
+                    ll_optional_data.setVisibility(View.VISIBLE);
+                } else {
+                    // The toggle is disabled
+
+                    ll_optional_data.setVisibility(View.GONE);
+                }
+            }
+        });
 
     }
 

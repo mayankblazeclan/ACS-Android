@@ -12,40 +12,13 @@
         android:layout_below="@id/app_bar"
         android:background="@color/white">
 
-
-        <!-- <LinearLayout
-             android:id="@+id/linearLayout_study_id"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:layout_marginLeft="@dimen/bt_ok_padding"
-             android:layout_marginRight="@dimen/bt_ok_padding"
-             android:layout_marginTop="@dimen/bt_ok_padding"
-             android:orientation="vertical">
-
-             <TextView
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:textColor="@color/black"
-                 android:textStyle="bold"
-                 android:textAppearance="?android:attr/textAppearanceMedium"
-                 android:layout_marginLeft="@dimen/activity_5dp_margin"
-                 android:text="@string/study_id"/>
-
-             <EditText
-                 android:id="@+id/edtStudyId"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:hint="Enter Study ID"/>
-
-         </LinearLayout>-->
-
         <LinearLayout
-            android:id="@+id/linearLayout_study_name"
+            android:id="@+id/linearLayout_screen_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/bt_ok_padding"
             android:layout_marginRight="@dimen/bt_ok_padding"
-            android:layout_marginTop="@dimen/bt_ok_padding"
+            android:layout_marginTop="@dimen/margin_10dp"
             android:orientation="vertical">
 
             <TextView
@@ -66,6 +39,34 @@
 
         </LinearLayout>
 
+
+        <LinearLayout
+            android:id="@+id/linearLayout_study_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/bt_ok_padding"
+            android:layout_marginRight="@dimen/bt_ok_padding"
+            android:layout_marginTop="@dimen/margin_10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_marginLeft="@dimen/activity_5dp_margin"
+                android:textAllCaps="true"
+                android:text="@string/initials"/>
+
+            <EditText
+                android:id="@+id/edtInitials"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter INITIALS"/>
+
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/linearLayout_date"
             android:layout_width="match_parent"
@@ -73,7 +74,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/bt_ok_padding"
             android:layout_marginRight="@dimen/bt_ok_padding"
-            android:layout_marginTop="@dimen/bt_ok_padding"
+            android:layout_marginTop="@dimen/margin_10dp"
             android:orientation="horizontal">
 
             <ImageButton
@@ -178,7 +179,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/bt_ok_padding"
             android:layout_marginRight="@dimen/bt_ok_padding"
-            android:layout_marginTop="@dimen/bt_ok_padding"
+            android:layout_marginTop="@dimen/margin_10dp"
             android:orientation="vertical">
 
             <TextView
@@ -218,7 +219,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/bt_ok_padding"
             android:layout_marginRight="@dimen/bt_ok_padding"
-            android:layout_marginTop="@dimen/bt_ok_padding"
+            android:layout_marginTop="@dimen/margin_10dp"
             android:orientation="vertical">
 
             <TextView
@@ -252,45 +253,45 @@
 
         </LinearLayout>
 
-   <!--     <LinearLayout
-            android:id="@+id/linearLayout_status"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/bt_ok_padding"
-            android:layout_marginRight="@dimen/bt_ok_padding"
-            android:layout_marginTop="@dimen/bt_ok_padding"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_marginLeft="@dimen/activity_5dp_margin"
-                android:textAllCaps="true"
-                android:text="@string/blood_group"/>
-
-            &lt;!&ndash;<EditText
-                android:id="@+id/edtStudyStaus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter Study Status"/>&ndash;&gt;
-
-            &lt;!&ndash; <Spinner
-                 android:id="@+id/spnBloodGroup"
+        <!--     <LinearLayout
+                 android:id="@+id/linearLayout_status"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
-                 android:layout_margin="@dimen/activity_5dp_margin"/>&ndash;&gt;
+                 android:layout_marginLeft="@dimen/bt_ok_padding"
+                 android:layout_marginRight="@dimen/bt_ok_padding"
+                 android:layout_marginTop="@dimen/bt_ok_padding"
+                 android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/spnBloodGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/spinner_background"
-                android:layout_margin="@dimen/activity_5dp_margin" />
+                 <TextView
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:textColor="@color/black"
+                     android:textStyle="bold"
+                     android:textAppearance="?android:attr/textAppearanceMedium"
+                     android:layout_marginLeft="@dimen/activity_5dp_margin"
+                     android:textAllCaps="true"
+                     android:text="@string/blood_group"/>
 
-        </LinearLayout>-->
+                 &lt;!&ndash;<EditText
+                     android:id="@+id/edtStudyStaus"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:hint="Enter Study Status"/>&ndash;&gt;
+
+                 &lt;!&ndash; <Spinner
+                      android:id="@+id/spnBloodGroup"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_margin="@dimen/activity_5dp_margin"/>&ndash;&gt;
+
+                 <android.support.v7.widget.AppCompatSpinner
+                     android:id="@+id/spnBloodGroup"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:background="@drawable/spinner_background"
+                     android:layout_margin="@dimen/activity_5dp_margin" />
+
+             </LinearLayout>-->
 
 
 
@@ -303,7 +304,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/bt_ok_padding"
             android:layout_marginRight="@dimen/bt_ok_padding"
-            android:layout_marginTop="@dimen/bt_ok_padding"
+            android:layout_marginTop="@dimen/margin_10dp"
             android:orientation="vertical">
 
             <TextView
@@ -334,7 +335,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/bt_ok_padding"
             android:layout_marginRight="@dimen/bt_ok_padding"
-            android:layout_marginTop="@dimen/bt_ok_padding"
+            android:layout_marginTop="@dimen/margin_10dp"
             android:orientation="horizontal">
 
 
@@ -361,11 +362,391 @@
                 android:layout_width="400dp"
                 android:layout_height="90dp"
                 android:id="@+id/barcode_image"/>
-               <!-- android:src="@drawable/ic_senior_inventory_barcode"-->
+            <!-- android:src="@drawable/ic_senior_inventory_barcode"-->
 
 
         </LinearLayout>
 
+
+        <LinearLayout
+            android:id="@+id/ll_show_hide_params"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/bt_ok_padding"
+            android:layout_marginRight="@dimen/bt_ok_padding"
+            android:orientation="horizontal">
+
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:switchMinWidth="55dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/txt_take_optional"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:checked="false"
+                android:textOff="NO"
+                android:textOn="YES"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_optional_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout_rand"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/bt_ok_padding"
+                android:layout_marginRight="@dimen/bt_ok_padding"
+                android:layout_marginTop="@dimen/margin_10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textAllCaps="true"
+                    android:text="@string/txt_random"/>
+
+                <EditText
+                    android:id="@+id/edtRand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_10dp"
+                    android:hint="Enter Rand#"/>
+
+            </LinearLayout>
+
+            <TableLayout
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:context="com.tablelayoutdemo.MainActivity">
+
+                <!--E-ANTIGEN STATUS -->
+                <TableRow
+                    android:background="@color/white"
+                    android:padding="@dimen/margin_10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/black"
+                        android:layout_gravity="left"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:textAllCaps="true"
+                        android:layout_marginLeft="@dimen/activity_5dp_margin"
+                        android:layout_weight="1"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/txt_e_antigen_status"/>
+
+
+                    <RadioGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_5dp_margin"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:id="@+id/radioGroup">
+
+                        <RadioButton
+                            android:id="@+id/radioNA"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" N/A"
+                            android:checked="true"
+                            android:layout_marginLeft="@dimen/margin_40dp"
+                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <RadioButton
+                            android:id="@+id/radioYES"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="  YES"
+                            android:checked="false"
+                            android:layout_marginLeft="@dimen/margin_30dp"
+                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <RadioButton
+                            android:id="@+id/radioNO"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="  NO"
+                            android:checked="false"
+                            android:layout_marginLeft="@dimen/margin_30dp"
+                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    </RadioGroup>
+                </TableRow>
+
+
+                <!--Optional PK Sub-study/ -->
+                <TableRow
+                    android:background="@color/white"
+                    android:padding="@dimen/margin_10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/black"
+                        android:layout_gravity="left"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:textAllCaps="true"
+                        android:layout_marginLeft="@dimen/activity_5dp_margin"
+                        android:layout_weight="1"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/txt_optional_pk_sub_study"/>
+
+
+                    <RadioGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_5dp_margin"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:id="@+id/radioGroup1">
+
+                        <RadioButton
+                            android:id="@+id/radioNA1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" N/A"
+                            android:checked="true"
+                            android:layout_marginLeft="@dimen/margin_40dp"
+                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <RadioButton
+                            android:id="@+id/radioYES1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="  YES"
+                            android:checked="false"
+                            android:layout_marginLeft="@dimen/margin_30dp"
+                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <RadioButton
+                            android:id="@+id/radioNO1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="  NO"
+                            android:checked="false"
+                            android:layout_marginLeft="@dimen/margin_30dp"
+                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    </RadioGroup>
+                </TableRow>
+
+
+                <!--Optional Leukapheresis -->
+                <TableRow
+                    android:background="@color/white"
+                    android:padding="@dimen/margin_10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/black"
+                        android:layout_gravity="left"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:textAllCaps="true"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/activity_5dp_margin"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/txt_optional_leukapherisi"/>
+
+
+                    <RadioGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_5dp_margin"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:id="@+id/radioGroup2">
+
+                        <RadioButton
+                            android:id="@+id/radioNA2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" N/A"
+                            android:checked="true"
+                            android:layout_marginLeft="@dimen/margin_40dp"
+                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <RadioButton
+                            android:id="@+id/radioYES2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="  YES"
+                            android:checked="false"
+                            android:layout_marginLeft="@dimen/margin_30dp"
+                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <RadioButton
+                            android:id="@+id/radioNO2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="  NO"
+                            android:checked="false"
+                            android:layout_marginLeft="@dimen/margin_30dp"
+                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    </RadioGroup>
+                </TableRow>
+
+
+                <!--Optional genomic -->
+                <TableRow
+                    android:background="@color/white"
+                    android:padding="@dimen/margin_10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/black"
+                        android:layout_gravity="left"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:textAllCaps="true"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/activity_5dp_margin"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/txt_optional_genomic"/>
+
+
+                    <RadioGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_5dp_margin"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:id="@+id/radioGroup3">
+
+                        <RadioButton
+                            android:id="@+id/radioNA3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" N/A"
+                            android:checked="true"
+                            android:layout_marginLeft="@dimen/margin_40dp"
+                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <RadioButton
+                            android:id="@+id/radioYES3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="  YES"
+                            android:checked="false"
+                            android:layout_marginLeft="@dimen/margin_30dp"
+                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <RadioButton
+                            android:id="@+id/radioNO3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="  NO"
+                            android:checked="false"
+                            android:layout_marginLeft="@dimen/margin_30dp"
+                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    </RadioGroup>
+                </TableRow>
+
+
+                <!--Optional Future Research -->
+                <TableRow
+                    android:background="@color/white"
+                    android:padding="@dimen/margin_10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/black"
+                        android:layout_gravity="left"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:textAllCaps="true"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/activity_5dp_margin"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/txt_optional_future_research"/>
+
+
+                    <RadioGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_5dp_margin"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:id="@+id/radioGroup4">
+
+                        <RadioButton
+                            android:id="@+id/radioNA4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" N/A"
+                            android:checked="true"
+                            android:layout_marginLeft="@dimen/margin_40dp"
+                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <RadioButton
+                            android:id="@+id/radioYES4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="  YES"
+                            android:checked="false"
+                            android:layout_marginLeft="@dimen/margin_30dp"
+                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <RadioButton
+                            android:id="@+id/radioNO4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="  NO"
+                            android:checked="false"
+                            android:layout_marginLeft="@dimen/margin_30dp"
+                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    </RadioGroup>
+                </TableRow>
+
+
+            </TableLayout>
+
+
+
+        </LinearLayout>
 
 
         <Button
@@ -375,7 +756,9 @@
             android:text="SUBMIT"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:layout_margin="@dimen/bt_ok_padding"
+            android:layout_marginTop="@dimen/margin_10dp"
+            android:layout_marginLeft="@dimen/bt_ok_padding"
+            android:layout_marginRight="@dimen/bt_ok_padding"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:background="@color/colorBCRed"/>
 

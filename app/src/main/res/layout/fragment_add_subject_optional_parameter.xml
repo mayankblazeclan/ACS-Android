@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+
+
+    <TableLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context="com.tablelayoutdemo.MainActivity">
+
+        <!--E-ANTIGEN STATUS -->
+        <TableRow
+            android:background="@color/white"
+            android:padding="@dimen/margin_10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:layout_gravity="left"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/txt_e_antigen_status"/>
+
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_5dp_margin"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:id="@+id/radioGroup">
+
+                <RadioButton
+                    android:id="@+id/radioNA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" N/A"
+                    android:checked="true"
+                    android:layout_marginLeft="@dimen/margin_40dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <RadioButton
+                    android:id="@+id/radioYES"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  YES"
+                    android:checked="false"
+                    android:layout_marginLeft="@dimen/margin_30dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <RadioButton
+                    android:id="@+id/radioNO"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  NO"
+                    android:checked="false"
+                    android:layout_marginLeft="@dimen/margin_30dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </RadioGroup>
+        </TableRow>
+
+
+        <!--Optional PK Sub-study/ -->
+        <TableRow
+            android:background="@color/white"
+            android:padding="@dimen/margin_10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:layout_gravity="left"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/txt_optional_pk_sub_study"/>
+
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_5dp_margin"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:id="@+id/radioGroup1">
+
+                <RadioButton
+                    android:id="@+id/radioNA1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" N/A"
+                    android:checked="true"
+                    android:layout_marginLeft="@dimen/margin_40dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <RadioButton
+                    android:id="@+id/radioYES1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  YES"
+                    android:checked="false"
+                    android:layout_marginLeft="@dimen/margin_30dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <RadioButton
+                    android:id="@+id/radioNO1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  NO"
+                    android:checked="false"
+                    android:layout_marginLeft="@dimen/margin_30dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </RadioGroup>
+        </TableRow>
+
+
+        <!--Optional Leukapheresis -->
+        <TableRow
+            android:background="@color/white"
+            android:padding="@dimen/margin_10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:layout_gravity="left"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/txt_optional_leukapherisi"/>
+
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_5dp_margin"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:id="@+id/radioGroup2">
+
+                <RadioButton
+                    android:id="@+id/radioNA2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" N/A"
+                    android:checked="true"
+                    android:layout_marginLeft="@dimen/margin_40dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <RadioButton
+                    android:id="@+id/radioYES2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  YES"
+                    android:checked="false"
+                    android:layout_marginLeft="@dimen/margin_30dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <RadioButton
+                    android:id="@+id/radioNO2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  NO"
+                    android:checked="false"
+                    android:layout_marginLeft="@dimen/margin_30dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </RadioGroup>
+        </TableRow>
+
+
+        <!--Optional genomic -->
+        <TableRow
+            android:background="@color/white"
+            android:padding="@dimen/margin_10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:layout_gravity="left"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/txt_optional_genomic"/>
+
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_5dp_margin"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:id="@+id/radioGroup3">
+
+                <RadioButton
+                    android:id="@+id/radioNA3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" N/A"
+                    android:checked="true"
+                    android:layout_marginLeft="@dimen/margin_40dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <RadioButton
+                    android:id="@+id/radioYES3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  YES"
+                    android:checked="false"
+                    android:layout_marginLeft="@dimen/margin_30dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <RadioButton
+                    android:id="@+id/radioNO3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  NO"
+                    android:checked="false"
+                    android:layout_marginLeft="@dimen/margin_30dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </RadioGroup>
+        </TableRow>
+
+
+        <!--Optional Future Research -->
+        <TableRow
+            android:background="@color/white"
+            android:padding="@dimen/margin_10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:layout_gravity="left"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/txt_optional_future_research"/>
+
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_5dp_margin"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:id="@+id/radioGroup4">
+
+                <RadioButton
+                    android:id="@+id/radioNA4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" N/A"
+                    android:checked="true"
+                    android:layout_marginLeft="@dimen/margin_40dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <RadioButton
+                    android:id="@+id/radioYES4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  YES"
+                    android:checked="false"
+                    android:layout_marginLeft="@dimen/margin_30dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <RadioButton
+                    android:id="@+id/radioNO4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  NO"
+                    android:checked="false"
+                    android:layout_marginLeft="@dimen/margin_30dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </RadioGroup>
+        </TableRow>
+
+    </TableLayout>
+
+
+
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SUBMIT"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_margin="@dimen/bt_ok_padding"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@color/colorBCRed"/>
+
+
+</LinearLayout>
