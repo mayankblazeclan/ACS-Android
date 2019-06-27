@@ -141,7 +141,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/margin_30dp"
+            android:layout_marginLeft="@dimen/bt_ok_padding"
             android:layout_marginRight="@dimen/bt_ok_padding"
             android:layout_marginTop="@dimen/bt_ok_padding"
             android:orientation="horizontal">
@@ -223,6 +223,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layout_marginLeft="@dimen/bt_ok_padding"
                         android:orientation="horizontal"
                         android:id="@+id/radioGroup">
 
@@ -232,7 +233,7 @@
                             android:layout_height="wrap_content"
                             android:text=" N/A"
                             android:checked="true"
-                            android:layout_marginLeft="@dimen/margin_40dp"
+                            android:layout_marginLeft="@dimen/bt_ok_padding"
                             android:layout_marginRight="@dimen/margin_30dp"
                             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -240,17 +241,17 @@
                             android:id="@+id/radioYES"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="  YES"
+                            android:text=" POS"
                             android:checked="false"
-                            android:layout_marginLeft="@dimen/margin_30dp"
-                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:layout_marginLeft="@dimen/bt_ok_padding"
+                            android:layout_marginRight="@dimen/bt_ok_padding"
                             android:textAppearance="?android:attr/textAppearanceMedium" />
 
                         <RadioButton
                             android:id="@+id/radioNO"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="  NO"
+                            android:text=" NEG"
                             android:checked="false"
                             android:layout_marginLeft="@dimen/margin_30dp"
                             android:layout_marginRight="@dimen/margin_30dp"
@@ -292,7 +293,7 @@
                             android:layout_height="wrap_content"
                             android:text=" N/A"
                             android:checked="true"
-                            android:layout_marginLeft="@dimen/margin_40dp"
+                            android:layout_marginLeft="@dimen/bt_ok_padding"
                             android:layout_marginRight="@dimen/margin_30dp"
                             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -300,17 +301,17 @@
                             android:id="@+id/radioYES1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="  YES"
+                            android:text=" YES"
                             android:checked="false"
-                            android:layout_marginLeft="@dimen/margin_30dp"
-                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:layout_marginLeft="@dimen/bt_ok_padding"
+                            android:layout_marginRight="@dimen/bt_ok_padding"
                             android:textAppearance="?android:attr/textAppearanceMedium" />
 
                         <RadioButton
                             android:id="@+id/radioNO1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="  NO"
+                            android:text=" NO"
                             android:checked="false"
                             android:layout_marginLeft="@dimen/margin_30dp"
                             android:layout_marginRight="@dimen/margin_30dp"
@@ -352,7 +353,7 @@
                             android:layout_height="wrap_content"
                             android:text=" N/A"
                             android:checked="true"
-                            android:layout_marginLeft="@dimen/margin_40dp"
+                            android:layout_marginLeft="@dimen/margin_30dp"
                             android:layout_marginRight="@dimen/margin_30dp"
                             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -360,17 +361,17 @@
                             android:id="@+id/radioYES2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="  YES"
+                            android:text=" YES"
                             android:checked="false"
-                            android:layout_marginLeft="@dimen/margin_30dp"
-                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:layout_marginLeft="@dimen/bt_ok_padding"
+                            android:layout_marginRight="@dimen/bt_ok_padding"
                             android:textAppearance="?android:attr/textAppearanceMedium" />
 
                         <RadioButton
                             android:id="@+id/radioNO2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="  NO"
+                            android:text=" NO"
                             android:checked="false"
                             android:layout_marginLeft="@dimen/margin_30dp"
                             android:layout_marginRight="@dimen/margin_30dp"
@@ -412,7 +413,7 @@
                             android:layout_height="wrap_content"
                             android:text=" N/A"
                             android:checked="true"
-                            android:layout_marginLeft="@dimen/margin_40dp"
+                            android:layout_marginLeft="@dimen/margin_30dp"
                             android:layout_marginRight="@dimen/margin_30dp"
                             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -420,17 +421,17 @@
                             android:id="@+id/radioYES3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="  YES"
+                            android:text=" YES"
                             android:checked="false"
-                            android:layout_marginLeft="@dimen/margin_30dp"
-                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:layout_marginLeft="@dimen/bt_ok_padding"
+                            android:layout_marginRight="@dimen/bt_ok_padding"
                             android:textAppearance="?android:attr/textAppearanceMedium" />
 
                         <RadioButton
                             android:id="@+id/radioNO3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="  NO"
+                            android:text=" NO"
                             android:checked="false"
                             android:layout_marginLeft="@dimen/margin_30dp"
                             android:layout_marginRight="@dimen/margin_30dp"
@@ -472,7 +473,7 @@
                             android:layout_height="wrap_content"
                             android:text=" N/A"
                             android:checked="true"
-                            android:layout_marginLeft="@dimen/margin_40dp"
+                            android:layout_marginLeft="@dimen/margin_30dp"
                             android:layout_marginRight="@dimen/margin_30dp"
                             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -480,17 +481,17 @@
                             android:id="@+id/radioYES4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="  YES"
+                            android:text=" YES"
                             android:checked="false"
-                            android:layout_marginLeft="@dimen/margin_30dp"
-                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:layout_marginLeft="@dimen/bt_ok_padding"
+                            android:layout_marginRight="@dimen/bt_ok_padding"
                             android:textAppearance="?android:attr/textAppearanceMedium" />
 
                         <RadioButton
                             android:id="@+id/radioNO4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="  NO"
+                            android:text=" NO"
                             android:checked="false"
                             android:layout_marginLeft="@dimen/margin_30dp"
                             android:layout_marginRight="@dimen/margin_30dp"

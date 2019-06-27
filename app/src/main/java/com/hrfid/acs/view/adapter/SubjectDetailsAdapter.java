@@ -62,7 +62,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
     //ArrayList personNames;
    // String[] status = { "APPROVED", "REJECTED", "IN_QUEUE"};
     Context context;
-    String[] spnGroupName = {"G1","G2","G3", "G4", "G5"};
+    String[] spnGroupName = {"-", "G1","G2","G3", "G4", "G5"};
     private String spnSelectedStudyID ="";
     private String spnSelectedStudyValue ="";
 

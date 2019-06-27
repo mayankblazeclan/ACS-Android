@@ -4,16 +4,20 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -192,17 +196,21 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         // Create custom dialog object
         final Dialog dialog = new Dialog(context);
         // Include dialog.xml file
-        dialog.setContentView(R.layout.dialog_subject_modify);
+        dialog.setContentView(R.layout.dialog_kit_modify);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Window window = dialog.getWindow();
+        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
 
-        //Adding value for ScreenID
+
+        /*//Adding value for ScreenID
 
         edtScreenId = dialog.findViewById(R.id.edtScreenId);
         edtScreenId.setText(studyList.getScreenId());
 
-  /*      //Getting the instance of Spinner and applying OnItemSelectedListener on it
+  *//*      //Getting the instance of Spinner and applying OnItemSelectedListener on it
         Spinner spnBloodGroups = (Spinner) dialog.findViewById(R.id.spnBloodGroup);
-        spnBloodGroups.setOnItemSelectedListener(this);*/
+        spnBloodGroups.setOnItemSelectedListener(this);*//*
 
         Spinner spnStudyIDs = (Spinner) dialog.findViewById(R.id.spnStudyId);
         spnStudyIDs.setOnItemSelectedListener(this);
@@ -238,11 +246,11 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         spnStatus.setAdapter(adpStatus);
 
 
-       /* //Creating the ArrayAdapter instance having the country list
+       *//* //Creating the ArrayAdapter instance having the country list
         ArrayAdapter bloodGroupAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item,spnBloodGroup);
         bloodGroupAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
-        spnBloodGroups.setAdapter(bloodGroupAdp);*/
+        spnBloodGroups.setAdapter(bloodGroupAdp);*//*
 
         if(studyList.getGender().equalsIgnoreCase("MALE")){
             spnGender = new String[]{"MALE", "FEMALE", "OTHER"};
@@ -326,7 +334,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
                 datePickerDialog.show();
             }
         });
-
+*/
         dialog.show();
 
         Button btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
@@ -340,7 +348,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         });
 
 
-        Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
+        ImageView btnCancel = (ImageView) dialog.findViewById(R.id.btnCancel);
         // if decline button is clicked, close the custom dialog
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override

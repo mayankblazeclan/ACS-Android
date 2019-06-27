@@ -66,7 +66,7 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
 
     String[] spnGender = {"Male","Female","Other"};
 
-    String[] spnGroup = {"G1","G2","G3", "G4", "G5"};
+    String[] spnGroup = {"-", "G1","G2","G3", "G4", "G5"};
 
     private Button btnGenerateBarcode;
     private Button btnSubmit;

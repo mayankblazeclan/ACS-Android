@@ -224,6 +224,7 @@
     <string name="study_type">STUDY TYPE</string>
     <string name="start_select_date">Please Select Start Date</string>
     <string name="end_select_date">Please Select End Date</string>
+    <string name="exp_select_date">Please Select Expiry Date</string>
     <string name="study_name_id">STUDY NAME (ID)</string>
     <string name="study_start_end_date">START DATE -- END DATE</string>
     <string name="study_delete">DELETE STUDY</string>
@@ -256,5 +257,8 @@
     <string name="txt_optional_future_research">Optional Future Research</string>
     <string name="txt_random">Rand#</string>
     <string name="txt_take_optional">Take Optional Data   </string>
+    <string name="txt_kit">Kit</string>
+    <string name="txt_additional_kit">Additional Kit \nReceived</string>
+    <string name="txt_category">Category</string>
 
 </resources>

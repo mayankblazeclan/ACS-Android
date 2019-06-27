@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +18,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,11 +55,13 @@ import java.util.List;
 /**
  * Created by MS on 2019-06-04.
  */
-public class AddKitFragment extends Fragment  implements AdapterView.OnItemSelectedListener, View.OnClickListener {
+public class AddKitFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     private static final String TAG = "SeniorSubjectOnBoarding";
 
     String[] spnStudyID = {"10012","10011","10010", "10015", "10016"};
+
+    String[] sNumber = {"1","2","3", "4", "5", "6", "7", "8", "9", "10"};
 
     String[] spnGender = {"Samples"};
 
@@ -72,10 +77,15 @@ public class AddKitFragment extends Fragment  implements AdapterView.OnItemSelec
    // private ImageButton btnDateOfBirth;
     private int mYear, mMonth, mDay;
     private String startDate ="";
-    private  Spinner spnStudyIDs;
+    private String endDate = "";
+    private  Spinner spnStudyIDs, spnLocal, spnCentral, spnAliquot;
     private Spinner spnGroups;
-    private  Spinner spnPersonGender;
+    //private  Spinner spnPersonGender;
     private Button btnReplicate;
+    private RadioButton rbSample, rbAliquot, rbBoth;
+    private LinearLayout llLocal, llCentral, llAliquot;
+    private ImageButton btnStartDatePicker, btnEndDatePicker;
+    private TextView txtStartDate, txtEndDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -100,11 +110,23 @@ public class AddKitFragment extends Fragment  implements AdapterView.OnItemSelec
         spnStudyIDs = (Spinner) v.findViewById(R.id.spnStatusId);
         spnStudyIDs.setOnItemSelectedListener(this);
 
-        spnGroups = (Spinner) v.findViewById(R.id.spnGroup);
-        spnGroups.setOnItemSelectedListener(this);
+        spnLocal = (Spinner) v.findViewById(R.id.spnLocal);
+        spnLocal.setOnItemSelectedListener(this);
 
-        spnPersonGender = (Spinner) v.findViewById(R.id.spnPersonGender);
-        spnPersonGender.setOnItemSelectedListener(this);
+        spnCentral = (Spinner) v.findViewById(R.id.spnCentral);
+        spnCentral.setOnItemSelectedListener(this);
+
+        spnAliquot = (Spinner) v.findViewById(R.id.spnAliquot);
+        spnAliquot.setOnItemSelectedListener(this);
+
+        btnStartDatePicker=(ImageButton)v.findViewById(R.id.btn_start_date);
+        txtStartDate=(TextView)v.findViewById(R.id.txt_start_date);
+
+        btnEndDatePicker=(ImageButton)v.findViewById(R.id.btn_end_date);
+        txtEndDate=(TextView)v.findViewById(R.id.txt_end_date);
+
+        btnStartDatePicker.setOnClickListener(this);
+        btnEndDatePicker.setOnClickListener(this);
 
         btnSubmit = v.findViewById(R.id.btnSubmit);
         btnSubmit.setOnClickListener(this);
@@ -132,13 +154,28 @@ public class AddKitFragment extends Fragment  implements AdapterView.OnItemSelec
         //Creating the ArrayAdapter instance having the country list
 
 
-        ArrayAdapter genderAdp = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item, spnGender);
+       /* ArrayAdapter genderAdp = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item, spnGender);
         genderAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnPersonGender.setAdapter(genderAdp);
+        spnPersonGender.setAdapter(genderAdp);*/
 
-        ArrayAdapter groupAdp = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item, spnGroup);
-        groupAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnGroups.setAdapter(groupAdp);
+        ArrayAdapter adpNumber = new ArrayAdapter(getActivity(),android.R.layout.simple_spinner_item, sNumber);
+        adpNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnAliquot.setAdapter(adpNumber);
+        spnLocal.setAdapter(adpNumber);
+        spnCentral.setAdapter(adpNumber);
+
+
+        rbSample = (RadioButton)v.findViewById(R.id.radioSample);
+        rbAliquot = (RadioButton)v.findViewById(R.id.radioAliquot);
+        rbBoth = (RadioButton)v.findViewById(R.id.radioBoth);
+
+        rbSample.setOnClickListener(this);
+        rbAliquot.setOnClickListener(this);
+        rbBoth.setOnClickListener(this);
+
+        llLocal = (LinearLayout) v.findViewById(R.id.linearLayout_local);
+        llCentral = (LinearLayout) v.findViewById(R.id.linearLayout_central);
+        llAliquot = (LinearLayout) v.findViewById(R.id.linearLayout_alqt);
 
     }
 
@@ -169,8 +206,33 @@ public class AddKitFragment extends Fragment  implements AdapterView.OnItemSelec
 
     }
 
+
+  /*  public void onRadioButtonClicked(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+        String str="";
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.radioAliquot:
+                if(checked)
+                    str = "Aliquot Selected";
+                break;
+            case R.id.radioSample:
+                if(checked)
+                    str = "Sample Selected";
+                break;
+            case R.id.radioBoth:
+                if(checked)
+                    str = "Both Selected";
+                break;
+        }
+        Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
+    }*/
+
     @Override
     public void onClick(View v) {
+
+
+        String str="";
 
         switch (v.getId()){
             case R.id.btnGenerateBarcode:
@@ -196,8 +258,146 @@ public class AddKitFragment extends Fragment  implements AdapterView.OnItemSelec
                 }
                 break;
 
-        }
+            case R.id.radioAliquot:
+                boolean checked = ((RadioButton) v).isChecked();
+                if(checked)
+                    str = "Aliquot Selected";
+                llLocal.setVisibility(View.GONE);
+                llCentral.setVisibility(View.GONE);
+                llAliquot.setVisibility(View.VISIBLE);
+                break;
 
+            case R.id.radioSample:
+                boolean checked1 = ((RadioButton) v).isChecked();
+                if(checked1)
+                    str = "Sample Selected";
+                llLocal.setVisibility(View.VISIBLE);
+                llCentral.setVisibility(View.VISIBLE);
+                llAliquot.setVisibility(View.GONE);
+                break;
+
+            case R.id.radioBoth:
+                boolean checked2 = ((RadioButton) v).isChecked();
+                if(checked2)
+                    str = "Both Selected";
+                llLocal.setVisibility(View.VISIBLE);
+                llCentral.setVisibility(View.VISIBLE);
+                llAliquot.setVisibility(View.VISIBLE);
+                break;
+
+
+            case R.id.btn_start_date:
+               setStartDate();
+                break;
+
+
+            case R.id.btn_end_date:
+               setExpDate();
+                break;
+
+        }
+        //Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
+
+    }
+
+    private void setExpDate() {
+
+        final Calendar c = Calendar.getInstance();
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
+                new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+                        String fmonth;
+                        int month;
+                        if (monthOfYear < 10 && dayOfMonth < 10) {
+
+                            fmonth = "0" + monthOfYear;
+                            month = Integer.parseInt(fmonth) + 1;
+                            String fDate = "0" + dayOfMonth;
+                            String paddedMonth = String.format("%02d", month);
+                            //editText.setText(fDate + "/" + paddedMonth + "/" + year);
+
+
+                            txtEndDate.setText(year + "-" + paddedMonth + "-" + fDate);
+                            endDate =txtEndDate.getText().toString();
+
+                        } else {
+
+                            fmonth = "0" + monthOfYear;
+                            month = Integer.parseInt(fmonth) + 1;
+                            String paddedMonth = String.format("%02d", month);
+                            //editText.setText(dayOfMonth + "/" + paddedMonth + "/" + year);
+
+                            txtEndDate.setText(year + "-" + paddedMonth + "-" + dayOfMonth);
+                            endDate =txtEndDate.getText().toString();
+                        }
+
+
+
+                        // txtEndDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                        //txtEndDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                        //endDate =txtEndDate.getText().toString();
+
+                    }
+                }, mYear, mMonth, mDay);
+        datePickerDialog.show();
+    }
+
+    private void setStartDate() {
+
+        final Calendar c = new GregorianCalendar();
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
+                new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+                        //txtStartDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                        // txtStartDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                        //startDate =txtStartDate.getText().toString();
+
+                        String fmonth;
+                        int month;
+                        if (monthOfYear < 10 && dayOfMonth < 10) {
+
+                            fmonth = "0" + monthOfYear;
+                            month = Integer.parseInt(fmonth) + 1;
+                            String fDate = "0" + dayOfMonth;
+                            String paddedMonth = String.format("%02d", month);
+                            //editText.setText(fDate + "/" + paddedMonth + "/" + year);
+
+
+                            txtStartDate.setText(year + "-" + paddedMonth + "-" + fDate);
+                            startDate =txtStartDate.getText().toString();
+
+                        } else {
+
+                            fmonth = "0" + monthOfYear;
+                            month = Integer.parseInt(fmonth) + 1;
+                            String paddedMonth = String.format("%02d", month);
+                            //editText.setText(dayOfMonth + "/" + paddedMonth + "/" + year);
+
+                            txtStartDate.setText(year + "-" + paddedMonth + "-" + dayOfMonth);
+                            startDate =txtStartDate.getText().toString();
+                        }
+
+                    }
+                }, mYear, mMonth, mDay);
+        datePickerDialog.show();
     }
 
     private void selectDOB() {
@@ -274,7 +474,7 @@ public class AddKitFragment extends Fragment  implements AdapterView.OnItemSelec
 
                         callAddSubjectOnBoardingAPI(edtStudyName.getText().toString(),
                                 txt_date_of_birth.getText().toString(),
-                                spnPersonGender.getSelectedItem().toString(),
+                                "",
                                 spnGroups.getSelectedItem().toString(),
                                 spnStudyIDs.getSelectedItem().toString());
                     }
