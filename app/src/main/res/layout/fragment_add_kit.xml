@@ -202,7 +202,7 @@
                             android:layout_height="wrap_content"
                             android:text="  YES"
                             android:checked="false"
-                            android:layout_marginLeft="111dp"
+                            android:layout_marginLeft="120dp"
                             android:layout_marginRight="@dimen/margin_30dp"
                             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -376,6 +376,78 @@
 
         </LinearLayout>
 
+
+        <LinearLayout
+            android:id="@+id/linearLayout_req_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/bt_ok_padding"
+            android:layout_marginRight="@dimen/bt_ok_padding"
+            android:layout_marginTop="@dimen/bt_ok_padding"
+            android:orientation="vertical">
+
+            <TableLayout
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:context=".view.activity.InventorySetupActivity">
+
+                <!--KIT -->
+                <TableRow
+                    android:background="@color/white"
+                    android:padding="@dimen/margin_10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/black"
+                        android:layout_gravity="left"
+                        android:textStyle="bold"
+                        android:gravity="left|center"
+                        android:textAllCaps="true"
+                        android:layout_marginLeft="@dimen/activity_5dp_margin"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/txt_requistion_form"/>
+
+
+                    <RadioGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_5dp_margin"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:id="@+id/radioGroup1">
+
+                        <RadioButton
+                            android:id="@+id/rScreening1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="  YES"
+                            android:checked="true"
+                            android:layout_marginLeft="@dimen/margin_30dp"
+                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <RadioButton
+                            android:id="@+id/rTrial2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="  NO"
+                            android:checked="false"
+                            android:layout_marginLeft="@dimen/margin_30dp"
+                            android:layout_marginRight="@dimen/margin_30dp"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    </RadioGroup>
+                </TableRow>
+
+            </TableLayout>
+
+        </LinearLayout>
+
+
+
+
         <LinearLayout
             android:id="@+id/linearLayout_date"
             android:layout_width="match_parent"
@@ -400,7 +472,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:hint="@string/start_select_date"/>
+                android:hint="@string/kit_scan_select_date"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

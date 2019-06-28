@@ -74,7 +74,35 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:hint=""/>
+                android:hint="afsdfs"/>
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout_study_initals"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/margin_40dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:layout_marginLeft="@dimen/activity_5dp_margin"
+                    android:textAllCaps="true"
+                    android:text="@string/initials"/>
+
+                <EditText
+                    android:id="@+id/edtInitials"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="@dimen/margin_10dp"
+                    android:hint="Enter Initials"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

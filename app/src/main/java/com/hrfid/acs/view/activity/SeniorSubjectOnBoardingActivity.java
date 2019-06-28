@@ -64,8 +64,8 @@ public class SeniorSubjectOnBoardingActivity extends BaseActivity {
         toolbar.setTitle("Subject OnBoarding");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
-        //getSupportActionBar().setHomeButtonEnabled(true);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

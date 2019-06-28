@@ -62,8 +62,6 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
 
     private static final String TAG = "SeniorSubjectOnBoarding";
 
-    String[] spnStudyID = {"10012","10011","10010", "10015", "10016"};
-
     String[] spnGender = {"Male","Female","Other"};
 
     String[] spnGroup = {"-", "G1","G2","G3", "G4", "G5"};
@@ -255,6 +253,9 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
 
                     }
                 }, mYear, mMonth, mDay);
+
+        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis() + (1000 * 60 * 60));
+
         datePickerDialog.show();
     }
 

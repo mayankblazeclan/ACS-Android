@@ -45,7 +45,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
 
     String[] spnStudyID = {"10012","10011","10010", "10015", "10016"};
 
-    String[] spnGender = {"Male","Female","Other"};
+    String[] spnReason = {"DAMAGE", "MISSING"};
 
     String[] spnGroup = {"G1","G2","G3", "G4", "G5"};
 
@@ -201,140 +201,6 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         Window window = dialog.getWindow();
         window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-
-
-        /*//Adding value for ScreenID
-
-        edtScreenId = dialog.findViewById(R.id.edtScreenId);
-        edtScreenId.setText(studyList.getScreenId());
-
-  *//*      //Getting the instance of Spinner and applying OnItemSelectedListener on it
-        Spinner spnBloodGroups = (Spinner) dialog.findViewById(R.id.spnBloodGroup);
-        spnBloodGroups.setOnItemSelectedListener(this);*//*
-
-        Spinner spnStudyIDs = (Spinner) dialog.findViewById(R.id.spnStudyId);
-        spnStudyIDs.setOnItemSelectedListener(this);
-
-        Spinner spnGroups = (Spinner) dialog.findViewById(R.id.spnGroup);
-        spnGroups.setOnItemSelectedListener(this);
-
-        Spinner spnPersonGender = (Spinner) dialog.findViewById(R.id.spnPersonGender);
-        spnPersonGender.setOnItemSelectedListener(this);
-
-        Spinner spnStatus = (Spinner) dialog.findViewById(R.id.spnStatusId);
-        spnStatus.setOnItemSelectedListener(this);
-
-
-        if(studyList.getStatus().equalsIgnoreCase("ACTIVE")){
-            status = new String[]{"ACTIVE", "INACTIVE", "IN_QUEUE"};
-        }else if(studyList.getStatus().equalsIgnoreCase("INACTIVE")){
-            status = new String[]{"INACTIVE", "ACTIVE", "IN_QUEUE"};
-        }else if(studyList.getStatus().equalsIgnoreCase("INQUEUE")){
-            status = new String[]{"IN_QUEUE", "INACTIVE", "ACTIVE"};
-        }else {
-
-        }
-
-        if(listSpinnerStudyID.get(0).equals(status)){
-
-            Logger.log("Element found :"+status);
-        }
-
-        //Creating the ArrayAdapter instance having the country list
-        ArrayAdapter adpStatus = new ArrayAdapter(context,android.R.layout.simple_spinner_item, status);
-        adpStatus.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnStatus.setAdapter(adpStatus);
-
-
-       *//* //Creating the ArrayAdapter instance having the country list
-        ArrayAdapter bloodGroupAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item,spnBloodGroup);
-        bloodGroupAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //Setting the ArrayAdapter data on the Spinner
-        spnBloodGroups.setAdapter(bloodGroupAdp);*//*
-
-        if(studyList.getGender().equalsIgnoreCase("MALE")){
-            spnGender = new String[]{"MALE", "FEMALE", "OTHER"};
-        }else if(studyList.getGender().equalsIgnoreCase("FEMALE")){
-            spnGender = new String[]{"FEMALE", "MALE", "OTHER"};
-        }else if(studyList.getGender().equalsIgnoreCase("OTHER")){
-            spnGender = new String[]{"OTHER", "MALE", "FEMALE"};
-        }else {
-
-        }
-
-        ArrayAdapter genderAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, spnGender);
-        genderAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnPersonGender.setAdapter(genderAdp);
-
-
-        //Creating the ArrayAdapter instance having the country list
-        ArrayAdapter studyIdAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, lists);
-        studyIdAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnStudyIDs.setAdapter(studyIdAdp);
-
-
-        ArrayAdapter groupAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, spnGroup);
-        groupAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnGroups.setAdapter(groupAdp);
-
-        txt_dob=(ImageButton)dialog.findViewById(R.id.btn_dob);
-        txtDob=(TextView)dialog.findViewById(R.id.txt_dob);
-        txtDob.setText(Utilities.splitDateFromDesired(studyList.getDOB()));
-
-        txt_dob.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Close dialog
-                // dialog.dismiss();
-
-                // Get Current Date
-                final Calendar c = Calendar.getInstance();
-                mYear[0] = c.get(Calendar.YEAR);
-                mMonth[0] = c.get(Calendar.MONTH);
-                mDay[0] = c.get(Calendar.DAY_OF_MONTH);
-
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(context,
-                        new DatePickerDialog.OnDateSetListener() {
-
-                            @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
-
-                                // txtEndDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-
-
-                                String fmonth;
-                                int month;
-                                if (monthOfYear < 10 && dayOfMonth < 10) {
-
-                                    fmonth = "0" + monthOfYear;
-                                    month = Integer.parseInt(fmonth) + 1;
-                                    String fDate = "0" + dayOfMonth;
-                                    String paddedMonth = String.format("%02d", month);
-                                    //editText.setText(fDate + "/" + paddedMonth + "/" + year);
-
-
-                                    txtDob.setText(year + "-" + paddedMonth + "-" + fDate);
-                                    //endDate =txtEndDate.getText().toString();
-
-                                } else {
-
-                                    fmonth = "0" + monthOfYear;
-                                    month = Integer.parseInt(fmonth) + 1;
-                                    String paddedMonth = String.format("%02d", month);
-                                    //editText.setText(dayOfMonth + "/" + paddedMonth + "/" + year);
-
-                                    txtDob.setText(year + "-" + paddedMonth + "-" + dayOfMonth);
-                                    //endDate =txtEndDate.getText().toString();
-                                }
-
-                            }
-                        }, mYear[0], mMonth[0], mDay[0]);
-                datePickerDialog.show();
-            }
-        });
-*/
         dialog.show();
 
         Button btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
@@ -357,30 +223,109 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
                 dialog.dismiss();
             }
         });
+
+
+
+        Button btnReturn = (Button) dialog.findViewById(R.id.btnReturn);
+        // if decline button is clicked, close the custom dialog
+        btnReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                showReturnDialog();
+            }
+        });
     }
 
 
     private void showDeleteDialog() {
 
-        Utils.createDialogTwoButtons(
-                context, context.getString(R.string.study_delete),
-                true, context.getString(R.string.delete_study_message),
-                context.getString(R.string.dlg_yes_text),
-                context.getString(R.string.dlg_no_text), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+        final ImageButton txt_dob;
+        final TextView txtStartDate, txtDob;
+        final int[] mYear = new int[1];
+        final int[] mMonth = new int[1];
+        final int[] mDay = new int[1];
+        final EditText edtScreenId;
 
-                        //CALL DELETE API
-                        dialog.dismiss();
-                    }
-                }, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+        // Create custom dialog object
+        final Dialog dialog = new Dialog(context);
+        // Include dialog.xml file
+        dialog.setContentView(R.layout.dialog_kit_resaon_modify);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Window window = dialog.getWindow();
+        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-                        dialog.dismiss();
+        dialog.show();
 
-                    }
-                });
+        Button btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
+        // if decline button is clicked, close the custom dialog
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                dialog.dismiss();
+            }
+        });
+
+
+        Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
+        // if decline button is clicked, close the custom dialog
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private void showReturnDialog() {
+
+        final ImageButton txt_dob;
+        final TextView txtStartDate, txtDob;
+        final int[] mYear = new int[1];
+        final int[] mMonth = new int[1];
+        final int[] mDay = new int[1];
+        final EditText edtScreenId;
+        final Spinner spnResaon;
+
+        // Create custom dialog object
+        final Dialog dialog = new Dialog(context);
+        // Include dialog.xml file
+        dialog.setContentView(R.layout.dialog_kit_return_modify);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Window window = dialog.getWindow();
+        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        spnResaon = (Spinner) dialog.findViewById(R.id.spnResaon);
+        spnResaon.setOnItemSelectedListener(this);
+
+        ArrayAdapter adpNumber = new ArrayAdapter(context,android.R.layout.simple_spinner_item, spnReason);
+        adpNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnResaon.setAdapter(adpNumber);
+
+        dialog.show();
+
+        Button btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
+        // if decline button is clicked, close the custom dialog
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                dialog.dismiss();
+            }
+        });
+
+
+        Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
+        // if decline button is clicked, close the custom dialog
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                dialog.dismiss();
+            }
+        });
     }
 
 }

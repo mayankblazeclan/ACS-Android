@@ -253,7 +253,7 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
                         }
                     }else {
 
-                        Toast.makeText(getActivity(),"Study End Date cannot be smaller than Study Start Date" , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(),"Study end date cannot be earlier than the study start date" , Toast.LENGTH_SHORT).show();
                     }
 
                 }else {

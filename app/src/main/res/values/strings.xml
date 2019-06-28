@@ -231,6 +231,7 @@
     <string name="subject_delete">DELETE SUBJECT</string>
     <string name="delete_study_message">\Are you sure you want to delete this study ?\</string>
     <string name="delete_subject_message">\Are you sure you want to Delete this Subject ?\</string>
+    <string name="delete_kit_message">\Are you sure you want to dismiss this Kit ?\</string>
     <string name="person_gender">Gender</string>
     <string name="screen_id">Screen ID</string>
     <string name="text_dob">Please Select Date of Birth</string>
@@ -260,5 +261,10 @@
     <string name="txt_kit">Kit</string>
     <string name="txt_additional_kit">Additional Kit \nReceived</string>
     <string name="txt_category">Category</string>
+    <string name="txt_resaon">Resaon</string>
+    <string name="txt_requistion_form">Requisition Form</string>
+    <string name="reqistion_form">Requistion Form</string>
+    <string name="kit_scan_select_date">Please Select Scan Date</string>
+
 
 </resources>

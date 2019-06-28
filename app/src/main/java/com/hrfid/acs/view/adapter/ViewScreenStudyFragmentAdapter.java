@@ -374,7 +374,7 @@ public class ViewScreenStudyFragmentAdapter extends RecyclerView.Adapter<ViewScr
 
                                 } else {
 
-                                    Toast.makeText(context, "Study End Date cannot be smaller than Study Start Date", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "Study end date cannot be earlier than the study start date", Toast.LENGTH_SHORT).show();
                                 }
 
                             } else {
