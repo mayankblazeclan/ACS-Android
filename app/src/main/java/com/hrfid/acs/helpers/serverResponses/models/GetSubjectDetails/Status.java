@@ -12,6 +12,9 @@ public class Status {
     @SerializedName("MSG")
     @Expose
     private String mSG;
+    @SerializedName("ERROR")
+    @Expose
+    private String eRROR;
 
     public int getCODE() {
         return cODE;
@@ -27,6 +30,14 @@ public class Status {
 
     public void setMSG(String mSG) {
         this.mSG = mSG;
+    }
+
+    public String getERROR() {
+        return eRROR;
+    }
+
+    public void setERROR(String eRROR) {
+        this.eRROR = eRROR;
     }
 
 }

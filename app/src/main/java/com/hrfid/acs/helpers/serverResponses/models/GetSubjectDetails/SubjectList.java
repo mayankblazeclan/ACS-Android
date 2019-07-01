@@ -45,6 +45,30 @@ public class SubjectList {
     @SerializedName("study_title")
     @Expose
     private String studyTitle;
+    @SerializedName("e_antigen_status")
+    @Expose
+    private String eAntigenStatus;
+    @SerializedName("pk_sub_study")
+    @Expose
+    private String pkSubStudy;
+    @SerializedName("Leukapheresis")
+    @Expose
+    private String leukapheresis;
+    @SerializedName("genomic")
+    @Expose
+    private String genomic;
+    @SerializedName("future_reserch")
+    @Expose
+    private String futureReserch;
+    @SerializedName("rand_number")
+    @Expose
+    private String randNumber;
+    @SerializedName("initials")
+    @Expose
+    private String initials;
+    @SerializedName("optional_required")
+    @Expose
+    private int optionalRequired;
 
     public int getId() {
         return id;
@@ -148,6 +172,70 @@ public class SubjectList {
 
     public void setStudyTitle(String studyTitle) {
         this.studyTitle = studyTitle;
+    }
+
+    public String getEAntigenStatus() {
+        return eAntigenStatus;
+    }
+
+    public void setEAntigenStatus(String eAntigenStatus) {
+        this.eAntigenStatus = eAntigenStatus;
+    }
+
+    public String getPkSubStudy() {
+        return pkSubStudy;
+    }
+
+    public void setPkSubStudy(String pkSubStudy) {
+        this.pkSubStudy = pkSubStudy;
+    }
+
+    public String getLeukapheresis() {
+        return leukapheresis;
+    }
+
+    public void setLeukapheresis(String leukapheresis) {
+        this.leukapheresis = leukapheresis;
+    }
+
+    public String getGenomic() {
+        return genomic;
+    }
+
+    public void setGenomic(String genomic) {
+        this.genomic = genomic;
+    }
+
+    public String getFutureReserch() {
+        return futureReserch;
+    }
+
+    public void setFutureReserch(String futureReserch) {
+        this.futureReserch = futureReserch;
+    }
+
+    public String getRandNumber() {
+        return randNumber;
+    }
+
+    public void setRandNumber(String randNumber) {
+        this.randNumber = randNumber;
+    }
+
+    public String getInitials() {
+        return initials;
+    }
+
+    public void setInitials(String initials) {
+        this.initials = initials;
+    }
+
+    public int getOptionalRequired() {
+        return optionalRequired;
+    }
+
+    public void setOptionalRequired(int optionalRequired) {
+        this.optionalRequired = optionalRequired;
     }
 
 }

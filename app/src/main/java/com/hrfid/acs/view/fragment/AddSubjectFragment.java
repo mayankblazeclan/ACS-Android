@@ -19,6 +19,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -82,6 +84,19 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
     private  List<StudyList> listStudy = new ArrayList<>();
     private Switch aSwitchOptionalData;
     private LinearLayout ll_optional_data;
+    private EditText editTextInitials;
+    private EditText editTextRand;
+    private int isOptional=0;
+    private RadioGroup radioGroupEStatus;
+    private RadioGroup radioGroupPKSubstudy;
+    private RadioGroup radioGroupLeuka;
+    private RadioGroup radioGroupGenomic;
+    private RadioGroup radioGroupFuture;
+    private RadioButton rbEStatus;
+    private RadioButton rbPKStatus;
+    private RadioButton rbLeukaStatus;
+    private RadioButton rbGenomicStatus;
+    private RadioButton rbFutureStatus;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -119,23 +134,25 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
         btnGenerateBarcode.setOnClickListener(this);
 
         edtStudyName = v.findViewById(R.id.edtStudyName);
+        editTextInitials = v.findViewById(R.id.edtInitials);
+        editTextRand = v.findViewById(R.id.edtRand);
         imageView = (ImageView) v.findViewById(R.id.barcode_image);
         txt_date_of_birth = v.findViewById(R.id.txt_start_date);
 
         btnDateOfBirth =(ImageButton)v.findViewById(R.id.btn_date_of_birth);
         btnDateOfBirth.setOnClickListener(this);
 
-       /* //Creating the ArrayAdapter instance having the country list
-        ArrayAdapter bloodGroupAdp = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item,spnBloodGroup);
-        bloodGroupAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //Setting the ArrayAdapter data on the Spinner
-        spnBloodGroups.setAdapter(bloodGroupAdp);*/
+        radioGroupEStatus =(RadioGroup) v.findViewById(R.id.radioGroup);
+        radioGroupPKSubstudy =(RadioGroup) v.findViewById(R.id.radioGroup1);
+        radioGroupLeuka =(RadioGroup) v.findViewById(R.id.radioGroup2);
+        radioGroupGenomic =(RadioGroup) v.findViewById(R.id.radioGroup3);
+        radioGroupFuture =(RadioGroup) v.findViewById(R.id.radioGroup4);
 
 
         //Creating the ArrayAdapter instance having the country list
 
         ll_optional_data =(LinearLayout) v.findViewById(R.id.ll_optional_data);
-       ll_optional_data.setVisibility(View.GONE);
+        ll_optional_data.setVisibility(View.GONE);
 
 
         ArrayAdapter genderAdp = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item, spnGender);
@@ -151,12 +168,12 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     // The toggle is enabled
-
                     ll_optional_data.setVisibility(View.VISIBLE);
+                    isOptional=1;
                 } else {
                     // The toggle is disabled
-
                     ll_optional_data.setVisibility(View.GONE);
+                    isOptional=0;
                 }
             }
         });
@@ -180,7 +197,7 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
             case R.id.spnStatusId :
                 //Your Action Here.
                 spnSelectedStudyID = String.valueOf(listStudy.get(position).getValue());
-               // Toast.makeText(getContext(), spnSelectedStudyID , Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getContext(), spnSelectedStudyID , Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -263,17 +280,18 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
 
         if(edtStudyName.length() >0) {
 
-            if(!txt_date_of_birth.getText().toString().equalsIgnoreCase("")){
+            if(editTextInitials.length() >0) {
 
+                if(!txt_date_of_birth.getText().toString().equalsIgnoreCase("")){
 
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-                Date date1 = null;
-                try {
-                    date1 = format.parse(txt_date_of_birth.getText().toString());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                    Date date1 = null;
+                    try {
+                        date1 = format.parse(txt_date_of_birth.getText().toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
                     Calendar cal = Calendar.getInstance();
                     Date sysDate = cal.getTime();
@@ -285,12 +303,65 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
 
                     }else {
 
+                        int selectedId=radioGroupEStatus.getCheckedRadioButtonId();
+                        rbEStatus=(RadioButton)getView().findViewById(selectedId);
 
-                        callAddSubjectOnBoardingAPI(edtStudyName.getText().toString(),
-                                txt_date_of_birth.getText().toString(),
-                                spnPersonGender.getSelectedItem().toString(),
-                                spnGroups.getSelectedItem().toString(),
-                                spnSelectedStudyID);
+                        int selectedId1=radioGroupPKSubstudy.getCheckedRadioButtonId();
+                        rbPKStatus=(RadioButton)getView().findViewById(selectedId1);
+
+
+                        int selectedId2=radioGroupLeuka.getCheckedRadioButtonId();
+                        rbLeukaStatus=(RadioButton)getView().findViewById(selectedId2);
+
+
+                        int selectedId3=radioGroupGenomic.getCheckedRadioButtonId();
+                        rbGenomicStatus=(RadioButton)getView().findViewById(selectedId3);
+
+
+                        int selectedId4=radioGroupFuture.getCheckedRadioButtonId();
+                        rbFutureStatus=(RadioButton)getView().findViewById(selectedId4);
+
+                        if(isOptional ==0)
+                        {
+
+                            callAddSubjectOnBoardingAPI(edtStudyName.getText().toString(),
+                                    txt_date_of_birth.getText().toString(),
+                                    spnPersonGender.getSelectedItem().toString(),
+                                    spnGroups.getSelectedItem().toString(),
+                                    spnSelectedStudyID,
+                                    editTextInitials.getText().toString(),
+                                    isOptional,
+                                    " ",
+                                    " ",
+                                    " ",
+                                    " ",
+                                    " ",
+                                    " ");
+
+                        }else {
+
+                            callAddSubjectOnBoardingAPI(edtStudyName.getText().toString(),
+                                    txt_date_of_birth.getText().toString(),
+                                    spnPersonGender.getSelectedItem().toString(),
+                                    spnGroups.getSelectedItem().toString(),
+                                    spnSelectedStudyID,
+                                    editTextInitials.getText().toString(),
+                                    isOptional,
+                                    editTextRand.getText().toString().trim(),
+                                    rbEStatus.getText().toString().trim(),
+                                    rbPKStatus.getText().toString().trim(),
+                                    rbLeukaStatus.getText().toString().trim(),
+                                    rbGenomicStatus.getText().toString().trim(),
+                                    rbFutureStatus.getText().toString().trim());
+
+                        }
+                    /*callAddSubjectOnBoardingAPI(edtStudyName.getText().toString(),
+                            txt_date_of_birth.getText().toString(),
+                            spnPersonGender.getSelectedItem().toString(),
+                            spnGroups.getSelectedItem().toString(),
+                            spnSelectedStudyID,
+                            editTextInitials.getText().toString(),
+                            editTextRand.getText().toString(), isOptional);*/
                     }
 
 
@@ -302,8 +373,12 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
                         spnGroups.getSelectedItem().toString(),
                         spnStudyIDs.getSelectedItem().toString());*/
 
+                }else {
+                    Toast.makeText(getContext(),"Please Select Date Of Birth" , Toast.LENGTH_SHORT).show();
+                }
+
             }else {
-                Toast.makeText(getContext(),"Please Select Date Of Birth" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"Please enter Initials" , Toast.LENGTH_SHORT).show();
             }
         }else {
             Toast.makeText(getContext(),"Please enter Screen ID" , Toast.LENGTH_SHORT).show();
@@ -333,7 +408,11 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
     }
 
     //Call callStudySetup API
-    private void callAddSubjectOnBoardingAPI(String screenId, String strDob, String gender, String group, String studyID) {
+    private void callAddSubjectOnBoardingAPI(String screenId, String strDob, String gender,
+                                             String group, String studyID, String initials,
+                                             int isOptional, String strRand,  String eStatus,
+                                             String strPkStudy, String strLeuka, String strGenomic,
+                                             String strFuture) {
 
         AddSubjectRequestModel addSubjectRequestModel = new AddSubjectRequestModel();
         addSubjectRequestModel.setAppName(AppConstants.APP_NAME);
@@ -352,6 +431,14 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
         addSubjectRequestModel.setGender(gender);
         addSubjectRequestModel.setGroup(group);
         addSubjectRequestModel.setStudyId(Integer.valueOf(studyID));
+        addSubjectRequestModel.setInitials(initials);
+        addSubjectRequestModel.setRandNum(strRand);
+        addSubjectRequestModel.setAntigenStatus(eStatus);
+        addSubjectRequestModel.setPKSubStudy(strPkStudy);
+        addSubjectRequestModel.setLeuka(strLeuka);
+        addSubjectRequestModel.setGenomic(strGenomic);
+        addSubjectRequestModel.setFResearch(strFuture);
+        addSubjectRequestModel.setIsOptional(isOptional);
 
         new NetworkingHelper(new AddSubjectRequest(getActivity(), true, addSubjectRequestModel)) {
 

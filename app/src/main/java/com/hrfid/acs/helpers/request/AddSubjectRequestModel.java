@@ -56,6 +56,30 @@ public class AddSubjectRequestModel {
     @SerializedName("studyId")
     @Expose
     private int studyId;
+    @SerializedName("initials")
+    @Expose
+    private String initials;
+    @SerializedName("antigenStatus")
+    @Expose
+    private String antigenStatus;
+    @SerializedName("PKSubStudy")
+    @Expose
+    private String pKSubStudy;
+    @SerializedName("Leuka")
+    @Expose
+    private String leuka;
+    @SerializedName("genomic")
+    @Expose
+    private String genomic;
+    @SerializedName("FResearch")
+    @Expose
+    private String fResearch;
+    @SerializedName("randNum")
+    @Expose
+    private String randNum;
+    @SerializedName("isOptional")
+    @Expose
+    private int isOptional;
 
     public String getAppName() {
         return appName;
@@ -183,6 +207,70 @@ public class AddSubjectRequestModel {
 
     public void setStudyId(int studyId) {
         this.studyId = studyId;
+    }
+
+    public String getInitials() {
+        return initials;
+    }
+
+    public void setInitials(String initials) {
+        this.initials = initials;
+    }
+
+    public String getAntigenStatus() {
+        return antigenStatus;
+    }
+
+    public void setAntigenStatus(String antigenStatus) {
+        this.antigenStatus = antigenStatus;
+    }
+
+    public String getPKSubStudy() {
+        return pKSubStudy;
+    }
+
+    public void setPKSubStudy(String pKSubStudy) {
+        this.pKSubStudy = pKSubStudy;
+    }
+
+    public String getLeuka() {
+        return leuka;
+    }
+
+    public void setLeuka(String leuka) {
+        this.leuka = leuka;
+    }
+
+    public String getGenomic() {
+        return genomic;
+    }
+
+    public void setGenomic(String genomic) {
+        this.genomic = genomic;
+    }
+
+    public String getFResearch() {
+        return fResearch;
+    }
+
+    public void setFResearch(String fResearch) {
+        this.fResearch = fResearch;
+    }
+
+    public String getRandNum() {
+        return randNum;
+    }
+
+    public void setRandNum(String randNum) {
+        this.randNum = randNum;
+    }
+
+    public int getIsOptional() {
+        return isOptional;
+    }
+
+    public void setIsOptional(int isOptional) {
+        this.isOptional = isOptional;
     }
 
 }

@@ -74,7 +74,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:hint="afsdfs"/>
+                android:hint=""/>
 
 
             <LinearLayout

@@ -21,6 +21,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -89,34 +91,6 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         // set the data in items
-        // holder.name.setText(" "+ personNames.get(position));
-        // implement setOnClickListener event on item view.
-      /*  holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // display a toast with person name on item click
-                Toast.makeText(context, ""+ personNames.get(position), Toast.LENGTH_SHORT).show();
-
-                showModifyDialog();
-            }
-        });*/
-
-     /* if( position ==1 || position ==4 || position ==7) {
-
-          holder.txtStatus.setText("APPROVED");
-          holder.txtStatus.setTextColor(Color.parseColor("#5AA105"));
-
-      }else if( position ==2 || position ==5 || position ==8) {
-
-          holder.txtStatus.setText("REJECTED");
-          holder.txtStatus.setTextColor(Color.RED);
-      }else {
-
-          holder.txtStatus.setText("IN_QUEUE");
-          holder.txtStatus.setTextColor(Color.parseColor("#F9980B"));
-      }*/
-
-
         if(subjectLists != null) {
 
             holder.txtScreenId.setText(subjectLists.get(position).getScreenId().trim());
@@ -125,6 +99,50 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
             holder.txtGroup.setText("" + subjectLists.get(position).getGroupId());
             holder.txtGender.setText("" + subjectLists.get(position).getGender());
             holder.txtStudyId.setText("" +subjectLists.get(position).getStudyTitle()+ "("+ subjectLists.get(position).getStudyName()+")");
+            holder.txtIntials.setText("" + subjectLists.get(position).getInitials());
+
+            if(subjectLists.get(position).getRandNumber()!=null && !subjectLists.get(position).getRandNumber().equalsIgnoreCase(" ")) {
+                holder.txtRandNo.setText("" + subjectLists.get(position).getRandNumber());
+            }else {
+                holder.txtRandNo.setText("--");
+            }
+
+            if(subjectLists.get(position).getEAntigenStatus()!=null && !subjectLists.get(position).getEAntigenStatus().equalsIgnoreCase(" ")) {
+                holder.txtEAntigenStatus.setText("" +subjectLists.get(position).getEAntigenStatus());
+            }else {
+                holder.txtEAntigenStatus.setText("--");
+            }
+
+
+            if(subjectLists.get(position).getPkSubStudy()!=null && !subjectLists.get(position).getPkSubStudy().equalsIgnoreCase(" ")) {
+                holder.txtOptionalPKSubstatus.setText("" +subjectLists.get(position).getPkSubStudy());
+            }else {
+                holder.txtOptionalPKSubstatus.setText("--");
+            }
+
+
+            if(subjectLists.get(position).getLeukapheresis()!=null && !subjectLists.get(position).getLeukapheresis().equalsIgnoreCase(" ")) {
+                holder.txt_optional_leukapherisi.setText("" +subjectLists.get(position).getLeukapheresis());
+            }else {
+                holder.txt_optional_leukapherisi.setText("--");
+            }
+
+
+            if(subjectLists.get(position).getGenomic()!=null && !subjectLists.get(position).getGenomic().equalsIgnoreCase(" ")) {
+                holder.txt_optional_genomic.setText("" +subjectLists.get(position).getGenomic());
+            }else {
+                holder.txt_optional_genomic.setText("--");
+            }
+
+            if(subjectLists.get(position).getFutureReserch()!=null && !subjectLists.get(position).getFutureReserch().equalsIgnoreCase(" ")) {
+                holder.txt_optional_future_research.setText("" +subjectLists.get(position).getFutureReserch());
+            }else {
+                holder.txt_optional_future_research.setText("--");
+            }
+
+
+
+
 
 
             if (subjectLists.get(position).getStatus().equalsIgnoreCase("In_Screening")) {
@@ -137,7 +155,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
                 holder.txtStatus.setText("Rejected");
                 holder.txtStatus.setTextColor(Color.RED);
             }else {
-                holder.txtStatus.setText("In_Queue");
+                holder.txtStatus.setText("IN QUEUE");
                 holder.txtStatus.setTextColor(Color.parseColor("#5dade2"));
             }
 
@@ -358,6 +376,13 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         TextView txtGender;
         TextView txtStudyId;
         Button btnMap;
+        TextView txtIntials;
+        TextView txtRandNo;
+        TextView txtEAntigenStatus;
+        TextView txtOptionalPKSubstatus;
+        TextView txt_optional_leukapherisi;
+        TextView txt_optional_genomic;
+        TextView txt_optional_future_research;
 
 
         public MyViewHolder(View itemView) {
@@ -372,12 +397,18 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
             txtGender = itemView.findViewById(R.id.txtGender);
             txtStudyId = itemView.findViewById(R.id.txtStudyId);
             btnMap = itemView.findViewById(R.id.btnMap);
+            txtIntials = itemView.findViewById(R.id.txtIntials);
+            txtRandNo = itemView.findViewById(R.id.txtRandNo);
+            txtEAntigenStatus= itemView.findViewById(R.id.txtEAntigenStatus);
+            txtOptionalPKSubstatus= itemView.findViewById(R.id.txtOptionalPKSubstatus);
+            txt_optional_leukapherisi= itemView.findViewById(R.id.txt_optional_leukapherisi);
+            txt_optional_genomic= itemView.findViewById(R.id.txt_optional_genomic);
+            txt_optional_future_research= itemView.findViewById(R.id.txt_optional_future_research);
 
             btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //viewScreenStudyFragmentAdapter.removeItem(getAdapterPosition());
-
                     showDeleteDialog(subjectLists.get(getAdapterPosition()).getId());
                 }
             });
@@ -575,6 +606,30 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         final EditText edtScreenId;
         final Switch aSwitchOptionalData;
         final LinearLayout ll_optional_data;
+        final EditText edtInitials;
+        final EditText edtRand;
+        final RadioGroup radioGroupEStatus;
+        final RadioGroup radioGroupPKSubstudy;
+        final RadioGroup radioGroupLeuka;
+        final RadioGroup radioGroupGenomic;
+        final RadioGroup radioGroupFuture;
+
+        final RadioButton radioButtonEStatusNA;
+        final RadioButton radioButtonEStatusPOS;
+        final RadioButton radioButtonEStatusNEG;
+        final RadioButton radioButtonPKStatusNA;
+        final RadioButton radioButtonPKStatusYES;
+        final RadioButton radioButtonPKStatusNO;
+        final RadioButton radioButtonLEUKAStatusNA;
+        final RadioButton radioButtonLEUKAStatusYES;
+        final RadioButton radioButtonLEUKAStatusNO;
+        final RadioButton radioButtonGenomicStatusNA;
+        final RadioButton radioButtonGenomicStatusYES;
+        final RadioButton radioButtonGenomicStatusNO;
+        final RadioButton radioButtonFutureStatusNA;
+        final RadioButton radioButtonFutureStatusYES;
+        final RadioButton radioButtonFutureStatusNO;
+        final int[] isOptional = {0};
 
         // Create custom dialog object
         final Dialog dialog = new Dialog(context);
@@ -591,6 +646,113 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         edtScreenId = dialog.findViewById(R.id.edtScreenId);
         edtScreenId.setText(subjectList.getScreenId());
         edtScreenId.setEnabled(false);
+
+        //Adding Initials Values
+        edtInitials = dialog.findViewById(R.id.edtInitials);
+        edtInitials.setText(subjectList.getInitials());
+
+
+        //Adding RAND Values
+        edtRand = dialog.findViewById(R.id.edtRand);
+        edtRand.setText(subjectList.getRandNumber());
+
+        radioGroupEStatus =(RadioGroup) dialog.findViewById(R.id.radioGroup);
+        radioGroupPKSubstudy =(RadioGroup) dialog.findViewById(R.id.radioGroup1);
+        radioGroupLeuka =(RadioGroup) dialog.findViewById(R.id.radioGroup2);
+        radioGroupGenomic =(RadioGroup) dialog.findViewById(R.id.radioGroup3);
+        radioGroupFuture =(RadioGroup) dialog.findViewById(R.id.radioGroup4);
+
+        //E-ANTIGEN STATUS
+        radioButtonEStatusNA = (RadioButton) dialog.findViewById(R.id.radioNA);
+        radioButtonEStatusPOS = (RadioButton) dialog.findViewById(R.id.radioYES);
+        radioButtonEStatusNEG = (RadioButton) dialog.findViewById(R.id.radioNO);
+
+        //PK Study
+        radioButtonPKStatusNA = (RadioButton) dialog.findViewById(R.id.radioNA1);
+        radioButtonPKStatusYES = (RadioButton) dialog.findViewById(R.id.radioYES1);
+        radioButtonPKStatusNO = (RadioButton) dialog.findViewById(R.id.radioNO1);
+
+        //LEUKA Study
+        radioButtonLEUKAStatusNA = (RadioButton) dialog.findViewById(R.id.radioNA2);
+        radioButtonLEUKAStatusYES = (RadioButton) dialog.findViewById(R.id.radioYES2);
+        radioButtonLEUKAStatusNO = (RadioButton) dialog.findViewById(R.id.radioNO2);
+
+        //GENOMIC Study
+        radioButtonGenomicStatusNA = (RadioButton) dialog.findViewById(R.id.radioNA3);
+        radioButtonGenomicStatusYES = (RadioButton) dialog.findViewById(R.id.radioYES3);
+        radioButtonGenomicStatusNO = (RadioButton) dialog.findViewById(R.id.radioNO3);
+
+        //FUTURE STATUS Study
+        radioButtonFutureStatusNA = (RadioButton) dialog.findViewById(R.id.radioNA4);
+        radioButtonFutureStatusYES = (RadioButton) dialog.findViewById(R.id.radioYES4);
+        radioButtonFutureStatusNO = (RadioButton) dialog.findViewById(R.id.radioNO4);
+
+        if(subjectList.getEAntigenStatus().equalsIgnoreCase("N/A")){
+
+            radioButtonEStatusNA.setChecked(true);
+
+        }else if(subjectList.getEAntigenStatus().equalsIgnoreCase("POS")){
+
+            radioButtonEStatusPOS.setChecked(true);
+        }else {
+
+            radioButtonEStatusNEG.setChecked(true);
+        }
+
+
+        //Set Checked Radio Button For Study PK
+        if(subjectList.getPkSubStudy().equalsIgnoreCase("N/A")){
+
+            radioButtonPKStatusNA.setChecked(true);
+
+        }else if(subjectList.getEAntigenStatus().equalsIgnoreCase("YES")){
+
+            radioButtonPKStatusYES.setChecked(true);
+        }else {
+
+            radioButtonPKStatusNO.setChecked(true);
+        }
+
+        //Set Checked Radio Button For LEUKAPHERSIS
+        if(subjectList.getLeukapheresis().equalsIgnoreCase("N/A")){
+
+            radioButtonLEUKAStatusNA.setChecked(true);
+
+        }else if(subjectList.getLeukapheresis().equalsIgnoreCase("YES")){
+
+            radioButtonLEUKAStatusYES.setChecked(true);
+        }else {
+
+            radioButtonLEUKAStatusNO.setChecked(true);
+        }
+
+        //Set Checked Radio Button For GENOMIC
+        if(subjectList.getGenomic().equalsIgnoreCase("N/A")){
+
+            radioButtonGenomicStatusNA.setChecked(true);
+
+        }else if(subjectList.getGenomic().equalsIgnoreCase("YES")){
+
+            radioButtonGenomicStatusYES.setChecked(true);
+        }else {
+
+            radioButtonGenomicStatusNO.setChecked(true);
+        }
+
+
+        //Set Checked Radio Button For FUTURE RESEARCH
+        if(subjectList.getFutureReserch().equalsIgnoreCase("N/A")){
+
+            radioButtonFutureStatusNA.setChecked(true);
+
+        }else if(subjectList.getFutureReserch().equalsIgnoreCase("YES")){
+
+            radioButtonFutureStatusYES.setChecked(true);
+        }else {
+
+            radioButtonFutureStatusNO.setChecked(true);
+        }
+
         final Spinner spnStudyIDs = (Spinner) dialog.findViewById(R.id.spnStudyId);
         spnStudyIDs.setOnItemSelectedListener(this);
 
@@ -642,19 +804,28 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         ll_optional_data =(LinearLayout) dialog.findViewById(R.id.ll_optional_data);
         ll_optional_data.setVisibility(View.GONE);
 
+
+
         aSwitchOptionalData = (Switch) dialog.findViewById(R.id.switch1);
         aSwitchOptionalData.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     // The toggle is enabled
                     ll_optional_data.setVisibility(View.VISIBLE);
+                    isOptional[0] =1;
                 } else {
                     // The toggle is disabled
                     ll_optional_data.setVisibility(View.GONE);
+                    isOptional[0] =0;
                 }
             }
         });
 
+        if(subjectList.getOptionalRequired() == 1){
+            aSwitchOptionalData.setChecked(true);
+        }else {
+            aSwitchOptionalData.setChecked(false);
+        }
         txt_dob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -721,6 +892,8 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
                // callModifySubjectAPI(String studyName, String strStudyId, String strDoctorCode, String startDate, String endDate, String status, int id)
 
+                if(edtInitials.length() >0) {
+
                 if(!txtDob.getText().toString().equalsIgnoreCase("")){
 
 
@@ -743,11 +916,82 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
                     }else {
 
                         dialog.dismiss();
-                        callModifySubjectAPI(subjectList, spnGroups.getSelectedItem().toString(), spnStudyIDs.getSelectedItem().toString(), spnSelectedStudyID, spnSelectedStudyValue, txtDob.getText().toString());
+
+                        if(isOptional[0] ==0)
+                        {
+
+                            /*callAddSubjectOnBoardingAPI(edtStudyName.getText().toString(),
+                                    txt_date_of_birth.getText().toString(),
+                                    spnPersonGender.getSelectedItem().toString(),
+                                    spnGroups.getSelectedItem().toString(),
+                                    spnSelectedStudyID,
+                                    editTextInitials.getText().toString(),
+                                    isOptional[0],
+                                    " ",
+                                    " ",
+                                    " ",
+                                    " ",
+                                    " ",
+                                    " ");*/
+
+                            callModifySubjectAPI(subjectList, spnGroups.getSelectedItem().toString(),
+                                    spnStudyIDs.getSelectedItem().toString(), spnSelectedStudyID,
+                                    spnSelectedStudyValue, txtDob.getText().toString(),
+                                    edtInitials.getText().toString(), isOptional[0],
+                                    " ", " ", " ", " ",
+                                    " ", " ");
+
+
+                        }else {
+
+                            RadioButton rbEStatus;
+                            RadioButton rbPKStatus;
+                            RadioButton rbLeukaStatus;
+                            RadioButton rbGenomicStatus;
+                            RadioButton rbFutureStatus;
+
+                            int selectedId=radioGroupEStatus.getCheckedRadioButtonId();
+                            rbEStatus=(RadioButton)dialog.findViewById(selectedId);
+
+
+                            int selectedId1=radioGroupPKSubstudy.getCheckedRadioButtonId();
+                            rbPKStatus=(RadioButton)dialog.findViewById(selectedId1);
+
+
+                            int selectedId2=radioGroupLeuka.getCheckedRadioButtonId();
+                            rbLeukaStatus=(RadioButton)dialog.findViewById(selectedId2);
+
+
+                            int selectedId3=radioGroupGenomic.getCheckedRadioButtonId();
+                            rbGenomicStatus=(RadioButton)dialog.findViewById(selectedId3);
+
+
+                            int selectedId4=radioGroupFuture.getCheckedRadioButtonId();
+                            rbFutureStatus=(RadioButton)dialog.findViewById(selectedId4);
+
+                            callModifySubjectAPI(subjectList, spnGroups.getSelectedItem().toString(),
+                                    spnStudyIDs.getSelectedItem().toString(),
+                                    spnSelectedStudyID,
+                                    spnSelectedStudyValue,
+                                    txtDob.getText().toString(),
+                                    edtInitials.getText().toString(), isOptional[0],
+                                    edtRand.getText().toString(),
+                                    rbEStatus.getText().toString().trim(),
+                                    rbPKStatus.getText().toString().trim(),
+                                    rbLeukaStatus.getText().toString().trim(),
+                                    rbGenomicStatus.getText().toString().trim(),
+                                    rbFutureStatus.getText().toString().trim());
+
+                        }
+
+
                     }
 
                 }else {
                     Toast.makeText(context,"Please Select Date Of Birth" , Toast.LENGTH_SHORT).show();
+                }
+                }else {
+                    Toast.makeText(context,"Please enter Initials" , Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -955,7 +1199,11 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
 
 
-    private void callModifySubjectAPI(SubjectList studyList, String spnGroups, String spnStudyIDLabel, String studyID, String spnSelectedStudyValue, String dob) {
+    private void callModifySubjectAPI(SubjectList studyList, String spnGroups, String spnStudyIDLabel, String studyID, String spnSelectedStudyValue, String dob,
+                                      String initials,
+                                      int isOptional, String strRand,  String eStatus,
+                                      String strPkStudy, String strLeuka, String strGenomic,
+                                      String strFuture) {
 
         ModifySubjectRequestModel modifySubjectRequestModel = new ModifySubjectRequestModel();
         modifySubjectRequestModel.setAppName(AppConstants.APP_NAME);
@@ -975,6 +1223,14 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         modifySubjectRequestModel.setIsMapped(studyList.getIsMapped());
         modifySubjectRequestModel.setStudyName(studyID);
         modifySubjectRequestModel.setDob(dob);
+        modifySubjectRequestModel.setInitials(initials);
+        modifySubjectRequestModel.setRandNum(strRand);
+        modifySubjectRequestModel.setAntigenStatus(eStatus);
+        modifySubjectRequestModel.setPKSubStudy(strPkStudy);
+        modifySubjectRequestModel.setLeuka(strLeuka);
+        modifySubjectRequestModel.setGenomic(strGenomic);
+        modifySubjectRequestModel.setFResearch(strFuture);
+        modifySubjectRequestModel.setIsOptional(isOptional);
         //modifySubjectRequestModel.setIsApproved("");
 
         new NetworkingHelper(new ModifySubjectRequest((Activity) context, true, modifySubjectRequestModel)) {
