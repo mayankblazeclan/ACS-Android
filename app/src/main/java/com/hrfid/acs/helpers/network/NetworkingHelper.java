@@ -3,6 +3,7 @@ package com.hrfid.acs.helpers.network;
 import android.app.ProgressDialog;
 
 
+import com.hrfid.acs.helpers.request.AddKitRequest;
 import com.hrfid.acs.helpers.request.AddSubjectRequest;
 import com.hrfid.acs.helpers.request.BaseApiRequest;
 import com.hrfid.acs.helpers.request.CreateScheduleRequest;
@@ -65,9 +66,10 @@ public abstract class NetworkingHelper {
   public static final int MODIFY_SUBJECT = 14;
   public static final int SEARCH_SUBJECT_ONBOARDING = 15;
   public static final int IDENTIFY_SUBJECT_ONBOARDING = 16;
+  public static final int ADD_KIT = 17;
 
 
-    private Call<ResponseBody> apiInterface;
+  private Call<ResponseBody> apiInterface;
   private String TAG = "NetworkingHelper = ";
   private BaseApiRequest mCmgRequest;
   private ProgressDialog pd;
@@ -159,6 +161,11 @@ public abstract class NetworkingHelper {
       case IDENTIFY_SUBJECT_ONBOARDING:
         IdentifySubjectRequest identifySubjectRequest = (IdentifySubjectRequest) cmgRequest;
         apiInterface = ApiRouter.get().getRetrofitService().verifySubjectBarcode(identifySubjectRequest.searchSubjectRequestModel);
+        break;
+
+      case ADD_KIT:
+        AddKitRequest addKitRequest = (AddKitRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().addKit(addKitRequest.addKitRequestModel);
         break;
 
       default:

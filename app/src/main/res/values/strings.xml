@@ -265,6 +265,8 @@
     <string name="txt_requistion_form">Requisition Form</string>
     <string name="reqistion_form">Requistion Form</string>
     <string name="kit_scan_select_date">Please Select Scan Date</string>
+    <string name="txt_kit_id">KIT ID</string>
+    <string name="txt_accession_number">ACCESSION NUMBER</string>
 
 
 </resources>

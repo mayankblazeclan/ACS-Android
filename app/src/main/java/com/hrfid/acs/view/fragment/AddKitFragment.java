@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,12 +31,15 @@ import com.hrfid.acs.R;
 import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
+import com.hrfid.acs.helpers.request.AddKitRequest;
+import com.hrfid.acs.helpers.request.AddKitRequestModel;
 import com.hrfid.acs.helpers.request.AddSubjectRequest;
 import com.hrfid.acs.helpers.request.AddSubjectRequestModel;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
+import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList;
 import com.hrfid.acs.util.AppConstants;
 import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
@@ -59,33 +62,35 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
 
     private static final String TAG = "SeniorSubjectOnBoarding";
 
-    String[] spnStudyID = {"10012","10011","10010", "10015", "10016"};
-
-    String[] sNumber = {"1","2","3", "4", "5", "6", "7", "8", "9", "10"};
-
-    String[] spnGender = {"Samples"};
-
-    String[] spnGroup = {"Kits"};
+    String[] sNumber = {"0", "1","2","3", "4", "5", "6", "7", "8", "9", "10"};
 
     private Button btnGenerateBarcode;
     private Button btnSubmit;
-    //private Bitmap myBitmap;
-    private EditText edtStudyName;
     private String message = "";
     private ImageView imageView;
-    private TextView txt_date_of_birth;
-   // private ImageButton btnDateOfBirth;
+   // private TextView txt_start_date;
     private int mYear, mMonth, mDay;
     private String startDate ="";
     private String endDate = "";
     private  Spinner spnStudyIDs, spnLocal, spnCentral, spnAliquot;
-    private Spinner spnGroups;
-    //private  Spinner spnPersonGender;
     private Button btnReplicate;
     private RadioButton rbSample, rbAliquot, rbBoth;
     private LinearLayout llLocal, llCentral, llAliquot;
     private ImageButton btnStartDatePicker, btnEndDatePicker;
     private TextView txtStartDate, txtEndDate;
+    private  List<StudyList> listStudy = new ArrayList<>();
+    private String spnSelectedStudyID ="";
+    private RadioGroup radioKITtype;
+    private RadioButton radioButtonKitTYPE;
+    private RadioGroup radioAdditionalKITtype;
+    private RadioButton radioButtonAdditionalKitTYPE;
+    private RadioGroup radioGroupCategory;
+    private RadioButton radioButtonCategory;
+    private RadioGroup radioGroupReqForm;
+    private RadioButton radioButtonReqForm;
+    private EditText editTextKIT_ID;
+    private EditText editTextAccessionNumber;
+    private EditText editTextVISIT;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -102,10 +107,6 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
 
     private void initViews(View v) {
 
-
-        //Getting the instance of Spinner and applying OnItemSelectedListener on it
-        /*Spinner spnBloodGroups = (Spinner) v.findViewById(R.id.spnBloodGroup);
-        spnBloodGroups.setOnItemSelectedListener(this);*/
 
         spnStudyIDs = (Spinner) v.findViewById(R.id.spnStatusId);
         spnStudyIDs.setOnItemSelectedListener(this);
@@ -134,36 +135,26 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
         btnGenerateBarcode = v.findViewById(R.id.btnGenerateBarcode);
         btnGenerateBarcode.setOnClickListener(this);
 
-        edtStudyName = v.findViewById(R.id.edtStudyName);
+        editTextKIT_ID = v.findViewById(R.id.edtKitId);
+        editTextAccessionNumber = v.findViewById(R.id.edtAccession);
+        editTextVISIT = v.findViewById(R.id.edtVisit);
+
+        radioKITtype =(RadioGroup) v.findViewById(R.id.radioGroupKitType);
+        radioAdditionalKITtype =(RadioGroup) v.findViewById(R.id.rg_additional_kit);
+        radioGroupCategory =(RadioGroup) v.findViewById(R.id.rg_category);
+        radioGroupReqForm =(RadioGroup) v.findViewById(R.id.radioGroup_req_form);
+
         imageView = (ImageView) v.findViewById(R.id.barcode_image);
-        txt_date_of_birth = v.findViewById(R.id.txt_start_date);
+        //txt_start_date = v.findViewById(R.id.txt_start_date);
 
         btnReplicate = v.findViewById(R.id.btn_replicate);
         btnReplicate.setOnClickListener(this);
-
-/*        btnDateOfBirth =(ImageButton)v.findViewById(R.id.btn_date_of_birth);
-        btnDateOfBirth.setOnClickListener(this);*/
-
-       /* //Creating the ArrayAdapter instance having the country list
-        ArrayAdapter bloodGroupAdp = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item,spnBloodGroup);
-        bloodGroupAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //Setting the ArrayAdapter data on the Spinner
-        spnBloodGroups.setAdapter(bloodGroupAdp);*/
-
-
-        //Creating the ArrayAdapter instance having the country list
-
-
-       /* ArrayAdapter genderAdp = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item, spnGender);
-        genderAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnPersonGender.setAdapter(genderAdp);*/
 
         ArrayAdapter adpNumber = new ArrayAdapter(getActivity(),android.R.layout.simple_spinner_item, sNumber);
         adpNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnAliquot.setAdapter(adpNumber);
         spnLocal.setAdapter(adpNumber);
         spnCentral.setAdapter(adpNumber);
-
 
         rbSample = (RadioButton)v.findViewById(R.id.radioSample);
         rbAliquot = (RadioButton)v.findViewById(R.id.radioAliquot);
@@ -185,16 +176,10 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
 
         // TODO Auto-generated method stub
         switch(parent.getId()){
-            case R.id.spnGroup :
-                //Your Action Here.
-                break;
-
-            case R.id.spnPersonGender :
-                //Your Another Action Here.
-                break;
 
             case R.id.spnStatusId :
                 //Your Action Here.
+                spnSelectedStudyID = String.valueOf(listStudy.get(position).getStudyId());
                 //Toast.makeText(getContext(), parent.getSelectedItem().toString() , Toast.LENGTH_SHORT).show();
                 break;
 
@@ -206,34 +191,10 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
 
     }
 
-
-  /*  public void onRadioButtonClicked(View view) {
-        boolean checked = ((RadioButton) view).isChecked();
-        String str="";
-        // Check which radio button was clicked
-        switch(view.getId()) {
-            case R.id.radioAliquot:
-                if(checked)
-                    str = "Aliquot Selected";
-                break;
-            case R.id.radioSample:
-                if(checked)
-                    str = "Sample Selected";
-                break;
-            case R.id.radioBoth:
-                if(checked)
-                    str = "Both Selected";
-                break;
-        }
-        Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
-    }*/
-
     @Override
     public void onClick(View v) {
 
-
         String str="";
-
         switch (v.getId()){
             case R.id.btnGenerateBarcode:
                 //Toast.makeText(getContext(),"Button Generate Pressed" , Toast.LENGTH_SHORT).show();
@@ -241,16 +202,12 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
                 break;
 
             case R.id.btnSubmit:
-                //submitDetails();
-                break;
-
-            case R.id.btn_date_of_birth:
-                selectDOB();
+                submitDetails();
                 break;
 
             case R.id.btn_replicate :
 
-                if(edtStudyName.getText().toString().length()>0) {
+                if(editTextKIT_ID.getText().toString().length()>0) {
                     //Your dialog
                     showReplicateDialog();
                 }else {
@@ -287,12 +244,11 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
 
 
             case R.id.btn_start_date:
-               setStartDate();
+                setStartDate();
                 break;
 
-
             case R.id.btn_end_date:
-               setExpDate();
+                setExpDate();
                 break;
 
         }
@@ -400,66 +356,25 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
         datePickerDialog.show();
     }
 
-    private void selectDOB() {
-
-        final Calendar c = new GregorianCalendar();
-        mYear = c.get(Calendar.YEAR);
-        mMonth = c.get(Calendar.MONTH);
-        mDay = c.get(Calendar.DAY_OF_MONTH);
-
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
-                new DatePickerDialog.OnDateSetListener() {
-
-                    @Override
-                    public void onDateSet(DatePicker view, int year,
-                                          int monthOfYear, int dayOfMonth) {
-
-                        String fmonth;
-                        int month;
-                        if (monthOfYear < 10 && dayOfMonth < 10) {
-
-                            fmonth = "0" + monthOfYear;
-                            month = Integer.parseInt(fmonth) + 1;
-                            String fDate = "0" + dayOfMonth;
-                            String paddedMonth = String.format("%02d", month);
-                            //editText.setText(fDate + "/" + paddedMonth + "/" + year);
-
-
-                            txt_date_of_birth.setText(year + "-" + paddedMonth + "-" + fDate);
-                            startDate = txt_date_of_birth.getText().toString();
-
-                        } else {
-
-                            fmonth = "0" + monthOfYear;
-                            month = Integer.parseInt(fmonth) + 1;
-                            String paddedMonth = String.format("%02d", month);
-                            //editText.setText(dayOfMonth + "/" + paddedMonth + "/" + year);
-
-                            txt_date_of_birth.setText(year + "-" + paddedMonth + "-" + dayOfMonth);
-                            startDate = txt_date_of_birth.getText().toString();
-                        }
-
-                    }
-                }, mYear, mMonth, mDay);
-        datePickerDialog.show();
-    }
-
     private void submitDetails() {
 
-        if(edtStudyName.length() >0) {
+        if(editTextKIT_ID.length() >0) {
 
-            if(!txt_date_of_birth.getText().toString().equalsIgnoreCase("")){
+            if(editTextVISIT.length() > 0) {
+
+            if(!txtStartDate.getText().toString().equalsIgnoreCase("")){
+
+                if(!txtEndDate.getText().toString().equalsIgnoreCase("")){
 
 
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-                Date date1 = null;
-                try {
-                    date1 = format.parse(txt_date_of_birth.getText().toString());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                    Date date1 = null;
+                    try {
+                        date1 = format.parse(txtStartDate.getText().toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
                     Calendar cal = Calendar.getInstance();
                     Date sysDate = cal.getTime();
@@ -472,34 +387,66 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
                     }else {
 
 
-                        callAddSubjectOnBoardingAPI(edtStudyName.getText().toString(),
-                                txt_date_of_birth.getText().toString(),
-                                "",
-                                spnGroups.getSelectedItem().toString(),
+                        int selectedId=radioKITtype.getCheckedRadioButtonId();
+                        radioButtonKitTYPE =(RadioButton)getView().findViewById(selectedId);
+
+                        int selectedId1=radioAdditionalKITtype.getCheckedRadioButtonId();
+                        radioButtonAdditionalKitTYPE =(RadioButton)getView().findViewById(selectedId1);
+
+                        int selectedId2=radioGroupCategory.getCheckedRadioButtonId();
+                        radioButtonCategory =(RadioButton)getView().findViewById(selectedId2);
+
+                        int selectedId3=radioGroupReqForm.getCheckedRadioButtonId();
+                        radioButtonReqForm =(RadioButton)getView().findViewById(selectedId3);
+
+
+                        //For selected Kit type
+                        radioButtonKitTYPE.getText().toString().trim();
+
+
+                        callAddKITdetailsAPI(editTextKIT_ID.getText().toString(),
+                                editTextAccessionNumber.getText().toString(),
+                                editTextVISIT.getText().toString(),
+                                radioButtonKitTYPE.getText().toString().trim(),
+                                radioButtonAdditionalKitTYPE.getText().toString().trim(),
+                                radioButtonCategory.getText().toString().trim(),
+                                radioButtonReqForm.getText().toString().trim(),
+                                txtStartDate.getText().toString(),
+                                txtEndDate.getText().toString(),
+                                spnLocal.getSelectedItem().toString(),
+                                spnCentral.getSelectedItem().toString(),
+                                spnAliquot.getSelectedItem().toString(),
                                 spnStudyIDs.getSelectedItem().toString());
                     }
 
 
 
 
-               /* callAddSubjectOnBoardingAPI(edtStudyName.getText().toString(),
-                        txt_date_of_birth.getText().toString(),
+               /* callAddSubjectOnBoardingAPI(editTextKIT_ID.getText().toString(),
+                        txt_start_date.getText().toString(),
                         spnPersonGender.getSelectedItem().toString(),
                         spnGroups.getSelectedItem().toString(),
                         spnStudyIDs.getSelectedItem().toString());*/
 
+                }else {
+                    Toast.makeText(getContext(),"Please Select Expiry Date" , Toast.LENGTH_SHORT).show();
+                }
             }else {
-                Toast.makeText(getContext(),"Please Select Date Of Birth" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"Please Select Scan Date" , Toast.LENGTH_SHORT).show();
+            }
+
+            }else {
+                Toast.makeText(getContext(),"Please enter VISIT" , Toast.LENGTH_SHORT).show();
             }
         }else {
-            Toast.makeText(getContext(),"Please enter Screen ID" , Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"Please enter KIT ID" , Toast.LENGTH_SHORT).show();
         }
 
     }
 
     private void generateBarcode() {
 
-        message = edtStudyName.getText().toString();
+        message = editTextKIT_ID.getText().toString();
 
         if(message.length() >0) {
 
@@ -518,28 +465,41 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
         }
     }
 
-    //Call callStudySetup API
-    private void callAddSubjectOnBoardingAPI(String screenId, String strDob, String gender, String group, String studyID) {
+    //Call callAddKITdetailsAPI API
+    private void callAddKITdetailsAPI(String kitId, String accessionNumber, String visit, String kitType, String additionalKit, String category, String reqForm, String startDate, String endDate, String localQty, String centralQty, String aliquotQty, String studyID) {
 
-        AddSubjectRequestModel addSubjectRequestModel = new AddSubjectRequestModel();
-        addSubjectRequestModel.setAppName(AppConstants.APP_NAME);
-        addSubjectRequestModel.setVersionNumber(AppConstants.APP_VERSION);
-        addSubjectRequestModel.setDeviceType(AppConstants.APP_OS);
-        addSubjectRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
-        addSubjectRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(getActivity()));
-        addSubjectRequestModel.setUserRole(new PrefManager(getActivity()).getUserRoleType());
-        addSubjectRequestModel.setTagId(new PrefManager(getActivity()).getBarCodeValue());
-        addSubjectRequestModel.setEvent(AppConstants.ADD_SUBJECT);
-        addSubjectRequestModel.setUserName(new PrefManager(getActivity()).getUserName());
-        addSubjectRequestModel.setScreenId(screenId);
-        addSubjectRequestModel.setDob(strDob);
-        addSubjectRequestModel.setGenBarcode(screenId);
-        addSubjectRequestModel.setStatus(AppConstants.INQUEUE);
-        addSubjectRequestModel.setGender(gender);
-        addSubjectRequestModel.setGroup(group);
-        addSubjectRequestModel.setStudyId(Integer.valueOf(studyID));
+        AddKitRequestModel addKitRequestModel = new AddKitRequestModel();
+        addKitRequestModel.setAppName(AppConstants.APP_NAME);
+        addKitRequestModel.setVersionNumber(AppConstants.APP_VERSION);
+        addKitRequestModel.setDeviceType(AppConstants.APP_OS);
+        addKitRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
+        addKitRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(getActivity()));
+        addKitRequestModel.setUserRole(new PrefManager(getActivity()).getUserRoleType());
+        addKitRequestModel.setTagId(new PrefManager(getActivity()).getBarCodeValue());
+        addKitRequestModel.setEvent(AppConstants.ADD_SUBJECT);
+        addKitRequestModel.setUserName(new PrefManager(getActivity()).getUserName());
+        addKitRequestModel.setK(screenId);
+        addKitRequestModel.setVisit(visit);
+        if(additionalKit.equalsIgnoreCase("YES")) {
+            addKitRequestModel.setAdditionalKit(1);
+        }else {
+            addKitRequestModel.setAdditionalKit(0);
+        }
+        addKitRequestModel.setCategory(category);
+        addKitRequestModel.setStatus(AppConstants.INQUEUE);
+        addKitRequestModel.setLocal(Integer.valueOf(localQty));
+        addKitRequestModel.setCentral(Integer.valueOf(centralQty));
+        addKitRequestModel.setAliquot(Integer.valueOf(aliquotQty));
+        if(reqForm.equalsIgnoreCase("YES")) {
+            addKitRequestModel.setReqForm(1);
+        }else {
+            addKitRequestModel.setReqForm(0);
+        }
+        addKitRequestModel.setScanDate(startDate);
+        addKitRequestModel.setExpDate(endDate);
+        addKitRequestModel.setStudyId(Integer.valueOf(studyID));
 
-        new NetworkingHelper(new AddSubjectRequest(getActivity(), true, addSubjectRequestModel)) {
+        new NetworkingHelper(new AddKitRequest(getActivity(), true, addKitRequestModel)) {
 
             @Override
             public void serverResponseFromApi(ApiResponse serverResponse) {
@@ -554,20 +514,23 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
 
                             if(commonResponse.getResponse().get(0).isStatus()){
 
-                                Logger.logError("subjectOnboard API success " +
+                                Logger.logError("addKIT API success " +
                                         commonResponse.getResponse().get(0).isStatus());
-                                Logger.logError("subjectOnboard API success " +
+                                Logger.logError("addKIT API success " +
                                         commonResponse.getResponse().get(0).getMessage());
 
                                 Utils.showAlertDialog(getActivity(),  commonResponse.getResponse().get(0).getMessage());
-                                edtStudyName.setText("");
-                                txt_date_of_birth.setText("");
+                                editTextKIT_ID.setText("");
+                                editTextAccessionNumber.setText("");
+                                editTextVISIT.setText("");
+                                txtStartDate.setText("");
+                                txtEndDate.setText("");
 
                             }else {
 
-                                Logger.logError("subjectOnboard API Failure " +
+                                Logger.logError("addKIT API Failure " +
                                         commonResponse.getResponse().get(0).isStatus());
-                                Logger.logError("subjectOnboard API Failure " +
+                                Logger.logError("addKIT API Failure " +
                                         commonResponse.getResponse().get(0).getMessage());
 
                                 Utils.showAlertDialog(getActivity(),  commonResponse.getResponse().get(0).getMessage());
@@ -575,9 +538,9 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
 
                         }else {
 
-                            Logger.logError("subjectOnboard API Failure " +
+                            Logger.logError("addKIT API Failure " +
                                     commonResponse.getResponse().get(0).isStatus());
-                            Logger.logError("subjectOnboard API Failure " +
+                            Logger.logError("addKIT API Failure " +
                                     commonResponse.getResponse().get(0).getMessage());
 
                             Utils.showAlertDialog(getActivity(),  commonResponse.getResponse().get(0).getMessage());
@@ -591,13 +554,14 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
                     }
 
                 } else {
-                    Logger.logError("subjectOnboard API Failure " +
+                    Logger.logError("addKIT API Failure " +
                             serverResponse.errorMessageToDisplay);
                 }
             }
         };
 
     }
+
 
 
 
@@ -634,13 +598,15 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
                                 Logger.logError("getStudyIds API success " +
                                         commonResponse.getStudyList());
 
+                                listStudy = commonResponse.getStudyList();
+
                                 if(commonResponse.getStudyList().size()>0) {
 
-                                    List<Integer> lists = new ArrayList<>();
+                                    List<String> lists = new ArrayList<>();
 
                                     for (int i = 0; i < commonResponse.getStudyList().size(); i++) {
 
-                                        lists.add(commonResponse.getStudyList().get(i).getValue());
+                                        lists.add(commonResponse.getStudyList().get(i).getLabel());
 
                                     }
 
@@ -701,7 +667,7 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
         btnCancel = dialog.findViewById(R.id.btnCancel);
         sp_qtyc = dialog.findViewById(R.id.sp_qtyc);
         sp_qtyl = dialog.findViewById(R.id.sp_qtyl);
-        et_text.setText(edtStudyName.getText().toString());
+        et_text.setText(editTextKIT_ID.getText().toString());
 
         String[] items = new String[]{"1 ", "2", "3 ", "4", "5 ", "6",
                 "7 ", "8", "9 ", "10"};

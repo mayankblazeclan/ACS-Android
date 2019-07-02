@@ -1,6 +1,8 @@
 package com.hrfid.acs.helpers.interfaces;
 
 
+import com.hrfid.acs.helpers.request.AddKitRequest;
+import com.hrfid.acs.helpers.request.AddKitRequestModel;
 import com.hrfid.acs.helpers.request.AddSubjectRequestModel;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.CreateScheduleModel;
@@ -64,7 +66,7 @@ public interface APIService {
   @POST("/acs/api/getStudyIds")
   Call<ResponseBody> getStudyIds(@Body CommonRequestModel commonRequestModel);
 
-  //getStudyIds
+  //getSubjectOnboard
   @POST("/acs/api/subjectOnboard")
   Call<ResponseBody> subjectOnboard(@Body AddSubjectRequestModel addSubjectRequestModel);
 
@@ -91,6 +93,10 @@ public interface APIService {
   //verifySubjectBarcode
   @POST("/acs/api/verifySubjectBarcode")
   Call<ResponseBody> verifySubjectBarcode(@Body IdentifySubjectRequestModel identifySubjectRequestModel);
+
+  //addKit
+  @POST("/acs/api/addKit")
+  Call<ResponseBody> addKit(@Body AddKitRequestModel addKitRequestModel);
 
  /* @POST("api/facebook/fblogin")
   Call<ResponseBody> loginFBToSSOAPI(@Body RequestBody body);

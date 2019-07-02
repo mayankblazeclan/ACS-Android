@@ -29,17 +29,74 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_marginLeft="@dimen/activity_5dp_margin"
                 android:textAllCaps="true"
-                android:text="@string/study_id"/>
+                android:text="@string/txt_kit_id"/>
 
             <EditText
-                android:id="@+id/edtStudyName"
+                android:id="@+id/edtKitId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter STUDY ID"/>
+                android:hint="Enter KIT ID"/>
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayout_acc_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/bt_ok_padding"
+            android:layout_marginRight="@dimen/bt_ok_padding"
+            android:layout_marginTop="@dimen/bt_ok_padding"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_marginLeft="@dimen/activity_5dp_margin"
+                android:textAllCaps="true"
+                android:text="@string/txt_accession_number"/>
+
+            <EditText
+                android:id="@+id/edtAccession"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Accession Number"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_days"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/bt_ok_padding"
+            android:layout_marginRight="@dimen/bt_ok_padding"
+            android:layout_marginTop="@dimen/bt_ok_padding"
+            android:visibility="visible"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_marginLeft="@dimen/activity_5dp_margin"
+                android:text="@string/study_name_id"/>
+
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spnStatusId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/spinner_background"
+                android:layout_margin="@dimen/activity_5dp_margin" />
+
+
+        </LinearLayout>
+
+        <!--<LinearLayout
             android:id="@+id/linearLayout_study_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -65,10 +122,10 @@
                 android:layout_height="wrap_content"
                 android:hint="Enter STUDY NAME"/>
 
-        </LinearLayout>
+        </LinearLayout>-->
 
         <LinearLayout
-            android:id="@+id/visti"
+            android:id="@+id/visit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/bt_ok_padding"
@@ -88,7 +145,7 @@
                 android:text="@string/visit"/>
 
             <EditText
-                android:id="@+id/edtStudyName10"
+                android:id="@+id/edtVisit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter VISIT"/>
@@ -134,7 +191,7 @@
                         android:layout_margin="@dimen/activity_5dp_margin"
                         android:gravity="left"
                         android:orientation="horizontal"
-                        android:id="@+id/radioGroup">
+                        android:id="@+id/radioGroupKitType">
 
                         <RadioButton
                             android:id="@+id/rScreening"
@@ -416,7 +473,7 @@
                         android:layout_margin="@dimen/activity_5dp_margin"
                         android:gravity="left"
                         android:orientation="horizontal"
-                        android:id="@+id/radioGroup1">
+                        android:id="@+id/radioGroup_req_form">
 
                         <RadioButton
                             android:id="@+id/rScreening1"
@@ -499,35 +556,7 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/linearLayout_days"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/bt_ok_padding"
-            android:layout_marginRight="@dimen/bt_ok_padding"
-            android:layout_marginTop="@dimen/bt_ok_padding"
-            android:visibility="gone"
-            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_marginLeft="@dimen/activity_5dp_margin"
-                android:text="@string/study_id"/>
-
-
-            <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/spnStatusId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/spinner_background"
-                android:layout_margin="@dimen/activity_5dp_margin" />
-
-
-        </LinearLayout>
 
 
         <LinearLayout
