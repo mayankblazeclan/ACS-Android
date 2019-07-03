@@ -98,6 +98,10 @@ public interface APIService {
   @POST("/acs/api/addKit")
   Call<ResponseBody> addKit(@Body AddKitRequestModel addKitRequestModel);
 
+  //getKitList
+  @POST("/acs/api/getKitList")
+  Call<ResponseBody> getKitList(@Body CommonRequestModel commonRequestModel);
+
  /* @POST("api/facebook/fblogin")
   Call<ResponseBody> loginFBToSSOAPI(@Body RequestBody body);
 

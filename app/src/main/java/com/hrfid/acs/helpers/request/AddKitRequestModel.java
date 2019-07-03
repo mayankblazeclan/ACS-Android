@@ -41,6 +41,12 @@ public class AddKitRequestModel {
     @SerializedName("tagId")
     @Expose
     private String tagId;
+    @SerializedName("kitId")
+    @Expose
+    private String kitId;
+    @SerializedName("extNum")
+    @Expose
+    private String extNum;
     @SerializedName("visit")
     @Expose
     private String visit;
@@ -77,6 +83,11 @@ public class AddKitRequestModel {
     @SerializedName("expDate")
     @Expose
     private String expDate;
+
+
+    @SerializedName("studyTitle")
+    @Expose
+    private String studyTitle;
 
     public String getAppName() {
         return appName;
@@ -164,6 +175,22 @@ public class AddKitRequestModel {
 
     public void setTagId(String tagId) {
         this.tagId = tagId;
+    }
+
+    public String getKitId() {
+        return kitId;
+    }
+
+    public void setKitId(String kitId) {
+        this.kitId = kitId;
+    }
+
+    public String getExtNum() {
+        return extNum;
+    }
+
+    public void setExtNum(String extNum) {
+        this.extNum = extNum;
     }
 
     public String getVisit() {
@@ -260,6 +287,15 @@ public class AddKitRequestModel {
 
     public void setExpDate(String expDate) {
         this.expDate = expDate;
+    }
+
+
+    public String getStudyTitle() {
+        return studyTitle;
+    }
+
+    public void setStudyTitle(String studyTitle) {
+        this.studyTitle = studyTitle;
     }
 
 }

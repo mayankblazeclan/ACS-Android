@@ -10,6 +10,7 @@ import com.hrfid.acs.helpers.request.CreateScheduleRequest;
 import com.hrfid.acs.helpers.request.DeleteScheduleRequest;
 import com.hrfid.acs.helpers.request.DeleteSubjectRequest;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
+import com.hrfid.acs.helpers.request.GetKitDetailsRequest;
 import com.hrfid.acs.helpers.request.GetNotificationRequest;
 import com.hrfid.acs.helpers.request.GetScheduleRequest;
 import com.hrfid.acs.helpers.request.GetSubjectDetailsRequest;
@@ -67,6 +68,7 @@ public abstract class NetworkingHelper {
   public static final int SEARCH_SUBJECT_ONBOARDING = 15;
   public static final int IDENTIFY_SUBJECT_ONBOARDING = 16;
   public static final int ADD_KIT = 17;
+  public static final int GET_KIT_DETAILS = 18;
 
 
   private Call<ResponseBody> apiInterface;
@@ -166,6 +168,11 @@ public abstract class NetworkingHelper {
       case ADD_KIT:
         AddKitRequest addKitRequest = (AddKitRequest) cmgRequest;
         apiInterface = ApiRouter.get().getRetrofitService().addKit(addKitRequest.addKitRequestModel);
+        break;
+
+      case GET_KIT_DETAILS:
+        GetKitDetailsRequest getKitDetailsRequest = (GetKitDetailsRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().getKitList(getKitDetailsRequest.commonRequestModel);
         break;
 
       default:

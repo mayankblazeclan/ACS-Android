@@ -91,6 +91,8 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
     private EditText editTextKIT_ID;
     private EditText editTextAccessionNumber;
     private EditText editTextVISIT;
+    private String strStudyName;
+    private String strStudyTitle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -179,7 +181,9 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
 
             case R.id.spnStatusId :
                 //Your Action Here.
-                spnSelectedStudyID = String.valueOf(listStudy.get(position).getStudyId());
+                spnSelectedStudyID = String.valueOf(listStudy.get(position).getValue());
+                strStudyName = String.valueOf(listStudy.get(position).getStudyId());
+                strStudyTitle = listStudy.get(position).getLabel();
                 //Toast.makeText(getContext(), parent.getSelectedItem().toString() , Toast.LENGTH_SHORT).show();
                 break;
 
@@ -211,7 +215,7 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
                     //Your dialog
                     showReplicateDialog();
                 }else {
-                    Toast.makeText(getContext(), "Enter Study ID " , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Enter KIT ID " , Toast.LENGTH_SHORT).show();
                 }
                 break;
 
@@ -376,7 +380,7 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
                         e.printStackTrace();
                     }
 
-                    Calendar cal = Calendar.getInstance();
+                   /* Calendar cal = Calendar.getInstance();
                     Date sysDate = cal.getTime();
 
                     if(date1.compareTo(sysDate) >0) {
@@ -384,7 +388,7 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
 
                         Toast.makeText(getActivity(),"Please select correct Date of Birth",Toast.LENGTH_SHORT).show();
 
-                    }else {
+                    }else {*/
 
 
                         int selectedId=radioKITtype.getCheckedRadioButtonId();
@@ -416,8 +420,10 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
                                 spnLocal.getSelectedItem().toString(),
                                 spnCentral.getSelectedItem().toString(),
                                 spnAliquot.getSelectedItem().toString(),
-                                spnStudyIDs.getSelectedItem().toString());
-                    }
+                                spnSelectedStudyID,
+                                strStudyName,
+                                strStudyTitle);
+                  //  }
 
 
 
@@ -461,12 +467,16 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
                 imageView.setImageBitmap(bitmap);
             }
         }else {
-            Toast.makeText(getContext(),"Please enter Screen ID" , Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"Please enter KIT ID" , Toast.LENGTH_SHORT).show();
         }
     }
 
     //Call callAddKITdetailsAPI API
-    private void callAddKITdetailsAPI(String kitId, String accessionNumber, String visit, String kitType, String additionalKit, String category, String reqForm, String startDate, String endDate, String localQty, String centralQty, String aliquotQty, String studyID) {
+    private void callAddKITdetailsAPI(String kitId, String accessionNumber, String visit,
+                                      String kitType, String additionalKit, String category,
+                                      String reqForm, String startDate, String endDate,
+                                      String localQty, String centralQty, String aliquotQty,
+                                      String studyID, String strStudyName, String strStudyTitle) {
 
         AddKitRequestModel addKitRequestModel = new AddKitRequestModel();
         addKitRequestModel.setAppName(AppConstants.APP_NAME);
@@ -476,9 +486,19 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
         addKitRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(getActivity()));
         addKitRequestModel.setUserRole(new PrefManager(getActivity()).getUserRoleType());
         addKitRequestModel.setTagId(new PrefManager(getActivity()).getBarCodeValue());
-        addKitRequestModel.setEvent(AppConstants.ADD_SUBJECT);
+        addKitRequestModel.setEvent(AppConstants.ADD_KIT);
+        if(kitType.equalsIgnoreCase("TRIAL")) {
+            addKitRequestModel.setIsTrial(1);
+        }else {
+            addKitRequestModel.setIsTrial(0);
+        }
         addKitRequestModel.setUserName(new PrefManager(getActivity()).getUserName());
-        addKitRequestModel.setK(screenId);
+        addKitRequestModel.setKitId(kitId);
+        if(!accessionNumber.isEmpty()) {
+            addKitRequestModel.setExtNum(accessionNumber);
+        }else {
+            addKitRequestModel.setExtNum(" ");
+        }
         addKitRequestModel.setVisit(visit);
         if(additionalKit.equalsIgnoreCase("YES")) {
             addKitRequestModel.setAdditionalKit(1);
@@ -486,7 +506,7 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
             addKitRequestModel.setAdditionalKit(0);
         }
         addKitRequestModel.setCategory(category);
-        addKitRequestModel.setStatus(AppConstants.INQUEUE);
+        addKitRequestModel.setStatus(AppConstants.IN_STOCK);
         addKitRequestModel.setLocal(Integer.valueOf(localQty));
         addKitRequestModel.setCentral(Integer.valueOf(centralQty));
         addKitRequestModel.setAliquot(Integer.valueOf(aliquotQty));
@@ -498,6 +518,9 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
         addKitRequestModel.setScanDate(startDate);
         addKitRequestModel.setExpDate(endDate);
         addKitRequestModel.setStudyId(Integer.valueOf(studyID));
+        addKitRequestModel.setGenBarcode(kitId);
+        addKitRequestModel.setStudyName(strStudyName);
+        addKitRequestModel.setStudyTitle(strStudyTitle);
 
         new NetworkingHelper(new AddKitRequest(getActivity(), true, addKitRequestModel)) {
 

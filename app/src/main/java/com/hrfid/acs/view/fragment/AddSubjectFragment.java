@@ -97,6 +97,7 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
     private RadioButton rbLeukaStatus;
     private RadioButton rbGenomicStatus;
     private RadioButton rbFutureStatus;
+    private String strStudyName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -197,6 +198,7 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
             case R.id.spnStatusId :
                 //Your Action Here.
                 spnSelectedStudyID = String.valueOf(listStudy.get(position).getValue());
+                strStudyName = String.valueOf(listStudy.get(position).getStudyId());
                 // Toast.makeText(getContext(), spnSelectedStudyID , Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -246,6 +248,18 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
                         String fmonth;
                         int month;
                         if (monthOfYear < 10 && dayOfMonth < 10) {
+
+                            fmonth = "0" + monthOfYear;
+                            month = Integer.parseInt(fmonth) + 1;
+                            String fDate = "0" + dayOfMonth;
+                            String paddedMonth = String.format("%02d", month);
+                            //editText.setText(fDate + "/" + paddedMonth + "/" + year);
+
+
+                            txt_date_of_birth.setText(year + "-" + paddedMonth + "-" + fDate);
+                            //startDate = txt_date_of_birth.getText().toString();
+
+                        } else if (monthOfYear < 13 && dayOfMonth < 10) {
 
                             fmonth = "0" + monthOfYear;
                             month = Integer.parseInt(fmonth) + 1;
@@ -330,6 +344,7 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
                                     spnGroups.getSelectedItem().toString(),
                                     spnSelectedStudyID,
                                     editTextInitials.getText().toString(),
+                                    strStudyName,
                                     isOptional,
                                     " ",
                                     " ",
@@ -346,6 +361,7 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
                                     spnGroups.getSelectedItem().toString(),
                                     spnSelectedStudyID,
                                     editTextInitials.getText().toString(),
+                                    strStudyName,
                                     isOptional,
                                     editTextRand.getText().toString().trim(),
                                     rbEStatus.getText().toString().trim(),
@@ -410,6 +426,7 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
     //Call callStudySetup API
     private void callAddSubjectOnBoardingAPI(String screenId, String strDob, String gender,
                                              String group, String studyID, String initials,
+                                             String strStudyName,
                                              int isOptional, String strRand,  String eStatus,
                                              String strPkStudy, String strLeuka, String strGenomic,
                                              String strFuture) {
@@ -439,6 +456,7 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
         addSubjectRequestModel.setGenomic(strGenomic);
         addSubjectRequestModel.setFResearch(strFuture);
         addSubjectRequestModel.setIsOptional(isOptional);
+        addSubjectRequestModel.setStudyName(strStudyName);
 
         new NetworkingHelper(new AddSubjectRequest(getActivity(), true, addSubjectRequestModel)) {
 

@@ -33,10 +33,6 @@
 
     </RelativeLayout>
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -50,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/bt_ok_padding"
             android:layout_marginRight="@dimen/bt_ok_padding"
-            android:layout_marginTop="@dimen/activity_5dp_margin"
+            android:layout_marginTop="@dimen/bt_ok_padding"
             android:orientation="vertical">
 
             <TextView
@@ -61,24 +57,25 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_marginLeft="@dimen/activity_5dp_margin"
                 android:textAllCaps="true"
-                android:text="@string/txt_kit_id"/>
+                android:text="@string/study_id"/>
 
             <EditText
-                android:id="@+id/edtKitId"
+                android:id="@+id/edtStudyName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter KIT ID"/>
+                android:hint="Enter STUDY ID"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayout_acc_number"
+            android:id="@+id/linearLayout_study_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/bt_ok_padding"
             android:layout_marginRight="@dimen/bt_ok_padding"
-            android:layout_marginTop="@dimen/activity_5dp_margin"
+            android:layout_marginTop="@dimen/bt_ok_padding"
             android:orientation="vertical">
+
 
             <TextView
                 android:layout_width="match_parent"
@@ -88,53 +85,23 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_marginLeft="@dimen/activity_5dp_margin"
                 android:textAllCaps="true"
-                android:text="@string/txt_accession_number"/>
+                android:text="@string/study_name"/>
 
             <EditText
-                android:id="@+id/edtAccession"
+                android:id="@+id/edtStudyName1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter Extension Number"/>
+                android:hint="Enter STUDY NAME"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayout_days"
+            android:id="@+id/visti"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/bt_ok_padding"
             android:layout_marginRight="@dimen/bt_ok_padding"
-            android:layout_marginTop="@dimen/activity_5dp_margin"
-            android:visibility="visible"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_marginLeft="@dimen/activity_5dp_margin"
-                android:text="@string/study_name_id"/>
-
-
-            <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/spnStatusId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/spinner_background"
-                android:layout_margin="@dimen/activity_5dp_margin" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/visit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/bt_ok_padding"
-            android:layout_marginRight="@dimen/bt_ok_padding"
-            android:layout_marginTop="@dimen/activity_5dp_margin"
+            android:layout_marginTop="@dimen/bt_ok_padding"
             android:orientation="vertical">
 
 
@@ -149,7 +116,7 @@
                 android:text="@string/visit"/>
 
             <EditText
-                android:id="@+id/edtVisit"
+                android:id="@+id/edtStudyName10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter VISIT"/>
@@ -162,7 +129,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/bt_ok_padding"
             android:layout_marginRight="@dimen/bt_ok_padding"
-            android:layout_marginTop="@dimen/margin_10dp"
+            android:layout_marginTop="@dimen/bt_ok_padding"
             android:orientation="vertical">
 
             <TableLayout
@@ -351,7 +318,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/bt_ok_padding"
                     android:layout_marginRight="@dimen/bt_ok_padding"
-                    android:layout_marginTop="@dimen/margin_10dp"
+                    android:layout_marginTop="@dimen/bt_ok_padding"
                     android:orientation="horizontal">
 
                     <TextView
@@ -378,9 +345,9 @@
                     android:id="@+id/linearLayout_central"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_10dp"
+                    android:layout_marginLeft="@dimen/bt_ok_padding"
                     android:layout_marginRight="@dimen/bt_ok_padding"
-                    android:layout_marginTop="@dimen/margin_10dp"
+                    android:layout_marginTop="@dimen/bt_ok_padding"
                     android:orientation="horizontal">
 
                     <TextView
@@ -408,7 +375,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/activity_5dp_margin"
                     android:layout_marginRight="@dimen/bt_ok_padding"
-                    android:layout_marginTop="@dimen/margin_10dp"
+                    android:layout_marginTop="@dimen/bt_ok_padding"
                     android:visibility="visible"
                     android:orientation="horizontal">
 
@@ -437,12 +404,62 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayout_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/bt_ok_padding"
+            android:layout_marginRight="@dimen/bt_ok_padding"
+            android:layout_marginTop="@dimen/bt_ok_padding"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btn_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_5dp_margin"
+                android:background="@mipmap/ic_date_calendar"/>
+
+            <TextView
+                android:id="@+id/txt_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:hint="@string/kit_scan_select_date"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <ImageButton
+                    android:id="@+id/btn_end_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/activity_5dp_margin"
+                    android:background="@mipmap/ic_date_calendar"/>
+
+                <TextView
+                    android:id="@+id/txt_end_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:hint="@string/exp_select_date"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/linearLayout_req_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/bt_ok_padding"
             android:layout_marginRight="@dimen/bt_ok_padding"
-            android:layout_marginTop="@dimen/activity_5dp_margin"
             android:orientation="vertical">
 
             <TableLayout
@@ -505,55 +522,35 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayout_date"
+            android:id="@+id/linearLayout_days"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginLeft="@dimen/bt_ok_padding"
             android:layout_marginRight="@dimen/bt_ok_padding"
-            android:layout_marginTop="@dimen/activity_5dp_margin"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/btn_start_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_5dp_margin"
-                android:background="@mipmap/ic_date_calendar"/>
+            android:layout_marginTop="@dimen/bt_ok_padding"
+            android:visibility="gone"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txt_start_date"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:hint="@string/kit_scan_select_date"/>
-
-            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center">
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_marginLeft="@dimen/activity_5dp_margin"
+                android:text="@string/study_id"/>
 
-                <ImageButton
-                    android:id="@+id/btn_end_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/activity_5dp_margin"
-                    android:background="@mipmap/ic_date_calendar"/>
 
-                <TextView
-                    android:id="@+id/txt_end_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:hint="@string/exp_select_date"/>
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spnStatusId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/spinner_background"
+                android:layout_margin="@dimen/activity_5dp_margin" />
 
-            </LinearLayout>
 
         </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/linearLayout_date2"
@@ -562,7 +559,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/bt_ok_padding"
             android:layout_marginRight="@dimen/bt_ok_padding"
-            android:layout_marginTop="@dimen/activity_5dp_margin"
+            android:layout_marginTop="@dimen/bt_ok_padding"
             android:orientation="horizontal">
 
 
@@ -657,7 +654,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    </ScrollView>
 
 </LinearLayout>

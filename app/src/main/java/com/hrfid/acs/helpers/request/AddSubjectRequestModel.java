@@ -80,6 +80,9 @@ public class AddSubjectRequestModel {
     @SerializedName("isOptional")
     @Expose
     private int isOptional;
+    @SerializedName("studyName")
+    @Expose
+    private String studyName;
 
     public String getAppName() {
         return appName;
@@ -271,6 +274,15 @@ public class AddSubjectRequestModel {
 
     public void setIsOptional(int isOptional) {
         this.isOptional = isOptional;
+    }
+
+
+    public String getStudyName() {
+        return studyName;
+    }
+
+    public void setStudyName(String studyName) {
+        this.studyName = studyName;
     }
 
 }

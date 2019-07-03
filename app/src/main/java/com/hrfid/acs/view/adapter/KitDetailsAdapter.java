@@ -1,10 +1,15 @@
 package com.hrfid.acs.view.adapter;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,45 +23,94 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.zxing.WriterException;
 import com.hrfid.acs.R;
-import com.hrfid.acs.helpers.serverResponses.models.GetSubjectDetails.SubjectList;
+import com.hrfid.acs.helpers.network.ApiResponse;
+import com.hrfid.acs.helpers.network.JsonParser;
+import com.hrfid.acs.helpers.network.NetworkingHelper;
+import com.hrfid.acs.helpers.request.AddKitRequest;
+import com.hrfid.acs.helpers.request.AddKitRequestModel;
+import com.hrfid.acs.helpers.request.CommonRequestModel;
+import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
+import com.hrfid.acs.helpers.request.GetKitDetailsRequest;
+import com.hrfid.acs.helpers.request.MapSubjectDetailsRequest;
+import com.hrfid.acs.helpers.request.MapSubjectRequestModel;
+import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
+import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
+import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList;
+import com.hrfid.acs.helpers.serverResponses.models.GetKitDetails.GetKitDetailsResponse;
+import com.hrfid.acs.helpers.serverResponses.models.GetKitDetails.KitList;
+import com.hrfid.acs.util.AppConstants;
 import com.hrfid.acs.util.Logger;
+import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
+import com.hrfid.acs.view.barcode.ShowReplicateListActivity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
  * Created by MS on 2019-05-31.
  */
-public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.MyViewHolder> implements AdapterView.OnItemSelectedListener {
+public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.MyViewHolder> implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
-    //ArrayList personNames;
-    String[] status = { "APPROVED", "REJECTED", "IN_QUEUE"};
+
+    String[] sNumber = {"0", "1","2","3", "4", "5", "6", "7", "8", "9", "10"};
+
+    private Button btnGenerateBarcode;
+    private Button btnSubmit;
+    private String message = "";
+    private ImageView imageView;
+    // private TextView txt_start_date;
+    private int mYear, mMonth, mDay;
+    private String startDate ="";
+    private String endDate = "";
+    private  Spinner spnStudyIDs, spnLocal, spnCentral, spnAliquot;
+    private Button btnReplicate;
+    private RadioButton rbSample, rbAliquot, rbBoth;
+    private LinearLayout llLocal, llCentral, llAliquot;
+    private ImageButton btnStartDatePicker, btnEndDatePicker;
+    private TextView txtStartDate, txtEndDate;
+    private  List<StudyList> listStudy = new ArrayList<>();
+    private String spnSelectedStudyID ="";
+    private RadioGroup radioKITtype;
+    private RadioButton radioButtonKitTYPE;
+    private RadioGroup radioAdditionalKITtype;
+    private RadioButton radioButtonAdditionalKitTYPE;
+    private RadioGroup radioGroupCategory;
+    private RadioButton radioButtonCategory;
+    private RadioGroup radioGroupReqForm;
+    private RadioButton radioButtonReqForm;
+    private EditText editTextKIT_ID;
+    private EditText editTextAccessionNumber;
+    private EditText editTextVISIT;
+    private String strStudyName;
+    private String strStudyTitle;
 
     Context context;
-
-    String[] spnBloodGroup = {"O+","B-","B+", "A+", "A-"};
-
-    String[] spnStudyID = {"10012","10011","10010", "10015", "10016"};
-
     String[] spnReason = {"DAMAGE", "MISSING"};
-
-    String[] spnGroup = {"G1","G2","G3", "G4", "G5"};
-
-    List<SubjectList> studyLists;
+    List<KitList> kitLists;
     private  List<Integer> lists;
     private  List<Integer> listSpinnerStudyID;
+    private RecyclerView recyclerView;
 
-    public KitDetailsAdapter(Context context, List<SubjectList> studyLists, List<Integer> lists) {
+    public KitDetailsAdapter(Context context, List<KitList> kitLists, List<Integer> lists, RecyclerView recyclerView) {
         this.context = context;
-        this.studyLists = studyLists;
+        this.kitLists = kitLists;
         this.lists = lists;
+        this.recyclerView = recyclerView;
     }
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -70,54 +124,60 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         // set the data in items
-        // holder.name.setText(" "+ personNames.get(position));
-        // implement setOnClickListener event on item view.
-      /*  holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // display a toast with person name on item click
-                Toast.makeText(context, ""+ personNames.get(position), Toast.LENGTH_SHORT).show();
 
-                showModifyDialog();
-            }
-        });*/
+        holder.txtKitId.setText(kitLists.get(position).getKitId().trim());
+        holder.txtStudyName.setText("" +kitLists.get(position).getStudyTitle()+ "("+ kitLists.get(position).getStudyName()+")");
+        holder.txtVisit.setText(kitLists.get(position).getVisit().trim());
+        holder.txtVisit.setSelected(true);
 
-     /* if( position ==1 || position ==4 || position ==7) {
+        if(kitLists.get(position).getIsTrial() ==0) {
+            holder.txtKitType.setText("TRIAL");
+        }else {
+            holder.txtKitType.setText("SCREENING");
+        }
+        //holder.txt_status.setText(kitLists.get(position).getStatus().trim());
 
-          holder.txtStatus.setText("APPROVED");
-          holder.txtStatus.setTextColor(Color.parseColor("#5AA105"));
+        if (kitLists.get(position).getStatus().equalsIgnoreCase("In_Screening")) {
+            holder.txt_status.setText("In_Screening");
+            holder.txt_status.setTextColor(Color.parseColor("#F9980B"));
+        } else if (kitLists.get(position).getStatus().equalsIgnoreCase("In_Trial")) {
+            holder.txt_status.setText("In_Trial");
+            holder.txt_status.setTextColor(Color.parseColor("#5AA105"));
+        } else if (kitLists.get(position).getStatus().equalsIgnoreCase("Dismissed")) {
+            holder.txt_status.setText("Dismissed");
+            holder.txt_status.setTextColor(Color.RED);
+        }else {
+            holder.txt_status.setText("In_Stock");
+            holder.txt_status.setTextColor(Color.parseColor("#5dade2"));
+        }
 
-      }else if( position ==2 || position ==5 || position ==8) {
+        if(kitLists.get(position).getAdditionalKit() ==0) {
+            holder.txtAdditionalKit.setText("NO");
+        }else {
+            holder.txtAdditionalKit.setText("YES");
+        }
 
-          holder.txtStatus.setText("REJECTED");
-          holder.txtStatus.setTextColor(Color.RED);
-      }else {
+        if(kitLists.get(position).getRequisitionForm() ==0) {
+            holder.txt_requistion_form.setText("NO");
+        }else {
+            holder.txt_requistion_form.setText("YES");
+        }
 
-          holder.txtStatus.setText("IN_QUEUE");
-          holder.txtStatus.setTextColor(Color.parseColor("#F9980B"));
-      }*/
+        if(kitLists.get(position).getExtNumber().equalsIgnoreCase(" ")) {
+            holder.txtExtNumber.setText("--");
+        }else {
+            holder.txtExtNumber.setText(kitLists.get(position).getExtNumber().trim());
+        }
 
 
-        /*if(studyLists != null) {
-
-            holder.txtScreenId.setText(studyLists.get(position).getScreenId().trim());
-            holder.txtDob.setText
-                    (Utilities.splitDateFromDesired(studyLists.get(position).getDob()));
-            holder.txtGroup.setText("" + studyLists.get(position).getGroupId());
-            holder.txtGender.setText("" + studyLists.get(position).getGender());
-            holder.txtStudyId.setText("" + studyLists.get(position).getStudyId());
-            if (studyLists.get(position).getStatus().equalsIgnoreCase("ACTIVE")) {
-                holder.txtStatus.setText("ACTIVE");
-                holder.txtStatus.setTextColor(Color.parseColor("#5AA105"));
-            } else if (studyLists.get(position).getStatus().equalsIgnoreCase("INACTIVE")) {
-                holder.txtStatus.setText("INACTIVE");
-                holder.txtStatus.setTextColor(Color.RED);
-            } else {
-                holder.txtStatus.setText("IN_QUEUE");
-                holder.txtStatus.setTextColor(Color.parseColor("#F9980B"));
-            }
-
-        }*/
+        holder.txtCategory.setText(kitLists.get(position).getCategory().trim());
+        holder.txtLocal.setText(""+kitLists.get(position).getLocal());
+        holder.txtCentral.setText(""+kitLists.get(position).getCentral());
+        holder.txt_aliquot.setText(""+kitLists.get(position).getAliquot());
+        holder.txtScanDate.setText
+                (Utilities.splitDateFromDesired(kitLists.get(position).getScanDate()));
+        holder.txt_exp_date.setText
+                (Utilities.splitDateFromDesired(kitLists.get(position).getExpiryDate()));
 
         holder.btnModify.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,15 +185,45 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
 
                 //showModifyDialog();
 
-                showModifyDialog(studyLists.get(position), lists);
+                showModifyDialog(kitLists.get(position), lists);
             }
         });
 
-        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+        holder.btnDismiss.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 showDeleteDialog();
+            }
+        });
+
+        holder.btnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //showDeleteDialog();
+
+                Utils.createDialogTwoButtons(
+                        context, context.getString(R.string.kit_mapping),
+                        true, context.getString(R.string.kit_alert_mapping),
+                        context.getString(R.string.dlg_yes_text),
+                        context.getString(R.string.dlg_no_text), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                dialog.dismiss();
+                                //CALL MAP API
+                                callKitMapAPI(kitLists.get(position).getId());
+
+                            }
+                        }, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                dialog.dismiss();
+
+                            }
+                        });
             }
         });
     }
@@ -143,12 +233,25 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
 
     @Override
     public int getItemCount() {
-        return studyLists.size();
+        return kitLists.size();
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        //  Toast.makeText(context,status[position] , Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(getContext(),spnBloodGroup[position] , Toast.LENGTH_SHORT).show();
+
+        // TODO Auto-generated method stub
+        switch(parent.getId()){
+
+            case R.id.spnStatusId :
+                //Your Action Here.
+                spnSelectedStudyID = String.valueOf(listStudy.get(position).getValue());
+                strStudyName = String.valueOf(listStudy.get(position).getStudyId());
+                strStudyTitle = listStudy.get(position).getLabel();
+                //Toast.makeText(getContext(), parent.getSelectedItem().toString() , Toast.LENGTH_SHORT).show();
+                break;
+
+        }
     }
 
     @Override
@@ -157,85 +260,130 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView txtScreenId;
-        TextView txtGroup;
-        TextView txtDob;
-        TextView txtStatus;
-        Button btnModify, btnDelete;
-        TextView txtGender;
-        TextView txtStudyId;
+        TextView txtKitId;
+        TextView txtStudyName;
+        TextView txtVisit;
+        TextView txtKitType;
+        TextView txt_status;
+        TextView txtExtNumber;
+        TextView txtAdditionalKit;
+        TextView txt_requistion_form;
+
+        TextView txtCategory;
+        TextView txtLocal;
+        TextView txtCentral;
+        TextView txt_aliquot;
+        TextView txtScanDate;
+        TextView txt_exp_date;
+
+        Button btnModify, btnDismiss, btnMap;
 
 
         public MyViewHolder(View itemView) {
             super(itemView);
             // get the reference of item view's
-            txtScreenId = (TextView) itemView.findViewById(R.id.txtScreenId);
-            btnModify = (Button) itemView.findViewById(R.id.btnModify);
-            btnDelete = (Button) itemView.findViewById(R.id.btnDelete);
-            txtStatus = itemView.findViewById(R.id.txt_status);
-            txtGroup = (TextView) itemView.findViewById(R.id.txtGroup);
-            txtDob = itemView.findViewById(R.id.txtDob);
-            txtGender = itemView.findViewById(R.id.txtGender);
-            txtStudyId = itemView.findViewById(R.id.txtStudyId);
+            txtKitId = (TextView) itemView.findViewById(R.id.txtKitId);
+            txtStudyName = (TextView) itemView.findViewById(R.id.txtStudyName);
+            txtVisit = (TextView) itemView.findViewById(R.id.txtVisit);
+            txtKitType = itemView.findViewById(R.id.txtKitType);
+            txtAdditionalKit = (TextView) itemView.findViewById(R.id.txtAdditionalKit);
+            txt_requistion_form = itemView.findViewById(R.id.txt_requistion_form);
+            txt_status = itemView.findViewById(R.id.txt_status);
+            txtExtNumber = itemView.findViewById(R.id.txtExtNumber);
+
+            txtCategory = itemView.findViewById(R.id.txtCategory);
+            txtLocal = itemView.findViewById(R.id.txtLocal);
+            txtCentral = itemView.findViewById(R.id.txtCentral);
+            txt_aliquot = itemView.findViewById(R.id.txt_aliquot);
+            txtScanDate = itemView.findViewById(R.id.txtScanDate);
+            txt_exp_date = itemView.findViewById(R.id.txt_exp_date);
+
+            btnModify = itemView.findViewById(R.id.btnModify);
+            btnDismiss = itemView.findViewById(R.id.btnDismiss);
+            btnMap = itemView.findViewById(R.id.btnMap);
         }
     }
 
-    private void showModifyDialog(final SubjectList studyList, List<Integer> lists) {
 
-        final ImageButton txt_dob;
-        final TextView txtStartDate, txtDob;
-        final int[] mYear = new int[1];
-        final int[] mMonth = new int[1];
-        final int[] mDay = new int[1];
-        final EditText edtScreenId;
+    //MAP API CALL
+    private void callKitMapAPI(int ID) {
 
-        listSpinnerStudyID = new ArrayList<>();
-        listSpinnerStudyID.add(studyList.getStudyId());
+        MapSubjectRequestModel mapSubjectRequestModel = new MapSubjectRequestModel();
+        mapSubjectRequestModel.setAppName(AppConstants.APP_NAME);
+        mapSubjectRequestModel.setVersionNumber(AppConstants.APP_VERSION);
+        mapSubjectRequestModel.setDeviceType(AppConstants.APP_OS);
+        mapSubjectRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
+        mapSubjectRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(context));
+        mapSubjectRequestModel.setUserRole(new PrefManager(context).getUserRoleType());
+        mapSubjectRequestModel.setTagId(new PrefManager(context).getBarCodeValue());
+        mapSubjectRequestModel.setEvent(AppConstants.MAP_SUBJECT);
+        mapSubjectRequestModel.setUserName(new PrefManager(context).getUserName());
+        mapSubjectRequestModel.setIsMapped(1);
+        mapSubjectRequestModel.setStatus("In_Screening");
+        mapSubjectRequestModel.setId(Integer.valueOf(ID));
 
+        new NetworkingHelper(new MapSubjectDetailsRequest(context, true,
+                mapSubjectRequestModel)) {
 
-        // Create custom dialog object
-        final Dialog dialog = new Dialog(context);
-        // Include dialog.xml file
-        dialog.setContentView(R.layout.dialog_kit_modify);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        Window window = dialog.getWindow();
-        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        dialog.show();
-
-        Button btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
-        // if decline button is clicked, close the custom dialog
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                // Close dialog
-                dialog.dismiss();
+            public void serverResponseFromApi(ApiResponse serverResponse) {
+                if (serverResponse.isSucess) {
+
+                    try {
+
+                        CommonResponse commonResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, CommonResponse.class);
+
+                        if (commonResponse.getStatus().getCODE() == 200) {
+
+                            if(commonResponse.getResponse().get(0).isStatus()){
+
+                                Logger.logError("mapSubject API success " +
+                                        commonResponse.getResponse().get(0).isStatus());
+                                Logger.logError("mapSubject API success " +
+                                        commonResponse.getResponse().get(0).getMessage());
+
+                                Utils.showAlertDialog((Activity)context,  commonResponse.getResponse().get(0).getMessage());
+                                callGetKitDetailsAPI();
+
+
+                            }else {
+
+                                Logger.logError("subjectOnboard API Failure " +
+                                        commonResponse.getResponse().get(0).isStatus());
+                                Logger.logError("subjectOnboard API Failure " +
+                                        commonResponse.getResponse().get(0).getMessage());
+
+                                Utils.showAlertDialog((Activity)context,  commonResponse.getResponse().get(0).getMessage());
+                            }
+
+                        }else {
+
+                            Logger.logError("subjectOnboard API Failure " +
+                                    commonResponse.getResponse().get(0).isStatus());
+                            Logger.logError("subjectOnboard API Failure " +
+                                    commonResponse.getResponse().get(0).getMessage());
+
+                            Utils.showAlertDialog((Activity)context,  commonResponse.getResponse().get(0).getMessage());
+                        }
+
+
+
+                    }
+                    catch (Exception e){
+                        Logger.logError("mapSubject Exception " + e.getMessage());
+                    }
+
+                } else {
+                    Logger.logError("mapSubject API Failure " +
+                            serverResponse.errorMessageToDisplay);
+                }
             }
-        });
+        };
 
-
-        ImageView btnCancel = (ImageView) dialog.findViewById(R.id.btnCancel);
-        // if decline button is clicked, close the custom dialog
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Close dialog
-                dialog.dismiss();
-            }
-        });
-
-
-
-        Button btnReturn = (Button) dialog.findViewById(R.id.btnReturn);
-        // if decline button is clicked, close the custom dialog
-        btnReturn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Close dialog
-                showReturnDialog();
-            }
-        });
     }
+
+
 
 
     private void showDeleteDialog() {
@@ -328,5 +476,724 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         });
     }
 
+    //Call callGetKitDetailsAPI API
+    private void callGetKitDetailsAPI() {
+        CommonRequestModel commonRequestModel = new CommonRequestModel();
+        commonRequestModel.setAppName(AppConstants.APP_NAME);
+        commonRequestModel.setVersionNumber(AppConstants.APP_VERSION);
+        commonRequestModel.setDeviceType(AppConstants.APP_OS);
+        commonRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
+        commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(context));
+        commonRequestModel.setUserRole(new PrefManager(context).getUserRoleType());
+        commonRequestModel.setTagId(new PrefManager(context).getBarCodeValue());
+        commonRequestModel.setEvent(AppConstants.GET_KIT_DETAILS);
+        commonRequestModel.setUserName(new PrefManager(context).getUserName());
+
+        new NetworkingHelper(new GetKitDetailsRequest((Activity) context, true,
+                commonRequestModel)) {
+
+            @Override
+            public void serverResponseFromApi(ApiResponse serverResponse) {
+                if (serverResponse.isSucess) {
+
+                    try {
+
+                        GetKitDetailsResponse getKitDetailsResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, GetKitDetailsResponse.class);
+
+                        if (getKitDetailsResponse.getStatus().getCODE() == 200) {
+
+                            if(getKitDetailsResponse.getKitList().size() > 0){
+
+                               // linearLayout.setVisibility(View.VISIBLE);
+                                //textView.setVisibility(View.GONE);
+
+                                Logger.logError("getKitList API success status " +
+                                        getKitDetailsResponse.getStatus());
+                                Logger.logError("getKitList API success getSubjectList" +
+                                        getKitDetailsResponse.getKitList());
+
+                               // getAllStudyID();
+
+                                KitDetailsAdapter customAdapter = new KitDetailsAdapter(context, getKitDetailsResponse.getKitList(), lists, recyclerView);
+                                recyclerView.setAdapter(customAdapter);
+
+
+                            }else {
+
+                                Logger.logError("getKitList API Failure " +
+                                        "getSubjectList" +
+                                        getKitDetailsResponse.getKitList());
+
+                                Utils.showAlertDialog((Activity) context,  "NO DATA IN STUDY");
+                            }
+
+                        }else {
+
+                            Logger.logError("getKitList API Failure " +
+                                    getKitDetailsResponse.getStatus().getCODE());
+                            Logger.logError("getKitList API Failure " +
+                                    getKitDetailsResponse.getStatus().getMSG());
+
+                            Utils.showAlertDialog((Activity) context,  getKitDetailsResponse.getStatus()
+                                    .getMSG());
+                        }
+
+
+
+                    }
+                    catch (Exception e){
+                        Logger.logError("getKitList Exception " + e.getMessage());
+                    }
+
+                } else {
+                    Logger.logError("getKitList API Failure " +
+                            serverResponse.errorMessageToDisplay);
+                }
+            }
+        };
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        String str="";
+        switch (v.getId()){
+            case R.id.btnGenerateBarcode:
+                //Toast.makeText(getContext(),"Button Generate Pressed" , Toast.LENGTH_SHORT).show();
+                generateBarcode();
+                break;
+
+         /*   case R.id.btnSubmit:
+                //submitDetails();
+                break;*/
+
+            case R.id.btn_replicate :
+
+                if(editTextKIT_ID.getText().toString().length()>0) {
+                    //Your dialog
+                    showReplicateDialog();
+                }else {
+                    Toast.makeText(context, "Enter KIT ID " , Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case R.id.radioAliquot:
+                boolean checked = ((RadioButton) v).isChecked();
+                if(checked)
+                    str = "Aliquot Selected";
+                llLocal.setVisibility(View.GONE);
+                llCentral.setVisibility(View.GONE);
+                llAliquot.setVisibility(View.VISIBLE);
+                break;
+
+            case R.id.radioSample:
+                boolean checked1 = ((RadioButton) v).isChecked();
+                if(checked1)
+                    str = "Sample Selected";
+                llLocal.setVisibility(View.VISIBLE);
+                llCentral.setVisibility(View.VISIBLE);
+                llAliquot.setVisibility(View.GONE);
+                break;
+
+            case R.id.radioBoth:
+                boolean checked2 = ((RadioButton) v).isChecked();
+                if(checked2)
+                    str = "Both Selected";
+                llLocal.setVisibility(View.VISIBLE);
+                llCentral.setVisibility(View.VISIBLE);
+                llAliquot.setVisibility(View.VISIBLE);
+                break;
+
+
+            case R.id.btn_start_date:
+                setStartDate();
+                break;
+
+            case R.id.btn_end_date:
+                setExpDate();
+                break;
+
+        }
+        //Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
+
+    }
+
+    private void setExpDate() {
+
+        final Calendar c = Calendar.getInstance();
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(context,
+                new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+                        String fmonth;
+                        int month;
+                        if (monthOfYear < 10 && dayOfMonth < 10) {
+
+                            fmonth = "0" + monthOfYear;
+                            month = Integer.parseInt(fmonth) + 1;
+                            String fDate = "0" + dayOfMonth;
+                            String paddedMonth = String.format("%02d", month);
+                            //editText.setText(fDate + "/" + paddedMonth + "/" + year);
+
+
+                            txtEndDate.setText(year + "-" + paddedMonth + "-" + fDate);
+                            endDate =txtEndDate.getText().toString();
+
+                        } else {
+
+                            fmonth = "0" + monthOfYear;
+                            month = Integer.parseInt(fmonth) + 1;
+                            String paddedMonth = String.format("%02d", month);
+                            //editText.setText(dayOfMonth + "/" + paddedMonth + "/" + year);
+
+                            txtEndDate.setText(year + "-" + paddedMonth + "-" + dayOfMonth);
+                            endDate =txtEndDate.getText().toString();
+                        }
+
+
+
+                        // txtEndDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                        //txtEndDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                        //endDate =txtEndDate.getText().toString();
+
+                    }
+                }, mYear, mMonth, mDay);
+        datePickerDialog.show();
+    }
+
+    private void setStartDate() {
+
+        final Calendar c = new GregorianCalendar();
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(context,
+                new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+                        //txtStartDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                        // txtStartDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                        //startDate =txtStartDate.getText().toString();
+
+                        String fmonth;
+                        int month;
+                        if (monthOfYear < 10 && dayOfMonth < 10) {
+
+                            fmonth = "0" + monthOfYear;
+                            month = Integer.parseInt(fmonth) + 1;
+                            String fDate = "0" + dayOfMonth;
+                            String paddedMonth = String.format("%02d", month);
+                            //editText.setText(fDate + "/" + paddedMonth + "/" + year);
+
+
+                            txtStartDate.setText(year + "-" + paddedMonth + "-" + fDate);
+                            startDate =txtStartDate.getText().toString();
+
+                        } else {
+
+                            fmonth = "0" + monthOfYear;
+                            month = Integer.parseInt(fmonth) + 1;
+                            String paddedMonth = String.format("%02d", month);
+                            //editText.setText(dayOfMonth + "/" + paddedMonth + "/" + year);
+
+                            txtStartDate.setText(year + "-" + paddedMonth + "-" + dayOfMonth);
+                            startDate =txtStartDate.getText().toString();
+                        }
+
+                    }
+                }, mYear, mMonth, mDay);
+        datePickerDialog.show();
+    }
+
+    private void generateBarcode() {
+
+        message = editTextKIT_ID.getText().toString();
+
+        if(message.length() >0) {
+
+            Bitmap bitmap = null;
+            try {
+                bitmap = Utilities.CreateImage(message, "Barcode");
+                //myBitmap = bitmap;
+            } catch (WriterException we) {
+                we.printStackTrace();
+            }
+            if (bitmap != null) {
+                imageView.setImageBitmap(bitmap);
+            }
+        }else {
+            Toast.makeText(context,"Please enter KIT ID" , Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showModifyDialog(final KitList kitList, List<Integer> lists) {
+
+        String[] sNumber = {"0", "1","2","3", "4", "5", "6", "7", "8", "9", "10"};
+        listSpinnerStudyID = new ArrayList<>();
+        listSpinnerStudyID.add(kitList.getStudyId());
+
+        // Create custom dialog object
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.dialog_kit_modify);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Window window = dialog.getWindow();
+        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        spnStudyIDs = (Spinner) dialog.findViewById(R.id.spnStatusId);
+        spnStudyIDs.setOnItemSelectedListener(this);
+
+        spnLocal = (Spinner) dialog.findViewById(R.id.spnLocal);
+        spnLocal.setOnItemSelectedListener(this);
+
+        spnCentral = (Spinner) dialog.findViewById(R.id.spnCentral);
+        spnCentral.setOnItemSelectedListener(this);
+
+        spnAliquot = (Spinner) dialog.findViewById(R.id.spnAliquot);
+        spnAliquot.setOnItemSelectedListener(this);
+
+        btnStartDatePicker=(ImageButton)dialog.findViewById(R.id.btn_start_date);
+        txtStartDate=(TextView)dialog.findViewById(R.id.txt_start_date);
+        txtStartDate.setText(kitList.getScanDate());
+
+        btnEndDatePicker=(ImageButton)dialog.findViewById(R.id.btn_end_date);
+        txtEndDate=(TextView)dialog.findViewById(R.id.txt_end_date);
+        txtEndDate.setText(kitList.getExpiryDate());
+
+        btnStartDatePicker.setOnClickListener(this);
+        btnEndDatePicker.setOnClickListener(this);
+
+        btnSubmit = dialog.findViewById(R.id.btnSubmit);
+        btnSubmit.setOnClickListener(this);
+
+        btnGenerateBarcode = dialog.findViewById(R.id.btnGenerateBarcode);
+        btnGenerateBarcode.setOnClickListener(this);
+
+        editTextKIT_ID = dialog.findViewById(R.id.edtKitId);
+        editTextKIT_ID.setText(kitList.getKitId());
+
+        editTextAccessionNumber = dialog.findViewById(R.id.edtAccession);
+        editTextAccessionNumber.setText(kitList.getExtNumber());
+
+        editTextVISIT = dialog.findViewById(R.id.edtVisit);
+        editTextVISIT.setText(kitList.getVisit());
+
+        radioKITtype =(RadioGroup) dialog.findViewById(R.id.radioGroupKitType);
+        radioAdditionalKITtype =(RadioGroup) dialog.findViewById(R.id.rg_additional_kit);
+        radioGroupCategory =(RadioGroup) dialog.findViewById(R.id.rg_category);
+        radioGroupReqForm =(RadioGroup) dialog.findViewById(R.id.radioGroup_req_form);
+
+        imageView = (ImageView) dialog.findViewById(R.id.barcode_image);
+        //txt_start_date = dialog.findViewById(R.id.txt_start_date);
+
+        btnReplicate = dialog.findViewById(R.id.btn_replicate);
+        btnReplicate.setOnClickListener(this);
+
+        ArrayAdapter adpNumber = new ArrayAdapter(context,android.R.layout.simple_spinner_item, sNumber);
+        adpNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnAliquot.setAdapter(adpNumber);
+        spnLocal.setAdapter(adpNumber);
+        spnCentral.setAdapter(adpNumber);
+
+        rbSample = (RadioButton)dialog.findViewById(R.id.radioSample);
+        rbAliquot = (RadioButton)dialog.findViewById(R.id.radioAliquot);
+        rbBoth = (RadioButton)dialog.findViewById(R.id.radioBoth);
+
+        rbSample.setOnClickListener(this);
+        rbAliquot.setOnClickListener(this);
+        rbBoth.setOnClickListener(this);
+
+        llLocal = (LinearLayout) dialog.findViewById(R.id.linearLayout_local);
+        llCentral = (LinearLayout) dialog.findViewById(R.id.linearLayout_central);
+        llAliquot = (LinearLayout) dialog.findViewById(R.id.linearLayout_alqt);
+
+        dialog.show();
+
+        Button btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
+        // if decline button is clicked, close the custom dialog
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                dialog.dismiss();
+                //submitDetails(v);
+            }
+        });
+
+
+        ImageView btnCancel = (ImageView) dialog.findViewById(R.id.btnCancel);
+        // if decline button is clicked, close the custom dialog
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                dialog.dismiss();
+            }
+        });
+
+
+
+        Button btnReturn = (Button) dialog.findViewById(R.id.btnReturn);
+        // if decline button is clicked, close the custom dialog
+        btnReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                showReturnDialog();
+            }
+        });
+    }
+
+
+    private void showReplicateDialog() {
+
+        final TextView et_text;
+        final Button btn_submit;
+        final Button btnCancel;
+        final Spinner sp_qtyc, sp_qtyl;
+
+
+        // Create custom dialog object
+        final Dialog dialog = new Dialog(context);
+        // Include dialog.xml file
+        dialog.setContentView(R.layout.dialog_kit_replicate_barcode);
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Window window = dialog.getWindow();
+        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+
+        et_text = dialog.findViewById(R.id.et_text);
+        btn_submit = dialog.findViewById(R.id.btn_submit);
+        btnCancel = dialog.findViewById(R.id.btnCancel);
+        sp_qtyc = dialog.findViewById(R.id.sp_qtyc);
+        sp_qtyl = dialog.findViewById(R.id.sp_qtyl);
+        et_text.setText(editTextKIT_ID.getText().toString());
+
+        String[] items = new String[]{"1 ", "2", "3 ", "4", "5 ", "6",
+                "7 ", "8", "9 ", "10"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, items);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp_qtyc.setAdapter(adapter);
+        sp_qtyl.setAdapter(adapter);
+
+
+        btn_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (et_text.getText().toString().equals("")) {
+                    Toast.makeText(context, "Please Enter Text", Toast.LENGTH_LONG).show();
+                } else {
+                    Intent i = new Intent(context, ShowReplicateListActivity.class);
+                    i.putExtra("qtyc", sp_qtyc.getSelectedItem().toString());
+                    i.putExtra("qtyl", sp_qtyl.getSelectedItem().toString());
+                    i.putExtra("text", et_text.getText().toString());
+                    context.startActivity(i);
+                }
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void submitDetails(View v) {
+
+        if(editTextKIT_ID.length() >0) {
+
+            if(editTextVISIT.length() > 0) {
+
+                if(!txtStartDate.getText().toString().equalsIgnoreCase("")){
+
+                    if(!txtEndDate.getText().toString().equalsIgnoreCase("")){
+
+
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+                        Date date1 = null;
+                        try {
+                            date1 = format.parse(txtStartDate.getText().toString());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                   /* Calendar cal = Calendar.getInstance();
+                    Date sysDate = cal.getTime();
+
+                    if(date1.compareTo(sysDate) >0) {
+
+
+                        Toast.makeText(getActivity(),"Please select correct Date of Birth",Toast.LENGTH_SHORT).show();
+
+                    }else {*/
+
+
+                        int selectedId=radioKITtype.getCheckedRadioButtonId();
+                        radioButtonKitTYPE =(RadioButton)v.findViewById(selectedId);
+
+                        int selectedId1=radioAdditionalKITtype.getCheckedRadioButtonId();
+                        radioButtonAdditionalKitTYPE =(RadioButton)v.findViewById(selectedId1);
+
+                        int selectedId2=radioGroupCategory.getCheckedRadioButtonId();
+                        radioButtonCategory =(RadioButton)v.findViewById(selectedId2);
+
+                        int selectedId3=radioGroupReqForm.getCheckedRadioButtonId();
+                        radioButtonReqForm =(RadioButton)v.findViewById(selectedId3);
+
+
+                        //For selected Kit type
+                        radioButtonKitTYPE.getText().toString().trim();
+
+
+                        CallModifyDetailsAPI(editTextKIT_ID.getText().toString(),
+                                editTextAccessionNumber.getText().toString(),
+                                editTextVISIT.getText().toString(),
+                                radioButtonKitTYPE.getText().toString().trim(),
+                                radioButtonAdditionalKitTYPE.getText().toString().trim(),
+                                radioButtonCategory.getText().toString().trim(),
+                                radioButtonReqForm.getText().toString().trim(),
+                                txtStartDate.getText().toString(),
+                                txtEndDate.getText().toString(),
+                                spnLocal.getSelectedItem().toString(),
+                                spnCentral.getSelectedItem().toString(),
+                                spnAliquot.getSelectedItem().toString(),
+                                spnSelectedStudyID,
+                                strStudyName,
+                                strStudyTitle);
+                        //  }
+
+
+
+
+               /* callAddSubjectOnBoardingAPI(editTextKIT_ID.getText().toString(),
+                        txt_start_date.getText().toString(),
+                        spnPersonGender.getSelectedItem().toString(),
+                        spnGroups.getSelectedItem().toString(),
+                        spnStudyIDs.getSelectedItem().toString());*/
+
+                    }else {
+                        Toast.makeText(context,"Please Select Expiry Date" , Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    Toast.makeText(context,"Please Select Scan Date" , Toast.LENGTH_SHORT).show();
+                }
+
+            }else {
+                Toast.makeText(context,"Please enter VISIT" , Toast.LENGTH_SHORT).show();
+            }
+        }else {
+            Toast.makeText(context,"Please enter KIT ID" , Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    //Call CallModifyDetailsAPI API
+    private void CallModifyDetailsAPI(String kitId, String accessionNumber, String visit,
+                                      String kitType, String additionalKit, String category,
+                                      String reqForm, String startDate, String endDate,
+                                      String localQty, String centralQty, String aliquotQty,
+                                      String studyID, String strStudyName, String strStudyTitle) {
+
+        AddKitRequestModel addKitRequestModel = new AddKitRequestModel();
+        addKitRequestModel.setAppName(AppConstants.APP_NAME);
+        addKitRequestModel.setVersionNumber(AppConstants.APP_VERSION);
+        addKitRequestModel.setDeviceType(AppConstants.APP_OS);
+        addKitRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
+        addKitRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(context));
+        addKitRequestModel.setUserRole(new PrefManager(context).getUserRoleType());
+        addKitRequestModel.setTagId(new PrefManager(context).getBarCodeValue());
+        addKitRequestModel.setEvent(AppConstants.ADD_KIT);
+        if(kitType.equalsIgnoreCase("TRIAL")) {
+            addKitRequestModel.setIsTrial(1);
+        }else {
+            addKitRequestModel.setIsTrial(0);
+        }
+        addKitRequestModel.setUserName(new PrefManager(context).getUserName());
+        addKitRequestModel.setKitId(kitId);
+        if(!accessionNumber.isEmpty()) {
+            addKitRequestModel.setExtNum(accessionNumber);
+        }else {
+            addKitRequestModel.setExtNum(" ");
+        }
+        addKitRequestModel.setVisit(visit);
+        if(additionalKit.equalsIgnoreCase("YES")) {
+            addKitRequestModel.setAdditionalKit(1);
+        }else {
+            addKitRequestModel.setAdditionalKit(0);
+        }
+        addKitRequestModel.setCategory(category);
+        addKitRequestModel.setStatus(AppConstants.IN_STOCK);
+        addKitRequestModel.setLocal(Integer.valueOf(localQty));
+        addKitRequestModel.setCentral(Integer.valueOf(centralQty));
+        addKitRequestModel.setAliquot(Integer.valueOf(aliquotQty));
+        if(reqForm.equalsIgnoreCase("YES")) {
+            addKitRequestModel.setReqForm(1);
+        }else {
+            addKitRequestModel.setReqForm(0);
+        }
+        addKitRequestModel.setScanDate(startDate);
+        addKitRequestModel.setExpDate(endDate);
+        addKitRequestModel.setStudyId(Integer.valueOf(studyID));
+        addKitRequestModel.setGenBarcode(kitId);
+        addKitRequestModel.setStudyName(strStudyName);
+        addKitRequestModel.setStudyTitle(strStudyTitle);
+
+        new NetworkingHelper(new AddKitRequest((Activity) context, true, addKitRequestModel)) {
+
+            @Override
+            public void serverResponseFromApi(ApiResponse serverResponse) {
+                if (serverResponse.isSucess) {
+
+                    try {
+
+                        CommonResponse commonResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, CommonResponse.class);
+
+                        if (commonResponse.getStatus().getCODE() == 200) {
+
+                            if(commonResponse.getResponse().get(0).isStatus()){
+
+                                Logger.logError("modifyKIT API success " +
+                                        commonResponse.getResponse().get(0).isStatus());
+                                Logger.logError("modifyKIT API success " +
+                                        commonResponse.getResponse().get(0).getMessage());
+
+                                Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
+                                editTextKIT_ID.setText("");
+                                editTextAccessionNumber.setText("");
+                                editTextVISIT.setText("");
+                                txtStartDate.setText("");
+                                txtEndDate.setText("");
+
+                            }else {
+
+                                Logger.logError("modifyKIT API Failure " +
+                                        commonResponse.getResponse().get(0).isStatus());
+                                Logger.logError("modifyKIT API Failure " +
+                                        commonResponse.getResponse().get(0).getMessage());
+
+                                Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
+                            }
+
+                        }else {
+
+                            Logger.logError("modifyKIT API Failure " +
+                                    commonResponse.getResponse().get(0).isStatus());
+                            Logger.logError("modifyKIT API Failure " +
+                                    commonResponse.getResponse().get(0).getMessage());
+
+                            Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
+                        }
+
+
+
+                    }
+                    catch (Exception e){
+                        Logger.logError("modifyKIT Exception " + e.getMessage());
+                    }
+
+                } else {
+                    Logger.logError("modifyKIT API Failure " +
+                            serverResponse.errorMessageToDisplay);
+                }
+            }
+        };
+
+    }
+
+    //getAllStudyID API
+    private void getAllStudyID()
+    {
+        final CommonRequestModel commonRequestModel = new CommonRequestModel();
+        commonRequestModel.setAppName(AppConstants.APP_NAME);
+        commonRequestModel.setVersionNumber(AppConstants.APP_VERSION);
+        commonRequestModel.setDeviceType(AppConstants.APP_OS);
+        commonRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
+        commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(context));
+        commonRequestModel.setUserRole(new PrefManager(context).getUserRoleType());
+        commonRequestModel.setTagId(new PrefManager(context).getBarCodeValue());
+        //commonRequestModel.setEvent(AppConstants.GET_NOTIFICATION);
+        commonRequestModel.setUserName(new PrefManager(context).getUserName());
+
+        new NetworkingHelper(new GetAllStudyIdRequest((Activity) context, true, commonRequestModel)) {
+
+            @Override
+            public void serverResponseFromApi(ApiResponse serverResponse) {
+                if (serverResponse.isSucess) {
+
+                    try {
+
+                        GetAllStudyIdResponse commonResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, GetAllStudyIdResponse.class);
+
+                        if (commonResponse.getStatus().getCODE() == 200) {
+
+                            if(commonResponse.getStatus().getMSG().equalsIgnoreCase("REQ_SUCCESS")){
+
+                                Logger.logError("getStudyIds API success " +
+                                        commonResponse.getStudyList());
+
+                                listStudy = commonResponse.getStudyList();
+
+                                if(commonResponse.getStudyList().size()>0) {
+
+                                    List<String> lists = new ArrayList<>();
+
+                                    for (int i = 0; i < commonResponse.getStudyList().size(); i++) {
+
+                                        lists.add(commonResponse.getStudyList().get(i).getLabel());
+
+                                    }
+
+                                    ArrayAdapter studyIdAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, lists);
+                                    studyIdAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnStudyIDs.setAdapter(studyIdAdp);
+
+                                }else {
+                                    Logger.logError("No STUDY_LIST FOUND :" + "No STUDY_LIST FOUND");
+                                }
+
+
+                            }else {
+
+                                Utils.showAlertDialog((Activity) context,  commonResponse.getStatus().getMSG());
+                            }
+
+                        }
+
+                    }
+                    catch (Exception e){
+                        Logger.logError("Exception " + e.getMessage());
+                    }
+
+                } else {
+                    Logger.logError("getStudyIds API Failure " +
+                            serverResponse.errorMessageToDisplay);
+                }
+            }
+        };
+
+    }
 }
 

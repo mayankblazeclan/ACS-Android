@@ -17,16 +17,15 @@ import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
-import com.hrfid.acs.helpers.request.GetSubjectDetailsRequest;
+import com.hrfid.acs.helpers.request.GetKitDetailsRequest;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
-import com.hrfid.acs.helpers.serverResponses.models.GetSubjectDetails.GetSubjectDetailsResponse;
+import com.hrfid.acs.helpers.serverResponses.models.GetKitDetails.GetKitDetailsResponse;
 import com.hrfid.acs.util.AppConstants;
 import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
 import com.hrfid.acs.view.adapter.KitDetailsAdapter;
-import com.hrfid.acs.view.adapter.SubjectDetailsAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +38,7 @@ public class KitDetailsFragment extends Fragment {
     private LinearLayout linearLayout;
     private TextView textView;
     private  RecyclerView recyclerView;
-    private  List<Integer> lists = new ArrayList<>();
+    private  List<Integer> listGetStudyList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,7 +48,7 @@ public class KitDetailsFragment extends Fragment {
 
         initViews(v);
 
-        getSubjectOnboardingDetails();
+        callGetKitDetailsAPI();
 
         return v;
     }
@@ -81,8 +80,8 @@ public class KitDetailsFragment extends Fragment {
 
 
 
-    //Call getSubjectOnboardingDetails API
-    private void getSubjectOnboardingDetails() {
+    //Call callGetKitDetailsAPI API
+    private void callGetKitDetailsAPI() {
         CommonRequestModel commonRequestModel = new CommonRequestModel();
         commonRequestModel.setAppName(AppConstants.APP_NAME);
         commonRequestModel.setVersionNumber(AppConstants.APP_VERSION);
@@ -91,10 +90,10 @@ public class KitDetailsFragment extends Fragment {
         commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(getActivity()));
         commonRequestModel.setUserRole(new PrefManager(getActivity()).getUserRoleType());
         commonRequestModel.setTagId(new PrefManager(getActivity()).getBarCodeValue());
-        commonRequestModel.setEvent(AppConstants.GET_SUBJECT);
+        commonRequestModel.setEvent(AppConstants.GET_KIT_DETAILS);
         commonRequestModel.setUserName(new PrefManager(getActivity()).getUserName());
 
-        new NetworkingHelper(new GetSubjectDetailsRequest(getActivity(), true,
+        new NetworkingHelper(new GetKitDetailsRequest(getActivity(), true,
                 commonRequestModel)) {
 
             @Override
@@ -103,32 +102,32 @@ public class KitDetailsFragment extends Fragment {
 
                     try {
 
-                        GetSubjectDetailsResponse getSubjectDetailsResponse = JsonParser
-                                .parseClass(serverResponse.jsonResponse, GetSubjectDetailsResponse.class);
+                        GetKitDetailsResponse getKitDetailsResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, GetKitDetailsResponse.class);
 
-                        if (getSubjectDetailsResponse.getStatus().getCODE() == 200) {
+                        if (getKitDetailsResponse.getStatus().getCODE() == 200) {
 
-                            if(getSubjectDetailsResponse.getSubjectList().size() > 0){
+                            if(getKitDetailsResponse.getKitList().size() > 0){
 
                                 linearLayout.setVisibility(View.VISIBLE);
                                 textView.setVisibility(View.GONE);
 
-                                Logger.logError("getSubjectOnboardingDetails API success status " +
-                                        getSubjectDetailsResponse.getStatus());
-                                Logger.logError("getSubjectOnboardingDetails API success getSubjectList" +
-                                        getSubjectDetailsResponse.getSubjectList());
+                                Logger.logError("getKitList API success status " +
+                                        getKitDetailsResponse.getStatus());
+                                Logger.logError("getKitList API success getSubjectList" +
+                                        getKitDetailsResponse.getKitList());
 
                                 getAllStudyID();
 
-                                KitDetailsAdapter customAdapter = new KitDetailsAdapter(getContext(), getSubjectDetailsResponse.getSubjectList(), lists);
+                                KitDetailsAdapter customAdapter = new KitDetailsAdapter(getContext(), getKitDetailsResponse.getKitList(), listGetStudyList, recyclerView);
                                 recyclerView.setAdapter(customAdapter);
 
 
                             }else {
 
-                                Logger.logError("getSubjectOnboardingDetails API Failure " +
+                                Logger.logError("getKitList API Failure " +
                                         "getSubjectList" +
-                                        getSubjectDetailsResponse.getSubjectList());
+                                        getKitDetailsResponse.getKitList());
 
                                 linearLayout.setVisibility(View.GONE);
                                 textView.setVisibility(View.VISIBLE);
@@ -138,12 +137,12 @@ public class KitDetailsFragment extends Fragment {
 
                         }else {
 
-                            Logger.logError("getSubjectOnboardingDetails API Failure " +
-                                    getSubjectDetailsResponse.getStatus().getCODE());
-                            Logger.logError("getSubjectOnboardingDetails API Failure " +
-                                    getSubjectDetailsResponse.getStatus().getMSG());
+                            Logger.logError("getKitList API Failure " +
+                                    getKitDetailsResponse.getStatus().getCODE());
+                            Logger.logError("getKitList API Failure " +
+                                    getKitDetailsResponse.getStatus().getMSG());
 
-                            Utils.showAlertDialog(getActivity(),  getSubjectDetailsResponse.getStatus()
+                            Utils.showAlertDialog(getActivity(),  getKitDetailsResponse.getStatus()
                                     .getMSG());
                         }
 
@@ -151,11 +150,11 @@ public class KitDetailsFragment extends Fragment {
 
                     }
                     catch (Exception e){
-                        Logger.logError("getSubjectOnboardingDetails Exception " + e.getMessage());
+                        Logger.logError("getKitList Exception " + e.getMessage());
                     }
 
                 } else {
-                    Logger.logError("getSubjectOnboardingDetails API Failure " +
+                    Logger.logError("getKitList API Failure " +
                             serverResponse.errorMessageToDisplay);
                 }
             }
@@ -202,7 +201,7 @@ public class KitDetailsFragment extends Fragment {
 
                                     for (int i = 0; i < commonResponse.getStudyList().size(); i++) {
 
-                                        lists.add(commonResponse.getStudyList().get(i).getValue());
+                                        listGetStudyList.add(commonResponse.getStudyList().get(i).getValue());
 
                                     }
 

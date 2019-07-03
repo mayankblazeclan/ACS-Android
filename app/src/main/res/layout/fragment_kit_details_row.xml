@@ -34,16 +34,16 @@
                     android:id="@+id/study_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/study_id"
+                    android:text="@string/txt_kit_id"
                     android:textColor="#000"
                     android:textAllCaps="true"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txtScreenId"
+                    android:id="@+id/txtKitId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ABC (123)"
+                    android:text=""
                     android:layout_marginLeft="@dimen/margin_10dp"
                     android:textColor="@color/gray"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -64,15 +64,15 @@
                     android:id="@+id/study_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/study_name"
+                    android:text="@string/study_name_id"
                     android:textColor="#000"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txtDob"
+                    android:id="@+id/txtStudyName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SAMSON"
+                    android:text=""
                     android:layout_marginLeft="@dimen/margin_10dp"
                     android:textColor="@color/gray"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -80,8 +80,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linearLayout312"
-                android:layout_below="@+id/linearLayout1"
+                android:id="@+id/linearLayout_kit_acc_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/bt_ok_padding"
@@ -90,24 +89,26 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/study_day134"
+                    android:id="@+id/txt_acc_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="VISIT"
+                    android:text="@string/txt_accession_number"
                     android:textColor="#000"
                     android:textAllCaps="true"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txtGroup"
+                    android:id="@+id/txtExtNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text=""
                     android:layout_marginLeft="@dimen/margin_10dp"
-                    android:text=" 30"
                     android:textColor="@color/gray"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
             </LinearLayout>
+
+
 
 
 
@@ -125,19 +126,19 @@
                     android:id="@+id/study_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="KIT"
+                    android:text="KIT TYPE"
                     android:textColor="#000"
                     android:textAllCaps="true"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txtGender"
+                    android:id="@+id/txtKitType"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/margin_10dp"
-                    android:text="KITS"
-                    android:textColor="@color/gray"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/gray" />
 
             </LinearLayout>
 
@@ -165,14 +166,44 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_10dp"
-                    android:text="YES"
+                    android:text=""
                     android:textColor="@color/gray"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linearLayout_r_form"
+                android:id="@+id/linearLayout321"
+                android:layout_below="@+id/linearLayout2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/bt_ok_padding"
+                android:layout_marginRight="@dimen/bt_ok_padding"
+                android:layout_marginTop="@dimen/activity_5dp_margin"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/study_day123"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SCAN DATE"
+                    android:textColor="#000"
+                    android:textAllCaps="true"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                <TextView
+                    android:id="@+id/txtScanDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_10dp"
+                    android:text=""
+                    android:textColor="@color/gray"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout_ext"
                 android:layout_below="@+id/linearLayout321"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -183,65 +214,70 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/txt_requistion_form_label"
+                    android:id="@+id/txtExp_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/reqistion_form"
+                    android:text="EXPIRE DATE"
                     android:textColor="#000"
                     android:textAllCaps="true"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txt_requistion_form"
+                    android:id="@+id/txt_exp_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_10dp"
-                    android:text="YES"
+                    android:text=""
                     android:textColor="@color/gray"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/linearLayout3"
-                android:layout_below="@+id/linearLayout321"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/bt_ok_padding"
-                android:layout_marginRight="@dimen/bt_ok_padding"
-                android:layout_marginTop="@dimen/activity_5dp_margin"
-                android:layout_marginBottom="@dimen/activity_5dp_margin"
-                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/study_status_day"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/kit_status"
-                    android:textColor="#000"
-                    android:textAllCaps="true"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                <TextView
-                    android:id="@+id/txt_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_10dp"
-                    android:text="ACTIVE"
-                    android:textColor="@color/gray"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
-
-            </LinearLayout>
 
         </LinearLayout>
 
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/ll_left"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/linearLayout312"
+                android:layout_below="@+id/linearLayout1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/bt_ok_padding"
+                android:layout_marginRight="@dimen/bt_ok_padding"
+                android:layout_marginTop="@dimen/activity_5dp_margin"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/study_day134"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="VISIT"
+                    android:textAllCaps="true"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#000" />
+
+                <TextView
+                    android:id="@+id/txtVisit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/margin_10dp"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/gray" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linearLayout_cat"
@@ -265,12 +301,14 @@
                     android:id="@+id/txtCategory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="BOTH"
+                    android:text=""
                     android:layout_marginLeft="@dimen/margin_10dp"
                     android:textColor="@color/gray"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
             </LinearLayout>
+
+
 
             <LinearLayout
                 android:id="@+id/linearLayout_local"
@@ -294,7 +332,7 @@
                     android:id="@+id/txtLocal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="8"
+                    android:text=""
                     android:layout_marginLeft="@dimen/margin_10dp"
                     android:textColor="@color/gray"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -325,7 +363,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_10dp"
-                    android:text=" 10"
+                    android:text=""
                     android:textColor="@color/gray"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -357,44 +395,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_10dp"
-                    android:text="9"
+                    android:text=""
                     android:textColor="@color/gray"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linearLayout321"
-                android:layout_below="@+id/linearLayout2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/bt_ok_padding"
-                android:layout_marginRight="@dimen/bt_ok_padding"
-                android:layout_marginTop="@dimen/activity_5dp_margin"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/study_day123"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="SCAN DATE"
-                    android:textColor="#000"
-                    android:textAllCaps="true"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                <TextView
-                    android:id="@+id/txtStartDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_10dp"
-                    android:text="2019-08-10"
-                    android:textColor="@color/gray"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linearLayout_ext"
+                android:id="@+id/linearLayout_r_form"
                 android:layout_below="@+id/linearLayout321"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -405,24 +413,59 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/txtExp_label"
+                    android:id="@+id/txt_requistion_form_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="EXPIRE DATE"
+                    android:text="@string/reqistion_form"
                     android:textColor="#000"
                     android:textAllCaps="true"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txt_exp_date"
+                    android:id="@+id/txt_requistion_form"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_10dp"
-                    android:text="2019-08-30"
+                    android:text=""
                     android:textColor="@color/gray"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout3"
+                android:layout_below="@+id/linearLayout321"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/bt_ok_padding"
+                android:layout_marginRight="@dimen/bt_ok_padding"
+                android:layout_marginBottom="@dimen/activity_5dp_margin"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/study_status_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/kit_status"
+                    android:textColor="#000"
+                    android:textAllCaps="true"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                <TextView
+                    android:id="@+id/txt_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_10dp"
+                    android:text=""
+                    android:textColor="@color/gray"
+                    android:textStyle="bold"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            </LinearLayout>
+
+
+
+
 
         </LinearLayout>
 
@@ -453,7 +496,7 @@
                 android:text="MODIFY"/>
 
             <Button
-                android:id="@+id/btnDelete"
+                android:id="@+id/btnDismiss"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/colorBCRed"
