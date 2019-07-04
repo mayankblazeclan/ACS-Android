@@ -7,9 +7,12 @@ import com.hrfid.acs.helpers.request.AddSubjectRequestModel;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.CreateScheduleModel;
 import com.hrfid.acs.helpers.request.CreateScheduleRequest;
+import com.hrfid.acs.helpers.request.DismissKitRequestModel;
 import com.hrfid.acs.helpers.request.IdentifySubjectRequestModel;
 import com.hrfid.acs.helpers.request.LogoutRequest;
+import com.hrfid.acs.helpers.request.MapKitRequestModel;
 import com.hrfid.acs.helpers.request.MapSubjectRequestModel;
+import com.hrfid.acs.helpers.request.ModifyKitRequestModel;
 import com.hrfid.acs.helpers.request.SearchSubjectRequestModel;
 import com.hrfid.acs.helpers.serverResponses.models.DeleteScheduleRequestModel;
 import com.hrfid.acs.helpers.serverResponses.models.ModifyScheduleRequestModel;
@@ -101,6 +104,18 @@ public interface APIService {
   //getKitList
   @POST("/acs/api/getKitList")
   Call<ResponseBody> getKitList(@Body CommonRequestModel commonRequestModel);
+
+  //modifyKit
+  @POST("/acs/api/modifyKit")
+  Call<ResponseBody> modifyKit(@Body ModifyKitRequestModel modifyKitRequestModel);
+
+  //mapKit
+  @POST("/acs/api/mapKit")
+  Call<ResponseBody> mapKit(@Body MapKitRequestModel mapKitRequestModel);
+
+  //dismissKit
+  @POST("/acs/api/dismissKit")
+  Call<ResponseBody> dismissKit(@Body DismissKitRequestModel dismissKitRequestModel);
 
  /* @POST("api/facebook/fblogin")
   Call<ResponseBody> loginFBToSSOAPI(@Body RequestBody body);

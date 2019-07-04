@@ -14,6 +14,7 @@ public class AppConstants {
  public static final String URL = "10.30.10.110:8080/";
 
 
+
   // public static final String URL = "";
 
  private static SharedPrefsManager spfManager  = new SharedPrefsManager();
@@ -103,6 +104,9 @@ public class AppConstants {
  public static final String IN_STOCK = "In_Stock";
  public static final String ADD_KIT = "Add Kit";
  public static final String GET_KIT_DETAILS = "Kit List";
+ public static final String MODIFY_KIT = "Modify Kit";
+ public static final String MAP_KIT = "Map Kit";
+ public static final String KIT_REASON = "Dismiss Kit";
 
 
 }

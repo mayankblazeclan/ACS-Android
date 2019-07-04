@@ -24,11 +24,12 @@
             android:background="@color/colorBCRed"/>
 
         <ImageView
-            android:id="@+id/btnCancel"
+            android:id="@+id/btnCancelImg"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="@dimen/margin_10dp"
             android:layout_alignParentRight="true"
+            android:visibility="gone"
             android:background="@drawable/ic_cross_close"/>
 
     </RelativeLayout>
@@ -63,10 +64,11 @@
                 android:textAllCaps="true"
                 android:text="@string/txt_kit_id"/>
 
-            <EditText
+            <TextView
                 android:id="@+id/edtKitId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
                 android:hint="Enter KIT ID"/>
 
         </LinearLayout>
@@ -195,7 +197,7 @@
                         android:layout_margin="@dimen/activity_5dp_margin"
                         android:gravity="left"
                         android:orientation="horizontal"
-                        android:id="@+id/radioGroup">
+                        android:id="@+id/radioGroupKitType">
 
                         <RadioButton
                             android:id="@+id/rScreening"
@@ -248,7 +250,7 @@
                         android:id="@+id/rg_additional_kit">
 
                         <RadioButton
-                            android:id="@+id/radioNo"
+                            android:id="@+id/rbAdNo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="  NO"
@@ -258,7 +260,7 @@
                             android:textAppearance="?android:attr/textAppearanceMedium" />
 
                         <RadioButton
-                            android:id="@+id/radioNO"
+                            android:id="@+id/rbAdYes"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="  YES"
@@ -475,10 +477,10 @@
                         android:layout_margin="@dimen/activity_5dp_margin"
                         android:gravity="left"
                         android:orientation="horizontal"
-                        android:id="@+id/radioGroup1">
+                        android:id="@+id/radioGroup_req_form">
 
                         <RadioButton
-                            android:id="@+id/rScreening1"
+                            android:id="@+id/rbReqFormYES"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="  YES"
@@ -488,7 +490,7 @@
                             android:textAppearance="?android:attr/textAppearanceMedium" />
 
                         <RadioButton
-                            android:id="@+id/rTrial2"
+                            android:id="@+id/rbReqFormNO"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="  NO"
@@ -600,7 +602,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:weightSum="4">
+            android:gravity="center"
+            android:weightSum="3">
 
             <Button
                 android:id="@+id/btnSubmit"
@@ -615,7 +618,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:background="@color/colorBCRed"/>
 
-            <Button
+          <!--  <Button
                 android:id="@+id/btnGenerateBarcode"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -639,7 +642,7 @@
                 android:padding="10dp"
                 android:layout_margin="@dimen/bt_ok_padding"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:background="@color/colorBCRed"/>
+                android:background="@color/colorBCRed"/>-->
 
             <Button
                 android:id="@+id/btnReturn"
@@ -653,6 +656,19 @@
                 android:layout_margin="@dimen/bt_ok_padding"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:background="@color/black"/>
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="CANCEL"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:padding="10dp"
+                android:layout_margin="@dimen/bt_ok_padding"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:background="@color/colorBCRed"/>-->
 
         </LinearLayout>
 

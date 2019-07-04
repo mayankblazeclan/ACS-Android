@@ -9,6 +9,7 @@ import com.hrfid.acs.helpers.request.BaseApiRequest;
 import com.hrfid.acs.helpers.request.CreateScheduleRequest;
 import com.hrfid.acs.helpers.request.DeleteScheduleRequest;
 import com.hrfid.acs.helpers.request.DeleteSubjectRequest;
+import com.hrfid.acs.helpers.request.DismissKitDetailsRequest;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.request.GetKitDetailsRequest;
 import com.hrfid.acs.helpers.request.GetNotificationRequest;
@@ -16,8 +17,10 @@ import com.hrfid.acs.helpers.request.GetScheduleRequest;
 import com.hrfid.acs.helpers.request.GetSubjectDetailsRequest;
 import com.hrfid.acs.helpers.request.IdentifySubjectRequest;
 import com.hrfid.acs.helpers.request.LogoutRequest;
+import com.hrfid.acs.helpers.request.MapKitDetailsRequest;
 import com.hrfid.acs.helpers.request.MapSubjectDetailsRequest;
 import com.hrfid.acs.helpers.request.MapSubjectRequestModel;
+import com.hrfid.acs.helpers.request.ModifyKitRequest;
 import com.hrfid.acs.helpers.request.ModifyScheduleRequest;
 import com.hrfid.acs.helpers.request.ModifySubjectRequest;
 import com.hrfid.acs.helpers.request.ResetNotificationCountRequest;
@@ -69,6 +72,9 @@ public abstract class NetworkingHelper {
   public static final int IDENTIFY_SUBJECT_ONBOARDING = 16;
   public static final int ADD_KIT = 17;
   public static final int GET_KIT_DETAILS = 18;
+  public static final int MODIFY_KIT = 19;
+  public static final int MAP_KIT_DETAILS = 20;
+  public static final int DISMISS_KIT_DETAILS = 21;
 
 
   private Call<ResponseBody> apiInterface;
@@ -173,6 +179,21 @@ public abstract class NetworkingHelper {
       case GET_KIT_DETAILS:
         GetKitDetailsRequest getKitDetailsRequest = (GetKitDetailsRequest) cmgRequest;
         apiInterface = ApiRouter.get().getRetrofitService().getKitList(getKitDetailsRequest.commonRequestModel);
+        break;
+
+      case MODIFY_KIT:
+        ModifyKitRequest modifyKit = (ModifyKitRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().modifyKit(modifyKit.modifyKitRequestModel);
+        break;
+
+      case MAP_KIT_DETAILS:
+        MapKitDetailsRequest mapKitDetailsRequest = (MapKitDetailsRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().mapKit(mapKitDetailsRequest.mapKitRequestModel);
+        break;
+
+      case DISMISS_KIT_DETAILS:
+        DismissKitDetailsRequest dismissKitDetailsRequest = (DismissKitDetailsRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().dismissKit(dismissKitDetailsRequest.dismissKitRequestModel);
         break;
 
       default:

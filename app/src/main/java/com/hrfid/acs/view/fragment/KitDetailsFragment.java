@@ -19,6 +19,7 @@ import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.request.GetKitDetailsRequest;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
+import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList;
 import com.hrfid.acs.helpers.serverResponses.models.GetKitDetails.GetKitDetailsResponse;
 import com.hrfid.acs.util.AppConstants;
 import com.hrfid.acs.util.Logger;
@@ -39,6 +40,7 @@ public class KitDetailsFragment extends Fragment {
     private TextView textView;
     private  RecyclerView recyclerView;
     private  List<Integer> listGetStudyList = new ArrayList<>();
+    private  List<StudyList> listStudy = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,6 +49,8 @@ public class KitDetailsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_view_screen_study, container, false);
 
         initViews(v);
+
+        getAllStudyID();
 
         callGetKitDetailsAPI();
 
@@ -119,7 +123,7 @@ public class KitDetailsFragment extends Fragment {
 
                                 getAllStudyID();
 
-                                KitDetailsAdapter customAdapter = new KitDetailsAdapter(getContext(), getKitDetailsResponse.getKitList(), listGetStudyList, recyclerView);
+                                KitDetailsAdapter customAdapter = new KitDetailsAdapter(getContext(), getKitDetailsResponse.getKitList(), listStudy, recyclerView);
                                 recyclerView.setAdapter(customAdapter);
 
 
@@ -198,6 +202,7 @@ public class KitDetailsFragment extends Fragment {
                                 if(commonResponse.getStudyList().size()>0) {
 
 
+                                    listStudy = commonResponse.getStudyList();
 
                                     for (int i = 0; i < commonResponse.getStudyList().size(); i++) {
 
