@@ -70,6 +70,11 @@ public class SubjectList {
     @Expose
     private int optionalRequired;
 
+
+    @SerializedName("rejection_reason")
+    @Expose
+    private String rejection_reason;
+
     public int getId() {
         return id;
     }
@@ -237,5 +242,14 @@ public class SubjectList {
     public void setOptionalRequired(int optionalRequired) {
         this.optionalRequired = optionalRequired;
     }
+
+    public String getRejection_reason() {
+        return rejection_reason;
+    }
+
+    public void setRejection_reason(String rejection_reason) {
+        this.rejection_reason = rejection_reason;
+    }
+
 
 }

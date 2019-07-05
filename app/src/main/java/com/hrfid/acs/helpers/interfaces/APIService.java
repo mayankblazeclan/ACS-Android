@@ -14,6 +14,7 @@ import com.hrfid.acs.helpers.request.MapKitRequestModel;
 import com.hrfid.acs.helpers.request.MapSubjectRequestModel;
 import com.hrfid.acs.helpers.request.ModifyKitRequestModel;
 import com.hrfid.acs.helpers.request.SearchSubjectRequestModel;
+import com.hrfid.acs.helpers.request.VerifySubjectRequestModel;
 import com.hrfid.acs.helpers.serverResponses.models.DeleteScheduleRequestModel;
 import com.hrfid.acs.helpers.serverResponses.models.ModifyScheduleRequestModel;
 import com.hrfid.acs.helpers.serverResponses.models.ModifySubjectRequestModel;
@@ -116,6 +117,10 @@ public interface APIService {
   //dismissKit
   @POST("/acs/api/dismissKit")
   Call<ResponseBody> dismissKit(@Body DismissKitRequestModel dismissKitRequestModel);
+
+  //verifySubject
+  @POST("/acs/api/verifySubject")
+  Call<ResponseBody> verifySubject(@Body VerifySubjectRequestModel verifySubjectRequestModel);
 
  /* @POST("api/facebook/fblogin")
   Call<ResponseBody> loginFBToSSOAPI(@Body RequestBody body);

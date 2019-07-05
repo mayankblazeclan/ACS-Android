@@ -151,6 +151,7 @@
     <string name="str_rfid">RFID</string>
     <string name="str_copyright_symbol_MAIN">\u00a9 2019 All rights Reserved v1.0 Build 01</string>
     <string name="bc_header_user_login">SCAN USER \nCARD</string>
+    <string name="bc_scan_barcode">SCAN SUBJECT \nBARCODE</string>
     <string name="string_scan_urcode">SCAN PATIENT UR CODE</string>
     <string name="string_verify_urcode">PATIENT VERIFICATION</string>
     <string name="bc_header_verbally_id_patient">VERBALLY IDENTIFY \nPATIENT</string>

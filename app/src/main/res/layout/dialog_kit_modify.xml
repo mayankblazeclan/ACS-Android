@@ -618,32 +618,6 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:background="@color/colorBCRed"/>
 
-          <!--  <Button
-                android:id="@+id/btnGenerateBarcode"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="GENERATE"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:padding="10dp"
-                android:layout_margin="@dimen/bt_ok_padding"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:background="@color/black"/>
-
-            <Button
-                android:id="@+id/btn_replicate"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="REPLICATE"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:padding="10dp"
-                android:layout_margin="@dimen/bt_ok_padding"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:background="@color/colorBCRed"/>-->
-
             <Button
                 android:id="@+id/btnReturn"
                 android:layout_width="0dp"

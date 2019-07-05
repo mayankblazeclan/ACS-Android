@@ -37,7 +37,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:padding="16dp"
-                android:text="@string/bc_header_user_login"
+                android:text="@string/bc_scan_barcode"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="18sp"

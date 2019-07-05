@@ -152,8 +152,21 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         holder.txtStatus.setText("In_Trial");
         holder.txtStatus.setTextColor(Color.parseColor("#5AA105"));
       } else if (subjectLists.get(position).getStatus().equalsIgnoreCase("Rejected")) {
-        holder.txtStatus.setText("Rejected");
-        holder.txtStatus.setTextColor(Color.RED);
+        if(subjectLists.get(position).getRejection_reason()!=null) {
+          holder.txtStatus.setText("Rejected" + " (" + subjectLists.get(position).getRejection_reason() + ")");
+          holder.txtStatus.setTextColor(Color.RED);
+        }else {
+          holder.txtStatus.setText("Rejected");
+          holder.txtStatus.setTextColor(Color.RED);
+        }
+      } else if (subjectLists.get(position).getStatus().equalsIgnoreCase("Withdrawal")) {
+        if(subjectLists.get(position).getRejection_reason()!=null) {
+          holder.txtStatus.setText("Withdrawal" + " (" + subjectLists.get(position).getRejection_reason() + ")");
+          holder.txtStatus.setTextColor(Color.RED);
+        }else {
+          holder.txtStatus.setText("Withdrawal");
+          holder.txtStatus.setTextColor(Color.RED);
+        }
       }else {
         holder.txtStatus.setText("IN QUEUE");
         holder.txtStatus.setTextColor(Color.parseColor("#5dade2"));
@@ -470,7 +483,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
     listsGroup.add(subjectList.getGroupId());
     //System.out.println("listsGroup (1) :" + String.valueOf(subjectList.getStudyName()));
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 6; i++) {
       if(!subjectList.getGroupId().equalsIgnoreCase(spnGroupName[i])) {
         listsGroup.add(spnGroupName[i]);
         // System.out.println("spnGroupName[i] Group :" + spnGroupName[i]);
@@ -560,7 +573,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
     listsGroup.add(subjectList.getGroupId());
     //System.out.println("listsGroup (1) :" + String.valueOf(subjectList.getStudyName()));
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 6; i++) {
       if(!subjectList.getGroupId().equalsIgnoreCase(spnGroupName[i])) {
         listsGroup.add(spnGroupName[i]);
         // System.out.println("spnGroupName[i] Group :" + spnGroupName[i]);
@@ -778,7 +791,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
     listsGroup.add(subjectList.getGroupId());
     //System.out.println("listsGroup (1) :" + String.valueOf(subjectList.getStudyName()));
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 6; i++) {
       if(!subjectList.getGroupId().equalsIgnoreCase(spnGroupName[i])) {
         listsGroup.add(spnGroupName[i]);
         // System.out.println("spnGroupName[i] Group :" + spnGroupName[i]);

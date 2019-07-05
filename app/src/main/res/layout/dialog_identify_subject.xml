@@ -8,11 +8,17 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="SUBJECT DETAILS"
+        android:text="SUBJECT DETAIL"
         android:textColor="@color/white"
         android:textStyle="bold"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:background="@color/colorBCRed"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_10dp"
+        android:orientation="vertical">
 
     <TextView
         android:id="@+id/screenId"
@@ -84,28 +90,112 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/black"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:layout_margin="@dimen/margin_10dp"
-        android:textStyle="bold"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/black"/>
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/btnOK"
-        android:layout_width="wrap_content"
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow
+            android:background="@color/white"
+            android:padding="@dimen/margin_10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:layout_gravity="left"
+                android:textStyle="bold"
+                android:gravity="left|center"
+                android:textAllCaps="true"
+                android:layout_marginLeft="@dimen/activity_5dp_margin"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="STATUS"/>
+
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_5dp_margin"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:id="@+id/rg_status">
+
+                <RadioButton
+                    android:id="@+id/radioAccept"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  ACCEPT"
+                    android:checked="true"
+                    android:layout_marginLeft="@dimen/margin_30dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <RadioButton
+                    android:id="@+id/radioReject"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  REJECT"
+                    android:checked="false"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <RadioButton
+                    android:id="@+id/radioWithdraw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  WITHDRAW"
+                    android:checked="false"
+                    android:layout_marginLeft="@dimen/activity_5dp_margin"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </RadioGroup>
+        </TableRow>
+
+
+        <EditText
+            android:id="@+id/edtReason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_10dp"
+            android:hint="Enter REASON"/>
+
+    </TableLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:paddingLeft="@dimen/margin_10dp"
-        android:paddingRight="@dimen/margin_10dp"
-        android:text="OK"
+        android:orientation="horizontal"
         android:gravity="center"
-        android:layout_gravity="center"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:background="@color/colorBCRed"/>
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="SUBMIT"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:layout_margin="@dimen/bt_ok_padding"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@color/colorBCRed"/>
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="CANCEL"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:layout_margin="@dimen/bt_ok_padding"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@color/black"/>-->
+
+    </LinearLayout>
 
 </LinearLayout>

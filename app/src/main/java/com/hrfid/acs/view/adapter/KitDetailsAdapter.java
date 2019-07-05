@@ -156,8 +156,14 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
             holder.txt_status.setText("In_Trial");
             holder.txt_status.setTextColor(Color.parseColor("#5AA105"));
         } else if (kitLists.get(position).getStatus().equalsIgnoreCase("Dismissed")) {
-            holder.txt_status.setText("Dismissed");
-            holder.txt_status.setTextColor(Color.RED);
+            if(kitLists.get(position).getReason()!=null) {
+
+                holder.txt_status.setText("Dismissed" + " (" + kitLists.get(position).getReason() + ")");
+                holder.txt_status.setTextColor(Color.RED);
+            }else {
+                holder.txt_status.setText("Dismissed");
+                holder.txt_status.setTextColor(Color.RED);
+            }
         }else {
             holder.txt_status.setText("In_Stock");
             holder.txt_status.setTextColor(Color.parseColor("#5dade2"));
@@ -1048,13 +1054,22 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         spnAliquot.setAdapter(adpNumberAliquot);
 
         List<String> listSetLabel = new ArrayList<>();
+        String s = kitList.getStudyTitle()+ "("+String.valueOf(kitList.getStudyName())+")";
+        listSetLabel.add(s);
 
         for (int i = 0; i < getListStudy.size(); i++) {
+            if (!s.equalsIgnoreCase(getListStudy.get(i).getLabel())) {
+                listSetLabel.add(getListStudy.get(i).getLabel());
+                //System.out.println("listStudyID name :" + listStudyID.get(i).getLabel());
+            }
+        }
+
+       /* for (int i = 0; i < getListStudy.size(); i++) {
 
             listSetLabel.add(""+getListStudy.get(i).getLabel());
             Logger.log("List of Label :"+getListStudy.get(i).getLabel());
 
-        }
+        }*/
 
         ArrayAdapter studyIdAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, listSetLabel);
         studyIdAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
