@@ -67,6 +67,8 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
   String[] spnGroupName = {"-", "G1","G2","G3", "G4", "G5"};
   private String spnSelectedStudyID ="";
   private String spnSelectedStudyValue ="";
+  List<String> lists1 = new ArrayList<>();
+  private Spinner spnStudyIDs;
 
   List<SubjectList> subjectLists;
   private  List<com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList> listStudyID;
@@ -186,6 +188,12 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
       }
 
       if(subjectLists.get(position).getStatus().equalsIgnoreCase("Rejected")){
+
+        holder.btnMap.setVisibility(View.GONE);
+        holder.btnDelete.setVisibility(View.GONE);
+        holder.btnModify.setVisibility(View.GONE);
+
+      }else if(subjectLists.get(position).getStatus().equalsIgnoreCase("Withdrawal")){
 
         holder.btnMap.setVisibility(View.GONE);
         holder.btnDelete.setVisibility(View.GONE);
@@ -363,13 +371,24 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
       case R.id.spnStudyId :
         //Your Action Here.
         if(position !=0) {
-          spnSelectedStudyID = String.valueOf(listStudyID.get(position - 1).getStudyId());
-          spnSelectedStudyValue = String.valueOf(listStudyID.get(position - 1).getValue());
+          for (int i = 0; i < listStudyID.size(); i++) {
+
+            if(listStudyID.get(i).getLabel().equalsIgnoreCase(spnStudyIDs.getSelectedItem().toString()))
+            {
+              spnSelectedStudyID = String.valueOf(listStudyID.get(i).getStudyId());
+              spnSelectedStudyValue = String.valueOf(listStudyID.get(i).getValue());
+             // Toast.makeText(context, spnSelectedStudyID+ " value :" + spnSelectedStudyValue, Toast.LENGTH_SHORT).show();
+            }
+
+          }
           //Toast.makeText(context, spnSelectedStudyID, Toast.LENGTH_SHORT).show();
         }else {
           spnSelectedStudyID = String.valueOf(listStudyID.get(position).getStudyId());
           spnSelectedStudyValue = String.valueOf(listStudyID.get(position).getValue());
           //Toast.makeText(context, spnSelectedStudyID, Toast.LENGTH_SHORT).show();
+
+          // Toast.makeText(context, spnSelectedStudyID+ " value :" + spnSelectedStudyValue, Toast.LENGTH_SHORT).show();
+
         }
         break;
     }
@@ -766,24 +785,13 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
       radioButtonFutureStatusNA.setChecked(true);
     }
 
-    final Spinner spnStudyIDs = (Spinner) dialog.findViewById(R.id.spnStudyId);
+    spnStudyIDs = (Spinner) dialog.findViewById(R.id.spnStudyId);
     spnStudyIDs.setOnItemSelectedListener(this);
 
     final Spinner spnGroups = (Spinner) dialog.findViewById(R.id.spnGroup);
     spnGroups.setOnItemSelectedListener(this);
 
-    List<String> lists1 = new ArrayList<>();
-    String s = subjectList.getStudyTitle()+ "("+String.valueOf(subjectList.getStudyName())+")";
 
-    lists1.add(s);
-    //System.out.println("listStudyID (1) :" + String.valueOf(subjectList.getStudyName()));
-
-    for (int i = 0; i < listStudyID.size(); i++) {
-      if (!s.equalsIgnoreCase(listStudyID.get(i).getLabel())) {
-        lists1.add(listStudyID.get(i).getLabel());
-        //System.out.println("listStudyID name :" + listStudyID.get(i).getLabel());
-      }
-    }
 
 
     List<String> listsGroup = new ArrayList<>();
@@ -798,11 +806,27 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
       }
     }
 
+    lists1.clear();
+
+    String s = subjectList.getStudyTitle()+ " ("+String.valueOf(subjectList.getStudyName())+")";
+
+    //lists1.add(s);
+    //System.out.println("listStudyID (1) :" + String.valueOf(subjectList.getStudyName()));
+
+    for (int i = 0; i < listStudyID.size(); i++) {
+      // if (!s.equalsIgnoreCase(listStudyID.get(i).getLabel())) {
+      lists1.add(listStudyID.get(i).getLabel());
+      //System.out.println("listStudyID name :" + listStudyID.get(i).getLabel());
+      //}
+    }
+
+
 
     //Creating the ArrayAdapter instance having the country list
     ArrayAdapter studyIdAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, lists1);
     studyIdAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     spnStudyIDs.setAdapter(studyIdAdp);
+    spnStudyIDs.setSelection(subjectList.getStudyId()-1);
 
 
     ArrayAdapter groupAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, listsGroup);
@@ -889,9 +913,14 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
                   }
                 }, mYear[0], mMonth[0], mDay[0]);
+
+        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis() + (1000 * 60 * 60));
+
         datePickerDialog.show();
       }
     });
+
+
 
     dialog.show();
 
@@ -906,8 +935,6 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
         // callModifySubjectAPI(String studyName, String strStudyId, String strDoctorCode, String startDate, String endDate, String status, int id)
 
         if(edtInitials.length() >0) {
-
-
 
           if(!txtDob.getText().toString().equalsIgnoreCase("")){
 
@@ -930,7 +957,7 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
 
             }else {
 
-              dialog.dismiss();
+
 
               if(isOptional[0] ==0)
               {
@@ -948,6 +975,8 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
                                     " ",
                                     " ",
                                     " ");*/
+
+                dialog.dismiss();
 
                 callModifySubjectAPI(subjectList, spnGroups.getSelectedItem().toString(),
                         spnStudyIDs.getSelectedItem().toString(), spnSelectedStudyID,
@@ -984,7 +1013,9 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
                 int selectedId4=radioGroupFuture.getCheckedRadioButtonId();
                 rbFutureStatus=(RadioButton)dialog.findViewById(selectedId4);
 
-                if(edtRand.length() > 0){
+                //if(edtRand.getText().toString().trim().length() > 0){
+
+                  dialog.dismiss();
 
                   callModifySubjectAPI(subjectList, spnGroups.getSelectedItem().toString(),
                           spnStudyIDs.getSelectedItem().toString(),
@@ -999,9 +1030,9 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
                           rbGenomicStatus.getText().toString().trim(),
                           rbFutureStatus.getText().toString().trim());
 
-                }else {
+                /*}else {
                   Toast.makeText(context,"Please enter RAND" , Toast.LENGTH_SHORT).show();
-                }
+                }*/
 
               }
 
@@ -1246,7 +1277,12 @@ public class SubjectDetailsAdapter extends RecyclerView.Adapter<SubjectDetailsAd
     modifySubjectRequestModel.setStudyName(studyID);
     modifySubjectRequestModel.setDob(dob);
     modifySubjectRequestModel.setInitials(initials);
-    modifySubjectRequestModel.setRandNum(strRand);
+    //modifySubjectRequestModel.setRandNum(strRand);
+    if(strRand.equalsIgnoreCase("")){
+      modifySubjectRequestModel.setRandNum(" ");
+    }else {
+      modifySubjectRequestModel.setRandNum(strRand);
+    }
     modifySubjectRequestModel.setAntigenStatus(eStatus);
     modifySubjectRequestModel.setPKSubStudy(strPkStudy);
     modifySubjectRequestModel.setLeuka(strLeuka);

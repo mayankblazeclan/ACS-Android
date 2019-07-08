@@ -3,6 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="@dimen/margin_10dp"
     android:background="@color/white">
 
     <Button
@@ -139,6 +140,12 @@
         android:layout_marginBottom="@dimen/bt_ok_padding"
         android:orientation="horizontal">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/bt_ok_padding"
+            android:gravity="center">
+
         <ImageButton
             android:id="@+id/btn_start_date"
             android:layout_width="wrap_content"
@@ -149,28 +156,30 @@
         <TextView
             android:id="@+id/txt_start_date"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:textStyle="bold"
             android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:hint="@string/start_select_date"/>
 
+        </LinearLayout>
+
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center">
 
             <ImageButton
                 android:id="@+id/btn_end_date"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_5dp_margin"
                 android:background="@mipmap/ic_date_calendar"/>
 
             <TextView
                 android:id="@+id/txt_end_date"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearanceMedium"

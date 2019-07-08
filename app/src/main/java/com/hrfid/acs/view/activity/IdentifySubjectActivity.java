@@ -166,6 +166,7 @@ public class IdentifySubjectActivity extends BaseActivity {
         final RadioButton rbAccept;
         final RadioButton rbReject;
         final RadioButton rbWithdraw;
+        final TextView txtInitials;
 
         // Create custom dialog object
         final Dialog dialog = new Dialog(IdentifySubjectActivity.this);
@@ -184,6 +185,7 @@ public class IdentifySubjectActivity extends BaseActivity {
         textView5 = dialog.findViewById(R.id.screenId5);
         textView6 = dialog.findViewById(R.id.screenId6);
         btnSubmit = dialog.findViewById(R.id.btnSubmit);
+        txtInitials = dialog.findViewById(R.id.initials);
         btnCancel = dialog.findViewById(R.id.btnCancel);
         radioGroupStatus = dialog.findViewById(R.id.rg_status);
         edtReason = dialog.findViewById(R.id.edtReason);
@@ -216,12 +218,13 @@ public class IdentifySubjectActivity extends BaseActivity {
 
             //textView.setText("TITLE :" +subjectList.get(0).getGenBarcodeVal());
             textView.setText("");
-            textView1.setText("GROUP :"+subjectList.get(0).getGroupId());
-            textView2.setText("SCREEN ID :"+subjectList.get(0).getScreenId());
+            textView1.setText("GROUP : "+subjectList.get(0).getGroupId());
+            textView2.setText("SCREEN ID : "+subjectList.get(0).getScreenId());
             textView3.setText("STUDY ID : "+subjectList.get(0).getStudyTitle()+" ("+subjectList.get(0).getStudyName()+")");
-            textView4.setText("DOB :"+subjectList.get(0).getDOB());
-            textView5.setText("GENDER :"+subjectList.get(0).getGender());
-            textView6.setText("STATUS :"+subjectList.get(0).getStatus());
+            textView4.setText("DOB : "+Utilities.splitDateFromDesired(subjectList.get(0).getDOB()));
+            textView5.setText("GENDER : "+subjectList.get(0).getGender());
+            textView6.setText("STATUS : "+subjectList.get(0).getStatus());
+            txtInitials.setText("INITIALS : "+subjectList.get(0).getInitials());
             //textView.setText(subjectList.get(0).getId());
             //textView.setText(subjectList.get(0).getId());
         }
@@ -232,7 +235,7 @@ public class IdentifySubjectActivity extends BaseActivity {
 
                 if(edtReason.getVisibility() ==View.VISIBLE){
 
-                    if(edtReason.getText().length() >0){
+                    if(edtReason.getText().toString().trim().length() >0){
 
                         //Call Reject / Withdraw API
                         //dialog.dismiss();
@@ -264,7 +267,7 @@ public class IdentifySubjectActivity extends BaseActivity {
 
                     }else {
 
-                        Toast.makeText(IdentifySubjectActivity.this,"Please enter REASON",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(IdentifySubjectActivity.this,"Please enter the Reason",Toast.LENGTH_SHORT).show();
 
                     }
 
@@ -302,7 +305,7 @@ public class IdentifySubjectActivity extends BaseActivity {
 
     }
 
-    private void callSetStatusAPI(String status, int isApproved, int subjectId, int studyId, String edtReason, String event) {
+    private void callSetStatusAPI(String status, int isApproved, int studyId, int subjectId, String edtReason, String event) {
 
         VerifySubjectRequestModel verifySubjectRequestModel = new VerifySubjectRequestModel();
         verifySubjectRequestModel.setAppName(AppConstants.APP_NAME);

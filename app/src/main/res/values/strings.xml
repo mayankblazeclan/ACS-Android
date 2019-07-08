@@ -249,7 +249,7 @@
     <string name="subject_mapping">SUBJECT MAPPING</string>
     <string name="kit_mapping">KIT MAPPING</string>
     <string name="alert_mapping" >\Are you sure you want to Map this Subject ?\</string>
-    <string name="kit_alert_mapping" >\Are you sure you want to Kit this Subject ?\</string>
+    <string name="kit_alert_mapping" >\Are you sure you want to Map this Kit ?\</string>
     <string name="group">Group</string>
     <string name="submit">SUBMIT</string>
     <string name="no_search_data">No relevant record found. Please modify the filter parameters.</string>

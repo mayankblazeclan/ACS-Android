@@ -1,5 +1,6 @@
 package com.hrfid.acs.view.fragment;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -45,6 +46,8 @@ import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
+import com.hrfid.acs.view.activity.InventorySetupActivity;
+import com.hrfid.acs.view.activity.SeniorSubjectOnBoardingActivity;
 import com.hrfid.acs.view.barcode.ShowReplicateListActivity;
 
 import java.text.ParseException;
@@ -215,7 +218,7 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
                     //Your dialog
                     showReplicateDialog();
                 }else {
-                    Toast.makeText(getContext(), "Enter KIT ID " , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Please enter Kit ID" , Toast.LENGTH_SHORT).show();
                 }
                 break;
 
@@ -308,6 +311,11 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
 
                     }
                 }, mYear, mMonth, mDay);
+
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        datePickerDialog.setTitle(null);
+       // datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() + (1000 * 60 * 60 *24));
+
         datePickerDialog.show();
     }
 
@@ -374,11 +382,20 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
                     Date date1 = null;
+                    Date date2 = null;
                     try {
-                        date1 = format.parse(txtStartDate.getText().toString());
+                        date1 = format.parse(startDate);
+                        date2 = format.parse(endDate);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
+
+                    if (date1.compareTo(date2) <= 0) {
+                        //Toast.makeText(getActivity(),"All Date OK.. RUN API.." , Toast.LENGTH_SHORT).show();
+                        Calendar cal = Calendar.getInstance();
+                        Date sysDate = cal.getTime();
+
+                       // if(date1.compareTo(sysDate) >0 && date2.compareTo(sysDate) >0) {
 
                    /* Calendar cal = Calendar.getInstance();
                     Date sysDate = cal.getTime();
@@ -391,39 +408,39 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
                     }else {*/
 
 
-                        int selectedId=radioKITtype.getCheckedRadioButtonId();
-                        radioButtonKitTYPE =(RadioButton)getView().findViewById(selectedId);
+                            int selectedId = radioKITtype.getCheckedRadioButtonId();
+                            radioButtonKitTYPE = (RadioButton) getView().findViewById(selectedId);
 
-                        int selectedId1=radioAdditionalKITtype.getCheckedRadioButtonId();
-                        radioButtonAdditionalKitTYPE =(RadioButton)getView().findViewById(selectedId1);
+                            int selectedId1 = radioAdditionalKITtype.getCheckedRadioButtonId();
+                            radioButtonAdditionalKitTYPE = (RadioButton) getView().findViewById(selectedId1);
 
-                        int selectedId2=radioGroupCategory.getCheckedRadioButtonId();
-                        radioButtonCategory =(RadioButton)getView().findViewById(selectedId2);
+                            int selectedId2 = radioGroupCategory.getCheckedRadioButtonId();
+                            radioButtonCategory = (RadioButton) getView().findViewById(selectedId2);
 
-                        int selectedId3=radioGroupReqForm.getCheckedRadioButtonId();
-                        radioButtonReqForm =(RadioButton)getView().findViewById(selectedId3);
-
-
-                        //For selected Kit type
-                        radioButtonKitTYPE.getText().toString().trim();
+                            int selectedId3 = radioGroupReqForm.getCheckedRadioButtonId();
+                            radioButtonReqForm = (RadioButton) getView().findViewById(selectedId3);
 
 
-                        callAddKITdetailsAPI(editTextKIT_ID.getText().toString(),
-                                editTextAccessionNumber.getText().toString(),
-                                editTextVISIT.getText().toString(),
-                                radioButtonKitTYPE.getText().toString().trim(),
-                                radioButtonAdditionalKitTYPE.getText().toString().trim(),
-                                radioButtonCategory.getText().toString().trim(),
-                                radioButtonReqForm.getText().toString().trim(),
-                                txtStartDate.getText().toString(),
-                                txtEndDate.getText().toString(),
-                                spnLocal.getSelectedItem().toString(),
-                                spnCentral.getSelectedItem().toString(),
-                                spnAliquot.getSelectedItem().toString(),
-                                spnSelectedStudyID,
-                                strStudyName,
-                                strStudyTitle);
-                  //  }
+                            //For selected Kit type
+                            radioButtonKitTYPE.getText().toString().trim();
+
+
+                            callAddKITdetailsAPI(editTextKIT_ID.getText().toString(),
+                                    editTextAccessionNumber.getText().toString(),
+                                    editTextVISIT.getText().toString(),
+                                    radioButtonKitTYPE.getText().toString().trim(),
+                                    radioButtonAdditionalKitTYPE.getText().toString().trim(),
+                                    radioButtonCategory.getText().toString().trim(),
+                                    radioButtonReqForm.getText().toString().trim(),
+                                    txtStartDate.getText().toString(),
+                                    txtEndDate.getText().toString(),
+                                    spnLocal.getSelectedItem().toString(),
+                                    spnCentral.getSelectedItem().toString(),
+                                    spnAliquot.getSelectedItem().toString(),
+                                    spnSelectedStudyID,
+                                    strStudyName,
+                                    strStudyTitle);
+                            //  }
 
 
 
@@ -433,6 +450,14 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
                         spnPersonGender.getSelectedItem().toString(),
                         spnGroups.getSelectedItem().toString(),
                         spnStudyIDs.getSelectedItem().toString());*/
+                        /*}else {
+
+                            Toast.makeText(getActivity(),"Scan date with past date cannot be scheduled",Toast.LENGTH_SHORT).show();
+                        }*/
+                    }else {
+
+                        Toast.makeText(getActivity(),"Kit Expiry Date cannot be earlier than Kit Scan Date" , Toast.LENGTH_SHORT).show();
+                    }
 
                 }else {
                     Toast.makeText(getContext(),"Please Select Expiry Date" , Toast.LENGTH_SHORT).show();
@@ -542,7 +567,31 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
                                 Logger.logError("addKIT API success " +
                                         commonResponse.getResponse().get(0).getMessage());
 
-                                Utils.showAlertDialog(getActivity(),  commonResponse.getResponse().get(0).getMessage());
+                               // Utils.showAlertDialog(getActivity(),  commonResponse.getResponse().get(0).getMessage());
+
+                                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+                                // ...Irrelevant code for customizing the buttons and title
+                                LayoutInflater inflater = getActivity().getLayoutInflater();
+                                View dialogView = inflater.inflate(R.layout.alert_dialog_with_one_button, null);
+                                dialogBuilder.setView(dialogView);
+                                final AlertDialog alertDialog = dialogBuilder.create();
+
+                                TextView tvDesc = (TextView) dialogView.findViewById(R.id.tv_dialog_desc);
+                                tvDesc.setText(commonResponse.getResponse().get(0).getMessage());
+                                Button btDialogOk = (Button) dialogView.findViewById(R.id.bt_dialog_ok);
+                                btDialogOk.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        alertDialog.dismiss();
+                                        Intent mNextActivity = new Intent(getActivity(), InventorySetupActivity.class);
+                                        startActivity(mNextActivity);
+                                        getActivity().finish();
+                                    }
+                                });
+
+                                alertDialog.setCanceledOnTouchOutside(false);
+                                alertDialog.show();
                                 editTextKIT_ID.setText("");
                                 editTextAccessionNumber.setText("");
                                 editTextVISIT.setText("");
@@ -561,12 +610,12 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
 
                         }else {
 
-                            Logger.logError("addKIT API Failure " +
+                          /*  Logger.logError("addKIT API Failure " +
                                     commonResponse.getResponse().get(0).isStatus());
                             Logger.logError("addKIT API Failure " +
-                                    commonResponse.getResponse().get(0).getMessage());
+                                    commonResponse.getResponse().get(0).getMessage());*/
 
-                            Utils.showAlertDialog(getActivity(),  commonResponse.getResponse().get(0).getMessage());
+                            Utils.showAlertDialog(getActivity(),  commonResponse.getStatus().geteRROR());
                         }
 
 

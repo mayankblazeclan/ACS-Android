@@ -46,6 +46,11 @@ public class SubjectList {
     @Expose
     private String studyTitle;
 
+
+    @SerializedName("initials")
+    @Expose
+    private String initials;
+
     public int getId() {
         return id;
     }
@@ -149,5 +154,14 @@ public class SubjectList {
     public void setStudyTitle(String studyTitle) {
         this.studyTitle = studyTitle;
     }
+
+    public String getInitials() {
+        return initials;
+    }
+
+    public void setInitials(String initials) {
+        this.initials = initials;
+    }
+
 
 }

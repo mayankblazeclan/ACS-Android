@@ -292,9 +292,9 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
 
     private void submitDetails() {
 
-        if(edtStudyName.length() >0) {
+        if(edtStudyName.getText().toString().trim().length() >0) {
 
-            if(editTextInitials.length() >0) {
+            if(editTextInitials.getText().toString().trim().length() >0) {
 
                 if(!txt_date_of_birth.getText().toString().equalsIgnoreCase("")){
 
@@ -406,7 +406,7 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
 
         message = edtStudyName.getText().toString();
 
-        if(message.length() >0) {
+        if(message.trim().length() >0) {
 
             Bitmap bitmap = null;
             try {
@@ -449,7 +449,11 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
         addSubjectRequestModel.setGroup(group);
         addSubjectRequestModel.setStudyId(Integer.valueOf(studyID));
         addSubjectRequestModel.setInitials(initials);
-        addSubjectRequestModel.setRandNum(strRand);
+        if(strRand.equalsIgnoreCase("")){
+         addSubjectRequestModel.setRandNum(" ");
+        }else {
+            addSubjectRequestModel.setRandNum(strRand);
+        }
         addSubjectRequestModel.setAntigenStatus(eStatus);
         addSubjectRequestModel.setPKSubStudy(strPkStudy);
         addSubjectRequestModel.setLeuka(strLeuka);
@@ -518,12 +522,12 @@ public class AddSubjectFragment extends Fragment  implements AdapterView.OnItemS
 
                         }else {
 
-                            Logger.logError("subjectOnboard API Failure " +
+                          /*  Logger.logError("subjectOnboard API Failure " +
                                     commonResponse.getResponse().get(0).isStatus());
                             Logger.logError("subjectOnboard API Failure " +
-                                    commonResponse.getResponse().get(0).getMessage());
+                                    commonResponse.getResponse().get(0).getMessage());*/
 
-                            Utils.showAlertDialog(getActivity(),  commonResponse.getResponse().get(0).getMessage());
+                            Utils.showAlertDialog(getActivity(),  commonResponse.getStatus().geteRROR());
                         }
 
 

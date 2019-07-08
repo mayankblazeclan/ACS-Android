@@ -30,6 +30,16 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/black"/>
 
+        <TextView
+            android:id="@+id/initials"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/study_name"
+            android:layout_margin="@dimen/margin_10dp"
+            android:textStyle="bold"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/black"/>
+
     <TextView
         android:id="@+id/screenId1"
         android:layout_width="wrap_content"
@@ -159,7 +169,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_10dp"
-            android:hint="Enter REASON"/>
+            android:hint="Enter the Reason"/>
 
     </TableLayout>
 

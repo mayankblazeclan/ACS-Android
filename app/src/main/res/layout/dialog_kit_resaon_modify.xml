@@ -65,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
-                android:hint="Enter Reason Details"/>
+                android:hint="Please enter the Reason"/>
 
         </LinearLayout>
 

@@ -318,7 +318,7 @@
                     android:textStyle="bold"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:layout_marginLeft="@dimen/activity_5dp_margin"
-                    android:text="@string/study_id"/>
+                    android:text="@string/study_name_id"/>
 
 
                 <android.support.v7.widget.AppCompatSpinner

@@ -565,6 +565,7 @@
             android:layout_marginLeft="@dimen/bt_ok_padding"
             android:layout_marginRight="@dimen/bt_ok_padding"
             android:layout_marginTop="@dimen/activity_5dp_margin"
+            android:visibility="gone"
             android:orientation="horizontal">
 
 

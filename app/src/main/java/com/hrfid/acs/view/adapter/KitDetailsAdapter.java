@@ -108,6 +108,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
     private RadioButton rbScreening, rbTrial;
     private RadioButton rbAdYes, rbAdNo;
     private RadioButton rbReqFormYES, rbReqFormNO;
+    List<String> lists1 = new ArrayList<>();
 
     Context context;
     String[] spnReason = {"DAMAGE", "MISSING"};
@@ -289,7 +290,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
                 strStudyTitle = listStudy.get(position).getLabel();*/
                 //Toast.makeText(getContext(), parent.getSelectedItem().toString() , Toast.LENGTH_SHORT).show();
 
-                if(position !=0) {
+              /*  if(position !=0) {
                     spnSelectedStudyID = String.valueOf(getListStudy.get(position).getValue());
                     strStudyName = String.valueOf(getListStudy.get(position).getStudyId());
                     strStudyTitle = getListStudy.get(position).getLabel();
@@ -302,6 +303,29 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
                     strStudyTitle = getListStudy.get(position).getLabel();
 
                     //Toast.makeText(context, "strStudyTitle 0"+strStudyTitle, Toast.LENGTH_SHORT).show();
+                }*/
+
+                if(position !=0) {
+                    for (int i = 0; i < getListStudy.size(); i++) {
+
+                        if(getListStudy.get(i).getLabel().equalsIgnoreCase(spnStudyIDs.getSelectedItem().toString()))
+                        {
+                            strStudyName = String.valueOf(getListStudy.get(i).getStudyId());
+                            spnSelectedStudyID = String.valueOf(getListStudy.get(i).getValue());
+                            strStudyTitle = String.valueOf(getListStudy.get(i).getLabel());
+                            // Toast.makeText(context, spnSelectedStudyID+ " value :" + spnSelectedStudyValue, Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                    //Toast.makeText(context, spnSelectedStudyID, Toast.LENGTH_SHORT).show();
+                }else {
+                    strStudyName = String.valueOf(getListStudy.get(position).getStudyId());
+                    spnSelectedStudyID = String.valueOf(getListStudy.get(position).getValue());
+                    strStudyTitle = String.valueOf(getListStudy.get(position).getLabel());
+                    //Toast.makeText(context, spnSelectedStudyID, Toast.LENGTH_SHORT).show();
+
+                    //Toast.makeText(context, spnSelectedStudyID+ " value :" + spnSelectedStudyValue, Toast.LENGTH_SHORT).show();
+
                 }
                 break;
 
@@ -464,13 +488,13 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
                 // Close dialog
 
 
-                if(edtReason.getText().length() >0) {
+                if(edtReason.getText().toString().trim().length() >0) {
 
                     dialog.dismiss();
                     callKitDismissAPI(kitList.getId(), edtReason.getText().toString().trim());
 
                 }else {
-                    Toast.makeText(context,"Please enter REASON" , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"Please enter the Reason" , Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -807,6 +831,9 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
 
                     }
                 }, mYear, mMonth, mDay);
+
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        datePickerDialog.setTitle(null);
         datePickerDialog.show();
     }
 
@@ -891,7 +918,8 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         dialog.setContentView(R.layout.dialog_kit_modify);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         Window window = dialog.getWindow();
-        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
 
         spnStudyIDs = (Spinner) dialog.findViewById(R.id.spnStatusId);
         spnStudyIDs.setOnItemSelectedListener(this);
@@ -1064,6 +1092,21 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
             }
         }
 
+
+        lists1.clear();
+
+        //String s = kitList.getStudyTitle()+ " ("+String.valueOf(kitList.getStudyName())+")";
+
+        //lists1.add(s);
+        //System.out.println("listStudyID (1) :" + String.valueOf(subjectList.getStudyName()));
+
+        for (int i = 0; i < getListStudy.size(); i++) {
+            // if (!s.equalsIgnoreCase(listStudyID.get(i).getLabel())) {
+            lists1.add(getListStudy.get(i).getLabel());
+            //System.out.println("listStudyID name :" + listStudyID.get(i).getLabel());
+            //}
+        }
+
        /* for (int i = 0; i < getListStudy.size(); i++) {
 
             listSetLabel.add(""+getListStudy.get(i).getLabel());
@@ -1071,9 +1114,11 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
 
         }*/
 
-        ArrayAdapter studyIdAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, listSetLabel);
+        ArrayAdapter studyIdAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, lists1);
         studyIdAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnStudyIDs.setAdapter(studyIdAdp);
+        spnStudyIDs.setSelection(kitList.getStudyId()-1);
+
 
         rbSample.setOnClickListener(this);
         rbAliquot.setOnClickListener(this);
@@ -1085,7 +1130,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
             @Override
             public void onClick(View v) {
                 // Close dialog
-                dialog.dismiss();
+
                 String kitType = "";
                 if(rbScreening.isChecked()){
                     kitType="SCREENING";
@@ -1157,7 +1202,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
                     sAliquot = spnAliquot.getSelectedItem().toString();
                 }
 
-                submitDetails(v, kitList.getId(), kitType, additionalKit, requistionForm, categoryStatus, sLocal, sCentral, sAliquot);
+                submitDetails(v, kitList.getId(), kitType, additionalKit, requistionForm, categoryStatus, sLocal, sCentral, sAliquot, dialog);
             }
         });
 
@@ -1247,25 +1292,34 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         dialog.show();
     }
 
-    private void submitDetails(View v, int id, String kitType, String additionalKit, String requistionForm, String categorty, String sLocal, String sCentral, String sAliquot) {
+    private void submitDetails(View v, int id, String kitType, String additionalKit, String requistionForm, String categorty, String sLocal, String sCentral, String sAliquot, Dialog dialog) {
 
-        if(editTextKIT_ID.length() >0) {
+        if(editTextKIT_ID.getText().toString().trim().length() >0) {
 
-            if(editTextVISIT.length() > 0) {
+            if(editTextVISIT.getText().toString().trim().length() > 0) {
 
                 if(!txtStartDate.getText().toString().equalsIgnoreCase("")){
 
                     if(!txtEndDate.getText().toString().equalsIgnoreCase("")){
 
 
+                        dialog.dismiss();
+
                         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
                         Date date1 = null;
+                        Date date2 = null;
                         try {
                             date1 = format.parse(txtStartDate.getText().toString());
+                            date2 = format.parse(txtEndDate.getText().toString());
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
+
+                        if (date1.compareTo(date2) <= 0) {
+                            //Toast.makeText(getActivity(),"All Date OK.. RUN API.." , Toast.LENGTH_SHORT).show();
+                            Calendar cal = Calendar.getInstance();
+                            Date sysDate = cal.getTime();
 
                         /*radioKITtype =(RadioGroup) v.findViewById(R.id.radioGroupKitType);
                         radioAdditionalKITtype =(RadioGroup) v.findViewById(R.id.rg_additional_kit);
@@ -1311,6 +1365,11 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
                         spnPersonGender.getSelectedItem().toString(),
                         spnGroups.getSelectedItem().toString(),
                         spnStudyIDs.getSelectedItem().toString());*/
+
+                    }else {
+
+                        Toast.makeText(context,"Kit Expiry Date cannot be earlier than Kit Scan Date" , Toast.LENGTH_SHORT).show();
+                    }
 
                     }else {
                         Toast.makeText(context,"Please Select Expiry Date" , Toast.LENGTH_SHORT).show();
