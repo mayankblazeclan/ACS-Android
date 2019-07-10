@@ -202,6 +202,13 @@ public class InventorySetupActivity extends BaseActivity {
             return true;
         }
 
+        if (id == R.id.app_bar_search) {
+            //Toast.makeText(SeniorStaffHomeActivity.this, "Logout tapped", Toast.LENGTH_LONG).show();
+            Intent mNextActivity = new Intent(InventorySetupActivity.this, SearchKitActivity.class);
+            startActivity(mNextActivity);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

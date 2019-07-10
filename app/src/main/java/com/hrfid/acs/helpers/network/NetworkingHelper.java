@@ -24,6 +24,7 @@ import com.hrfid.acs.helpers.request.ModifyKitRequest;
 import com.hrfid.acs.helpers.request.ModifyScheduleRequest;
 import com.hrfid.acs.helpers.request.ModifySubjectRequest;
 import com.hrfid.acs.helpers.request.ResetNotificationCountRequest;
+import com.hrfid.acs.helpers.request.SearchKitRequest;
 import com.hrfid.acs.helpers.request.SearchSubjectRequest;
 import com.hrfid.acs.helpers.request.VerifySubjectDetailsRequest;
 import com.hrfid.acs.helpers.serverResponses.ErrorArrayResponse;
@@ -77,6 +78,8 @@ public abstract class NetworkingHelper {
   public static final int MAP_KIT_DETAILS = 20;
   public static final int DISMISS_KIT_DETAILS = 21;
   public static final int VERIFY_SUBJECT_DETAILS = 22;
+  public static final int SEARCH_KIT = 23;
+
 
 
   private Call<ResponseBody> apiInterface;
@@ -201,6 +204,11 @@ public abstract class NetworkingHelper {
       case VERIFY_SUBJECT_DETAILS:
         VerifySubjectDetailsRequest verifySubjectDetailsRequest = (VerifySubjectDetailsRequest) cmgRequest;
         apiInterface = ApiRouter.get().getRetrofitService().verifySubject(verifySubjectDetailsRequest.verifySubjectRequestModel);
+        break;
+
+      case SEARCH_KIT:
+        SearchKitRequest searchKitRequest = (SearchKitRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().searchKit(searchKitRequest.searchKitRequestModel);
         break;
 
       default:

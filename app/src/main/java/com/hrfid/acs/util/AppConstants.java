@@ -11,11 +11,11 @@ public class AppConstants {
 
  //public static final String URL = "sit-stage-test.controlpoint.healthrfid.com/";
 
- //public static final String URL = "10.30.10.110:8080/";
+ public static final String URL = "10.30.10.110:8080/";
 
 
 
-   public static final String URL = "";
+   //public static final String URL = "";
 
  private static SharedPrefsManager spfManager  = new SharedPrefsManager();
  //  Staging Data
@@ -107,6 +107,8 @@ public class AppConstants {
  public static final String MODIFY_KIT = "Modify Kit";
  public static final String MAP_KIT = "Map Kit";
  public static final String KIT_REASON = "Dismiss Kit";
+ public static final String SEARCH_KIT = "Kit Advance Search";
+
 
 
 }

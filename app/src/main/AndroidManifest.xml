@@ -96,6 +96,11 @@
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".view.activity.SearchKitActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".view.barcode.ReplicateActivity"></activity>
         <activity android:name=".view.barcode.ShowReplicateListActivity" />
 
