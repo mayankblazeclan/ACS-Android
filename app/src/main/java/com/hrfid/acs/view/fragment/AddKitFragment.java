@@ -481,7 +481,7 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
 
         if(message.length() >0) {
 
-            Bitmap bitmap = null;
+           /* Bitmap bitmap = null;
             try {
                 bitmap = Utilities.CreateImage(message, "Barcode");
                 //myBitmap = bitmap;
@@ -490,7 +490,9 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
             }
             if (bitmap != null) {
                 imageView.setImageBitmap(bitmap);
-            }
+            }*/
+
+            showGenerateBarcodeDialog(message, imageView);
         }else {
             Toast.makeText(getContext(),"Please enter KIT ID" , Toast.LENGTH_SHORT).show();
         }
@@ -762,6 +764,100 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
                     i.putExtra("text", et_text.getText().toString());
                     startActivity(i);
                 }
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+
+    private void showGenerateBarcodeDialog(String message, ImageView imageView) {
+
+        final TextView et_text;
+        final TextView txtBarcode;
+        final Button btn_submit;
+        final Button btnCancel;
+        //final Spinner spnLabel, spnSize;
+        final RadioGroup radioGroupLabelSize;
+        final RadioButton rbKitType, rbLabelSize;
+        final ImageView imageView1;
+
+
+        // Create custom dialog object
+        final Dialog dialog = new Dialog(getContext());
+        // Include dialog.xml file
+        dialog.setContentView(R.layout.dialog_kit_generate_barcode);
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Window window = dialog.getWindow();
+        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+
+        et_text = dialog.findViewById(R.id.et_text);
+        txtBarcode = dialog.findViewById(R.id.txtBarcode);
+        btn_submit = dialog.findViewById(R.id.btn_submit);
+        btnCancel = dialog.findViewById(R.id.btnCancel);
+        imageView1 = dialog.findViewById(R.id.barcode_image);
+        //spnLabel = dialog.findViewById(R.id.sp_qtyc);
+        //spnSize = dialog.findViewById(R.id.sp_qtyl);
+        et_text.setText(editTextKIT_ID.getText().toString());
+        txtBarcode.setText(editTextKIT_ID.getText().toString());
+
+        Bitmap bitmap = null;
+        try {
+            bitmap = Utilities.CreateImage(message, "Barcode");
+            //myBitmap = bitmap;
+        } catch (WriterException we) {
+            we.printStackTrace();
+        }
+        if (bitmap != null) {
+            imageView1.setImageBitmap(bitmap);
+        }
+
+        //radioGroupKitType =(RadioGroup) dialog.findViewById(R.id.radioGroupKitType);
+        radioGroupLabelSize =(RadioGroup) dialog.findViewById(R.id.radioGroupLabelSize);
+
+       /* int selectedId = radioGroupKitType.getCheckedRadioButtonId();
+        rbKitType = (RadioButton) getView().findViewById(selectedId);*/
+
+        int selectedId1 = radioGroupLabelSize.getCheckedRadioButtonId();
+        rbLabelSize = (RadioButton) dialog.findViewById(selectedId1);
+
+
+        /*String[] items = new String[]{"SCREENING", "VISITING"};
+        String[] itemsSize = new String[]{"0.5", "1.5-2.0", "GENERAL"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, items);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnLabel.setAdapter(adapter);
+
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, itemsSize);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnSize.setAdapter(adapter1);*/
+
+
+        btn_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(getContext(),"Label size is - "+rbLabelSize.getText(),Toast.LENGTH_SHORT).show();
+
+
+                /*if (et_text.getText().toString().equals("")) {
+                    Toast.makeText(getContext(), "Please Enter Text", Toast.LENGTH_LONG).show();
+                } else {
+                    Intent i = new Intent(getActivity(), ShowReplicateListActivity.class);
+                    i.putExtra("qtyc", spnLabel.getSelectedItem().toString());
+                    i.putExtra("qtyl", spnSize.getSelectedItem().toString());
+                    i.putExtra("text", et_text.getText().toString());
+                    startActivity(i);
+                }*/
             }
         });
 

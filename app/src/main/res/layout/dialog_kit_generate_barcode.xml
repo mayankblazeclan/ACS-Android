@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="50dp"
+    tools:context=".view.activity.InventorySetupActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="GENERATE BARCODE"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:background="@color/colorBCRed"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_margin="15dp"
+                android:textAllCaps="true"
+                android:text="@string/txt_kit_id"/>
+
+            <TextView
+                android:id="@+id/et_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_margin="15dp"
+                android:hint="Enter the barcode ID/Scan the barcode" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_marginLeft="@dimen/margin_30dp"
+            android:layout_marginRight="@dimen/margin_30dp"
+            android:id="@+id/barcode_image"/>
+
+        <TextView
+            android:id="@+id/txtBarcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/activity_5dp_margin"
+            android:layout_marginBottom="@dimen/activity_5dp_margin"
+            android:hint="" />
+
+       <!-- <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_margin="@dimen/margin_10dp"
+            android:weightSum="3">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_marginLeft="@dimen/margin_10dp"
+                android:textAllCaps="true"
+                android:text="KIT TYPE"/>
+
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_5dp_margin"
+                android:gravity="left"
+                android:orientation="horizontal"
+                android:id="@+id/radioGroupKitType">
+
+                <RadioButton
+                    android:id="@+id/rScreening"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  SCREENING"
+                    android:checked="true"
+                    android:layout_marginLeft="@dimen/margin_30dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <RadioButton
+                    android:id="@+id/rTrial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  TRIAL"
+                    android:checked="false"
+                    android:layout_marginLeft="@dimen/margin_30dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </RadioGroup>
+
+
+        </LinearLayout>-->
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="@dimen/margin_10dp"
+            android:weightSum="3">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_marginLeft="@dimen/activity_5dp_margin"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:text="LABEL SIZE"/>
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_5dp_margin"
+                android:gravity="left"
+                android:orientation="horizontal"
+                android:id="@+id/radioGroupLabelSize">
+
+                <RadioButton
+                    android:id="@+id/radio1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  0.5"
+                    android:checked="true"
+                    android:layout_marginLeft="@dimen/margin_30dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <RadioButton
+                    android:id="@+id/radio2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  1.5-2.0"
+                    android:checked="false"
+                    android:layout_marginLeft="@dimen/margin_30dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <RadioButton
+                    android:id="@+id/radioGeneral"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  GENERAL"
+                    android:checked="false"
+                    android:layout_marginLeft="@dimen/margin_30dp"
+                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </RadioGroup>
+
+            <!-- <android.support.v7.widget.AppCompatSpinner
+                 android:id="@+id/sp_qtyl"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:background="@drawable/spinner_background"
+                 android:layout_margin="@dimen/activity_5dp_margin" />-->
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_10dp"
+            android:weightSum="2"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btn_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SUBMIT"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_margin="@dimen/activity_5dp_margin"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_weight="1"
+                android:background="@color/colorBCRed"/>
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CANCEL"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_margin="@dimen/activity_5dp_margin"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:background="@color/black"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

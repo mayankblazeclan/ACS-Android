@@ -41,6 +41,7 @@
         android:layout_below="@id/app_bar"
         android:background="@color/white">
 
+
         <LinearLayout
             android:id="@+id/linearLayout_study_id"
             android:layout_width="match_parent"

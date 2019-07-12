@@ -48,6 +48,8 @@ import com.hrfid.acs.helpers.request.MapSubjectDetailsRequest;
 import com.hrfid.acs.helpers.request.MapSubjectRequestModel;
 import com.hrfid.acs.helpers.request.ModifyKitRequest;
 import com.hrfid.acs.helpers.request.ModifyKitRequestModel;
+import com.hrfid.acs.helpers.request.ReturnKitDetailsRequest;
+import com.hrfid.acs.helpers.request.ReturnKitRequestModel;
 import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList;
@@ -74,7 +76,7 @@ import java.util.List;
 public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.MyViewHolder> implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
 
-   // String[] sNumber = {"0", "1","2","3", "4", "5", "6", "7", "8", "9", "10"};
+    // String[] sNumber = {"0", "1","2","3", "4", "5", "6", "7", "8", "9", "10"};
 
     //private Button btnGenerateBarcode;
     private Button btnSubmit;
@@ -165,7 +167,17 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
                 holder.txt_status.setText("Dismissed");
                 holder.txt_status.setTextColor(Color.RED);
             }
-        }else {
+        } else if (kitLists.get(position).getStatus().equalsIgnoreCase("Returned")) {
+            if(kitLists.get(position).getReason()!=null) {
+
+                holder.txt_status.setText("Returned" + " (" + kitLists.get(position).getReason() + ")");
+                holder.txt_status.setTextColor(Color.RED);
+            }else {
+                holder.txt_status.setText("Returned");
+                holder.txt_status.setTextColor(Color.RED);
+            }
+        }
+        else {
             holder.txt_status.setText("In_Stock");
             holder.txt_status.setTextColor(Color.parseColor("#5dade2"));
         }
@@ -202,7 +214,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
 
             holder.btnMap.setVisibility(View.GONE);
             holder.btnModify.setVisibility(View.GONE);
-
+            holder.btnDismiss.setVisibility(View.VISIBLE);
         }
         else {
 
@@ -215,8 +227,11 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
             holder.btnModify.setVisibility(View.GONE);
             holder.btnMap.setVisibility(View.GONE);
             holder.btnDismiss.setVisibility(View.GONE);
+        }else if(kitLists.get(position).getStatus().equalsIgnoreCase("Returned")){
+            holder.btnModify.setVisibility(View.GONE);
+            holder.btnMap.setVisibility(View.GONE);
+            holder.btnDismiss.setVisibility(View.GONE);
         }else {
-
         }
 
         holder.btnModify.setOnClickListener(new View.OnClickListener() {
@@ -512,6 +527,142 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
     }
 
 
+    //RETURN API CALL
+    private void callReturnKitAPI(int ID, String reason, String emailID) {
+
+        ReturnKitRequestModel returnKitRequestModel = new ReturnKitRequestModel();
+        returnKitRequestModel.setAppName(AppConstants.APP_NAME);
+        returnKitRequestModel.setVersionNumber(AppConstants.APP_VERSION);
+        returnKitRequestModel.setDeviceType(AppConstants.APP_OS);
+        returnKitRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
+        returnKitRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(context));
+        returnKitRequestModel.setUserRole(new PrefManager(context).getUserRoleType());
+        returnKitRequestModel.setTagId(new PrefManager(context).getBarCodeValue());
+        returnKitRequestModel.setEvent(AppConstants.KIT_RETURN);
+        returnKitRequestModel.setUserName(new PrefManager(context).getUserName());
+        returnKitRequestModel.setReason(reason);
+        returnKitRequestModel.setId(Integer.valueOf(ID));
+        returnKitRequestModel.setEmail(emailID);
+
+        new NetworkingHelper(new ReturnKitDetailsRequest(context, true,
+                returnKitRequestModel)) {
+
+            @Override
+            public void serverResponseFromApi(ApiResponse serverResponse) {
+                if (serverResponse.isSucess) {
+
+                    try {
+
+                        CommonResponse commonResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, CommonResponse.class);
+
+                        if (commonResponse.getStatus().getCODE() == 200) {
+
+                            if(commonResponse.getResponse().get(0).isStatus()){
+
+                                Logger.logError("returnKit API success " +
+                                        commonResponse.getResponse().get(0).isStatus());
+                                Logger.logError("returnKit API success " +
+                                        commonResponse.getResponse().get(0).getMessage());
+
+                                Utils.showAlertDialog((Activity)context,  commonResponse.getResponse().get(0).getMessage());
+                                callGetKitDetailsAPI();
+
+
+                            }else {
+
+                                Logger.logError("returnKit API Failure " +
+                                        commonResponse.getResponse().get(0).isStatus());
+                                Logger.logError("returnKit API Failure " +
+                                        commonResponse.getResponse().get(0).getMessage());
+
+                                Utils.showAlertDialog((Activity)context,  commonResponse.getResponse().get(0).getMessage());
+                            }
+
+                        }else {
+
+                            Logger.logError("returnKit API Failure " +
+                                    commonResponse.getStatus().geteRROR());
+
+                            Utils.showAlertDialog((Activity)context,  commonResponse.getStatus().geteRROR());
+                        }
+
+
+
+                    }
+                    catch (Exception e){
+                        Logger.logError("returnKit Exception " + e.getMessage());
+                    }
+
+                } else {
+                    Logger.logError("returnKit API Failure " +
+                            serverResponse.errorMessageToDisplay);
+                }
+            }
+        };
+
+    }
+
+    private void showReturnDialog(final int id, final Dialog dialog1) {
+
+        final EditText edtEmailId;
+        final Spinner spnResaon;
+
+        // Create custom dialog object
+        final Dialog dialog = new Dialog(context);
+        // Include dialog.xml file
+        dialog.setContentView(R.layout.dialog_kit_return_modify);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Window window = dialog.getWindow();
+        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        edtEmailId = dialog.findViewById(R.id.edtEmailId);
+
+        spnResaon = (Spinner) dialog.findViewById(R.id.spnResaon);
+        spnResaon.setOnItemSelectedListener(this);
+
+        ArrayAdapter adpNumber = new ArrayAdapter(context,android.R.layout.simple_spinner_item, spnReason);
+        adpNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnResaon.setAdapter(adpNumber);
+
+        dialog.show();
+
+        Button btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
+        // if decline button is clicked, close the custom dialog
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+
+                if(edtEmailId.getText().toString().trim().length() >0){
+
+                    dialog1.dismiss();
+                    dialog.dismiss();
+
+                    callReturnKitAPI(id,spnResaon.getSelectedItem().toString(),edtEmailId.getText().toString().trim());
+
+
+                }else {
+
+                    Toast.makeText(context,"Please enter the EMAIL ID" , Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+        });
+
+
+        Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
+        // if decline button is clicked, close the custom dialog
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                dialog.dismiss();
+            }
+        });
+    }
+
     //DISMISS API CALL
     private void callKitDismissAPI(int ID, String reason) {
 
@@ -590,54 +741,13 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
 
     }
 
-    private void showReturnDialog() {
-
-        final ImageButton txt_dob;
-        final TextView txtStartDate, txtDob;
-        final int[] mYear = new int[1];
-        final int[] mMonth = new int[1];
-        final int[] mDay = new int[1];
-        final EditText edtScreenId;
-        final Spinner spnResaon;
-
-        // Create custom dialog object
-        final Dialog dialog = new Dialog(context);
-        // Include dialog.xml file
-        dialog.setContentView(R.layout.dialog_kit_return_modify);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        Window window = dialog.getWindow();
-        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        spnResaon = (Spinner) dialog.findViewById(R.id.spnResaon);
-        spnResaon.setOnItemSelectedListener(this);
-
-        ArrayAdapter adpNumber = new ArrayAdapter(context,android.R.layout.simple_spinner_item, spnReason);
-        adpNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnResaon.setAdapter(adpNumber);
-
-        dialog.show();
-
-        Button btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
-        // if decline button is clicked, close the custom dialog
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Close dialog
-                dialog.dismiss();
-            }
-        });
 
 
-        Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
-        // if decline button is clicked, close the custom dialog
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Close dialog
-                dialog.dismiss();
-            }
-        });
-    }
+
+
+
+
+
 
     //Call callGetKitDetailsAPI API
     private void callGetKitDetailsAPI() {
@@ -668,7 +778,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
 
                             if(getKitDetailsResponse.getKitList().size() > 0){
 
-                               // linearLayout.setVisibility(View.VISIBLE);
+                                // linearLayout.setVisibility(View.VISIBLE);
                                 //textView.setVisibility(View.GONE);
 
                                 Logger.logError("getKitList API success status " +
@@ -676,7 +786,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
                                 Logger.logError("getKitList API success getSubjectList" +
                                         getKitDetailsResponse.getKitList());
 
-                               // getAllStudyID();
+                                // getAllStudyID();
 
                                 KitDetailsAdapter customAdapter = new KitDetailsAdapter(context, getKitDetailsResponse.getKitList(), getListStudy, recyclerView);
                                 recyclerView.setAdapter(customAdapter);
@@ -955,7 +1065,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         btnSubmit = dialog.findViewById(R.id.btnSubmit);
         btnSubmit.setOnClickListener(this);
 
-  //      btnGenerateBarcode = dialog.findViewById(R.id.btnGenerateBarcode);
+        //      btnGenerateBarcode = dialog.findViewById(R.id.btnGenerateBarcode);
 //        btnGenerateBarcode.setOnClickListener(this);
 
         editTextKIT_ID = dialog.findViewById(R.id.edtKitId);
@@ -1225,7 +1335,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
             @Override
             public void onClick(View v) {
                 // Close dialog
-                showReturnDialog();
+                showReturnDialog(kitList.getId(), dialog);
             }
         });
 
@@ -1339,23 +1449,23 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
                         radioButtonReqForm =(RadioButton)v.findViewById(selectedId3);*/
 
 
-                        CallModifyDetailsAPI(editTextKIT_ID.getText().toString(),
-                                editTextAccessionNumber.getText().toString(),
-                                editTextVISIT.getText().toString(),
-                                kitType,
-                                additionalKit,
-                                categorty,
-                                requistionForm,
-                                txtStartDate.getText().toString(),
-                                txtEndDate.getText().toString(),
-                                sLocal,
-                                sCentral,
-                                sAliquot,
-                                spnSelectedStudyID,
-                                strStudyName,
-                                strStudyTitle,
-                                id);
-                        //  }
+                            CallModifyDetailsAPI(editTextKIT_ID.getText().toString(),
+                                    editTextAccessionNumber.getText().toString(),
+                                    editTextVISIT.getText().toString(),
+                                    kitType,
+                                    additionalKit,
+                                    categorty,
+                                    requistionForm,
+                                    txtStartDate.getText().toString(),
+                                    txtEndDate.getText().toString(),
+                                    sLocal,
+                                    sCentral,
+                                    sAliquot,
+                                    spnSelectedStudyID,
+                                    strStudyName,
+                                    strStudyTitle,
+                                    id);
+                            //  }
 
 
 
@@ -1366,10 +1476,10 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
                         spnGroups.getSelectedItem().toString(),
                         spnStudyIDs.getSelectedItem().toString());*/
 
-                    }else {
+                        }else {
 
-                        Toast.makeText(context,"Kit Expiry Date cannot be earlier than Kit Scan Date" , Toast.LENGTH_SHORT).show();
-                    }
+                            Toast.makeText(context,"Kit Expiry Date cannot be earlier than Kit Scan Date" , Toast.LENGTH_SHORT).show();
+                        }
 
                     }else {
                         Toast.makeText(context,"Please Select Expiry Date" , Toast.LENGTH_SHORT).show();

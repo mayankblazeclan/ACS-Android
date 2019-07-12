@@ -270,6 +270,7 @@
     <string name="kit_scan_select_date">Please Select Scan Date</string>
     <string name="txt_kit_id">KIT ID</string>
     <string name="txt_accession_number">EXTENSION NUMBER</string>
+    <string name="txt_email_id">Email ID</string>
 
 
 </resources>

@@ -13,6 +13,7 @@ import com.hrfid.acs.helpers.request.LogoutRequest;
 import com.hrfid.acs.helpers.request.MapKitRequestModel;
 import com.hrfid.acs.helpers.request.MapSubjectRequestModel;
 import com.hrfid.acs.helpers.request.ModifyKitRequestModel;
+import com.hrfid.acs.helpers.request.ReturnKitRequestModel;
 import com.hrfid.acs.helpers.request.SearchKitRequestModel;
 import com.hrfid.acs.helpers.request.SearchSubjectRequestModel;
 import com.hrfid.acs.helpers.request.VerifySubjectRequestModel;
@@ -126,6 +127,10 @@ public interface APIService {
   //searchKit
   @POST("/acs/api/searchKit")
   Call<ResponseBody> searchKit(@Body SearchKitRequestModel searchKitRequestModel);
+
+  //returnKit
+  @POST("/acs/api/returnKit")
+  Call<ResponseBody> returnKit(@Body ReturnKitRequestModel returnKitRequestModel);
 
  /* @POST("api/facebook/fblogin")
   Call<ResponseBody> loginFBToSSOAPI(@Body RequestBody body);

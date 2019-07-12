@@ -331,6 +331,8 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
 
                         if (commonResponse.getStatus().getCODE() == 200) {
 
+                            if(commonResponse.getResponse() !=null){
+
                             if(commonResponse.getResponse().get(0).isStatus()){
 
                                 Logger.logError("createSchedule API success " +
@@ -376,22 +378,32 @@ public class CreateStudyScheduleFrgement extends Fragment implements View.OnClic
 
                             }else {
 
-                                Logger.logError("createSchedule API Failure " +
+                                /*Logger.logError("createSchedule API Failure " +
                                         commonResponse.getResponse().get(0).isStatus());
                                 Logger.logError("createSchedule API Failure " +
-                                        commonResponse.getResponse().get(0).getMessage());
+                                        commonResponse.getResponse().get(0).getMessage());*/
 
-                                Utils.showAlertDialog(getActivity(),  commonResponse.getResponse().get(0).getMessage());
+                                Utils.showAlertDialog(getActivity(),  commonResponse.getStatus().geteRROR());
+                            }
+
+                            }else {
+
+                                /*Logger.logError("createSchedule API Failure " +
+                                        commonResponse.getResponse().get(0).isStatus());
+                                Logger.logError("createSchedule API Failure " +
+                                        commonResponse.getResponse().get(0).getMessage());*/
+
+                                Utils.showAlertDialog(getActivity(),  commonResponse.getStatus().geteRROR());
                             }
 
                         }else {
 
-                            Logger.logError("createSchedule API Failure " +
+                           /* Logger.logError("createSchedule API Failure " +
                                     commonResponse.getResponse().get(0).isStatus());
                             Logger.logError("createSchedule API Failure " +
-                                    commonResponse.getResponse().get(0).getMessage());
+                                    commonResponse.getResponse().get(0).getMessage());*/
 
-                            Utils.showAlertDialog(getActivity(),  commonResponse.getResponse().get(0).getMessage());
+                            Utils.showAlertDialog(getActivity(),  commonResponse.getStatus().geteRROR());
                         }
 
 
