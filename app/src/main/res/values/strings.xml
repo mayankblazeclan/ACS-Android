@@ -269,8 +269,28 @@
     <string name="reqistion_form">Requistion Form</string>
     <string name="kit_scan_select_date">Please Select Scan Date</string>
     <string name="txt_kit_id">KIT ID</string>
+    <string name="txt_kit_name_id">KIT NAME (ID)</string>
+
     <string name="txt_accession_number">EXTENSION NUMBER</string>
     <string name="txt_email_id">Email ID</string>
+    <string name="txt_site_number">Site No</string>
+    <string name="txt_cohort_number">Cohort No</string>
+    <string name="txt_primary_investigator">Primary Investigator</string>
+    <string name="txt_time_point">Timepoint</string>
+    <string name="txt_discard_tube_color">Discard Tube Color</string>
+    <string name="txt_discard_tube_volume">Discard Tube Volume</string>
+    <string name="txt_test_name">Test Name</string>
+    <string name="txt_collection_label">Collection Label</string>
+    <string name="txt_transport_label">Transport Label</string>
+    <string name="txt_tube_color">Tube Color</string>
+    <string name="txt_lab_use">Lab Use</string>
+    <string name="txt_tube_volume">Tube Volume</string>
+    <string name="txt_aliquot_tube">Aliquot Tube</string>
+    <string name="txt_blood_tube_type">Tube Type</string>
+    <string name="txt_tsu_entry_date">Please select entry date</string>
+    <string name="txt_tube_quantity">Tube Quantity</string>
+    <string name="txt_extension_number">Ext No</string>
+    <string name="txt_centrifuge_programme">Centrifuge Programme</string>
 
 
 </resources>

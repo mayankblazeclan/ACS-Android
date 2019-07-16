@@ -11,11 +11,12 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,23 +37,17 @@ import com.hrfid.acs.R;
 import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
-import com.hrfid.acs.helpers.request.AddKitRequest;
-import com.hrfid.acs.helpers.request.AddKitRequestModel;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.DismissKitDetailsRequest;
 import com.hrfid.acs.helpers.request.DismissKitRequestModel;
-import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.request.GetKitDetailsRequest;
 import com.hrfid.acs.helpers.request.MapKitDetailsRequest;
 import com.hrfid.acs.helpers.request.MapKitRequestModel;
-import com.hrfid.acs.helpers.request.MapSubjectDetailsRequest;
-import com.hrfid.acs.helpers.request.MapSubjectRequestModel;
 import com.hrfid.acs.helpers.request.ModifyKitRequest;
 import com.hrfid.acs.helpers.request.ModifyKitRequestModel;
 import com.hrfid.acs.helpers.request.ReturnKitDetailsRequest;
 import com.hrfid.acs.helpers.request.ReturnKitRequestModel;
 import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
-import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList;
 import com.hrfid.acs.helpers.serverResponses.models.GetKitDetails.GetKitDetailsResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetKitDetails.KitList;
@@ -73,7 +69,7 @@ import java.util.List;
 /**
  * Created by MS on 2019-05-31.
  */
-public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.MyViewHolder> implements AdapterView.OnItemSelectedListener, View.OnClickListener {
+public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.MyViewHolder> implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
 
     // String[] sNumber = {"0", "1","2","3", "4", "5", "6", "7", "8", "9", "10"};
@@ -119,8 +115,9 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
     private  List<Integer> listSpinnerStudyID;
     private RecyclerView recyclerView;
     List<String> listStudyLabel = new ArrayList<>();
+    private static int currentPosition = 0;
 
-    public KitDetailsAdapter(Context context, List<KitList> kitLists, List<StudyList> lists, RecyclerView recyclerView) {
+    public TSUDetailsAdapter(Context context, List<KitList> kitLists, List<StudyList> lists, RecyclerView recyclerView) {
         this.context = context;
         this.kitLists = kitLists;
         this.getListStudy = lists;
@@ -130,7 +127,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // infalte the item Layout
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_kit_details_row, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_tsu_details_row, parent, false);
         // set the view's size, margins, paddings and layout parameters
         MyViewHolder vh = new MyViewHolder(v); // pass the view to View Holder
         return vh;
@@ -141,6 +138,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         // set the data in items
 
         holder.txtKitId.setText(kitLists.get(position).getKitId().trim());
+        holder.textViewHeading.setText("STUDY NAME (ID) :"+"" +kitLists.get(position).getStudyTitle()+ "("+ kitLists.get(position).getStudyName()+")" +"  KIT NAME/ID : "+kitLists.get(position).getKitId());
         holder.txtStudyName.setText("" +kitLists.get(position).getStudyTitle()+ "("+ kitLists.get(position).getStudyName()+")");
         holder.txtVisit.setText(kitLists.get(position).getVisit().trim());
         holder.txtVisit.setSelected(true);
@@ -205,6 +203,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         holder.txtLocal.setText(""+kitLists.get(position).getLocal());
         holder.txtCentral.setText(""+kitLists.get(position).getCentral());
         holder.txt_aliquot.setText(""+kitLists.get(position).getAliquot());
+        holder.linearLayout.setVisibility(View.GONE);
         holder.txtScanDate.setText
                 (Utilities.splitDateFromDesired(kitLists.get(position).getScanDate()));
         holder.txt_exp_date.setText
@@ -249,6 +248,30 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
             public void onClick(View v) {
 
                 showDismissKitDialog(kitLists.get(position));
+            }
+        });
+
+        if (currentPosition == position) {
+            //creating an animation
+            Animation slideDown = AnimationUtils.loadAnimation(context, R.anim.slide_down);
+
+            //adding sliding effect
+            holder.linearLayout.startAnimation(slideDown);
+
+            //toggling visibility
+            holder.linearLayout.setVisibility(View.VISIBLE);
+        }
+
+
+        holder.textViewHeading.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //getting the position of the item to expand it
+                currentPosition = position;
+
+                //reloding the list
+                notifyDataSetChanged();
             }
         });
 
@@ -368,6 +391,8 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         TextView txt_aliquot;
         TextView txtScanDate;
         TextView txt_exp_date;
+        RelativeLayout linearLayout;
+        TextView textViewHeading;
 
         Button btnModify, btnDismiss, btnMap;
 
@@ -389,11 +414,13 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
             txtCentral = itemView.findViewById(R.id.txtCentral);
             txt_aliquot = itemView.findViewById(R.id.txt_aliquot);
             txtScanDate = itemView.findViewById(R.id.txtScanDate);
-            txt_exp_date = itemView.findViewById(R.id.txt_exp_date);
+            txt_exp_date = itemView.findViewById(R.id.txt_entry_date);
 
             btnModify = itemView.findViewById(R.id.btnModify);
             btnDismiss = itemView.findViewById(R.id.btnDismiss);
             btnMap = itemView.findViewById(R.id.btnMap);
+            linearLayout = itemView.findViewById(R.id.relativeLayout);
+            textViewHeading = itemView.findViewById(R.id.textViewHeading);
         }
     }
 
@@ -486,7 +513,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         final Dialog dialog = new Dialog(context);
         // Include dialog.xml file
         dialog.setContentView(R.layout.dialog_kit_resaon_modify);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         Window window = dialog.getWindow();
         window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -612,7 +639,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         final Dialog dialog = new Dialog(context);
         // Include dialog.xml file
         dialog.setContentView(R.layout.dialog_kit_return_modify);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         Window window = dialog.getWindow();
         window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -792,7 +819,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
 
                                 // getAllStudyID();
 
-                                KitDetailsAdapter customAdapter = new KitDetailsAdapter(context, getKitDetailsResponse.getKitList(), getListStudy, recyclerView);
+                                TSUDetailsAdapter customAdapter = new TSUDetailsAdapter(context, getKitDetailsResponse.getKitList(), getListStudy, recyclerView);
                                 recyclerView.setAdapter(customAdapter);
 
 
@@ -1030,7 +1057,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         // Create custom dialog object
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_kit_modify);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         Window window = dialog.getWindow();
         window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -1360,7 +1387,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         // Include dialog.xml file
         dialog.setContentView(R.layout.dialog_kit_replicate_barcode);
         dialog.setCancelable(false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         Window window = dialog.getWindow();
         window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 

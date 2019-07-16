@@ -129,7 +129,7 @@ public class PrintAdapter extends PrintDocumentAdapter {
             for (int i = 0; i < replicateArrayList.size(); i++) {
 
                 if (i > 6 && i < 14) {
-                    paint.setTextSize(20);
+                    paint.setTextSize(16);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 
                     Bitmap resized = getResizedBitmap(replicateArrayList.get(i).getBarcodeBitmap(), 500);
@@ -143,7 +143,7 @@ public class PrintAdapter extends PrintDocumentAdapter {
                 }
 
                 if (i > 12 && i < 20) {
-                    paint.setTextSize(20);
+                    paint.setTextSize(16);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 
                     Bitmap resized = getResizedBitmap(replicateArrayList.get(i).getBarcodeBitmap(), 500);
@@ -156,7 +156,7 @@ public class PrintAdapter extends PrintDocumentAdapter {
                     row3height = row3height + 100;
                 }
                 if (i > 21 && i < 29) {
-                    paint.setTextSize(20);
+                    paint.setTextSize(16);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 
                     Bitmap resized = getResizedBitmap(replicateArrayList.get(i).getBarcodeBitmap(), 500);
@@ -169,7 +169,7 @@ public class PrintAdapter extends PrintDocumentAdapter {
                     row4height = row4height + 100;
                 } else {
                     if (i < 7) {
-                        paint.setTextSize(20);
+                        paint.setTextSize(16);
                         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 
                         Bitmap resized = getResizedBitmap(replicateArrayList.get(i).getBarcodeBitmap(), 500);
@@ -185,7 +185,154 @@ public class PrintAdapter extends PrintDocumentAdapter {
 
                 }
             }
-        } else {
+        } else if (selectedValue.equals("5")) {
+
+            int height = 50;
+            int textXPos = 110;
+            int textYPos = 90;
+
+            int row2height = 50;
+            int row2textYPos = 90;
+            int row3height = 50;
+            int row3textYPos = 90;
+            int row4height = 50;
+            int row4textYPos = 90;
+            for (int i = 0; i < replicateArrayList.size(); i++) {
+
+                if (i > 6 && i < 14) {
+                    paint.setTextSize(18);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+
+                    Bitmap resized = getResizedBitmap(replicateArrayList.get(i).getBarcodeBitmap(), 570);
+                    canvas.drawBitmap(resized, 250, row2height, paint);
+
+                    canvas.drawText(replicateArrayList.get(i).getTitle(), 300, row2textYPos, paint);
+
+                    row2textYPos = row2textYPos + 100;
+
+                    row2height = row2height + 100;
+                }
+
+                if (i > 12 && i < 20) {
+                    paint.setTextSize(18);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+
+                    Bitmap resized = getResizedBitmap(replicateArrayList.get(i).getBarcodeBitmap(), 570);
+                    canvas.drawBitmap(resized, 450, row3height, paint);
+
+                    canvas.drawText(replicateArrayList.get(i).getTitle(), 500, row3textYPos, paint);
+
+                    row3textYPos = row3textYPos + 100;
+
+                    row3height = row3height + 100;
+                }
+                if (i > 21 && i < 29) {
+                    paint.setTextSize(18);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+
+                    Bitmap resized = getResizedBitmap(replicateArrayList.get(i).getBarcodeBitmap(), 570);
+                    canvas.drawBitmap(resized, 650, row4height, paint);
+
+                    canvas.drawText(replicateArrayList.get(i).getTitle(), 700, row4textYPos, paint);
+
+                    row4textYPos = row4textYPos + 100;
+
+                    row4height = row4height + 100;
+                } else {
+                    if (i < 7) {
+                        paint.setTextSize(18);
+                        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+
+                        Bitmap resized = getResizedBitmap(replicateArrayList.get(i).getBarcodeBitmap(), 570);
+                        canvas.drawBitmap(resized, 25, height, paint);
+
+                        canvas.drawText(replicateArrayList.get(i).getTitle(), textXPos, textYPos, paint);
+
+                        textYPos = textYPos + 100;
+
+                        height = height + 100;
+                    }
+
+
+                }
+            }
+        }
+        else if (selectedValue.equals("6")) {
+
+            int height = 50;
+            int textXPos = 110;
+            int textYPos = 80;
+
+            int row2height = 50;
+            int row2textYPos = 90;
+            int row3height = 50;
+            int row3textYPos = 90;
+            int row4height = 50;
+            int row4textYPos = 90;
+            for (int i = 0; i < replicateArrayList.size(); i++) {
+
+                if (i > 6 && i < 14) {
+                    paint.setTextSize(20);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+
+                    Bitmap resized = getResizedBitmap(replicateArrayList.get(i).getBarcodeBitmap(), 650);
+                    canvas.drawBitmap(resized, 250, row2height, paint);
+
+                    canvas.drawText(replicateArrayList.get(i).getTitle(), 300, row2textYPos, paint);
+
+                    row2textYPos = row2textYPos + 100;
+
+                    row2height = row2height + 100;
+                }
+
+                if (i > 12 && i < 20) {
+                    paint.setTextSize(20);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+
+                    Bitmap resized = getResizedBitmap(replicateArrayList.get(i).getBarcodeBitmap(), 650);
+                    canvas.drawBitmap(resized, 450, row3height, paint);
+
+                    canvas.drawText(replicateArrayList.get(i).getTitle(), 500, row3textYPos, paint);
+
+                    row3textYPos = row3textYPos + 100;
+
+                    row3height = row3height + 100;
+                }
+                if (i > 21 && i < 29) {
+                    paint.setTextSize(20);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+
+                    Bitmap resized = getResizedBitmap(replicateArrayList.get(i).getBarcodeBitmap(), 650);
+                    canvas.drawBitmap(resized, 650, row4height, paint);
+
+                    canvas.drawText(replicateArrayList.get(i).getTitle(), 700, row4textYPos, paint);
+
+                    row4textYPos = row4textYPos + 100;
+
+                    row4height = row4height + 100;
+                } else {
+                    if (i < 7) {
+                        paint.setTextSize(20);
+                        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+
+                        Bitmap resized = getResizedBitmap(replicateArrayList.get(i).getBarcodeBitmap(), 650);
+                        canvas.drawBitmap(resized, 25, height, paint);
+
+                        canvas.drawText(replicateArrayList.get(i).getTitle(), textXPos, textYPos, paint);
+
+                        textYPos = textYPos + 100;
+
+                        height = height + 100;
+                    }
+
+
+                }
+            }
+        }
+
+
+
+        else {
             paint.setTextSize(20);
             paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 

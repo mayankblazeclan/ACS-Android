@@ -36,8 +36,6 @@ import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
 import com.hrfid.acs.helpers.request.AddKitRequest;
 import com.hrfid.acs.helpers.request.AddKitRequestModel;
-import com.hrfid.acs.helpers.request.AddSubjectRequest;
-import com.hrfid.acs.helpers.request.AddSubjectRequestModel;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
@@ -49,7 +47,6 @@ import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
 import com.hrfid.acs.view.activity.InventorySetupActivity;
-import com.hrfid.acs.view.activity.SeniorSubjectOnBoardingActivity;
 import com.hrfid.acs.view.barcode.PrintAdapter;
 import com.hrfid.acs.view.barcode.ReplicateModel;
 import com.hrfid.acs.view.barcode.ShowReplicateListActivity;
@@ -65,9 +62,9 @@ import java.util.List;
 /**
  * Created by MS on 2019-06-04.
  */
-public class AddKitFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
+public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
-    private static final String TAG = "SeniorSubjectOnBoarding";
+    private static final String TAG = "AddTSU_Details";
 
     String[] sNumber = {"0", "1","2","3", "4", "5", "6", "7", "8", "9", "10"};
 
@@ -105,7 +102,7 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_add_kit, container, false);
+        View v = inflater.inflate(R.layout.fragment_add_tsu, container, false);
 
         initViews(v);
 
@@ -116,7 +113,7 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
 
     private void initViews(View v) {
 
-
+/*
         spnStudyIDs = (Spinner) v.findViewById(R.id.spnStatusId);
         spnStudyIDs.setOnItemSelectedListener(this);
 
@@ -175,7 +172,7 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
 
         llLocal = (LinearLayout) v.findViewById(R.id.linearLayout_local);
         llCentral = (LinearLayout) v.findViewById(R.id.linearLayout_central);
-        llAliquot = (LinearLayout) v.findViewById(R.id.linearLayout_alqt);
+        llAliquot = (LinearLayout) v.findViewById(R.id.linearLayout_alqt);*/
 
     }
 

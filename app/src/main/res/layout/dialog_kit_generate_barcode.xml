@@ -43,8 +43,8 @@
                 android:id="@+id/et_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_margin="15dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="15dp"
                 android:hint="Enter the barcode ID/Scan the barcode" />
 
         </LinearLayout>
@@ -65,6 +65,8 @@
             android:gravity="center"
             android:layout_marginRight="@dimen/activity_5dp_margin"
             android:layout_marginBottom="@dimen/activity_5dp_margin"
+            android:textColor="@color/black"
+            android:text=""
             android:hint="" />
 
        <!-- <LinearLayout
@@ -150,30 +152,27 @@
                     android:id="@+id/radio1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="  0.5"
+                    android:text=" 0.5 ml tube"
                     android:checked="true"
-                    android:layout_marginLeft="@dimen/margin_30dp"
-                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:layout_marginLeft="@dimen/margin_10dp"
+                    android:layout_marginRight="@dimen/bt_ok_padding"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <RadioButton
                     android:id="@+id/radio2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="  1.5-2.0"
+                    android:text=" 1.5 - 2.0 ml tube"
                     android:checked="false"
-                    android:layout_marginLeft="@dimen/margin_30dp"
-                    android:layout_marginRight="@dimen/margin_30dp"
+                    android:layout_marginRight="@dimen/bt_ok_padding"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <RadioButton
                     android:id="@+id/radioGeneral"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="  GENERAL"
+                    android:text=" GENERAL"
                     android:checked="false"
-                    android:layout_marginLeft="@dimen/margin_30dp"
-                    android:layout_marginRight="@dimen/margin_30dp"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
             </RadioGroup>
@@ -197,7 +196,7 @@
                 android:id="@+id/btn_submit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SUBMIT"
+                android:text="PRINT"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:layout_margin="@dimen/activity_5dp_margin"

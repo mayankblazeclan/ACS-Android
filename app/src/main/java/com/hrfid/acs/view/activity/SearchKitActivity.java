@@ -204,6 +204,18 @@ public class SearchKitActivity extends BaseActivity  implements AdapterView.OnIt
                             txtEndDate.setText(year + "-" + paddedMonth + "-" + fDate);
                             endDate =txtEndDate.getText().toString();
 
+                        } else if (monthOfYear < 13 && dayOfMonth < 10) {
+
+                            fmonth = "0" + monthOfYear;
+                            month = Integer.parseInt(fmonth) + 1;
+                            String fDate = "0" + dayOfMonth;
+                            String paddedMonth = String.format("%02d", month);
+                            //editText.setText(fDate + "/" + paddedMonth + "/" + year);
+
+
+                            txtEndDate.setText(year + "-" + paddedMonth + "-" + fDate);
+                            endDate =txtEndDate.getText().toString();
+
                         } else {
 
                             fmonth = "0" + monthOfYear;
