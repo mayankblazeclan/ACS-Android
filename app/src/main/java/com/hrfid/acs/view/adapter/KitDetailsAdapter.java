@@ -150,7 +150,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         }else {
             holder.txtKitType.setText("SCREENING");
         }
-        //holder.txt_status.setText(kitLists.get(position).getStatus().trim());
+        //holder.txtCohortNo.setText(tsuLists.get(position).getStatus().trim());
 
         if (kitLists.get(position).getStatus().equalsIgnoreCase("In_Screening")) {
             holder.txt_status.setText("In_Screening");

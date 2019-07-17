@@ -65,7 +65,7 @@
                     android:text="@string/txt_kit_name_id"/>
 
                 <android.support.v7.widget.AppCompatSpinner
-                    android:id="@+id/kitId"
+                    android:id="@+id/spnKitLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/spinner_background"
@@ -125,7 +125,7 @@
                     android:text="@string/txt_site_number"/>
 
                 <EditText
-                    android:id="@+id/edtAccession"
+                    android:id="@+id/edtSiteNo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_10dp"
@@ -153,7 +153,7 @@
                     android:text="@string/txt_cohort_number"/>
 
                 <EditText
-                    android:id="@+id/edtCohortNumber"
+                    android:id="@+id/edtCohortNo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_10dp"
@@ -258,10 +258,10 @@
                             android:layout_margin="@dimen/activity_5dp_margin"
                             android:gravity="left"
                             android:orientation="horizontal"
-                            android:id="@+id/radioGroup_req_form">
+                            android:id="@+id/radioGroup_tube_type">
 
                             <RadioButton
-                                android:id="@+id/rScreening1"
+                                android:id="@+id/rBlood"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="  BLOOD"
@@ -271,7 +271,7 @@
                                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
                             <RadioButton
-                                android:id="@+id/rTrial2"
+                                android:id="@+id/rUrine"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="  URINE"
@@ -364,14 +364,14 @@
                         android:textStyle="bold"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:layout_marginLeft="@dimen/activity_5dp_margin"
-                        android:textAllCaps="true"
                         android:text="@string/txt_tube_volume"/>
 
                     <EditText
                         android:id="@+id/edtTubeVolume"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Enter Tube Volume"/>
+                        android:inputType="numberDecimal"
+                        android:hint="Enter Tube Vol (in ml)"/>
 
                 </LinearLayout>
 
@@ -481,13 +481,14 @@
                             android:textStyle="bold"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:layout_marginLeft="@dimen/activity_5dp_margin"
-                            android:textAllCaps="true"
+                            android:textAllCaps="false"
                             android:text="@string/txt_tube_volume"/>
 
                         <EditText
                             android:id="@+id/edtAliquotTubeVolume"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
                             android:hint="Enter Tube Vol"/>
 
                     </LinearLayout>
@@ -738,14 +739,14 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/btn_start_date"
+                    android:id="@+id/btnEntryDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/activity_5dp_margin"
                     android:background="@mipmap/ic_date_calendar"/>
 
                 <TextView
-                    android:id="@+id/txt_start_date"
+                    android:id="@+id/txt_entry_date"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:textStyle="bold"

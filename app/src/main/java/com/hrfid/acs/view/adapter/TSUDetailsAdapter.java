@@ -1,6 +1,7 @@
 package com.hrfid.acs.view.adapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -37,9 +38,12 @@ import com.hrfid.acs.R;
 import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
+import com.hrfid.acs.helpers.request.AddTSURequest;
+import com.hrfid.acs.helpers.request.AddTSURequestModel;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.DismissKitDetailsRequest;
 import com.hrfid.acs.helpers.request.DismissKitRequestModel;
+import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.request.GetKitDetailsRequest;
 import com.hrfid.acs.helpers.request.MapKitDetailsRequest;
 import com.hrfid.acs.helpers.request.MapKitRequestModel;
@@ -48,14 +52,18 @@ import com.hrfid.acs.helpers.request.ModifyKitRequestModel;
 import com.hrfid.acs.helpers.request.ReturnKitDetailsRequest;
 import com.hrfid.acs.helpers.request.ReturnKitRequestModel;
 import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
+import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList;
 import com.hrfid.acs.helpers.serverResponses.models.GetKitDetails.GetKitDetailsResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetKitDetails.KitList;
+import com.hrfid.acs.helpers.serverResponses.models.GetTSUDetails.GetTSUDetailsResponse;
+import com.hrfid.acs.helpers.serverResponses.models.GetTSUDetails.TSUList;
 import com.hrfid.acs.util.AppConstants;
 import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
+import com.hrfid.acs.view.activity.TSUSetupActivity;
 import com.hrfid.acs.view.barcode.ShowReplicateListActivity;
 
 import java.text.ParseException;
@@ -71,55 +79,53 @@ import java.util.List;
  */
 public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.MyViewHolder> implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
-
-    // String[] sNumber = {"0", "1","2","3", "4", "5", "6", "7", "8", "9", "10"};
-
-    //private Button btnGenerateBarcode;
-    private Button btnSubmit;
-    private String message = "";
-    private ImageView imageView;
-    // private TextView txt_start_date;
     private int mYear, mMonth, mDay;
-    private String startDate ="";
-    private String endDate = "";
-    private  Spinner spnStudyIDs, spnLocal, spnCentral, spnAliquot;
-    //private Button btnReplicate;
-    private RadioButton rbSample, rbAliquot, rbBoth;
-    private LinearLayout llLocal, llCentral, llAliquot;
-    private ImageButton btnStartDatePicker, btnEndDatePicker;
-    private TextView txtStartDate, txtEndDate;
     private  List<StudyList> listStudy = new ArrayList<>();
     private String spnSelectedStudyID ="";
-    private RadioGroup radioKITtype;
-    private RadioButton radioButtonKitTYPE;
-    private RadioGroup radioAdditionalKITtype;
-    private RadioButton radioButtonAdditionalKitTYPE;
-    private RadioGroup radioGroupCategory;
-    private RadioButton radioButtonCategory;
-    private RadioGroup radioGroupReqForm;
-    private RadioButton radioButtonReqForm;
-    private TextView editTextKIT_ID;
-    private EditText editTextAccessionNumber;
-    private EditText editTextVISIT;
     private String strStudyName;
     private String strStudyTitle;
-    private RadioButton rbScreening, rbTrial;
-    private RadioButton rbAdYes, rbAdNo;
-    private RadioButton rbReqFormYES, rbReqFormNO;
-    List<String> lists1 = new ArrayList<>();
-
     Context context;
-    String[] spnReason = {"DAMAGE", "MISSING"};
-    List<KitList> kitLists;
+    List<TSUList> tsuLists;
     private  List<StudyList> getListStudy;
-    private  List<Integer> listSpinnerStudyID;
     private RecyclerView recyclerView;
-    List<String> listStudyLabel = new ArrayList<>();
     private static int currentPosition = 0;
 
-    public TSUDetailsAdapter(Context context, List<KitList> kitLists, List<StudyList> lists, RecyclerView recyclerView) {
+    String[] sNumberValue = {"ABC","DBABC","ADDABC","TAABC","OPABC","0", "1","2","3", "4", "5", "6", "7", "8", "9", "10"};
+    private String strKitName;
+    private String strKitTitle;
+    private String spnSelectedKitID ="";
+
+    private TextView spnStudyLabel;
+    private Spinner spnKitLabel;
+    private Spinner spnPrimaryInvestigator;
+    private Spinner spnTubeColor;
+    private Spinner spnAliquotTubeColor;
+    private Spinner spnDiscardTubeColor;
+    private Spinner spnTestName;
+    private Spinner spnCollectionLabel;
+    private Spinner spnTransportLabel;
+    private Spinner spnLabUse;
+    private EditText edtVisit;
+    private EditText edtSiteNo;
+    private EditText edtCohortNo;
+    private EditText edtTimepoint;
+    private EditText edtTubeVolume;
+
+    private EditText edtAliquotTubeVolume;
+    private EditText edtAliquotExtNo;
+    private EditText edtDiscardTubeVolume;
+    private EditText edtCentrifugeProg;
+
+    private RadioGroup radioTubeType;
+    private RadioButton radioButtonTubeTypeBlood;
+    private RadioButton radioButtonTubeTypeUrine;
+    private ImageButton btnEntryDate;
+    private TextView txtEntryDate;
+    private Button btnSubmit;
+
+    public TSUDetailsAdapter(Context context, List<TSUList> tsuLists, List<StudyList> lists, RecyclerView recyclerView) {
         this.context = context;
-        this.kitLists = kitLists;
+        this.tsuLists = tsuLists;
         this.getListStudy = lists;
         this.recyclerView = recyclerView;
         //getAllStudyID();
@@ -133,105 +139,108 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
         return vh;
     }
 
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        //TextView txtKitId;
+        //TextView txtStudyName;
+        TextView txtVisit;
+        TextView txtSiteNo;
+        TextView txtCohortNo;
+        TextView txtPrimartInvestigator;
+        TextView txtTimepoint;
+        TextView txtDiscardTubeColor;
+
+        TextView txtDiscardTubeVolume;
+        TextView txtCollectionLabel;
+        TextView txtTestName;
+        TextView txtEntryDate;
+        TextView txtTubetype;
+        TextView txtTubeColor;
+
+        TextView txtTubeVol;
+        TextView txtAliquotTubeColor;
+        TextView txtAliquotTubeVol;
+        TextView txtAliquotTubeExt;
+        TextView txtCentrifugeProg;
+        TextView txtLabUse;
+        RelativeLayout linearLayout;
+        TextView textViewHeading;
+
+        Button btnModify, btnDismiss;
+
+
+        public MyViewHolder(View itemView) {
+            super(itemView);
+            // get the reference of item view's
+            //txtKitId = (TextView) itemView.findViewById(R.id.txtKitId);
+           // txtStudyName = (TextView) itemView.findViewById(R.id.txtStudyName);
+            txtVisit = (TextView) itemView.findViewById(R.id.txtVisit);
+            txtSiteNo = itemView.findViewById(R.id.txtSiteNo);
+            txtTimepoint = (TextView) itemView.findViewById(R.id.txtTimepoint);
+            txtDiscardTubeColor = itemView.findViewById(R.id.txtDiscardTubeColor);
+            txtCohortNo = itemView.findViewById(R.id.txtCohortNo);
+            txtPrimartInvestigator = itemView.findViewById(R.id.txtPrimartInvestigator);
+
+            txtDiscardTubeVolume = itemView.findViewById(R.id.txtDiscardTubeVolume);
+            txtCollectionLabel = itemView.findViewById(R.id.txtCollectionLabel);
+            txtTestName = itemView.findViewById(R.id.txtTestName);
+            txtEntryDate = itemView.findViewById(R.id.txtEntryDate);
+            txtTubetype = itemView.findViewById(R.id.txtTubetype);
+            txtTubeColor = itemView.findViewById(R.id.txtTubeColor);
+
+            txtTubeVol = itemView.findViewById(R.id.txtTubeVol);
+            txtAliquotTubeColor = itemView.findViewById(R.id.txtAliquotTubeColor);
+            txtAliquotTubeVol = itemView.findViewById(R.id.txtAliquotTubeVol);
+            txtAliquotTubeExt = itemView.findViewById(R.id.txtAliquotTubeExt);
+            txtCentrifugeProg = itemView.findViewById(R.id.txtCentrifugeProg);
+            txtLabUse = itemView.findViewById(R.id.txtLabUse);
+
+
+            btnModify = itemView.findViewById(R.id.btnModify);
+            btnDismiss = itemView.findViewById(R.id.btnDismiss);
+            linearLayout = itemView.findViewById(R.id.relativeLayout);
+            textViewHeading = itemView.findViewById(R.id.textViewHeading);
+        }
+    }
+
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         // set the data in items
 
-        holder.txtKitId.setText(kitLists.get(position).getKitId().trim());
-        holder.textViewHeading.setText("STUDY NAME (ID) :"+"" +kitLists.get(position).getStudyTitle()+ "("+ kitLists.get(position).getStudyName()+")" +"  KIT NAME/ID : "+kitLists.get(position).getKitId());
-        holder.txtStudyName.setText("" +kitLists.get(position).getStudyTitle()+ "("+ kitLists.get(position).getStudyName()+")");
-        holder.txtVisit.setText(kitLists.get(position).getVisit().trim());
+        holder.linearLayout.setVisibility(View.GONE);
+        //holder.txtKitId.setText(tsuLists.get(position).getKitId().trim());
+        holder.textViewHeading.setText("STUDY NAME (ID) : "+"" + tsuLists.get(position).getStudyTitle()+ "("+ tsuLists.get(position).getStudyName()+")" +"  KIT NAME/ID : "+ tsuLists.get(position).getKitId());
+        holder.textViewHeading.setSelected(true);
+//        holder.txtStudyName.setText("" + tsuLists.get(position).getStudyTitle()+ "("+ tsuLists.get(position).getStudyName()+")");
+        holder.txtVisit.setText(tsuLists.get(position).getVisit().trim());
         holder.txtVisit.setSelected(true);
 
-        if(kitLists.get(position).getIsTrial() == 1) {
-            holder.txtKitType.setText("TRIAL");
+        if(tsuLists.get(position).getTubeType() == 1) {
+            holder.txtTubetype.setText("BLOOD");
         }else {
-            holder.txtKitType.setText("SCREENING");
+            holder.txtTubetype.setText("URINE");
         }
-        //holder.txt_status.setText(kitLists.get(position).getStatus().trim());
+        //holder.txtCohortNo.setText(tsuLists.get(position).getStatus().trim());
 
-        if (kitLists.get(position).getStatus().equalsIgnoreCase("In_Screening")) {
-            holder.txt_status.setText("In_Screening");
-            holder.txt_status.setTextColor(Color.parseColor("#F9980B"));
-        } else if (kitLists.get(position).getStatus().equalsIgnoreCase("In_Trial")) {
-            holder.txt_status.setText("In_Trial");
-            holder.txt_status.setTextColor(Color.parseColor("#5AA105"));
-        } else if (kitLists.get(position).getStatus().equalsIgnoreCase("Dismissed")) {
-            if(kitLists.get(position).getReason()!=null) {
+        holder.txtSiteNo.setText(""+ tsuLists.get(position).getSiteNo());
+        holder.txtCohortNo.setText(tsuLists.get(position).getCohortNo());
+        holder.txtPrimartInvestigator.setText(tsuLists.get(position).getPrimaryInvestigator());
+        holder.txtTimepoint.setText(tsuLists.get(position).getTimepoint());
+        holder.txtDiscardTubeColor.setText(tsuLists.get(position).getDiscardTubeColor());
+        holder.txtDiscardTubeVolume.setText(tsuLists.get(position).getDiscardTubeVolume());
+        holder.txtCollectionLabel.setText(""+ tsuLists.get(position).getCollectionLable());
+        holder.txtTestName.setText(""+ tsuLists.get(position).getTestName());
+        //holder.txtEntryDate.setText(""+ tsuLists.get(position).get());
 
-                holder.txt_status.setText("Dismissed" + " (" + kitLists.get(position).getReason() + ")");
-                holder.txt_status.setTextColor(Color.RED);
-            }else {
-                holder.txt_status.setText("Dismissed");
-                holder.txt_status.setTextColor(Color.RED);
-            }
-        } else if (kitLists.get(position).getStatus().equalsIgnoreCase("Returned")) {
-            if(kitLists.get(position).getReason()!=null) {
+        holder.txtTubeColor.setText(""+ tsuLists.get(position).getTubeColor());
+        holder.txtTubeVol.setText(""+ tsuLists.get(position).getTubeVolume());
+        holder.txtAliquotTubeColor.setText(""+ tsuLists.get(position).getAliquotColorTube());
+        holder.txtAliquotTubeVol.setText(""+ tsuLists.get(position).getAliquotVolume());
+        holder.txtAliquotTubeExt.setText(""+ tsuLists.get(position).getAliquotExtNo());
+        holder.txtCentrifugeProg.setText(""+ tsuLists.get(position).getCentrifugeProg());
+        holder.txtLabUse.setText(""+ tsuLists.get(position).getLabUse());
+        holder.txtEntryDate.setText
+                (Utilities.splitDateFromDesired(tsuLists.get(position).getEntry_date()));
 
-                holder.txt_status.setText("Returned" + " (" + kitLists.get(position).getReason() + ")");
-                holder.txt_status.setTextColor(Color.RED);
-            }else {
-                holder.txt_status.setText("Returned");
-                holder.txt_status.setTextColor(Color.RED);
-            }
-        }
-        else {
-            holder.txt_status.setText("In_Stock");
-            holder.txt_status.setTextColor(Color.parseColor("#5dade2"));
-        }
-
-        if(kitLists.get(position).getAdditionalKit() ==0) {
-            holder.txtAdditionalKit.setText("NO");
-        }else {
-            holder.txtAdditionalKit.setText("YES");
-        }
-
-        if(kitLists.get(position).getRequisitionForm() ==0) {
-            holder.txt_requistion_form.setText("NO");
-        }else {
-            holder.txt_requistion_form.setText("YES");
-        }
-
-        if(kitLists.get(position).getExtNumber().equalsIgnoreCase(" ")) {
-            holder.txtExtNumber.setText("--");
-        }else {
-            holder.txtExtNumber.setText(kitLists.get(position).getExtNumber().trim());
-        }
-
-
-        holder.txtCategory.setText(kitLists.get(position).getCategory().trim());
-        holder.txtLocal.setText(""+kitLists.get(position).getLocal());
-        holder.txtCentral.setText(""+kitLists.get(position).getCentral());
-        holder.txt_aliquot.setText(""+kitLists.get(position).getAliquot());
-        holder.linearLayout.setVisibility(View.GONE);
-        holder.txtScanDate.setText
-                (Utilities.splitDateFromDesired(kitLists.get(position).getScanDate()));
-        holder.txt_exp_date.setText
-                (Utilities.splitDateFromDesired(kitLists.get(position).getExpiryDate()));
-
-        if(kitLists.get(position).getIsMapped() == 1){
-
-            holder.btnMap.setVisibility(View.GONE);
-            holder.btnModify.setVisibility(View.GONE);
-            holder.btnDismiss.setVisibility(View.VISIBLE);
-        }
-        else {
-
-            holder.btnModify.setVisibility(View.VISIBLE);
-            holder.btnMap.setVisibility(View.VISIBLE);
-            holder.btnDismiss.setVisibility(View.VISIBLE);
-        }
-
-        if(kitLists.get(position).getStatus().equalsIgnoreCase("Dismissed")){
-            holder.btnModify.setVisibility(View.GONE);
-            holder.btnMap.setVisibility(View.GONE);
-            holder.btnDismiss.setVisibility(View.GONE);
-        }else if(kitLists.get(position).getStatus().equalsIgnoreCase("Returned")){
-            holder.btnModify.setVisibility(View.GONE);
-            holder.btnMap.setVisibility(View.GONE);
-            holder.btnDismiss.setVisibility(View.GONE);
-        }else {
-        }
 
         holder.btnModify.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -239,7 +248,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
                 //showModifyDialog();
 
-                showModifyDialog(kitLists.get(position), getListStudy);
+                showModifyDialog(tsuLists.get(position), getListStudy);
             }
         });
 
@@ -247,7 +256,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
             @Override
             public void onClick(View v) {
 
-                showDismissKitDialog(kitLists.get(position));
+               // showDismissKitDialog(tsuLists.get(position));
             }
         });
 
@@ -275,7 +284,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
             }
         });
 
-        holder.btnMap.setOnClickListener(new View.OnClickListener() {
+       /* holder.btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -291,7 +300,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
                                 dialog.dismiss();
                                 //CALL MAP API
-                                callKitMapAPI(kitLists.get(position).getId(), kitLists.get(position).getIsTrial());
+                              //  callKitMapAPI(tsuLists.get(position).getId(), tsuLists.get(position).getIsTrial());
 
                             }
                         }, new DialogInterface.OnClickListener() {
@@ -303,15 +312,12 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
                             }
                         });
             }
-        });
+        });*/
     }
-
-
-
 
     @Override
     public int getItemCount() {
-        return kitLists.size();
+        return tsuLists.size();
     }
 
     @Override
@@ -323,49 +329,51 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
             case R.id.spnStatusId :
                 //Your Action Here.
-               /* spnSelectedStudyID = String.valueOf(listStudy.get(position).getValue());
+                spnSelectedStudyID = String.valueOf(listStudy.get(position).getValue());
                 strStudyName = String.valueOf(listStudy.get(position).getStudyId());
-                strStudyTitle = listStudy.get(position).getLabel();*/
+                strStudyTitle = listStudy.get(position).getLabel();
                 //Toast.makeText(getContext(), parent.getSelectedItem().toString() , Toast.LENGTH_SHORT).show();
-
-              /*  if(position !=0) {
-                    spnSelectedStudyID = String.valueOf(getListStudy.get(position).getValue());
-                    strStudyName = String.valueOf(getListStudy.get(position).getStudyId());
-                    strStudyTitle = getListStudy.get(position).getLabel();
-                    //Toast.makeText(context, spnSelectedStudyID, Toast.LENGTH_SHORT).show();
-                   // Toast.makeText(context, "strStudyTitle :"+strStudyTitle, Toast.LENGTH_SHORT).show();
-
-                }else {
-                    spnSelectedStudyID = String.valueOf(getListStudy.get(position).getValue());
-                    strStudyName = String.valueOf(getListStudy.get(position).getStudyId());
-                    strStudyTitle = getListStudy.get(position).getLabel();
-
-                    //Toast.makeText(context, "strStudyTitle 0"+strStudyTitle, Toast.LENGTH_SHORT).show();
-                }*/
-
-                if(position !=0) {
-                    for (int i = 0; i < getListStudy.size(); i++) {
-
-                        if(getListStudy.get(i).getLabel().equalsIgnoreCase(spnStudyIDs.getSelectedItem().toString()))
-                        {
-                            strStudyName = String.valueOf(getListStudy.get(i).getStudyId());
-                            spnSelectedStudyID = String.valueOf(getListStudy.get(i).getValue());
-                            strStudyTitle = String.valueOf(getListStudy.get(i).getLabel());
-                            // Toast.makeText(context, spnSelectedStudyID+ " value :" + spnSelectedStudyValue, Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                    //Toast.makeText(context, spnSelectedStudyID, Toast.LENGTH_SHORT).show();
-                }else {
-                    strStudyName = String.valueOf(getListStudy.get(position).getStudyId());
-                    spnSelectedStudyID = String.valueOf(getListStudy.get(position).getValue());
-                    strStudyTitle = String.valueOf(getListStudy.get(position).getLabel());
-                    //Toast.makeText(context, spnSelectedStudyID, Toast.LENGTH_SHORT).show();
-
-                    //Toast.makeText(context, spnSelectedStudyID+ " value :" + spnSelectedStudyValue, Toast.LENGTH_SHORT).show();
-
-                }
                 break;
+
+            case R.id.spnPrimaryInvestigator :
+
+                break;
+
+            //TubeColor
+            case R.id.spnTubeColor :
+
+                break;
+
+            //AliquotTubeColor
+            case R.id.spnAliquotTubeColor :
+
+                break;
+
+            //DiscardTubeColor
+            case R.id.spnDiscardTubeColor :
+
+                break;
+
+            //TestName
+            case R.id.spnTestName :
+
+                break;
+
+            //CollectionLabel
+            case R.id.spnCollectionLabel :
+
+                break;
+
+            //TransportLabel
+            case R.id.spnTransportLabel :
+
+                break;
+
+            //Lab Use
+            case R.id.spnLabUse :
+
+                break;
+
 
         }
     }
@@ -375,413 +383,8 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView txtKitId;
-        TextView txtStudyName;
-        TextView txtVisit;
-        TextView txtKitType;
-        TextView txt_status;
-        TextView txtExtNumber;
-        TextView txtAdditionalKit;
-        TextView txt_requistion_form;
-
-        TextView txtCategory;
-        TextView txtLocal;
-        TextView txtCentral;
-        TextView txt_aliquot;
-        TextView txtScanDate;
-        TextView txt_exp_date;
-        RelativeLayout linearLayout;
-        TextView textViewHeading;
-
-        Button btnModify, btnDismiss, btnMap;
-
-
-        public MyViewHolder(View itemView) {
-            super(itemView);
-            // get the reference of item view's
-            txtKitId = (TextView) itemView.findViewById(R.id.txtKitId);
-            txtStudyName = (TextView) itemView.findViewById(R.id.txtStudyName);
-            txtVisit = (TextView) itemView.findViewById(R.id.txtVisit);
-            txtKitType = itemView.findViewById(R.id.txtKitType);
-            txtAdditionalKit = (TextView) itemView.findViewById(R.id.txtAdditionalKit);
-            txt_requistion_form = itemView.findViewById(R.id.txt_requistion_form);
-            txt_status = itemView.findViewById(R.id.txt_status);
-            txtExtNumber = itemView.findViewById(R.id.txtExtNumber);
-
-            txtCategory = itemView.findViewById(R.id.txtCategory);
-            txtLocal = itemView.findViewById(R.id.txtLocal);
-            txtCentral = itemView.findViewById(R.id.txtCentral);
-            txt_aliquot = itemView.findViewById(R.id.txt_aliquot);
-            txtScanDate = itemView.findViewById(R.id.txtScanDate);
-            txt_exp_date = itemView.findViewById(R.id.txt_entry_date);
-
-            btnModify = itemView.findViewById(R.id.btnModify);
-            btnDismiss = itemView.findViewById(R.id.btnDismiss);
-            btnMap = itemView.findViewById(R.id.btnMap);
-            linearLayout = itemView.findViewById(R.id.relativeLayout);
-            textViewHeading = itemView.findViewById(R.id.textViewHeading);
-        }
-    }
-
-
-    //MAP API CALL
-    private void callKitMapAPI(int ID, int isTrial) {
-
-        MapKitRequestModel mapKitRequestModel = new MapKitRequestModel();
-        mapKitRequestModel.setAppName(AppConstants.APP_NAME);
-        mapKitRequestModel.setVersionNumber(AppConstants.APP_VERSION);
-        mapKitRequestModel.setDeviceType(AppConstants.APP_OS);
-        mapKitRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
-        mapKitRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(context));
-        mapKitRequestModel.setUserRole(new PrefManager(context).getUserRoleType());
-        mapKitRequestModel.setTagId(new PrefManager(context).getBarCodeValue());
-        mapKitRequestModel.setEvent(AppConstants.MAP_KIT);
-        mapKitRequestModel.setUserName(new PrefManager(context).getUserName());
-        mapKitRequestModel.setIsTrial(isTrial);
-        mapKitRequestModel.setId(Integer.valueOf(ID));
-
-        new NetworkingHelper(new MapKitDetailsRequest(context, true,
-                mapKitRequestModel)) {
-
-            @Override
-            public void serverResponseFromApi(ApiResponse serverResponse) {
-                if (serverResponse.isSucess) {
-
-                    try {
-
-                        CommonResponse commonResponse = JsonParser
-                                .parseClass(serverResponse.jsonResponse, CommonResponse.class);
-
-                        if (commonResponse.getStatus().getCODE() == 200) {
-
-                            if(commonResponse.getResponse().get(0).isStatus()){
-
-                                Logger.logError("mapKit API success " +
-                                        commonResponse.getResponse().get(0).isStatus());
-                                Logger.logError("mapKit API success " +
-                                        commonResponse.getResponse().get(0).getMessage());
-
-                                Utils.showAlertDialog((Activity)context,  commonResponse.getResponse().get(0).getMessage());
-                                callGetKitDetailsAPI();
-
-
-                            }else {
-
-                                Logger.logError("mapKit API Failure " +
-                                        commonResponse.getResponse().get(0).isStatus());
-                                Logger.logError("mapKit API Failure " +
-                                        commonResponse.getResponse().get(0).getMessage());
-
-                                Utils.showAlertDialog((Activity)context,  commonResponse.getResponse().get(0).getMessage());
-                            }
-
-                        }else {
-
-                            Logger.logError("mapKit API Failure " +
-                                    commonResponse.getResponse().get(0).isStatus());
-                            Logger.logError("mapKit API Failure " +
-                                    commonResponse.getResponse().get(0).getMessage());
-
-                            Utils.showAlertDialog((Activity)context,  commonResponse.getResponse().get(0).getMessage());
-                        }
-
-
-
-                    }
-                    catch (Exception e){
-                        Logger.logError("mapKit Exception " + e.getMessage());
-                    }
-
-                } else {
-                    Logger.logError("mapKit API Failure " +
-                            serverResponse.errorMessageToDisplay);
-                }
-            }
-        };
-
-    }
-
-
-
-
-    private void showDismissKitDialog(final KitList kitList) {
-
-        final EditText edtReason;
-
-        // Create custom dialog object
-        final Dialog dialog = new Dialog(context);
-        // Include dialog.xml file
-        dialog.setContentView(R.layout.dialog_kit_resaon_modify);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        Window window = dialog.getWindow();
-        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        edtReason = dialog.findViewById(R.id.edtReason);
-
-
-        dialog.show();
-
-        Button btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
-        // if decline button is clicked, close the custom dialog
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Close dialog
-
-
-                if(edtReason.getText().toString().trim().length() >0) {
-
-                    dialog.dismiss();
-                    callKitDismissAPI(kitList.getId(), edtReason.getText().toString().trim());
-
-                }else {
-                    Toast.makeText(context,"Please enter the Reason" , Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-
-        Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
-        // if decline button is clicked, close the custom dialog
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Close dialog
-                dialog.dismiss();
-            }
-        });
-    }
-
-
-    //RETURN API CALL
-    private void callReturnKitAPI(int ID, String reason, String emailID) {
-
-        ReturnKitRequestModel returnKitRequestModel = new ReturnKitRequestModel();
-        returnKitRequestModel.setAppName(AppConstants.APP_NAME);
-        returnKitRequestModel.setVersionNumber(AppConstants.APP_VERSION);
-        returnKitRequestModel.setDeviceType(AppConstants.APP_OS);
-        returnKitRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
-        returnKitRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(context));
-        returnKitRequestModel.setUserRole(new PrefManager(context).getUserRoleType());
-        returnKitRequestModel.setTagId(new PrefManager(context).getBarCodeValue());
-        returnKitRequestModel.setEvent(AppConstants.KIT_RETURN);
-        returnKitRequestModel.setUserName(new PrefManager(context).getUserName());
-        returnKitRequestModel.setReason(reason);
-        returnKitRequestModel.setId(Integer.valueOf(ID));
-        returnKitRequestModel.setEmail(emailID);
-
-        new NetworkingHelper(new ReturnKitDetailsRequest(context, true,
-                returnKitRequestModel)) {
-
-            @Override
-            public void serverResponseFromApi(ApiResponse serverResponse) {
-                if (serverResponse.isSucess) {
-
-                    try {
-
-                        CommonResponse commonResponse = JsonParser
-                                .parseClass(serverResponse.jsonResponse, CommonResponse.class);
-
-                        if (commonResponse.getStatus().getCODE() == 200) {
-
-                            if(commonResponse.getResponse().get(0).isStatus()){
-
-                                Logger.logError("returnKit API success " +
-                                        commonResponse.getResponse().get(0).isStatus());
-                                Logger.logError("returnKit API success " +
-                                        commonResponse.getResponse().get(0).getMessage());
-
-                                Utils.showAlertDialog((Activity)context,  commonResponse.getResponse().get(0).getMessage());
-                                callGetKitDetailsAPI();
-
-
-                            }else {
-
-                                Logger.logError("returnKit API Failure " +
-                                        commonResponse.getResponse().get(0).isStatus());
-                                Logger.logError("returnKit API Failure " +
-                                        commonResponse.getResponse().get(0).getMessage());
-
-                                Utils.showAlertDialog((Activity)context,  commonResponse.getResponse().get(0).getMessage());
-                            }
-
-                        }else {
-
-                            Logger.logError("returnKit API Failure " +
-                                    commonResponse.getStatus().geteRROR());
-
-                            Utils.showAlertDialog((Activity)context,  commonResponse.getStatus().geteRROR());
-                        }
-
-
-
-                    }
-                    catch (Exception e){
-                        Logger.logError("returnKit Exception " + e.getMessage());
-                    }
-
-                } else {
-                    Logger.logError("returnKit API Failure " +
-                            serverResponse.errorMessageToDisplay);
-                }
-            }
-        };
-
-    }
-
-    private void showReturnDialog(final int id, final Dialog dialog1) {
-
-        final EditText edtEmailId;
-        final Spinner spnResaon;
-
-        // Create custom dialog object
-        final Dialog dialog = new Dialog(context);
-        // Include dialog.xml file
-        dialog.setContentView(R.layout.dialog_kit_return_modify);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        Window window = dialog.getWindow();
-        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        edtEmailId = dialog.findViewById(R.id.edtEmailId);
-
-        spnResaon = (Spinner) dialog.findViewById(R.id.spnResaon);
-        spnResaon.setOnItemSelectedListener(this);
-
-        ArrayAdapter adpNumber = new ArrayAdapter(context,android.R.layout.simple_spinner_item, spnReason);
-        adpNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnResaon.setAdapter(adpNumber);
-
-        dialog.show();
-
-        Button btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
-        // if decline button is clicked, close the custom dialog
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Close dialog
-
-                if(edtEmailId.getText().toString().trim().length() >0){
-
-                    if(Utilities.isValidEmailId(edtEmailId.getText().toString().trim())){
-                        //Toast.makeText(context, "Valid Email Address.", Toast.LENGTH_SHORT).show();
-
-                        dialog1.dismiss();
-                        dialog.dismiss();
-                        callReturnKitAPI(id,spnResaon.getSelectedItem().toString(),edtEmailId.getText().toString().trim());
-
-                    }else{
-                        Toast.makeText(context, "Invalid Email ID", Toast.LENGTH_SHORT).show();
-                    }
-                }else {
-
-                    Toast.makeText(context,"Please enter the Email ID" , Toast.LENGTH_SHORT).show();
-
-                }
-
-            }
-        });
-
-
-        Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
-        // if decline button is clicked, close the custom dialog
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Close dialog
-                dialog.dismiss();
-            }
-        });
-    }
-
-    //DISMISS API CALL
-    private void callKitDismissAPI(int ID, String reason) {
-
-        DismissKitRequestModel mapKitRequestModel = new DismissKitRequestModel();
-        mapKitRequestModel.setAppName(AppConstants.APP_NAME);
-        mapKitRequestModel.setVersionNumber(AppConstants.APP_VERSION);
-        mapKitRequestModel.setDeviceType(AppConstants.APP_OS);
-        mapKitRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
-        mapKitRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(context));
-        mapKitRequestModel.setUserRole(new PrefManager(context).getUserRoleType());
-        mapKitRequestModel.setTagId(new PrefManager(context).getBarCodeValue());
-        mapKitRequestModel.setEvent(AppConstants.KIT_REASON);
-        mapKitRequestModel.setUserName(new PrefManager(context).getUserName());
-        mapKitRequestModel.setReason(reason);
-        mapKitRequestModel.setId(Integer.valueOf(ID));
-        mapKitRequestModel.setStatus("Dismissed");
-
-        new NetworkingHelper(new DismissKitDetailsRequest(context, true,
-                mapKitRequestModel)) {
-
-            @Override
-            public void serverResponseFromApi(ApiResponse serverResponse) {
-                if (serverResponse.isSucess) {
-
-                    try {
-
-                        CommonResponse commonResponse = JsonParser
-                                .parseClass(serverResponse.jsonResponse, CommonResponse.class);
-
-                        if (commonResponse.getStatus().getCODE() == 200) {
-
-                            if(commonResponse.getResponse().get(0).isStatus()){
-
-                                Logger.logError("dismissKit API success " +
-                                        commonResponse.getResponse().get(0).isStatus());
-                                Logger.logError("dismissKit API success " +
-                                        commonResponse.getResponse().get(0).getMessage());
-
-                                Utils.showAlertDialog((Activity)context,  commonResponse.getResponse().get(0).getMessage());
-                                callGetKitDetailsAPI();
-
-
-                            }else {
-
-                                Logger.logError("dismissKit API Failure " +
-                                        commonResponse.getResponse().get(0).isStatus());
-                                Logger.logError("dismissKit API Failure " +
-                                        commonResponse.getResponse().get(0).getMessage());
-
-                                Utils.showAlertDialog((Activity)context,  commonResponse.getResponse().get(0).getMessage());
-                            }
-
-                        }else {
-
-                            Logger.logError("dismissKit API Failure " +
-                                    commonResponse.getResponse().get(0).isStatus());
-                            Logger.logError("dismissKit API Failure " +
-                                    commonResponse.getResponse().get(0).getMessage());
-
-                            Utils.showAlertDialog((Activity)context,  commonResponse.getResponse().get(0).getMessage());
-                        }
-
-
-
-                    }
-                    catch (Exception e){
-                        Logger.logError("dismissKit Exception " + e.getMessage());
-                    }
-
-                } else {
-                    Logger.logError("dismissKit API Failure " +
-                            serverResponse.errorMessageToDisplay);
-                }
-            }
-        };
-
-    }
-
-
-
-
-
-
-
-
-
-    //Call callGetKitDetailsAPI API
-    private void callGetKitDetailsAPI() {
+    //Call callGetTSUDetails API
+    private void callGetTSUDetailsAPI() {
         CommonRequestModel commonRequestModel = new CommonRequestModel();
         commonRequestModel.setAppName(AppConstants.APP_NAME);
         commonRequestModel.setVersionNumber(AppConstants.APP_VERSION);
@@ -790,7 +393,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
         commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(context));
         commonRequestModel.setUserRole(new PrefManager(context).getUserRoleType());
         commonRequestModel.setTagId(new PrefManager(context).getBarCodeValue());
-        commonRequestModel.setEvent(AppConstants.GET_KIT_DETAILS);
+        commonRequestModel.setEvent(AppConstants.GET_TSU_DETAILS);
         commonRequestModel.setUserName(new PrefManager(context).getUserName());
 
         new NetworkingHelper(new GetKitDetailsRequest((Activity) context, true,
@@ -802,56 +405,59 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
                     try {
 
-                        GetKitDetailsResponse getKitDetailsResponse = JsonParser
-                                .parseClass(serverResponse.jsonResponse, GetKitDetailsResponse.class);
+                        GetTSUDetailsResponse getKitDetailsResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, GetTSUDetailsResponse.class);
 
                         if (getKitDetailsResponse.getStatus().getCODE() == 200) {
 
-                            if(getKitDetailsResponse.getKitList().size() > 0){
+                            if(getKitDetailsResponse.getTSUList().size() > 0){
 
-                                // linearLayout.setVisibility(View.VISIBLE);
+                                //linearLayout.setVisibility(View.VISIBLE);
                                 //textView.setVisibility(View.GONE);
 
-                                Logger.logError("getKitList API success status " +
+                                Logger.logError("getTSUList API success status " +
                                         getKitDetailsResponse.getStatus());
-                                Logger.logError("getKitList API success getSubjectList" +
-                                        getKitDetailsResponse.getKitList());
+                                Logger.logError("getTSUList API success getSubjectList" +
+                                        getKitDetailsResponse.getTSUList());
 
-                                // getAllStudyID();
+                                //getAllStudyID();
 
-                                TSUDetailsAdapter customAdapter = new TSUDetailsAdapter(context, getKitDetailsResponse.getKitList(), getListStudy, recyclerView);
+                                TSUDetailsAdapter customAdapter = new TSUDetailsAdapter(context, getKitDetailsResponse.getTSUList(), listStudy, recyclerView);
                                 recyclerView.setAdapter(customAdapter);
 
 
                             }else {
 
-                                Logger.logError("getKitList API Failure " +
+                                Logger.logError("getTSUList API Failure " +
                                         "getSubjectList" +
-                                        getKitDetailsResponse.getKitList());
+                                        getKitDetailsResponse.getTSUList());
+
+                                //linearLayout.setVisibility(View.GONE);
+                                //textView.setVisibility(View.VISIBLE);
 
                                 Utils.showAlertDialog((Activity) context,  "NO DATA IN STUDY");
                             }
 
                         }else {
 
-                            Logger.logError("getKitList API Failure " +
+                           /* Logger.logError("getTSUList API Failure " +
                                     getKitDetailsResponse.getStatus().getCODE());
-                            Logger.logError("getKitList API Failure " +
-                                    getKitDetailsResponse.getStatus().getMSG());
+                            Logger.logError("getTSUList API Failure " +
+                                    getKitDetailsResponse.getStatus().getMSG());*/
 
                             Utils.showAlertDialog((Activity) context,  getKitDetailsResponse.getStatus()
-                                    .getMSG());
+                                    .getERROR());
                         }
 
 
 
                     }
                     catch (Exception e){
-                        Logger.logError("getKitList Exception " + e.getMessage());
+                        Logger.logError("getTSUList Exception " + e.getMessage());
                     }
 
                 } else {
-                    Logger.logError("getKitList API Failure " +
+                    Logger.logError("getTSUList API Failure " +
                             serverResponse.errorMessageToDisplay);
                 }
             }
@@ -861,124 +467,151 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
     @Override
     public void onClick(View v) {
-
-        String str="";
         switch (v.getId()){
-           /* case R.id.btnGenerateBarcode:
-                //Toast.makeText(getContext(),"Button Generate Pressed" , Toast.LENGTH_SHORT).show();
-                generateBarcode();
-                break;*/
-
          /*   case R.id.btnSubmit:
-                //submitDetails();
+                submitDetails();
                 break;*/
 
-          /*  case R.id.btn_replicate :
-
-                if(editTextKIT_ID.getText().toString().length()>0) {
-                    //Your dialog
-                    showReplicateDialog();
-                }else {
-                    Toast.makeText(context, "Enter KIT ID " , Toast.LENGTH_SHORT).show();
-                }
-                break;*/
-
-            case R.id.radioAliquot:
-                boolean checked = ((RadioButton) v).isChecked();
-                if(checked)
-                    str = "Aliquot Selected";
-                llLocal.setVisibility(View.GONE);
-                llCentral.setVisibility(View.GONE);
-                llAliquot.setVisibility(View.VISIBLE);
-                break;
-
-            case R.id.radioSample:
-                boolean checked1 = ((RadioButton) v).isChecked();
-                if(checked1)
-                    str = "Sample Selected";
-                llLocal.setVisibility(View.VISIBLE);
-                llCentral.setVisibility(View.VISIBLE);
-                llAliquot.setVisibility(View.GONE);
-                break;
-
-            case R.id.radioBoth:
-                boolean checked2 = ((RadioButton) v).isChecked();
-                if(checked2)
-                    str = "Both Selected";
-                llLocal.setVisibility(View.VISIBLE);
-                llCentral.setVisibility(View.VISIBLE);
-                llAliquot.setVisibility(View.VISIBLE);
-                break;
-
-
-            case R.id.btn_start_date:
-                setStartDate();
-                break;
-
-            case R.id.btn_end_date:
-                setExpDate();
+            case R.id.btnEntryDate:
+                setEntryDate();
                 break;
 
         }
-        //Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
-
     }
 
-    private void setExpDate() {
+    private void showModifyDialog(final TSUList tsuList, List<StudyList> lists) {
 
-        final Calendar c = Calendar.getInstance();
-        mYear = c.get(Calendar.YEAR);
-        mMonth = c.get(Calendar.MONTH);
-        mDay = c.get(Calendar.DAY_OF_MONTH);
+        // Create custom dialog object
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.dialog_tsu_modify);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Window window = dialog.getWindow();
+        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
 
+        initViews(dialog, tsuList, lists);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(context,
-                new DatePickerDialog.OnDateSetListener() {
+        Button btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                dialog.dismiss();
 
-                    @Override
-                    public void onDateSet(DatePicker view, int year,
-                                          int monthOfYear, int dayOfMonth) {
+                //submitDetails();
+            }
+        });
 
-                        String fmonth;
-                        int month;
-                        if (monthOfYear < 10 && dayOfMonth < 10) {
+        Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
+        // if decline button is clicked, close the custom dialog
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                dialog.dismiss();
+            }
+        });
 
-                            fmonth = "0" + monthOfYear;
-                            month = Integer.parseInt(fmonth) + 1;
-                            String fDate = "0" + dayOfMonth;
-                            String paddedMonth = String.format("%02d", month);
-                            //editText.setText(fDate + "/" + paddedMonth + "/" + year);
-
-
-                            txtEndDate.setText(year + "-" + paddedMonth + "-" + fDate);
-                            endDate =txtEndDate.getText().toString();
-
-                        } else {
-
-                            fmonth = "0" + monthOfYear;
-                            month = Integer.parseInt(fmonth) + 1;
-                            String paddedMonth = String.format("%02d", month);
-                            //editText.setText(dayOfMonth + "/" + paddedMonth + "/" + year);
-
-                            txtEndDate.setText(year + "-" + paddedMonth + "-" + dayOfMonth);
-                            endDate =txtEndDate.getText().toString();
-                        }
-
-
-
-                        // txtEndDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-                        //txtEndDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-                        //endDate =txtEndDate.getText().toString();
-
-                    }
-                }, mYear, mMonth, mDay);
-
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
-        datePickerDialog.setTitle(null);
-        datePickerDialog.show();
+        dialog.show();
     }
 
-    private void setStartDate() {
+
+    private void initViews(Dialog v, TSUList tsuList, List<StudyList> lists) {
+
+        spnStudyLabel = (TextView) v.findViewById(R.id.spnStatusId);
+       // spnStudyLabel.setOnItemSelectedListener(this);
+        spnStudyLabel.setText(tsuList.getStudyTitle()+ "("+ tsuList.getStudyName()+")");
+
+        spnKitLabel = (Spinner) v.findViewById(R.id.spnKitLabel);
+        spnKitLabel.setOnItemSelectedListener(this);
+
+        edtVisit = v.findViewById(R.id.edtVisit);
+        edtVisit.setText(tsuList.getVisit());
+
+        edtSiteNo = v.findViewById(R.id.edtSiteNo);
+        edtSiteNo.setText(tsuList.getSiteNo());
+
+        edtCohortNo = v.findViewById(R.id.edtCohortNo);
+        edtCohortNo.setText(tsuList.getCohortNo());
+
+        edtTimepoint = v.findViewById(R.id.edtTimepoint);
+        edtTimepoint.setText(tsuList.getTimepoint());
+
+        edtTubeVolume = v.findViewById(R.id.edtTubeVolume);
+        edtTubeVolume.setText(tsuList.getTubeVolume());
+
+        edtAliquotTubeVolume = v.findViewById(R.id.edtAliquotTubeVolume);
+        edtAliquotTubeVolume.setText(tsuList.getAliquotVolume());
+
+        edtAliquotExtNo = v.findViewById(R.id.edtAliquotTubeExt);
+        edtAliquotExtNo.setText(tsuList.getAliquotExtNo());
+
+        edtDiscardTubeVolume = v.findViewById(R.id.edtDiscardTubeVol);
+        edtDiscardTubeVolume.setText(tsuList.getDiscardTubeVolume());
+
+        edtCentrifugeProg = v.findViewById(R.id.edtCentrifugeProgramme);
+        edtCentrifugeProg.setText(tsuList.getCentrifugeProg());
+
+        spnPrimaryInvestigator = (Spinner) v.findViewById(R.id.spnPrimaryInvestigator);
+        spnPrimaryInvestigator.setOnItemSelectedListener(this);
+
+        spnTubeColor = (Spinner) v.findViewById(R.id.spnTubeColor);
+        spnTubeColor.setOnItemSelectedListener(this);
+
+        spnAliquotTubeColor = (Spinner) v.findViewById(R.id.spnAliquotTubeColor);
+        spnAliquotTubeColor.setOnItemSelectedListener(this);
+
+        spnDiscardTubeColor = (Spinner) v.findViewById(R.id.spnDiscardTubeColor);
+        spnDiscardTubeColor.setOnItemSelectedListener(this);
+
+        spnTestName = (Spinner) v.findViewById(R.id.spnTestName);
+        spnTestName.setOnItemSelectedListener(this);
+
+        spnCollectionLabel = (Spinner) v.findViewById(R.id.spnCollectionLabel);
+        spnCollectionLabel.setOnItemSelectedListener(this);
+
+        spnTransportLabel = (Spinner) v.findViewById(R.id.spnTransportLabel);
+        spnTransportLabel.setOnItemSelectedListener(this);
+
+        spnLabUse = (Spinner) v.findViewById(R.id.spnLabUse);
+        spnLabUse.setOnItemSelectedListener(this);
+
+        radioTubeType = v.findViewById(R.id.radioGroup_tube_type);
+        radioButtonTubeTypeBlood=(RadioButton) v.findViewById(R.id.rBlood);
+        radioButtonTubeTypeUrine=(RadioButton) v.findViewById(R.id.rUrine);
+
+        if(tsuList.getTubeType() ==1){
+            radioButtonTubeTypeBlood.setChecked(true);
+        }else {
+            radioButtonTubeTypeUrine.setChecked(true);
+        }
+
+        txtEntryDate = v.findViewById(R.id.txt_entry_date);
+        txtEntryDate.setText(tsuList.getEntry_date());
+
+        btnSubmit = v.findViewById(R.id.btnSubmit);
+        //btnSubmit.setOnClickListener(this);
+
+        btnEntryDate=  v.findViewById(R.id.btnEntryDate);
+        btnEntryDate.setOnClickListener(this);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
+                android.R.layout.simple_spinner_item, sNumberValue);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnKitLabel.setAdapter(adapter);
+        spnPrimaryInvestigator.setAdapter(adapter);
+
+        spnTubeColor.setAdapter(adapter);
+        spnAliquotTubeColor.setAdapter(adapter);
+
+        spnDiscardTubeColor.setAdapter(adapter);
+        spnCollectionLabel.setAdapter(adapter);
+        spnTransportLabel.setAdapter(adapter);
+        spnTestName.setAdapter(adapter);
+        spnLabUse.setAdapter(adapter);
+    }
+
+    private void setEntryDate() {
 
         final Calendar c = new GregorianCalendar();
         mYear = c.get(Calendar.YEAR);
@@ -999,6 +632,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
                         String fmonth;
                         int month;
+                        String startDate;
                         if (monthOfYear < 10 && dayOfMonth < 10) {
 
                             fmonth = "0" + monthOfYear;
@@ -1008,8 +642,20 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
                             //editText.setText(fDate + "/" + paddedMonth + "/" + year);
 
 
-                            txtStartDate.setText(year + "-" + paddedMonth + "-" + fDate);
-                            startDate =txtStartDate.getText().toString();
+                            txtEntryDate.setText(year + "-" + paddedMonth + "-" + fDate);
+                            startDate =txtEntryDate.getText().toString();
+
+                        }  else if (monthOfYear < 13 && dayOfMonth < 10) {
+
+                            fmonth = "0" + monthOfYear;
+                            month = Integer.parseInt(fmonth) + 1;
+                            String fDate = "0" + dayOfMonth;
+                            String paddedMonth = String.format("%02d", month);
+                            //editText.setText(fDate + "/" + paddedMonth + "/" + year);
+
+
+                            txtEntryDate.setText(year + "-" + paddedMonth + "-" + fDate);
+                            startDate =txtEntryDate.getText().toString();
 
                         } else {
 
@@ -1018,8 +664,8 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
                             String paddedMonth = String.format("%02d", month);
                             //editText.setText(dayOfMonth + "/" + paddedMonth + "/" + year);
 
-                            txtStartDate.setText(year + "-" + paddedMonth + "-" + dayOfMonth);
-                            startDate =txtStartDate.getText().toString();
+                            txtEntryDate.setText(year + "-" + paddedMonth + "-" + dayOfMonth);
+                            startDate =txtEntryDate.getText().toString();
                         }
 
                     }
@@ -1027,564 +673,136 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
         datePickerDialog.show();
     }
 
-    private void generateBarcode() {
 
-        message = editTextKIT_ID.getText().toString();
 
-        if(message.length() >0) {
+    private void submitDetails() {
 
-            Bitmap bitmap = null;
-            try {
-                bitmap = Utilities.CreateImage(message, "Barcode");
-                //myBitmap = bitmap;
-            } catch (WriterException we) {
-                we.printStackTrace();
-            }
-            if (bitmap != null) {
-                imageView.setImageBitmap(bitmap);
-            }
-        }else {
-            Toast.makeText(context,"Please enter KIT ID" , Toast.LENGTH_SHORT).show();
-        }
-    }
+        if(edtSiteNo.getText().toString().trim().length() >0) {
 
-    private void showModifyDialog(final KitList kitList, List<StudyList> lists) {
+            if(edtCohortNo.getText().toString().trim().length() > 0) {
 
-        String[] sNumber = {"0", "1","2","3", "4", "5", "6", "7", "8", "9", "10"};
-        listSpinnerStudyID = new ArrayList<>();
-        listSpinnerStudyID.add(kitList.getStudyId());
+                if(edtTimepoint.getText().toString().trim().length() > 0) {
 
-        // Create custom dialog object
-        final Dialog dialog = new Dialog(context);
-        dialog.setContentView(R.layout.dialog_kit_modify);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        Window window = dialog.getWindow();
-        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
+                    if(edtTubeVolume.getText().toString().trim().length() > 0) {
 
-        spnStudyIDs = (Spinner) dialog.findViewById(R.id.spnStatusId);
-        spnStudyIDs.setOnItemSelectedListener(this);
+                        if(!txtEntryDate.getText().toString().equalsIgnoreCase("")){
 
-        spnLocal = (Spinner) dialog.findViewById(R.id.spnLocal);
-        spnLocal.setOnItemSelectedListener(this);
 
-        spnCentral = (Spinner) dialog.findViewById(R.id.spnCentral);
-        spnCentral.setOnItemSelectedListener(this);
+                           // int selectedId = radioTubeType.getCheckedRadioButtonId();
+                           // radioButtonTubeType = (RadioButton) getView().findViewById(selectedId);
 
-        spnAliquot = (Spinner) dialog.findViewById(R.id.spnAliquot);
-        spnAliquot.setOnItemSelectedListener(this);
 
-        btnStartDatePicker=(ImageButton)dialog.findViewById(R.id.btn_start_date);
-        txtStartDate=(TextView)dialog.findViewById(R.id.txt_start_date);
-        txtStartDate.setText(Utilities.splitDateFromDesired(kitList.getScanDate()));
+                            String tubeType = "";
+                            if(radioButtonTubeTypeBlood.isChecked()){
+                                tubeType="1";
+                            }else if(radioButtonTubeTypeUrine.isChecked()){
+                                tubeType= "0";
+                            }else {
 
-        btnEndDatePicker=(ImageButton)dialog.findViewById(R.id.btn_end_date);
-        txtEndDate=(TextView)dialog.findViewById(R.id.txt_end_date);
-        txtEndDate.setText(Utilities.splitDateFromDesired(kitList.getExpiryDate()));
+                            }
 
-        rbScreening=(RadioButton) dialog.findViewById(R.id.rScreening);
-        rbTrial=(RadioButton) dialog.findViewById(R.id.rTrial);
-        rbAdYes=(RadioButton) dialog.findViewById(R.id.rbAdYes);
-        rbAdNo=(RadioButton) dialog.findViewById(R.id.rbAdNo);
-
-        rbReqFormYES=(RadioButton) dialog.findViewById(R.id.rbReqFormYES);
-        rbReqFormNO=(RadioButton) dialog.findViewById(R.id.rbReqFormNO);
-
-        btnStartDatePicker.setOnClickListener(this);
-        btnEndDatePicker.setOnClickListener(this);
-
-        btnSubmit = dialog.findViewById(R.id.btnSubmit);
-        btnSubmit.setOnClickListener(this);
-
-        //      btnGenerateBarcode = dialog.findViewById(R.id.btnGenerateBarcode);
-//        btnGenerateBarcode.setOnClickListener(this);
-
-        editTextKIT_ID = dialog.findViewById(R.id.edtKitId);
-        editTextKIT_ID.setText(kitList.getKitId());
-
-        editTextAccessionNumber = dialog.findViewById(R.id.edtAccession);
-        editTextAccessionNumber.setText(kitList.getExtNumber());
-
-        editTextVISIT = dialog.findViewById(R.id.edtVisit);
-        editTextVISIT.setText(kitList.getVisit());
-
-        rbSample = (RadioButton)dialog.findViewById(R.id.radioSample);
-        rbAliquot = (RadioButton)dialog.findViewById(R.id.radioAliquot);
-        rbBoth = (RadioButton)dialog.findViewById(R.id.radioBoth);
-
-        llLocal = (LinearLayout) dialog.findViewById(R.id.linearLayout_local);
-        llCentral = (LinearLayout) dialog.findViewById(R.id.linearLayout_central);
-        llAliquot = (LinearLayout) dialog.findViewById(R.id.linearLayout_alqt);
-
-        imageView = (ImageView) dialog.findViewById(R.id.barcode_image);
-        //txt_start_date = dialog.findViewById(R.id.txt_start_date);
-
-        //btnReplicate = dialog.findViewById(R.id.btn_replicate);
-        //btnReplicate.setOnClickListener(this);
-
-        radioKITtype =(RadioGroup) dialog.findViewById(R.id.radioGroupKitType);
-        radioAdditionalKITtype =(RadioGroup) dialog.findViewById(R.id.rg_additional_kit);
-        radioGroupCategory =(RadioGroup) dialog.findViewById(R.id.rg_category);
-        radioGroupReqForm =(RadioGroup) dialog.findViewById(R.id.radioGroup_req_form);
-
-        int selectedId=radioKITtype.getCheckedRadioButtonId();
-        radioButtonKitTYPE =(RadioButton)dialog.findViewById(selectedId);
-
-        int selectedId1=radioAdditionalKITtype.getCheckedRadioButtonId();
-        radioButtonAdditionalKitTYPE =(RadioButton)dialog.findViewById(selectedId1);
-
-        int selectedId2=radioGroupCategory.getCheckedRadioButtonId();
-        radioButtonCategory =(RadioButton)dialog.findViewById(selectedId2);
-
-        int selectedId3=radioGroupReqForm.getCheckedRadioButtonId();
-        radioButtonReqForm =(RadioButton)dialog.findViewById(selectedId3);
-
-        if(kitList.getIsTrial() ==1){
-            rbTrial.setChecked(true);
-        }else {
-            rbScreening.setChecked(true);
-        }
-
-        if(kitList.getAdditionalKit() ==1){
-            rbAdYes.setChecked(true);
-        }else {
-            rbAdNo.setChecked(true);
-        }
-
-        if(kitList.getRequisitionForm() ==1){
-            rbReqFormYES.setChecked(true);
-        }else {
-            rbReqFormNO.setChecked(true);
-        }
-
-        if(kitList.getCategory().equalsIgnoreCase("SAMPLE")){
-            rbSample.setChecked(true);
-            llLocal.setVisibility(View.VISIBLE);
-            llCentral.setVisibility(View.VISIBLE);
-            llAliquot.setVisibility(View.GONE);
-
-        }else if(kitList.getCategory().equalsIgnoreCase("ALIQUOT")){
-            rbAliquot.setChecked(true);
-            llLocal.setVisibility(View.GONE);
-            llCentral.setVisibility(View.GONE);
-            llAliquot.setVisibility(View.VISIBLE);
-
-        }else {
-            rbBoth.setChecked(true);
-            llLocal.setVisibility(View.VISIBLE);
-            llCentral.setVisibility(View.VISIBLE);
-            llAliquot.setVisibility(View.VISIBLE);
-        }
-
-        List<String> listsGroup = new ArrayList<>();
-        listsGroup.add(""+kitList.getCentral());
-        //System.out.println("listsGroup (1) :" + String.valueOf(subjectList.getStudyName()));
-
-        for (int i = 0; i < 11; i++) {
-            if(String.valueOf(kitList.getCentral()) !=sNumber[i]) {
-                listsGroup.add(sNumber[i]);
-                // System.out.println("spnGroupName[i] Group :" + spnGroupName[i]);
-            }
-        }
-
-        ArrayAdapter adpNumber = new ArrayAdapter(context,android.R.layout.simple_spinner_item, listsGroup);
-        adpNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnCentral.setAdapter(adpNumber);
-
-        List<String> listsGroup2 = new ArrayList<>();
-        listsGroup2.add(""+kitList.getLocal());
-        //System.out.println("listsGroup (1) :" + String.valueOf(subjectList.getStudyName()));
-
-        for (int i = 0; i < 11; i++) {
-            if(String.valueOf(kitList.getLocal()) !=sNumber[i]) {
-                listsGroup2.add(sNumber[i]);
-                // System.out.println("spnGroupName[i] Group :" + spnGroupName[i]);
-            }
-        }
-
-        ArrayAdapter adpNumberLocal = new ArrayAdapter(context,android.R.layout.simple_spinner_item, listsGroup2);
-        adpNumberLocal.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnLocal.setAdapter(adpNumberLocal);
-
-        List<String> listsGroup3 = new ArrayList<>();
-        listsGroup3.add(""+kitList.getAliquot());
-        //System.out.println("listsGroup (1) :" + String.valueOf(subjectList.getStudyName()));
-
-        for (int i = 0; i < 11; i++) {
-            if(String.valueOf(kitList.getAliquot()) !=sNumber[i]) {
-                listsGroup3.add(sNumber[i]);
-                // System.out.println("spnGroupName[i] Group :" + spnGroupName[i]);
-            }
-        }
-
-
-        ArrayAdapter adpNumberAliquot = new ArrayAdapter(context,android.R.layout.simple_spinner_item, listsGroup3);
-        adpNumberAliquot.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnAliquot.setAdapter(adpNumberAliquot);
-
-        List<String> listSetLabel = new ArrayList<>();
-        String s = kitList.getStudyTitle()+ "("+String.valueOf(kitList.getStudyName())+")";
-        listSetLabel.add(s);
-
-        for (int i = 0; i < getListStudy.size(); i++) {
-            if (!s.equalsIgnoreCase(getListStudy.get(i).getLabel())) {
-                listSetLabel.add(getListStudy.get(i).getLabel());
-                //System.out.println("listStudyID name :" + listStudyID.get(i).getLabel());
-            }
-        }
-
-
-        lists1.clear();
-
-        //String s = kitList.getStudyTitle()+ " ("+String.valueOf(kitList.getStudyName())+")";
-
-        //lists1.add(s);
-        //System.out.println("listStudyID (1) :" + String.valueOf(subjectList.getStudyName()));
-
-        for (int i = 0; i < getListStudy.size(); i++) {
-            // if (!s.equalsIgnoreCase(listStudyID.get(i).getLabel())) {
-            lists1.add(getListStudy.get(i).getLabel());
-            //System.out.println("listStudyID name :" + listStudyID.get(i).getLabel());
-            //}
-        }
-
-       /* for (int i = 0; i < getListStudy.size(); i++) {
-
-            listSetLabel.add(""+getListStudy.get(i).getLabel());
-            Logger.log("List of Label :"+getListStudy.get(i).getLabel());
-
-        }*/
-
-        ArrayAdapter studyIdAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, lists1);
-        studyIdAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnStudyIDs.setAdapter(studyIdAdp);
-        spnStudyIDs.setSelection(kitList.getStudyId()-1);
-
-
-        rbSample.setOnClickListener(this);
-        rbAliquot.setOnClickListener(this);
-        rbBoth.setOnClickListener(this);
-
-        Button btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
-        // if decline button is clicked, close the custom dialog
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Close dialog
-
-                String kitType = "";
-                if(rbScreening.isChecked()){
-                    kitType="SCREENING";
-                }else if(rbTrial.isChecked()){
-                    kitType= "TRIAL";
-                }else {
-
-                }
-
-                String additionalKit = "";
-                if(rbAdYes.isChecked()){
-                    additionalKit="YES";
-                }else if(rbAdNo.isChecked()){
-                    additionalKit= "NO";
-                }else {
-
-                }
-
-                String requistionForm = "";
-                if(rbReqFormYES.isChecked()){
-                    requistionForm="YES";
-                }else if(rbReqFormNO.isChecked()){
-                    requistionForm= "NO";
-                }else {
-
-                }
-
-                String categoryStatus = "";
-                if(rbSample.isChecked()){
-                    categoryStatus="SAMPLE";
-                }else if(rbAliquot.isChecked()){
-                    categoryStatus= "ALIQUOT";
-                }else if(rbBoth.isChecked()){
-                    categoryStatus= "BOTH";
-                }else {
-
-                }
-
-                String sLocal ="", sCentral ="", sAliquot ="";
-
-                if(rbSample.isChecked()){
-                    /*rbSample.setChecked(true);
-                    llLocal.setVisibility(View.VISIBLE);
-                    llCentral.setVisibility(View.VISIBLE);
-                    llAliquot.setVisibility(View.GONE);*/
-
-                    sLocal = spnLocal.getSelectedItem().toString();
-                    sCentral =spnCentral.getSelectedItem().toString();
-                    sAliquot = "0";
-
-                }else if(rbAliquot.isChecked()){
-                   /* rbAliquot.setChecked(true);
-                    llLocal.setVisibility(View.GONE);
-                    llCentral.setVisibility(View.GONE);
-                    llAliquot.setVisibility(View.VISIBLE);*/
-
-                    sLocal = "0";
-                    sCentral = "0";
-                    sAliquot = spnAliquot.getSelectedItem().toString();
-
-                }else {
-                    /*rbBoth.setChecked(true);
-                    llLocal.setVisibility(View.VISIBLE);
-                    llCentral.setVisibility(View.VISIBLE);
-                    llAliquot.setVisibility(View.VISIBLE);*/
-
-                    sLocal = spnLocal.getSelectedItem().toString();
-                    sCentral =spnCentral.getSelectedItem().toString();
-                    sAliquot = spnAliquot.getSelectedItem().toString();
-                }
-
-                submitDetails(v, kitList.getId(), kitType, additionalKit, requistionForm, categoryStatus, sLocal, sCentral, sAliquot, dialog);
-            }
-        });
-
-
-        Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
-        // if decline button is clicked, close the custom dialog
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Close dialog
-                dialog.dismiss();
-            }
-        });
-
-
-
-        Button btnReturn = (Button) dialog.findViewById(R.id.btnReturn);
-        // if decline button is clicked, close the custom dialog
-        btnReturn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Close dialog
-                showReturnDialog(kitList.getId(), dialog);
-            }
-        });
-
-        dialog.show();
-    }
-
-
-    private void showReplicateDialog() {
-
-        final TextView et_text;
-        final Button btn_submit;
-        final Button btnCancel;
-        final Spinner sp_qtyc, sp_qtyl;
-
-
-        // Create custom dialog object
-        final Dialog dialog = new Dialog(context);
-        // Include dialog.xml file
-        dialog.setContentView(R.layout.dialog_kit_replicate_barcode);
-        dialog.setCancelable(false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        Window window = dialog.getWindow();
-        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-
-        et_text = dialog.findViewById(R.id.et_text);
-        btn_submit = dialog.findViewById(R.id.btn_submit);
-        btnCancel = dialog.findViewById(R.id.btnCancel);
-        sp_qtyc = dialog.findViewById(R.id.sp_qtyc);
-        sp_qtyl = dialog.findViewById(R.id.sp_qtyl);
-        et_text.setText(editTextKIT_ID.getText().toString());
-
-        String[] items = new String[]{"1 ", "2", "3 ", "4", "5 ", "6",
-                "7 ", "8", "9 ", "10"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, items);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sp_qtyc.setAdapter(adapter);
-        sp_qtyl.setAdapter(adapter);
-
-
-        btn_submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (et_text.getText().toString().equals("")) {
-                    Toast.makeText(context, "Please Enter Text", Toast.LENGTH_LONG).show();
-                } else {
-                    Intent i = new Intent(context, ShowReplicateListActivity.class);
-                    i.putExtra("qtyc", sp_qtyc.getSelectedItem().toString());
-                    i.putExtra("qtyl", sp_qtyl.getSelectedItem().toString());
-                    i.putExtra("text", et_text.getText().toString());
-                    context.startActivity(i);
-                }
-            }
-        });
-
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-    }
-
-    private void submitDetails(View v, int id, String kitType, String additionalKit, String requistionForm, String categorty, String sLocal, String sCentral, String sAliquot, Dialog dialog) {
-
-        if(editTextKIT_ID.getText().toString().trim().length() >0) {
-
-            if(editTextVISIT.getText().toString().trim().length() > 0) {
-
-                if(!txtStartDate.getText().toString().equalsIgnoreCase("")){
-
-                    if(!txtEndDate.getText().toString().equalsIgnoreCase("")){
-
-
-                        dialog.dismiss();
-
-                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
-                        Date date1 = null;
-                        Date date2 = null;
-                        try {
-                            date1 = format.parse(txtStartDate.getText().toString());
-                            date2 = format.parse(txtEndDate.getText().toString());
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-
-                        if (date1.compareTo(date2) <= 0) {
-                            //Toast.makeText(getActivity(),"All Date OK.. RUN API.." , Toast.LENGTH_SHORT).show();
-                            Calendar cal = Calendar.getInstance();
-                            Date sysDate = cal.getTime();
-
-                        /*radioKITtype =(RadioGroup) v.findViewById(R.id.radioGroupKitType);
-                        radioAdditionalKITtype =(RadioGroup) v.findViewById(R.id.rg_additional_kit);
-                        radioGroupCategory =(RadioGroup) v.findViewById(R.id.rg_category);
-                        radioGroupReqForm =(RadioGroup) v.findViewById(R.id.radioGroup_req_form);
-
-                        int selectedId=radioKITtype.getCheckedRadioButtonId();
-                        radioButtonKitTYPE =(RadioButton)v.findViewById(selectedId);
-
-                        int selectedId1=radioAdditionalKITtype.getCheckedRadioButtonId();
-                        radioButtonAdditionalKitTYPE =(RadioButton)v.findViewById(selectedId1);
-
-                        int selectedId2=radioGroupCategory.getCheckedRadioButtonId();
-                        radioButtonCategory =(RadioButton)v.findViewById(selectedId2);
-
-                        int selectedId3=radioGroupReqForm.getCheckedRadioButtonId();
-                        radioButtonReqForm =(RadioButton)v.findViewById(selectedId3);*/
-
-
-                            CallModifyDetailsAPI(editTextKIT_ID.getText().toString(),
-                                    editTextAccessionNumber.getText().toString(),
-                                    editTextVISIT.getText().toString(),
-                                    kitType,
-                                    additionalKit,
-                                    categorty,
-                                    requistionForm,
-                                    txtStartDate.getText().toString(),
-                                    txtEndDate.getText().toString(),
-                                    sLocal,
-                                    sCentral,
-                                    sAliquot,
-                                    spnSelectedStudyID,
+                            callModifyTSUapi(spnSelectedStudyID,
                                     strStudyName,
                                     strStudyTitle,
-                                    id);
-                            //  }
-
-
-
-
-               /* callAddSubjectOnBoardingAPI(editTextKIT_ID.getText().toString(),
-                        txt_start_date.getText().toString(),
-                        spnPersonGender.getSelectedItem().toString(),
-                        spnGroups.getSelectedItem().toString(),
-                        spnStudyIDs.getSelectedItem().toString());*/
+                                    spnSelectedKitID,
+                                    strKitName,
+                                    strKitTitle,
+                                    edtVisit.getText().toString().trim(),
+                                    edtSiteNo.getText().toString().trim(),
+                                    edtCohortNo.getText().toString().trim(),
+                                    spnPrimaryInvestigator.getSelectedItem().toString(),
+                                    edtTimepoint.getText().toString().trim(),
+                                    tubeType,
+                                    spnTubeColor.getSelectedItem().toString(),
+                                    edtTubeVolume.getText().toString().trim(),
+                                    spnAliquotTubeColor.getSelectedItem().toString(),
+                                    edtAliquotTubeVolume.getText().toString().trim(),
+                                    edtAliquotExtNo.getText().toString().trim(),
+                                    spnDiscardTubeColor.getSelectedItem().toString(),
+                                    edtDiscardTubeVolume.getText().toString().trim(),
+                                    spnTestName.getSelectedItem().toString().trim(),
+                                    spnCollectionLabel.getSelectedItem().toString().trim(),
+                                    spnTransportLabel.getSelectedItem().toString().trim(),
+                                    edtCentrifugeProg.getText().toString().trim(),
+                                    spnLabUse.getSelectedItem().toString().trim(),
+                                    txtEntryDate.getText().toString().trim()
+                            );
 
                         }else {
-
-                            Toast.makeText(context,"Kit Expiry Date cannot be earlier than Kit Scan Date" , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context,"Please select Entry Date" , Toast.LENGTH_SHORT).show();
                         }
 
                     }else {
-                        Toast.makeText(context,"Please Select Expiry Date" , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"Please enter Tube Volume" , Toast.LENGTH_SHORT).show();
                     }
+
                 }else {
-                    Toast.makeText(context,"Please Select Scan Date" , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"Please enter Timpepoint" , Toast.LENGTH_SHORT).show();
                 }
 
             }else {
-                Toast.makeText(context,"Please enter VISIT" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"Please enter Cohort Number" , Toast.LENGTH_SHORT).show();
             }
         }else {
-            Toast.makeText(context,"Please enter KIT ID" , Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,"Please enter Site Number" , Toast.LENGTH_SHORT).show();
         }
 
     }
 
-    //Call CallModifyDetailsAPI API
-    private void CallModifyDetailsAPI(String kitId, String accessionNumber, String visit,
-                                      String kitType, String additionalKit, String category,
-                                      String reqForm, String startDate, String endDate,
-                                      String localQty, String centralQty, String aliquotQty,
-                                      String studyID, String strStudyName, String strStudyTitle, int id) {
 
-        ModifyKitRequestModel modifyKitRequestModel = new ModifyKitRequestModel();
-        modifyKitRequestModel.setAppName(AppConstants.APP_NAME);
-        modifyKitRequestModel.setVersionNumber(AppConstants.APP_VERSION);
-        modifyKitRequestModel.setDeviceType(AppConstants.APP_OS);
-        modifyKitRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
-        modifyKitRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(context));
-        modifyKitRequestModel.setUserRole(new PrefManager(context).getUserRoleType());
-        modifyKitRequestModel.setTagId(new PrefManager(context).getBarCodeValue());
-        modifyKitRequestModel.setEvent(AppConstants.MODIFY_KIT);
-        if(kitType.equalsIgnoreCase("TRIAL")) {
-            modifyKitRequestModel.setIsTrial(1);
-        }else {
-            modifyKitRequestModel.setIsTrial(0);
-        }
-        modifyKitRequestModel.setUserName(new PrefManager(context).getUserName());
-        modifyKitRequestModel.setKitId(kitId);
-        if(!accessionNumber.isEmpty()) {
-            modifyKitRequestModel.setExtNum(accessionNumber);
-        }else {
-            modifyKitRequestModel.setExtNum(" ");
-        }
-        modifyKitRequestModel.setVisit(visit);
-        if(additionalKit.equalsIgnoreCase("YES")) {
-            modifyKitRequestModel.setAdditionalKit(1);
-        }else {
-            modifyKitRequestModel.setAdditionalKit(0);
-        }
-        modifyKitRequestModel.setCategory(category);
-        modifyKitRequestModel.setStatus(AppConstants.IN_STOCK);
-        modifyKitRequestModel.setLocal(Integer.valueOf(localQty));
-        modifyKitRequestModel.setCentral(Integer.valueOf(centralQty));
-        modifyKitRequestModel.setAliquot(Integer.valueOf(aliquotQty));
-        if(reqForm.equalsIgnoreCase("YES")) {
-            modifyKitRequestModel.setReqForm(1);
-        }else {
-            modifyKitRequestModel.setReqForm(0);
-        }
-        modifyKitRequestModel.setScanDate(startDate);
-        modifyKitRequestModel.setExpDate(endDate);
-        modifyKitRequestModel.setStudyId(Integer.valueOf(studyID));
-        modifyKitRequestModel.setGenBarcode(kitId);
-        modifyKitRequestModel.setStudyName(strStudyName);
-        modifyKitRequestModel.setStudyTitle(strStudyTitle);
-        modifyKitRequestModel.setId(id);
+    //Call callAddTSUapi API
+    private void callModifyTSUapi(String spnSelectedStudyID, String studyName, String studyTitle,
+                               String spnSelectedKitID, String strKitName, String strKitTitle,
+                               String visit, String siteNo, String cohortNo,
+                               String prim_investegator, String strTimePoint, String rbTypeValue,
+                               String tubeColor, String tubeVolume, String aliquotColor, String aliquotVol,
+                               String aliquotExtNo, String spnDiscardTubeColor, String discardTubeVol,
+                               String spnTestName, String spnCollectionLabel, String spnTransportLabel,
+                               String centriProg, String strLabUse, String txtEntryDate) {
 
-        Logger.log("Integer.valueOf(studyID) "+Integer.valueOf(studyID));
-        Logger.log("strStudyName "+strStudyName);
-        Logger.log("strStudyTitle "+strStudyTitle);
+        AddTSURequestModel tsuRequestModel = new AddTSURequestModel();
+        tsuRequestModel.setAppName(AppConstants.APP_NAME);
+        tsuRequestModel.setVersionNumber(AppConstants.APP_VERSION);
+        tsuRequestModel.setDeviceType(AppConstants.APP_OS);
+        tsuRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
+        tsuRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(context));
+        tsuRequestModel.setUserRole(new PrefManager(context).getUserRoleType());
+        tsuRequestModel.setUserName(new PrefManager(context).getUserName());
+        tsuRequestModel.setTagId(new PrefManager(context).getBarCodeValue());
+        tsuRequestModel.setEvent(AppConstants.ADD_TSU);
 
-        new NetworkingHelper(new ModifyKitRequest((Activity) context, true, modifyKitRequestModel)) {
+        tsuRequestModel.setVisit(visit);
+        // tsuRequestModel.setStudyName(strStudyName);
+        tsuRequestModel.setStudyName("SST");
+        tsuRequestModel.setKitId("SsT");
+        // tsuRequestModel.setStudyId(Integer.valueOf(spnSelectedStudyID));
+        tsuRequestModel.setStudyId(4);
+        tsuRequestModel.setKitRecId(24);
+        if(rbTypeValue.equalsIgnoreCase("Blood")) {
+            tsuRequestModel.setTubeType(1);
+        }else {
+            tsuRequestModel.setTubeType(0);
+        }
+        tsuRequestModel.setIsDuplicate(0);
+        tsuRequestModel.setEntryDate(txtEntryDate);
+        tsuRequestModel.setSiteNo(siteNo);
+        tsuRequestModel.setCohortNo(cohortNo);
+        tsuRequestModel.setPi(prim_investegator);
+        tsuRequestModel.setTimepoint(strTimePoint);
+        tsuRequestModel.setTubeColor(tubeColor);
+        tsuRequestModel.setTubeVol(tubeVolume);
+        tsuRequestModel.setAliquotColor(aliquotColor);
+        tsuRequestModel.setAliquotVol(aliquotVol);
+        tsuRequestModel.setAliquotExt(aliquotExtNo);
+        tsuRequestModel.setDiscardTubeColor(spnDiscardTubeColor);
+        tsuRequestModel.setDiscardTubeVolume(discardTubeVol);
+        tsuRequestModel.setTestName(spnTestName);
+        tsuRequestModel.setCollectionLable(spnCollectionLabel);
+        tsuRequestModel.setTransportLable(spnTransportLabel);
+        tsuRequestModel.setCentrifugeProg(centriProg);
+        tsuRequestModel.setLabUse(strLabUse);
+
+        new NetworkingHelper(new AddTSURequest((Activity) context, true, tsuRequestModel)) {
 
             @Override
             public void serverResponseFromApi(ApiResponse serverResponse) {
@@ -1599,48 +817,66 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
                             if(commonResponse.getResponse().get(0).isStatus()){
 
-                                Logger.logError("modifyKIT API success " +
+                                Logger.logError("addTSU API success " +
                                         commonResponse.getResponse().get(0).isStatus());
-                                Logger.logError("modifyKIT API success " +
+                                Logger.logError("addTSU API success " +
                                         commonResponse.getResponse().get(0).getMessage());
 
-                                Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
-                                callGetKitDetailsAPI();
-                                /*editTextKIT_ID.setText("");
-                                editTextAccessionNumber.setText("");
-                                editTextVISIT.setText("");
-                                txtStartDate.setText("");
-                                txtEndDate.setText("");*/
+                                // Utils.showAlertDialog(context,  commonResponse.getResponse().get(0).getMessage());
+
+                                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+                                // ...Irrelevant code for customizing the buttons and title
+                                LayoutInflater inflater = ((Activity) context).getParent().getLayoutInflater();
+                                View dialogView = inflater.inflate(R.layout.alert_dialog_with_one_button, null);
+                                dialogBuilder.setView(dialogView);
+                                final AlertDialog alertDialog = dialogBuilder.create();
+
+                                TextView tvDesc = (TextView) dialogView.findViewById(R.id.tv_dialog_desc);
+                                tvDesc.setText(commonResponse.getResponse().get(0).getMessage());
+                                Button btDialogOk = (Button) dialogView.findViewById(R.id.bt_dialog_ok);
+                                btDialogOk.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        alertDialog.dismiss();
+                                        Intent mNextActivity = new Intent(context, TSUSetupActivity.class);
+                                        context.startActivity(mNextActivity);
+                                        //context.finish();
+                                    }
+                                });
+
+                                alertDialog.setCanceledOnTouchOutside(false);
+                                alertDialog.show();
+                                edtSiteNo.setText("");
+                                edtCohortNo.setText("");
+                                edtTimepoint.setText("");
+                                edtTubeVolume.setText("");
+                                //txtEntryDate.setText("");
 
                             }else {
 
-                                Logger.logError("modifyKIT API Failure " +
+                                Logger.logError("addTSU API Failure " +
                                         commonResponse.getResponse().get(0).isStatus());
-                                Logger.logError("modifyKIT API Failure " +
+                                Logger.logError("addTSU API Failure " +
                                         commonResponse.getResponse().get(0).getMessage());
 
-                                Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
+                                Utils.showAlertDialog((Activity)context,  commonResponse.getResponse().get(0).getMessage());
                             }
 
                         }else {
 
-                            Logger.logError("modifyKIT API Failure " +
-                                    commonResponse.getResponse().get(0).isStatus());
-                            Logger.logError("modifyKIT API Failure " +
-                                    commonResponse.getResponse().get(0).getMessage());
-
-                            Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
+                            Utils.showAlertDialog((Activity)context,  commonResponse.getStatus().geteRROR());
                         }
 
 
 
                     }
                     catch (Exception e){
-                        Logger.logError("modifyKIT Exception " + e.getMessage());
+                        Logger.logError("Exception " + e.getMessage());
                     }
 
                 } else {
-                    Logger.logError("modifyKIT API Failure " +
+                    Logger.logError("addTSU API Failure " +
                             serverResponse.errorMessageToDisplay);
                 }
             }
@@ -1648,7 +884,11 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
     }
 
-    /*//getAllStudyID API
+
+
+
+
+    //getAllStudyID API
     private void getAllStudyID()
     {
         final CommonRequestModel commonRequestModel = new CommonRequestModel();
@@ -1662,7 +902,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
         //commonRequestModel.setEvent(AppConstants.GET_NOTIFICATION);
         commonRequestModel.setUserName(new PrefManager(context).getUserName());
 
-        new NetworkingHelper(new GetAllStudyIdRequest((Activity) context, true, commonRequestModel)) {
+        new NetworkingHelper(new GetAllStudyIdRequest((Activity)context, true, commonRequestModel)) {
 
             @Override
             public void serverResponseFromApi(ApiResponse serverResponse) {
@@ -1684,14 +924,17 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
                                 if(commonResponse.getStudyList().size()>0) {
 
-
+                                    List<String> lists = new ArrayList<>();
 
                                     for (int i = 0; i < commonResponse.getStudyList().size(); i++) {
 
-                                        listStudyLabel.add(commonResponse.getStudyList().get(i).getLabel());
+                                        lists.add(commonResponse.getStudyList().get(i).getLabel());
 
                                     }
 
+                                    ArrayAdapter studyIdAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, lists);
+                                    studyIdAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    //spnStudyLabel.setAdapter(studyIdAdp);
 
                                 }else {
                                     Logger.logError("No STUDY_LIST FOUND :" + "No STUDY_LIST FOUND");
@@ -1700,7 +943,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
                             }else {
 
-                                Utils.showAlertDialog((Activity) context,  commonResponse.getStatus().getMSG());
+                                Utils.showAlertDialog((Activity)context,  commonResponse.getStatus().getMSG());
                             }
 
                         }
@@ -1717,6 +960,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
             }
         };
 
-    }*/
+    }
+
 }
 

@@ -4,6 +4,7 @@ package com.hrfid.acs.helpers.interfaces;
 import com.hrfid.acs.helpers.request.AddKitRequest;
 import com.hrfid.acs.helpers.request.AddKitRequestModel;
 import com.hrfid.acs.helpers.request.AddSubjectRequestModel;
+import com.hrfid.acs.helpers.request.AddTSURequestModel;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.CreateScheduleModel;
 import com.hrfid.acs.helpers.request.CreateScheduleRequest;
@@ -131,6 +132,14 @@ public interface APIService {
   //returnKit
   @POST("/acs/api/returnKit")
   Call<ResponseBody> returnKit(@Body ReturnKitRequestModel returnKitRequestModel);
+
+  //addTSU
+  @POST("/acs/api/addTSU")
+  Call<ResponseBody> addTSU(@Body AddTSURequestModel addTSURequestModel);
+
+  //getTSUList
+  @POST("/acs/api/getTSUList")
+  Call<ResponseBody> getTSUList(@Body CommonRequestModel commonRequestModel);
 
  /* @POST("api/facebook/fblogin")
   Call<ResponseBody> loginFBToSSOAPI(@Body RequestBody body);

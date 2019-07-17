@@ -284,7 +284,7 @@
     <string name="txt_transport_label">Transport Label</string>
     <string name="txt_tube_color">Tube Color</string>
     <string name="txt_lab_use">Lab Use</string>
-    <string name="txt_tube_volume">Tube Volume</string>
+    <string name="txt_tube_volume">TUBE VOL (in ml)</string>
     <string name="txt_aliquot_tube">Aliquot Tube</string>
     <string name="txt_blood_tube_type">Tube Type</string>
     <string name="txt_tsu_entry_date">Please select entry date</string>

@@ -18,9 +18,11 @@ import com.hrfid.acs.helpers.network.NetworkingHelper;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.request.GetKitDetailsRequest;
+import com.hrfid.acs.helpers.request.GetTSUDetailsRequest;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList;
 import com.hrfid.acs.helpers.serverResponses.models.GetKitDetails.GetKitDetailsResponse;
+import com.hrfid.acs.helpers.serverResponses.models.GetTSUDetails.GetTSUDetailsResponse;
 import com.hrfid.acs.util.AppConstants;
 import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
@@ -53,7 +55,7 @@ public class TSUDetailsFragment extends Fragment {
 
         getAllStudyID();
 
-        callGetKitDetailsAPI();
+        callGetTSUDetailsAPI();
 
         return v;
     }
@@ -62,31 +64,16 @@ public class TSUDetailsFragment extends Fragment {
 
         // get the reference of RecyclerView
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
-        // set a LinearLayoutManager with default vertical orientation
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        //  call the constructor of CustomAdapter to send the reference and data to Adapter
-
         linearLayout = v.findViewById(R.id.llRec);
         textView = v.findViewById(R.id.txtNoData);
-
-        /*if(personNames.size() >0) {
-            linearLayout.setVisibility(View.VISIBLE);
-            textView.setVisibility(View.GONE);
-
-            SubjectDetailsAdapter customAdapter = new SubjectDetailsAdapter(getContext(), personNames);
-            recyclerView.setAdapter(customAdapter); // set the Adapter to RecyclerView
-        }else {
-
-            linearLayout.setVisibility(View.GONE);
-            textView.setVisibility(View.VISIBLE);
-        }*/
     }
 
 
 
-    //Call callGetKitDetailsAPI API
-    private void callGetKitDetailsAPI() {
+    //Call callGetTSUDetails API
+    private void callGetTSUDetailsAPI() {
         CommonRequestModel commonRequestModel = new CommonRequestModel();
         commonRequestModel.setAppName(AppConstants.APP_NAME);
         commonRequestModel.setVersionNumber(AppConstants.APP_VERSION);
@@ -95,10 +82,10 @@ public class TSUDetailsFragment extends Fragment {
         commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(getActivity()));
         commonRequestModel.setUserRole(new PrefManager(getActivity()).getUserRoleType());
         commonRequestModel.setTagId(new PrefManager(getActivity()).getBarCodeValue());
-        commonRequestModel.setEvent(AppConstants.GET_KIT_DETAILS);
+        commonRequestModel.setEvent(AppConstants.GET_TSU_DETAILS);
         commonRequestModel.setUserName(new PrefManager(getActivity()).getUserName());
 
-        new NetworkingHelper(new GetKitDetailsRequest(getActivity(), true,
+        new NetworkingHelper(new GetTSUDetailsRequest(getActivity(), true,
                 commonRequestModel)) {
 
             @Override
@@ -107,32 +94,32 @@ public class TSUDetailsFragment extends Fragment {
 
                     try {
 
-                        GetKitDetailsResponse getKitDetailsResponse = JsonParser
-                                .parseClass(serverResponse.jsonResponse, GetKitDetailsResponse.class);
+                        GetTSUDetailsResponse getKitDetailsResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, GetTSUDetailsResponse.class);
 
                         if (getKitDetailsResponse.getStatus().getCODE() == 200) {
 
-                            if(getKitDetailsResponse.getKitList().size() > 0){
+                            if(getKitDetailsResponse.getTSUList().size() > 0){
 
                                 linearLayout.setVisibility(View.VISIBLE);
                                 textView.setVisibility(View.GONE);
 
-                                Logger.logError("getKitList API success status " +
+                                Logger.logError("getTSUList API success status " +
                                         getKitDetailsResponse.getStatus());
-                                Logger.logError("getKitList API success getSubjectList" +
-                                        getKitDetailsResponse.getKitList());
+                                Logger.logError("getTSUList API success getSubjectList" +
+                                        getKitDetailsResponse.getTSUList());
 
                                 getAllStudyID();
 
-                                TSUDetailsAdapter customAdapter = new TSUDetailsAdapter(getContext(), getKitDetailsResponse.getKitList(), listStudy, recyclerView);
+                                TSUDetailsAdapter customAdapter = new TSUDetailsAdapter(getContext(), getKitDetailsResponse.getTSUList(), listStudy, recyclerView);
                                 recyclerView.setAdapter(customAdapter);
 
 
                             }else {
 
-                                Logger.logError("getKitList API Failure " +
+                                Logger.logError("getTSUList API Failure " +
                                         "getSubjectList" +
-                                        getKitDetailsResponse.getKitList());
+                                        getKitDetailsResponse.getTSUList());
 
                                 linearLayout.setVisibility(View.GONE);
                                 textView.setVisibility(View.VISIBLE);
@@ -142,24 +129,24 @@ public class TSUDetailsFragment extends Fragment {
 
                         }else {
 
-                            Logger.logError("getKitList API Failure " +
+                           /* Logger.logError("getTSUList API Failure " +
                                     getKitDetailsResponse.getStatus().getCODE());
-                            Logger.logError("getKitList API Failure " +
-                                    getKitDetailsResponse.getStatus().getMSG());
+                            Logger.logError("getTSUList API Failure " +
+                                    getKitDetailsResponse.getStatus().getMSG());*/
 
                             Utils.showAlertDialog(getActivity(),  getKitDetailsResponse.getStatus()
-                                    .getMSG());
+                                    .getERROR());
                         }
 
 
 
                     }
                     catch (Exception e){
-                        Logger.logError("getKitList Exception " + e.getMessage());
+                        Logger.logError("getTSUList Exception " + e.getMessage());
                     }
 
                 } else {
-                    Logger.logError("getKitList API Failure " +
+                    Logger.logError("getTSUList API Failure " +
                             serverResponse.errorMessageToDisplay);
                 }
             }

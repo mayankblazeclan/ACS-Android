@@ -36,6 +36,8 @@ import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
 import com.hrfid.acs.helpers.request.AddKitRequest;
 import com.hrfid.acs.helpers.request.AddKitRequestModel;
+import com.hrfid.acs.helpers.request.AddTSURequest;
+import com.hrfid.acs.helpers.request.AddTSURequestModel;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
@@ -47,6 +49,7 @@ import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
 import com.hrfid.acs.view.activity.InventorySetupActivity;
+import com.hrfid.acs.view.activity.TSUSetupActivity;
 import com.hrfid.acs.view.barcode.PrintAdapter;
 import com.hrfid.acs.view.barcode.ReplicateModel;
 import com.hrfid.acs.view.barcode.ShowReplicateListActivity;
@@ -66,26 +69,26 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
 
     private static final String TAG = "AddTSU_Details";
 
-    String[] sNumber = {"0", "1","2","3", "4", "5", "6", "7", "8", "9", "10"};
+/*    String[] sNumber = {"0", "1","2","3", "4", "5", "6", "7", "8", "9", "10"};
 
     private Button btnGenerateBarcode;
-    private Button btnSubmit;
+
     private String message = "";
     private ImageView imageView;
-   // private TextView txt_start_date;
-    private int mYear, mMonth, mDay;
+    // private TextView txt_start_date;
+
     private String startDate ="";
     private String endDate = "";
-    private  Spinner spnStudyIDs, spnLocal, spnCentral, spnAliquot;
+    private  Spinner spnCentral, spnAliquot;
     private Button btnReplicate;
     private RadioButton rbSample, rbAliquot, rbBoth;
-    private LinearLayout llLocal, llCentral, llAliquot;
-    private ImageButton btnStartDatePicker, btnEndDatePicker;
-    private TextView txtStartDate, txtEndDate;
+    private LinearLayout llLocal, llCentral, llAliquot;*/
+
+    // private TextView txtStartDate, txtEndDate;
     private  List<StudyList> listStudy = new ArrayList<>();
-    private String spnSelectedStudyID ="";
-    private RadioGroup radioKITtype;
-    private RadioButton radioButtonKitTYPE;
+
+  /*
+
     private RadioGroup radioAdditionalKITtype;
     private RadioButton radioButtonAdditionalKitTYPE;
     private RadioGroup radioGroupCategory;
@@ -94,9 +97,46 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
     private RadioButton radioButtonReqForm;
     private EditText editTextKIT_ID;
     private EditText editTextAccessionNumber;
-    private EditText editTextVISIT;
+    private EditText editTextVISIT;*/
+
+    String[] sNumberValue = {"ABC","DBABC","ADDABC","TAABC","OPABC","0", "1","2","3", "4", "5", "6", "7", "8", "9", "10"};
+    private String strKitName;
+    private String strKitTitle;
+    private String spnSelectedKitID ="";
+
     private String strStudyName;
     private String strStudyTitle;
+    private String spnSelectedStudyID ="";
+    private int mYear, mMonth, mDay;
+
+
+    private Spinner spnStudyLabel;
+    private Spinner spnKitLabel;
+    private Spinner spnPrimaryInvestigator;
+    private Spinner spnTubeColor;
+    private Spinner spnAliquotTubeColor;
+    private Spinner spnDiscardTubeColor;
+    private Spinner spnTestName;
+    private Spinner spnCollectionLabel;
+    private Spinner spnTransportLabel;
+    private Spinner spnLabUse;
+    private EditText edtVisit;
+    private EditText edtSiteNo;
+    private EditText edtCohortNo;
+    private EditText edtTimepoint;
+    private EditText edtTubeVolume;
+
+    private EditText edtAliquotTubeVolume;
+    private EditText edtAliquotExtNo;
+    private EditText edtDiscardTubeVolume;
+    private EditText edtCentrifugeProg;
+
+    private RadioGroup radioTubeType;
+    private RadioButton radioButtonTubeType;
+    private ImageButton btnEntryDate;
+    private TextView txtEntryDate;
+    private Button btnSubmit;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -113,67 +153,71 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
 
     private void initViews(View v) {
 
-/*
-        spnStudyIDs = (Spinner) v.findViewById(R.id.spnStatusId);
-        spnStudyIDs.setOnItemSelectedListener(this);
+        spnStudyLabel = (Spinner) v.findViewById(R.id.spnStatusId);
+        spnStudyLabel.setOnItemSelectedListener(this);
 
-        spnLocal = (Spinner) v.findViewById(R.id.spnLocal);
-        spnLocal.setOnItemSelectedListener(this);
+        spnKitLabel = (Spinner) v.findViewById(R.id.spnKitLabel);
+        spnKitLabel.setOnItemSelectedListener(this);
 
-        spnCentral = (Spinner) v.findViewById(R.id.spnCentral);
-        spnCentral.setOnItemSelectedListener(this);
+        edtVisit = v.findViewById(R.id.edtVisit);
+        edtSiteNo = v.findViewById(R.id.edtSiteNo);
+        edtCohortNo = v.findViewById(R.id.edtCohortNo);
+        edtTimepoint = v.findViewById(R.id.edtTimepoint);
 
-        spnAliquot = (Spinner) v.findViewById(R.id.spnAliquot);
-        spnAliquot.setOnItemSelectedListener(this);
+        edtTubeVolume = v.findViewById(R.id.edtTubeVolume);
+        edtAliquotTubeVolume = v.findViewById(R.id.edtAliquotTubeVolume);
+        edtAliquotExtNo = v.findViewById(R.id.edtAliquotTubeExt);
 
-        btnStartDatePicker=(ImageButton)v.findViewById(R.id.btn_start_date);
-        txtStartDate=(TextView)v.findViewById(R.id.txt_start_date);
+        edtDiscardTubeVolume = v.findViewById(R.id.edtDiscardTubeVol);
+        edtCentrifugeProg = v.findViewById(R.id.edtCentrifugeProgramme);
 
-        btnEndDatePicker=(ImageButton)v.findViewById(R.id.btn_end_date);
-        txtEndDate=(TextView)v.findViewById(R.id.txt_end_date);
+        spnPrimaryInvestigator = (Spinner) v.findViewById(R.id.spnPrimaryInvestigator);
+        spnPrimaryInvestigator.setOnItemSelectedListener(this);
 
-        btnStartDatePicker.setOnClickListener(this);
-        btnEndDatePicker.setOnClickListener(this);
+        spnTubeColor = (Spinner) v.findViewById(R.id.spnTubeColor);
+        spnTubeColor.setOnItemSelectedListener(this);
+
+        spnAliquotTubeColor = (Spinner) v.findViewById(R.id.spnAliquotTubeColor);
+        spnAliquotTubeColor.setOnItemSelectedListener(this);
+
+        spnDiscardTubeColor = (Spinner) v.findViewById(R.id.spnDiscardTubeColor);
+        spnDiscardTubeColor.setOnItemSelectedListener(this);
+
+        spnTestName = (Spinner) v.findViewById(R.id.spnTestName);
+        spnTestName.setOnItemSelectedListener(this);
+
+        spnCollectionLabel = (Spinner) v.findViewById(R.id.spnCollectionLabel);
+        spnCollectionLabel.setOnItemSelectedListener(this);
+
+        spnTransportLabel = (Spinner) v.findViewById(R.id.spnTransportLabel);
+        spnTransportLabel.setOnItemSelectedListener(this);
+
+        spnLabUse = (Spinner) v.findViewById(R.id.spnLabUse);
+        spnLabUse.setOnItemSelectedListener(this);
+
+        radioTubeType = v.findViewById(R.id.radioGroup_tube_type);
+        txtEntryDate = v.findViewById(R.id.txt_entry_date);
 
         btnSubmit = v.findViewById(R.id.btnSubmit);
         btnSubmit.setOnClickListener(this);
 
-        btnGenerateBarcode = v.findViewById(R.id.btnGenerateBarcode);
-        btnGenerateBarcode.setOnClickListener(this);
+        btnEntryDate=  v.findViewById(R.id.btnEntryDate);
+        btnEntryDate.setOnClickListener(this);
 
-        editTextKIT_ID = v.findViewById(R.id.edtKitId);
-        editTextAccessionNumber = v.findViewById(R.id.edtAccession);
-        editTextVISIT = v.findViewById(R.id.edtVisit);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_spinner_item, sNumberValue);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnKitLabel.setAdapter(adapter);
+        spnPrimaryInvestigator.setAdapter(adapter);
 
-        radioKITtype =(RadioGroup) v.findViewById(R.id.radioGroupKitType);
-        radioAdditionalKITtype =(RadioGroup) v.findViewById(R.id.rg_additional_kit);
-        radioGroupCategory =(RadioGroup) v.findViewById(R.id.rg_category);
-        radioGroupReqForm =(RadioGroup) v.findViewById(R.id.radioGroup_req_form);
+        spnTubeColor.setAdapter(adapter);
+        spnAliquotTubeColor.setAdapter(adapter);
 
-        imageView = (ImageView) v.findViewById(R.id.barcode_image);
-        //txt_start_date = v.findViewById(R.id.txt_start_date);
-
-        btnReplicate = v.findViewById(R.id.btn_replicate);
-        btnReplicate.setOnClickListener(this);
-
-        ArrayAdapter adpNumber = new ArrayAdapter(getActivity(),android.R.layout.simple_spinner_item, sNumber);
-        adpNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnAliquot.setAdapter(adpNumber);
-        spnLocal.setAdapter(adpNumber);
-        spnCentral.setAdapter(adpNumber);
-
-        rbSample = (RadioButton)v.findViewById(R.id.radioSample);
-        rbAliquot = (RadioButton)v.findViewById(R.id.radioAliquot);
-        rbBoth = (RadioButton)v.findViewById(R.id.radioBoth);
-
-        rbSample.setOnClickListener(this);
-        rbAliquot.setOnClickListener(this);
-        rbBoth.setOnClickListener(this);
-
-        llLocal = (LinearLayout) v.findViewById(R.id.linearLayout_local);
-        llCentral = (LinearLayout) v.findViewById(R.id.linearLayout_central);
-        llAliquot = (LinearLayout) v.findViewById(R.id.linearLayout_alqt);*/
-
+        spnDiscardTubeColor.setAdapter(adapter);
+        spnCollectionLabel.setAdapter(adapter);
+        spnTransportLabel.setAdapter(adapter);
+        spnTestName.setAdapter(adapter);
+        spnLabUse.setAdapter(adapter);
     }
 
     @Override
@@ -191,6 +235,46 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                 //Toast.makeText(getContext(), parent.getSelectedItem().toString() , Toast.LENGTH_SHORT).show();
                 break;
 
+            case R.id.spnPrimaryInvestigator :
+
+                break;
+
+            //TubeColor
+            case R.id.spnTubeColor :
+
+                break;
+
+            //AliquotTubeColor
+            case R.id.spnAliquotTubeColor :
+
+                break;
+
+            //DiscardTubeColor
+            case R.id.spnDiscardTubeColor :
+
+                break;
+
+            //TestName
+            case R.id.spnTestName :
+
+                break;
+
+            //CollectionLabel
+            case R.id.spnCollectionLabel :
+
+                break;
+
+            //TransportLabel
+            case R.id.spnTransportLabel :
+
+                break;
+
+            //Lab Use
+            case R.id.spnLabUse :
+
+                break;
+
+
         }
     }
 
@@ -201,138 +285,19 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
 
     @Override
     public void onClick(View v) {
-
-        String str="";
         switch (v.getId()){
-            case R.id.btnGenerateBarcode:
-                //Toast.makeText(getContext(),"Button Generate Pressed" , Toast.LENGTH_SHORT).show();
-                generateBarcode();
-                break;
-
             case R.id.btnSubmit:
                 submitDetails();
                 break;
 
-            case R.id.btn_replicate :
-
-                if(editTextKIT_ID.getText().toString().length()>0) {
-                    //Your dialog
-                    showReplicateDialog();
-                }else {
-                    Toast.makeText(getContext(), "Please enter Kit ID" , Toast.LENGTH_SHORT).show();
-                }
-                break;
-
-            case R.id.radioAliquot:
-                boolean checked = ((RadioButton) v).isChecked();
-                if(checked)
-                    str = "Aliquot Selected";
-                llLocal.setVisibility(View.GONE);
-                llCentral.setVisibility(View.GONE);
-                llAliquot.setVisibility(View.VISIBLE);
-                break;
-
-            case R.id.radioSample:
-                boolean checked1 = ((RadioButton) v).isChecked();
-                if(checked1)
-                    str = "Sample Selected";
-                llLocal.setVisibility(View.VISIBLE);
-                llCentral.setVisibility(View.VISIBLE);
-                llAliquot.setVisibility(View.GONE);
-                break;
-
-            case R.id.radioBoth:
-                boolean checked2 = ((RadioButton) v).isChecked();
-                if(checked2)
-                    str = "Both Selected";
-                llLocal.setVisibility(View.VISIBLE);
-                llCentral.setVisibility(View.VISIBLE);
-                llAliquot.setVisibility(View.VISIBLE);
-                break;
-
-
-            case R.id.btn_start_date:
-                setStartDate();
-                break;
-
-            case R.id.btn_end_date:
-                setExpDate();
+            case R.id.btnEntryDate:
+                setEntryDate();
                 break;
 
         }
-        //Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
-
     }
 
-    private void setExpDate() {
-
-        final Calendar c = Calendar.getInstance();
-        mYear = c.get(Calendar.YEAR);
-        mMonth = c.get(Calendar.MONTH);
-        mDay = c.get(Calendar.DAY_OF_MONTH);
-
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
-                new DatePickerDialog.OnDateSetListener() {
-
-                    @Override
-                    public void onDateSet(DatePicker view, int year,
-                                          int monthOfYear, int dayOfMonth) {
-
-                        String fmonth;
-                        int month;
-                        if (monthOfYear < 10 && dayOfMonth < 10) {
-
-                            fmonth = "0" + monthOfYear;
-                            month = Integer.parseInt(fmonth) + 1;
-                            String fDate = "0" + dayOfMonth;
-                            String paddedMonth = String.format("%02d", month);
-                            //editText.setText(fDate + "/" + paddedMonth + "/" + year);
-
-
-                            txtEndDate.setText(year + "-" + paddedMonth + "-" + fDate);
-                            endDate =txtEndDate.getText().toString();
-
-                        }  else if (monthOfYear < 13 && dayOfMonth < 10) {
-
-                            fmonth = "0" + monthOfYear;
-                            month = Integer.parseInt(fmonth) + 1;
-                            String fDate = "0" + dayOfMonth;
-                            String paddedMonth = String.format("%02d", month);
-                            //editText.setText(fDate + "/" + paddedMonth + "/" + year);
-
-
-                            txtEndDate.setText(year + "-" + paddedMonth + "-" + fDate);
-                            endDate =txtEndDate.getText().toString();
-
-                        } else {
-
-                            fmonth = "0" + monthOfYear;
-                            month = Integer.parseInt(fmonth) + 1;
-                            String paddedMonth = String.format("%02d", month);
-                            //editText.setText(dayOfMonth + "/" + paddedMonth + "/" + year);
-
-                            txtEndDate.setText(year + "-" + paddedMonth + "-" + dayOfMonth);
-                            endDate =txtEndDate.getText().toString();
-                        }
-
-
-
-                        // txtEndDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-                        //txtEndDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-                        //endDate =txtEndDate.getText().toString();
-
-                    }
-                }, mYear, mMonth, mDay);
-
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
-        datePickerDialog.setTitle(null);
-       // datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() + (1000 * 60 * 60 *24));
-
-        datePickerDialog.show();
-    }
-
-    private void setStartDate() {
+    private void setEntryDate() {
 
         final Calendar c = new GregorianCalendar();
         mYear = c.get(Calendar.YEAR);
@@ -353,6 +318,7 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
 
                         String fmonth;
                         int month;
+                        String startDate;
                         if (monthOfYear < 10 && dayOfMonth < 10) {
 
                             fmonth = "0" + monthOfYear;
@@ -362,8 +328,8 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                             //editText.setText(fDate + "/" + paddedMonth + "/" + year);
 
 
-                            txtStartDate.setText(year + "-" + paddedMonth + "-" + fDate);
-                            startDate =txtStartDate.getText().toString();
+                            txtEntryDate.setText(year + "-" + paddedMonth + "-" + fDate);
+                            startDate =txtEntryDate.getText().toString();
 
                         }  else if (monthOfYear < 13 && dayOfMonth < 10) {
 
@@ -374,8 +340,8 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                             //editText.setText(fDate + "/" + paddedMonth + "/" + year);
 
 
-                            txtStartDate.setText(year + "-" + paddedMonth + "-" + fDate);
-                            startDate =txtStartDate.getText().toString();
+                            txtEntryDate.setText(year + "-" + paddedMonth + "-" + fDate);
+                            startDate =txtEntryDate.getText().toString();
 
                         } else {
 
@@ -384,8 +350,8 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                             String paddedMonth = String.format("%02d", month);
                             //editText.setText(dayOfMonth + "/" + paddedMonth + "/" + year);
 
-                            txtStartDate.setText(year + "-" + paddedMonth + "-" + dayOfMonth);
-                            startDate =txtStartDate.getText().toString();
+                            txtEntryDate.setText(year + "-" + paddedMonth + "-" + dayOfMonth);
+                            startDate =txtEntryDate.getText().toString();
                         }
 
                     }
@@ -395,32 +361,36 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
 
     private void submitDetails() {
 
-        if(editTextKIT_ID.length() >0) {
+        if(edtSiteNo.getText().toString().trim().length() >0) {
 
-            if(editTextVISIT.length() > 0) {
+            if(edtCohortNo.getText().toString().trim().length() > 0) {
 
-            if(!txtStartDate.getText().toString().equalsIgnoreCase("")){
+                if(edtTimepoint.getText().toString().trim().length() > 0) {
 
-                if(!txtEndDate.getText().toString().equalsIgnoreCase("")){
+                    if(edtTubeVolume.getText().toString().trim().length() > 0) {
+
+                        if(!txtEntryDate.getText().toString().equalsIgnoreCase("")){
+
+                            //if(!txtEndDate.getText().toString().equalsIgnoreCase("")){
 
 
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                       /* SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-                    Date date1 = null;
-                    Date date2 = null;
-                    try {
-                        date1 = format.parse(startDate);
-                        date2 = format.parse(endDate);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                        Date date1 = null;
+                        Date date2 = null;
+                        try {
+                            date1 = format.parse(startDate);
+                            date2 = format.parse(endDate);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
 
-                    if (date1.compareTo(date2) <= 0) {
-                        //Toast.makeText(getActivity(),"All Date OK.. RUN API.." , Toast.LENGTH_SHORT).show();
-                        Calendar cal = Calendar.getInstance();
-                        Date sysDate = cal.getTime();
+                        if (date1.compareTo(date2) <= 0) {
+                            //Toast.makeText(getActivity(),"All Date OK.. RUN API.." , Toast.LENGTH_SHORT).show();
+                            Calendar cal = Calendar.getInstance();
+                            Date sysDate = cal.getTime();*/
 
-                       // if(date1.compareTo(sysDate) >0 && date2.compareTo(sysDate) >0) {
+                            // if(date1.compareTo(sysDate) >0 && date2.compareTo(sysDate) >0) {
 
                    /* Calendar cal = Calendar.getInstance();
                     Date sysDate = cal.getTime();
@@ -433,24 +403,38 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                     }else {*/
 
 
-                            int selectedId = radioKITtype.getCheckedRadioButtonId();
-                            radioButtonKitTYPE = (RadioButton) getView().findViewById(selectedId);
-
-                            int selectedId1 = radioAdditionalKITtype.getCheckedRadioButtonId();
-                            radioButtonAdditionalKitTYPE = (RadioButton) getView().findViewById(selectedId1);
-
-                            int selectedId2 = radioGroupCategory.getCheckedRadioButtonId();
-                            radioButtonCategory = (RadioButton) getView().findViewById(selectedId2);
-
-                            int selectedId3 = radioGroupReqForm.getCheckedRadioButtonId();
-                            radioButtonReqForm = (RadioButton) getView().findViewById(selectedId3);
+                            int selectedId = radioTubeType.getCheckedRadioButtonId();
+                            radioButtonTubeType = (RadioButton) getView().findViewById(selectedId);
 
 
-                            //For selected Kit type
-                            radioButtonKitTYPE.getText().toString().trim();
+                            callAddTSUapi(spnSelectedStudyID,
+                                    strStudyName,
+                                    strStudyTitle,
+                                    spnSelectedKitID,
+                                    strKitName,
+                                    strKitTitle,
+                                    edtVisit.getText().toString().trim(),
+                                    edtSiteNo.getText().toString().trim(),
+                                    edtCohortNo.getText().toString().trim(),
+                                    spnPrimaryInvestigator.getSelectedItem().toString(),
+                                    edtTimepoint.getText().toString().trim(),
+                                    radioButtonTubeType.getText().toString().trim(),
+                                    spnTubeColor.getSelectedItem().toString(),
+                                    edtTubeVolume.getText().toString().trim(),
+                                    spnAliquotTubeColor.getSelectedItem().toString(),
+                                    edtAliquotTubeVolume.getText().toString().trim(),
+                                    edtAliquotExtNo.getText().toString().trim(),
+                                    spnDiscardTubeColor.getSelectedItem().toString(),
+                                    edtDiscardTubeVolume.getText().toString().trim(),
+                                    spnTestName.getSelectedItem().toString().trim(),
+                                    spnCollectionLabel.getSelectedItem().toString().trim(),
+                                    spnTransportLabel.getSelectedItem().toString().trim(),
+                                    edtCentrifugeProg.getText().toString().trim(),
+                                    spnLabUse.getSelectedItem().toString().trim(),
+                                    txtEntryDate.getText().toString().trim()
+                            );
 
-
-                            callAddKITdetailsAPI(editTextKIT_ID.getText().toString(),
+                           /* callAddKITdetailsAPI(editTextKIT_ID.getText().toString(),
                                     editTextAccessionNumber.getText().toString(),
                                     editTextVISIT.getText().toString(),
                                     radioButtonKitTYPE.getText().toString().trim(),
@@ -459,122 +443,96 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                                     radioButtonReqForm.getText().toString().trim(),
                                     txtStartDate.getText().toString(),
                                     txtEndDate.getText().toString(),
-                                    spnLocal.getSelectedItem().toString(),
+                                    spnTransportLabel.getSelectedItem().toString(),
                                     spnCentral.getSelectedItem().toString(),
                                     spnAliquot.getSelectedItem().toString(),
                                     spnSelectedStudyID,
                                     strStudyName,
-                                    strStudyTitle);
+                                    strStudyTitle);*/
                             //  }
 
-
-
-
-               /* callAddSubjectOnBoardingAPI(editTextKIT_ID.getText().toString(),
-                        txt_start_date.getText().toString(),
-                        spnPersonGender.getSelectedItem().toString(),
-                        spnGroups.getSelectedItem().toString(),
-                        spnStudyIDs.getSelectedItem().toString());*/
                         /*}else {
 
-                            Toast.makeText(getActivity(),"Scan date with past date cannot be scheduled",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(),"Kit Expiry Date cannot be earlier than Kit Scan Date" , Toast.LENGTH_SHORT).show();
                         }*/
+/*
                     }else {
+                        Toast.makeText(getContext(),"Please Select Expiry Date" , Toast.LENGTH_SHORT).show();
+                    }*/
+                        }else {
+                            Toast.makeText(getContext(),"Please select Entry Date" , Toast.LENGTH_SHORT).show();
+                        }
 
-                        Toast.makeText(getActivity(),"Kit Expiry Date cannot be earlier than Kit Scan Date" , Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(getContext(),"Please enter Tube Volume" , Toast.LENGTH_SHORT).show();
                     }
 
                 }else {
-                    Toast.makeText(getContext(),"Please Select Expiry Date" , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"Please enter Timpepoint" , Toast.LENGTH_SHORT).show();
                 }
-            }else {
-                Toast.makeText(getContext(),"Please Select Scan Date" , Toast.LENGTH_SHORT).show();
-            }
 
             }else {
-                Toast.makeText(getContext(),"Please enter VISIT" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"Please enter Cohort Number" , Toast.LENGTH_SHORT).show();
             }
         }else {
-            Toast.makeText(getContext(),"Please enter KIT ID" , Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"Please enter Site Number" , Toast.LENGTH_SHORT).show();
         }
 
     }
 
-    private void generateBarcode() {
+    //Call callAddTSUapi API
+    private void callAddTSUapi(String spnSelectedStudyID, String studyName, String studyTitle,
+                               String spnSelectedKitID, String strKitName, String strKitTitle,
+                               String visit, String siteNo, String cohortNo,
+                               String prim_investegator, String strTimePoint, String rbTypeValue,
+                               String tubeColor, String tubeVolume, String aliquotColor, String aliquotVol,
+                               String aliquotExtNo, String spnDiscardTubeColor, String discardTubeVol,
+                               String spnTestName, String spnCollectionLabel, String spnTransportLabel,
+                               String centriProg, String strLabUse, String txtEntryDate) {
 
-        message = editTextKIT_ID.getText().toString();
+        AddTSURequestModel tsuRequestModel = new AddTSURequestModel();
+        tsuRequestModel.setAppName(AppConstants.APP_NAME);
+        tsuRequestModel.setVersionNumber(AppConstants.APP_VERSION);
+        tsuRequestModel.setDeviceType(AppConstants.APP_OS);
+        tsuRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
+        tsuRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(getActivity()));
+        tsuRequestModel.setUserRole(new PrefManager(getActivity()).getUserRoleType());
+        tsuRequestModel.setUserName(new PrefManager(getActivity()).getUserName());
+        tsuRequestModel.setTagId(new PrefManager(getActivity()).getBarCodeValue());
+        tsuRequestModel.setEvent(AppConstants.ADD_TSU);
 
-        if(message.length() >0) {
-
-           /* Bitmap bitmap = null;
-            try {
-                bitmap = Utilities.CreateImage(message, "Barcode");
-                //myBitmap = bitmap;
-            } catch (WriterException we) {
-                we.printStackTrace();
-            }
-            if (bitmap != null) {
-                imageView.setImageBitmap(bitmap);
-            }*/
-
-            showGenerateBarcodeDialog(message, imageView);
+        tsuRequestModel.setVisit(visit);
+       // tsuRequestModel.setStudyName(strStudyName);
+        tsuRequestModel.setStudyName("SST");
+        tsuRequestModel.setKitId("SsT");
+       // tsuRequestModel.setStudyId(Integer.valueOf(spnSelectedStudyID));
+        tsuRequestModel.setStudyId(4);
+        tsuRequestModel.setKitRecId(24);
+        if(rbTypeValue.equalsIgnoreCase("Blood")) {
+            tsuRequestModel.setTubeType(1);
         }else {
-            Toast.makeText(getContext(),"Please enter KIT ID" , Toast.LENGTH_SHORT).show();
+            tsuRequestModel.setTubeType(0);
         }
-    }
+        tsuRequestModel.setIsDuplicate(0);
+        tsuRequestModel.setEntryDate(txtEntryDate);
+        tsuRequestModel.setSiteNo(siteNo);
+        tsuRequestModel.setCohortNo(cohortNo);
+        tsuRequestModel.setPi(prim_investegator);
+        tsuRequestModel.setTimepoint(strTimePoint);
+        tsuRequestModel.setTubeColor(tubeColor);
+        tsuRequestModel.setTubeVol(tubeVolume);
+        tsuRequestModel.setAliquotColor(aliquotColor);
+        tsuRequestModel.setAliquotVol(aliquotVol);
+        tsuRequestModel.setAliquotExt(aliquotExtNo);
+        tsuRequestModel.setDiscardTubeColor(spnDiscardTubeColor);
+        tsuRequestModel.setDiscardTubeVolume(discardTubeVol);
+        tsuRequestModel.setTestName(spnTestName);
+        tsuRequestModel.setCollectionLable(spnCollectionLabel);
+        tsuRequestModel.setTransportLable(spnTransportLabel);
+        tsuRequestModel.setCentrifugeProg(centriProg);
+        tsuRequestModel.setLabUse(strLabUse);
 
-    //Call callAddKITdetailsAPI API
-    private void callAddKITdetailsAPI(String kitId, String accessionNumber, String visit,
-                                      String kitType, String additionalKit, String category,
-                                      String reqForm, String startDate, String endDate,
-                                      String localQty, String centralQty, String aliquotQty,
-                                      String studyID, String strStudyName, String strStudyTitle) {
-
-        AddKitRequestModel addKitRequestModel = new AddKitRequestModel();
-        addKitRequestModel.setAppName(AppConstants.APP_NAME);
-        addKitRequestModel.setVersionNumber(AppConstants.APP_VERSION);
-        addKitRequestModel.setDeviceType(AppConstants.APP_OS);
-        addKitRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
-        addKitRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(getActivity()));
-        addKitRequestModel.setUserRole(new PrefManager(getActivity()).getUserRoleType());
-        addKitRequestModel.setTagId(new PrefManager(getActivity()).getBarCodeValue());
-        addKitRequestModel.setEvent(AppConstants.ADD_KIT);
-        if(kitType.equalsIgnoreCase("TRIAL")) {
-            addKitRequestModel.setIsTrial(1);
-        }else {
-            addKitRequestModel.setIsTrial(0);
-        }
-        addKitRequestModel.setUserName(new PrefManager(getActivity()).getUserName());
-        addKitRequestModel.setKitId(kitId);
-        if(!accessionNumber.isEmpty()) {
-            addKitRequestModel.setExtNum(accessionNumber);
-        }else {
-            addKitRequestModel.setExtNum(" ");
-        }
-        addKitRequestModel.setVisit(visit);
-        if(additionalKit.equalsIgnoreCase("YES")) {
-            addKitRequestModel.setAdditionalKit(1);
-        }else {
-            addKitRequestModel.setAdditionalKit(0);
-        }
-        addKitRequestModel.setCategory(category);
-        addKitRequestModel.setStatus(AppConstants.IN_STOCK);
-        addKitRequestModel.setLocal(Integer.valueOf(localQty));
-        addKitRequestModel.setCentral(Integer.valueOf(centralQty));
-        addKitRequestModel.setAliquot(Integer.valueOf(aliquotQty));
-        if(reqForm.equalsIgnoreCase("YES")) {
-            addKitRequestModel.setReqForm(1);
-        }else {
-            addKitRequestModel.setReqForm(0);
-        }
-        addKitRequestModel.setScanDate(startDate);
-        addKitRequestModel.setExpDate(endDate);
-        addKitRequestModel.setStudyId(Integer.valueOf(studyID));
-        addKitRequestModel.setGenBarcode(kitId);
-        addKitRequestModel.setStudyName(strStudyName);
-        addKitRequestModel.setStudyTitle(strStudyTitle);
-
-        new NetworkingHelper(new AddKitRequest(getActivity(), true, addKitRequestModel)) {
+        new NetworkingHelper(new AddTSURequest(getActivity(), true, tsuRequestModel)) {
 
             @Override
             public void serverResponseFromApi(ApiResponse serverResponse) {
@@ -589,12 +547,12 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
 
                             if(commonResponse.getResponse().get(0).isStatus()){
 
-                                Logger.logError("addKIT API success " +
+                                Logger.logError("addTSU API success " +
                                         commonResponse.getResponse().get(0).isStatus());
-                                Logger.logError("addKIT API success " +
+                                Logger.logError("addTSU API success " +
                                         commonResponse.getResponse().get(0).getMessage());
 
-                               // Utils.showAlertDialog(getActivity(),  commonResponse.getResponse().get(0).getMessage());
+                                // Utils.showAlertDialog(getActivity(),  commonResponse.getResponse().get(0).getMessage());
 
                                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
                                 // ...Irrelevant code for customizing the buttons and title
@@ -611,7 +569,7 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                                     public void onClick(View v) {
 
                                         alertDialog.dismiss();
-                                        Intent mNextActivity = new Intent(getActivity(), InventorySetupActivity.class);
+                                        Intent mNextActivity = new Intent(getActivity(), TSUSetupActivity.class);
                                         startActivity(mNextActivity);
                                         getActivity().finish();
                                     }
@@ -619,28 +577,23 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
 
                                 alertDialog.setCanceledOnTouchOutside(false);
                                 alertDialog.show();
-                                editTextKIT_ID.setText("");
-                                editTextAccessionNumber.setText("");
-                                editTextVISIT.setText("");
-                                txtStartDate.setText("");
-                                txtEndDate.setText("");
+                                edtSiteNo.setText("");
+                                edtCohortNo.setText("");
+                                edtTimepoint.setText("");
+                                edtTubeVolume.setText("");
+                                //txtEntryDate.setText("");
 
                             }else {
 
-                                Logger.logError("addKIT API Failure " +
+                                Logger.logError("addTSU API Failure " +
                                         commonResponse.getResponse().get(0).isStatus());
-                                Logger.logError("addKIT API Failure " +
+                                Logger.logError("addTSU API Failure " +
                                         commonResponse.getResponse().get(0).getMessage());
 
                                 Utils.showAlertDialog(getActivity(),  commonResponse.getResponse().get(0).getMessage());
                             }
 
                         }else {
-
-                          /*  Logger.logError("addKIT API Failure " +
-                                    commonResponse.getResponse().get(0).isStatus());
-                            Logger.logError("addKIT API Failure " +
-                                    commonResponse.getResponse().get(0).getMessage());*/
 
                             Utils.showAlertDialog(getActivity(),  commonResponse.getStatus().geteRROR());
                         }
@@ -653,7 +606,7 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                     }
 
                 } else {
-                    Logger.logError("addKIT API Failure " +
+                    Logger.logError("addTSU API Failure " +
                             serverResponse.errorMessageToDisplay);
                 }
             }
@@ -711,7 +664,7 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
 
                                     ArrayAdapter studyIdAdp = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item, lists);
                                     studyIdAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                    spnStudyIDs.setAdapter(studyIdAdp);
+                                    spnStudyLabel.setAdapter(studyIdAdp);
 
                                 }else {
                                     Logger.logError("No STUDY_LIST FOUND :" + "No STUDY_LIST FOUND");
@@ -737,176 +690,6 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
             }
         };
 
-    }
-
-
-
-
-
-    private void showReplicateDialog() {
-
-        final TextView et_text;
-        final Button btn_submit;
-        final Button btnCancel;
-        final Spinner sp_qtyc, sp_qtyl;
-
-
-        // Create custom dialog object
-        final Dialog dialog = new Dialog(getContext());
-        // Include dialog.xml file
-        dialog.setContentView(R.layout.dialog_kit_replicate_barcode);
-        dialog.setCancelable(false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        Window window = dialog.getWindow();
-        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-
-        et_text = dialog.findViewById(R.id.et_text);
-        btn_submit = dialog.findViewById(R.id.btn_submit);
-        btnCancel = dialog.findViewById(R.id.btnCancel);
-        sp_qtyc = dialog.findViewById(R.id.sp_qtyc);
-        sp_qtyl = dialog.findViewById(R.id.sp_qtyl);
-        et_text.setText(editTextKIT_ID.getText().toString());
-
-        String[] items = new String[]{"1 ", "2", "3 ", "4", "5 ", "6",
-                "7 ", "8", "9 ", "10"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, items);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sp_qtyc.setAdapter(adapter);
-        sp_qtyl.setAdapter(adapter);
-
-
-        btn_submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (et_text.getText().toString().equals("")) {
-                    Toast.makeText(getContext(), "Please Enter Text", Toast.LENGTH_LONG).show();
-                } else {
-                    Intent i = new Intent(getActivity(), ShowReplicateListActivity.class);
-                    i.putExtra("qtyc", sp_qtyc.getSelectedItem().toString());
-                    i.putExtra("qtyl", sp_qtyl.getSelectedItem().toString());
-                    i.putExtra("text", et_text.getText().toString());
-                    startActivity(i);
-                }
-            }
-        });
-
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-    }
-
-
-    private void showGenerateBarcodeDialog(final String message, ImageView imageView) {
-
-        final TextView et_text;
-        final TextView txtBarcode;
-        final Button btn_submit;
-        final Button btnCancel;
-        final RadioGroup radioGroupLabelSize;
-        final RadioButton[] rbLabelSize = new RadioButton[1];
-        final ImageView imageView1;
-
-
-        // Create custom dialog object
-        final Dialog dialog = new Dialog(getContext());
-        // Include dialog.xml file
-        dialog.setContentView(R.layout.dialog_kit_generate_barcode);
-        dialog.setCancelable(false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        Window window = dialog.getWindow();
-        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-
-        et_text = dialog.findViewById(R.id.et_text);
-        txtBarcode = dialog.findViewById(R.id.txtBarcode);
-        btn_submit = dialog.findViewById(R.id.btn_submit);
-        btnCancel = dialog.findViewById(R.id.btnCancel);
-        imageView1 = dialog.findViewById(R.id.barcode_image);
-        //spnLabel = dialog.findViewById(R.id.sp_qtyc);
-        //spnSize = dialog.findViewById(R.id.sp_qtyl);
-        et_text.setText(editTextKIT_ID.getText().toString());
-        txtBarcode.setText(editTextKIT_ID.getText().toString());
-
-        Bitmap bitmap = null;
-        try {
-            bitmap = Utilities.CreateImage(message, "Barcode");
-            //myBitmap = bitmap;
-        } catch (WriterException we) {
-            we.printStackTrace();
-        }
-        if (bitmap != null) {
-            imageView1.setImageBitmap(bitmap);
-        }
-
-        //radioGroupKitType =(RadioGroup) dialog.findViewById(R.id.radioGroupKitType);
-        radioGroupLabelSize =(RadioGroup) dialog.findViewById(R.id.radioGroupLabelSize);
-
-        btn_submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                int selectedId1 = radioGroupLabelSize.getCheckedRadioButtonId();
-                rbLabelSize[0] = (RadioButton) dialog.findViewById(selectedId1);
-
-                Toast.makeText(getContext(),"Label size is - "+ rbLabelSize[0].getText(),Toast.LENGTH_SHORT).show();
-
-
-                PrintManager printManager = (PrintManager) getActivity().getSystemService(Context.PRINT_SERVICE);
-                List<ReplicateModel> replicateListQtyc = new ArrayList<>();
-
-                ReplicateModel replicateModel = null;
-                try {
-                    replicateModel = new ReplicateModel(message, Utilities.CreateImage(message, "Barcode"));
-                } catch (WriterException e) {
-                    e.printStackTrace();
-                }
-                replicateListQtyc.add(replicateModel);
-                String jobName = getString(R.string.app_name) +
-                        " Document";
-
-                if(rbLabelSize[0].getText().toString().trim().equalsIgnoreCase("0.5 ml tube")){
-
-                    printManager.print(jobName, new PrintAdapter(getActivity(), "4", replicateListQtyc), null);
-
-                }else if(rbLabelSize[0].getText().toString().trim().equalsIgnoreCase("1.5 - 2.0 ml tube")){
-
-                    printManager.print(jobName, new PrintAdapter(getActivity(), "5", replicateListQtyc), null);
-
-                }else {
-
-                    printManager.print(jobName, new PrintAdapter(getActivity(), "6", replicateListQtyc), null);
-
-                }
-
-
-
-                /*if (et_text.getText().toString().equals("")) {
-                    Toast.makeText(getContext(), "Please Enter Text", Toast.LENGTH_LONG).show();
-                } else {
-                    Intent i = new Intent(getActivity(), ShowReplicateListActivity.class);
-                    i.putExtra("qtyc", spnLabel.getSelectedItem().toString());
-                    i.putExtra("qtyl", spnSize.getSelectedItem().toString());
-                    i.putExtra("text", et_text.getText().toString());
-                    startActivity(i);
-                }*/
-            }
-        });
-
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
     }
 
 }

@@ -103,10 +103,9 @@ public class SeniorStaffHomeActivity extends BaseActivity {
 
                 } else if(i==2){
 
-                    Toast.makeText(SeniorStaffHomeActivity.this, "Tapped on TSU", Toast.LENGTH_SHORT).show();
-
-                    /*Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, SeniorSubjectOnBoardingActivity.class);
-                    startActivity(mNextActivity);*/
+                    //Toast.makeText(SeniorStaffHomeActivity.this, "Tapped on TSU", Toast.LENGTH_SHORT).show();
+                    Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, TSUSetupActivity.class);
+                    startActivity(mNextActivity);
 
 
                 } else if(i==3){

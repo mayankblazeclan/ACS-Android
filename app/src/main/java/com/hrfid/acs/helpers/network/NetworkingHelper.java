@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 
 import com.hrfid.acs.helpers.request.AddKitRequest;
 import com.hrfid.acs.helpers.request.AddSubjectRequest;
+import com.hrfid.acs.helpers.request.AddTSURequest;
 import com.hrfid.acs.helpers.request.BaseApiRequest;
 import com.hrfid.acs.helpers.request.CreateScheduleRequest;
 import com.hrfid.acs.helpers.request.DeleteScheduleRequest;
@@ -15,6 +16,7 @@ import com.hrfid.acs.helpers.request.GetKitDetailsRequest;
 import com.hrfid.acs.helpers.request.GetNotificationRequest;
 import com.hrfid.acs.helpers.request.GetScheduleRequest;
 import com.hrfid.acs.helpers.request.GetSubjectDetailsRequest;
+import com.hrfid.acs.helpers.request.GetTSUDetailsRequest;
 import com.hrfid.acs.helpers.request.IdentifySubjectRequest;
 import com.hrfid.acs.helpers.request.LogoutRequest;
 import com.hrfid.acs.helpers.request.MapKitDetailsRequest;
@@ -81,6 +83,8 @@ public abstract class NetworkingHelper {
   public static final int VERIFY_SUBJECT_DETAILS = 22;
   public static final int SEARCH_KIT = 23;
   public static final int RETURN_KIT_DETAILS = 24;
+  public static final int ADD_TSU_SETUP = 25;
+  public static final int GET_TSU_DETAILS = 26;
 
 
   private Call<ResponseBody> apiInterface;
@@ -215,6 +219,16 @@ public abstract class NetworkingHelper {
       case RETURN_KIT_DETAILS:
         ReturnKitDetailsRequest returnKitDetailsRequest = (ReturnKitDetailsRequest) cmgRequest;
         apiInterface = ApiRouter.get().getRetrofitService().returnKit(returnKitDetailsRequest.returnKitRequestModel);
+        break;
+
+      case ADD_TSU_SETUP:
+        AddTSURequest addTSURequest = (AddTSURequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().addTSU(addTSURequest.addTSURequestModel);
+        break;
+
+      case GET_TSU_DETAILS:
+        GetTSUDetailsRequest getTSUDetailsRequest = (GetTSUDetailsRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().getTSUList(getTSUDetailsRequest.commonRequestModel);
         break;
 
       default:

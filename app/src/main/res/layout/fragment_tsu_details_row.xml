@@ -16,8 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorBCRed"
-        android:alpha="0.7"
-        >
+        android:alpha="0.7" >
 
         <TextView
             android:id="@+id/textViewHeading"
@@ -25,9 +24,13 @@
             android:layout_height="match_parent"
             android:background="@color/colorBCRed"
             android:text=""
-            android:layout_margin="@dimen/margin_10dp"
+            android:padding="@dimen/margin_10dp"
             android:textColor="@color/white"
             android:textStyle="bold"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:gravity="left"/>
 
@@ -43,7 +46,7 @@
 
         <LinearLayout
             android:id="@+id/ll_left"
-            android:layout_width="350dp"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -67,7 +70,7 @@
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txtExtNumber"
+                    android:id="@+id/txtSiteNo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
@@ -97,7 +100,7 @@
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txtKitType"
+                    android:id="@+id/txtCohortNo"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/margin_10dp"
@@ -118,7 +121,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/additnal_kit_label"
+                    android:id="@+id/pi_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/txt_primary_investigator"
@@ -127,7 +130,7 @@
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txtAdditionalKit"
+                    android:id="@+id/txtPrimartInvestigator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_10dp"
@@ -157,7 +160,7 @@
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txtScanDate"
+                    android:id="@+id/txtTimepoint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_10dp"
@@ -191,7 +194,7 @@
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txtStudyName"
+                    android:id="@+id/txtDiscardTubeColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
@@ -221,7 +224,7 @@
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txtKitId"
+                    android:id="@+id/txtDiscardTubeVolume"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
@@ -251,7 +254,7 @@
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txt_collection"
+                    android:id="@+id/txtCollectionLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
@@ -276,9 +279,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/txt_test_name"
-                    android:textColor="#000"
                     android:textAllCaps="true"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#000" />
 
                 <TextView
                     android:id="@+id/txtTestName"
@@ -312,7 +315,7 @@
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txt_entry_date"
+                    android:id="@+id/txtEntryDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_10dp"
@@ -330,39 +333,7 @@
             android:layout_toRightOf="@+id/ll_left"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/linearLayout312"
-                android:layout_below="@+id/linearLayout1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/bt_ok_padding"
-                android:layout_marginRight="@dimen/bt_ok_padding"
-                android:layout_marginTop="@dimen/activity_5dp_margin"
-                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/study_day134"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="VISIT"
-                    android:textAllCaps="true"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="#000" />
-
-                <TextView
-                    android:id="@+id/txtVisit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/margin_10dp"
-                    android:singleLine="true"
-                    android:ellipsize="marquee"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:scrollHorizontally="true"
-                    android:text=""
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/gray" />
-
-            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linearLayout_cat"
@@ -383,7 +354,7 @@
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txtCategory"
+                    android:id="@+id/txtTubetype"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
@@ -415,7 +386,7 @@
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txtLocal"
+                    android:id="@+id/txtTubeColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
@@ -445,7 +416,7 @@
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txtCentral"
+                    android:id="@+id/txtTubeVol"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_10dp"
@@ -477,7 +448,7 @@
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txt_aliquot"
+                    android:id="@+id/txtAliquotTubeColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_10dp"
@@ -508,7 +479,7 @@
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txt_requistion_form"
+                    android:id="@+id/txtAliquotTubeVol"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_10dp"
@@ -537,7 +508,7 @@
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txt_status"
+                    android:id="@+id/txtAliquotTubeExt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_10dp"
@@ -570,7 +541,7 @@
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txt_centri_prog"
+                    android:id="@+id/txtCentrifugeProg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_10dp"
@@ -601,7 +572,7 @@
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
-                    android:id="@+id/txt_lab_use"
+                    android:id="@+id/txtLabUse"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_10dp"
@@ -612,7 +583,39 @@
             </LinearLayout>
 
 
+            <LinearLayout
+                android:id="@+id/linearLayout312"
+                android:layout_below="@+id/linearLayout1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/bt_ok_padding"
+                android:layout_marginRight="@dimen/bt_ok_padding"
+                android:layout_marginBottom="@dimen/activity_5dp_margin"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/study_day134"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="VISIT"
+                    android:textAllCaps="true"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#000" />
+
+                <TextView
+                    android:id="@+id/txtVisit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/margin_10dp"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/gray" />
+
+            </LinearLayout>
 
 
         </LinearLayout>
@@ -626,48 +629,36 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/bt_ok_padding"
             android:layout_marginRight="@dimen/bt_ok_padding"
-            android:layout_marginTop="@dimen/margin_10dp"
-            android:gravity="center"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
             android:orientation="vertical">
 
 
             <Button
                 android:id="@+id/btnModify"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/black"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                android:layout_margin="@dimen/activity_5dp_margin"
+                android:padding="@dimen/activity_5dp_margin"
+                android:layout_marginBottom="@dimen/margin_10dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="MODIFY"/>
 
             <Button
                 android:id="@+id/btnDismiss"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorBCRed"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                android:layout_margin="@dimen/activity_5dp_margin"
+                android:padding="@dimen/activity_5dp_margin"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="DISMISS"/>
-
-            <Button
-                android:id="@+id/btnMap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/black"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:layout_margin="@dimen/activity_5dp_margin"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="MAP"/>
+                android:text="DUPLICATE"/>
 
         </LinearLayout>
-
-
 
     </RelativeLayout>
 
