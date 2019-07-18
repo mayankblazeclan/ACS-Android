@@ -17,6 +17,7 @@ import com.hrfid.acs.helpers.request.GetNotificationRequest;
 import com.hrfid.acs.helpers.request.GetScheduleRequest;
 import com.hrfid.acs.helpers.request.GetSubjectDetailsRequest;
 import com.hrfid.acs.helpers.request.GetTSUDetailsRequest;
+import com.hrfid.acs.helpers.request.GetTSUParamRequest;
 import com.hrfid.acs.helpers.request.IdentifySubjectRequest;
 import com.hrfid.acs.helpers.request.LogoutRequest;
 import com.hrfid.acs.helpers.request.MapKitDetailsRequest;
@@ -25,6 +26,8 @@ import com.hrfid.acs.helpers.request.MapSubjectRequestModel;
 import com.hrfid.acs.helpers.request.ModifyKitRequest;
 import com.hrfid.acs.helpers.request.ModifyScheduleRequest;
 import com.hrfid.acs.helpers.request.ModifySubjectRequest;
+import com.hrfid.acs.helpers.request.ModifyTSUDetailsRequestModel;
+import com.hrfid.acs.helpers.request.ModifyTSURequest;
 import com.hrfid.acs.helpers.request.ResetNotificationCountRequest;
 import com.hrfid.acs.helpers.request.ReturnKitDetailsRequest;
 import com.hrfid.acs.helpers.request.SearchKitRequest;
@@ -85,6 +88,8 @@ public abstract class NetworkingHelper {
   public static final int RETURN_KIT_DETAILS = 24;
   public static final int ADD_TSU_SETUP = 25;
   public static final int GET_TSU_DETAILS = 26;
+  public static final int MODIFY_TSU_SETUP = 27;
+  public static final int GET_TSU_PARAMS = 28;
 
 
   private Call<ResponseBody> apiInterface;
@@ -229,6 +234,16 @@ public abstract class NetworkingHelper {
       case GET_TSU_DETAILS:
         GetTSUDetailsRequest getTSUDetailsRequest = (GetTSUDetailsRequest) cmgRequest;
         apiInterface = ApiRouter.get().getRetrofitService().getTSUList(getTSUDetailsRequest.commonRequestModel);
+        break;
+
+      case MODIFY_TSU_SETUP:
+        ModifyTSURequest modifyTSURequest = (ModifyTSURequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().modifyTSU(modifyTSURequest.modifyTSUDetailsRequestModel);
+        break;
+
+      case GET_TSU_PARAMS:
+        GetTSUParamRequest getTSUParamRequest = (GetTSUParamRequest) cmgRequest;
+        apiInterface = ApiRouter.get().getRetrofitService().getkitListValues(getTSUParamRequest.studyId);
         break;
 
       default:

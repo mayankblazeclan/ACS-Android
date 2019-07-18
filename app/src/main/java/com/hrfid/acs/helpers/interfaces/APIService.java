@@ -14,6 +14,7 @@ import com.hrfid.acs.helpers.request.LogoutRequest;
 import com.hrfid.acs.helpers.request.MapKitRequestModel;
 import com.hrfid.acs.helpers.request.MapSubjectRequestModel;
 import com.hrfid.acs.helpers.request.ModifyKitRequestModel;
+import com.hrfid.acs.helpers.request.ModifyTSUDetailsRequestModel;
 import com.hrfid.acs.helpers.request.ReturnKitRequestModel;
 import com.hrfid.acs.helpers.request.SearchKitRequestModel;
 import com.hrfid.acs.helpers.request.SearchSubjectRequestModel;
@@ -140,6 +141,14 @@ public interface APIService {
   //getTSUList
   @POST("/acs/api/getTSUList")
   Call<ResponseBody> getTSUList(@Body CommonRequestModel commonRequestModel);
+
+  //modifyTSU
+  @POST("/acs/api/modifyTSU")
+  Call<ResponseBody> modifyTSU(@Body ModifyTSUDetailsRequestModel modifyTSUDetailsRequestModel);
+
+  //getkitListValues
+  @GET("/acs/api/getkitListValues?")
+  Call<ResponseBody> getkitListValues(@Query("id") String id);
 
  /* @POST("api/facebook/fblogin")
   Call<ResponseBody> loginFBToSSOAPI(@Body RequestBody body);

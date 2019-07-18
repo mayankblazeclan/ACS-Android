@@ -111,5 +111,6 @@ public class AppConstants {
  public static final String KIT_RETURN = "Return Kit";
  public static final String ADD_TSU = "Add TSU";
  public static final String GET_TSU_DETAILS = "TSU List";
+ public static final String MODIFY_TSU = "Modify TSU";
 
 }

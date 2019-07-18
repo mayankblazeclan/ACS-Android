@@ -597,7 +597,7 @@
                     android:id="@+id/study_day134"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="VISIT"
+                    android:text="@string/visit"
                     android:textAllCaps="true"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="#000" />
@@ -645,10 +645,10 @@
                 android:padding="@dimen/activity_5dp_margin"
                 android:layout_marginBottom="@dimen/margin_10dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="MODIFY"/>
+                android:text="@string/modify"/>
 
             <Button
-                android:id="@+id/btnDismiss"
+                android:id="@+id/btnDuplicate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorBCRed"
@@ -656,7 +656,7 @@
                 android:textStyle="bold"
                 android:padding="@dimen/activity_5dp_margin"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="DUPLICATE"/>
+                android:text="@string/txt_duplicate"/>
 
         </LinearLayout>
 

@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import com.hrfid.acs.view.fragment.AddKitFragment;
 import com.hrfid.acs.view.fragment.AddTSUFragment;
 import com.hrfid.acs.view.fragment.KitDetailsFragment;
+import com.hrfid.acs.view.fragment.TSUArchiveDetailsFragment;
 import com.hrfid.acs.view.fragment.TSUDetailsFragment;
 
 /**
@@ -36,6 +37,10 @@ public class TSUSetupAdapter extends FragmentStatePagerAdapter {
                 case 1:
                     TSUDetailsFragment tsuDetailsFragment = new TSUDetailsFragment();
                     return tsuDetailsFragment;
+
+                case 2:
+                    TSUArchiveDetailsFragment tsuArchiveDetailsFragment = new TSUArchiveDetailsFragment();
+                    return tsuArchiveDetailsFragment;
 
 
                 default:

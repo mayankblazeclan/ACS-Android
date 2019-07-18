@@ -5,9 +5,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -24,7 +22,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -33,7 +30,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.WriterException;
 import com.hrfid.acs.R;
 import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
@@ -41,24 +37,11 @@ import com.hrfid.acs.helpers.network.NetworkingHelper;
 import com.hrfid.acs.helpers.request.AddTSURequest;
 import com.hrfid.acs.helpers.request.AddTSURequestModel;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
-import com.hrfid.acs.helpers.request.DismissKitDetailsRequest;
-import com.hrfid.acs.helpers.request.DismissKitRequestModel;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.request.GetKitDetailsRequest;
-import com.hrfid.acs.helpers.request.GetTSUDetailsRequest;
-import com.hrfid.acs.helpers.request.MapKitDetailsRequest;
-import com.hrfid.acs.helpers.request.MapKitRequestModel;
-import com.hrfid.acs.helpers.request.ModifyKitRequest;
-import com.hrfid.acs.helpers.request.ModifyKitRequestModel;
-import com.hrfid.acs.helpers.request.ModifyTSUDetailsRequestModel;
-import com.hrfid.acs.helpers.request.ModifyTSURequest;
-import com.hrfid.acs.helpers.request.ReturnKitDetailsRequest;
-import com.hrfid.acs.helpers.request.ReturnKitRequestModel;
 import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList;
-import com.hrfid.acs.helpers.serverResponses.models.GetKitDetails.GetKitDetailsResponse;
-import com.hrfid.acs.helpers.serverResponses.models.GetKitDetails.KitList;
 import com.hrfid.acs.helpers.serverResponses.models.GetTSUDetails.GetTSUDetailsResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetTSUDetails.TSUList;
 import com.hrfid.acs.util.AppConstants;
@@ -67,20 +50,16 @@ import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
 import com.hrfid.acs.view.activity.TSUSetupActivity;
-import com.hrfid.acs.view.barcode.ShowReplicateListActivity;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
  * Created by MS on 2019-05-31.
  */
-public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.MyViewHolder> implements AdapterView.OnItemSelectedListener, View.OnClickListener {
+public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDetailsAdapter.MyViewHolder> implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     private int mYear, mMonth, mDay;
     private  List<StudyList> listStudy = new ArrayList<>();
@@ -126,7 +105,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
     private TextView txtEntryDate;
     private Button btnSubmit;
 
-    public TSUDetailsAdapter(Context context, List<TSUList> tsuLists, List<StudyList> lists, RecyclerView recyclerView) {
+    public TSUArchiveDetailsAdapter(Context context, List<TSUList> tsuLists, List<StudyList> lists, RecyclerView recyclerView) {
         this.context = context;
         this.tsuLists = tsuLists;
         this.getListStudy = lists;
@@ -199,6 +178,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
 
             btnModify = itemView.findViewById(R.id.btnModify);
+            btnModify.setVisibility(View.GONE);
             btnDuplicate = itemView.findViewById(R.id.btnDuplicate);
             linearLayout = itemView.findViewById(R.id.relativeLayout);
             textViewHeading = itemView.findViewById(R.id.textViewHeading);
@@ -208,6 +188,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         // set the data in items
+
             holder.linearLayout.setVisibility(View.GONE);
             //holder.txtKitId.setText(tsuLists.get(position).getKitId().trim());
             holder.textViewHeading.setText("STUDY NAME (ID) : " + "" + tsuLists.get(position).getStudyTitle() + "(" + tsuLists.get(position).getStudyName() + ")" + "  KIT NAME/ID : " + tsuLists.get(position).getKitId());
@@ -242,9 +223,10 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
             holder.txtLabUse.setText("" + tsuLists.get(position).getLabUse());
             holder.txtEntryDate.setText
                     (Utilities.splitDateFromDesired(tsuLists.get(position).getEntry_date()));
+            holder.btnModify.setVisibility(View.GONE);
 
 
-        holder.btnModify.setOnClickListener(new View.OnClickListener() {
+        /*holder.btnModify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -252,7 +234,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
                 showModifyDialog(tsuLists.get(position), getListStudy);
             }
-        });
+        });*/
 
         holder.btnDuplicate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -285,6 +267,36 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
                 notifyDataSetChanged();
             }
         });
+
+       /* holder.btnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //showDeleteDialog();
+
+                Utils.createDialogTwoButtons(
+                        context, context.getString(R.string.kit_mapping),
+                        true, context.getString(R.string.kit_alert_mapping),
+                        context.getString(R.string.dlg_yes_text),
+                        context.getString(R.string.dlg_no_text), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                dialog.dismiss();
+                                //CALL MAP API
+                              //  callKitMapAPI(tsuLists.get(position).getId(), tsuLists.get(position).getIsTrial());
+
+                            }
+                        }, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                dialog.dismiss();
+
+                            }
+                        });
+            }
+        });*/
     }
 
     @Override
@@ -368,7 +380,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
         commonRequestModel.setEvent(AppConstants.GET_TSU_DETAILS);
         commonRequestModel.setUserName(new PrefManager(context).getUserName());
 
-        new NetworkingHelper(new GetTSUDetailsRequest((Activity) context, true,
+        new NetworkingHelper(new GetKitDetailsRequest((Activity) context, true,
                 commonRequestModel)) {
 
             @Override
@@ -394,7 +406,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
                                 //getAllStudyID();
 
-                                TSUDetailsAdapter customAdapter = new TSUDetailsAdapter(context, getKitDetailsResponse.getTSUList(), listStudy, recyclerView);
+                                TSUArchiveDetailsAdapter customAdapter = new TSUArchiveDetailsAdapter(context, getKitDetailsResponse.getTSUList(), listStudy, recyclerView);
                                 recyclerView.setAdapter(customAdapter);
 
 
@@ -440,6 +452,9 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+         /*   case R.id.btnSubmit:
+                submitDetails();
+                break;*/
 
             case R.id.btnEntryDate:
                 setEntryDate();
@@ -467,7 +482,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
                 // Close dialog
                 dialog.dismiss();
 
-                submitDetails(tsuList.getId());
+                //submitDetails();
             }
         });
 
@@ -644,7 +659,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
 
 
-    private void submitDetails(int id) {
+    private void submitDetails() {
 
         if(edtSiteNo.getText().toString().trim().length() >0) {
 
@@ -694,8 +709,8 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
                                     spnTransportLabel.getSelectedItem().toString().trim(),
                                     edtCentrifugeProg.getText().toString().trim(),
                                     spnLabUse.getSelectedItem().toString().trim(),
-                                    txtEntryDate.getText().toString().trim(),
-                                    id);
+                                    txtEntryDate.getText().toString().trim()
+                            );
 
                         }else {
                             Toast.makeText(context,"Please select Entry Date" , Toast.LENGTH_SHORT).show();
@@ -727,9 +742,9 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
                                String tubeColor, String tubeVolume, String aliquotColor, String aliquotVol,
                                String aliquotExtNo, String spnDiscardTubeColor, String discardTubeVol,
                                String spnTestName, String spnCollectionLabel, String spnTransportLabel,
-                               String centriProg, String strLabUse, String txtEntryDate, int id) {
+                               String centriProg, String strLabUse, String txtEntryDate) {
 
-        ModifyTSUDetailsRequestModel tsuRequestModel = new ModifyTSUDetailsRequestModel();
+        AddTSURequestModel tsuRequestModel = new AddTSURequestModel();
         tsuRequestModel.setAppName(AppConstants.APP_NAME);
         tsuRequestModel.setVersionNumber(AppConstants.APP_VERSION);
         tsuRequestModel.setDeviceType(AppConstants.APP_OS);
@@ -738,7 +753,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
         tsuRequestModel.setUserRole(new PrefManager(context).getUserRoleType());
         tsuRequestModel.setUserName(new PrefManager(context).getUserName());
         tsuRequestModel.setTagId(new PrefManager(context).getBarCodeValue());
-        tsuRequestModel.setEvent(AppConstants.MODIFY_TSU);
+        tsuRequestModel.setEvent(AppConstants.ADD_TSU);
 
         tsuRequestModel.setVisit(visit);
         // tsuRequestModel.setStudyName(strStudyName);
@@ -770,9 +785,8 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
         tsuRequestModel.setTransportLable(spnTransportLabel);
         tsuRequestModel.setCentrifugeProg(centriProg);
         tsuRequestModel.setLabUse(strLabUse);
-        tsuRequestModel.setId(id);
 
-        new NetworkingHelper(new ModifyTSURequest((Activity) context, true, tsuRequestModel)) {
+        new NetworkingHelper(new AddTSURequest((Activity) context, true, tsuRequestModel)) {
 
             @Override
             public void serverResponseFromApi(ApiResponse serverResponse) {
@@ -787,17 +801,14 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
                             if(commonResponse.getResponse().get(0).isStatus()){
 
-                                Logger.logError("modifyTSU API success " +
+                                Logger.logError("addTSU API success " +
                                         commonResponse.getResponse().get(0).isStatus());
-                                Logger.logError("modifyTSU API success " +
+                                Logger.logError("addTSU API success " +
                                         commonResponse.getResponse().get(0).getMessage());
-
-                                Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
-                                callGetTSUDetailsAPI();
 
                                 // Utils.showAlertDialog(context,  commonResponse.getResponse().get(0).getMessage());
 
-                              /*  AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+                                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
                                 // ...Irrelevant code for customizing the buttons and title
                                 LayoutInflater inflater = ((Activity) context).getParent().getLayoutInflater();
                                 View dialogView = inflater.inflate(R.layout.alert_dialog_with_one_button, null);
@@ -823,14 +834,14 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
                                 edtSiteNo.setText("");
                                 edtCohortNo.setText("");
                                 edtTimepoint.setText("");
-                                edtTubeVolume.setText("");*/
+                                edtTubeVolume.setText("");
                                 //txtEntryDate.setText("");
 
                             }else {
 
-                                Logger.logError("modifyTSU API Failure " +
+                                Logger.logError("addTSU API Failure " +
                                         commonResponse.getResponse().get(0).isStatus());
-                                Logger.logError("modifyTSU API Failure " +
+                                Logger.logError("addTSU API Failure " +
                                         commonResponse.getResponse().get(0).getMessage());
 
                                 Utils.showAlertDialog((Activity)context,  commonResponse.getResponse().get(0).getMessage());
@@ -845,11 +856,11 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
                     }
                     catch (Exception e){
-                        Logger.logError("modifyTSU Exception " + e.getMessage());
+                        Logger.logError("Exception " + e.getMessage());
                     }
 
                 } else {
-                    Logger.logError("modifyTSU API Failure " +
+                    Logger.logError("addTSU API Failure " +
                             serverResponse.errorMessageToDisplay);
                 }
             }

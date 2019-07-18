@@ -291,6 +291,8 @@
     <string name="txt_tube_quantity">Tube Quantity</string>
     <string name="txt_extension_number">Ext No</string>
     <string name="txt_centrifuge_programme">Centrifuge Programme</string>
+    <string name="txt_duplicate">DUPLICATE</string>
+    <string name="modify">MODIFY</string>
 
 
 </resources>

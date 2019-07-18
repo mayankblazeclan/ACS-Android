@@ -40,9 +40,13 @@ import com.hrfid.acs.helpers.request.AddTSURequest;
 import com.hrfid.acs.helpers.request.AddTSURequestModel;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
+import com.hrfid.acs.helpers.request.GetTSUParamRequest;
 import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList;
+import com.hrfid.acs.helpers.serverResponses.models.GetKitDetails.KitList;
+import com.hrfid.acs.helpers.serverResponses.models.GetTSUParams.GetTSUParamsResponse;
+import com.hrfid.acs.helpers.serverResponses.models.GetTSUParams.Kit;
 import com.hrfid.acs.util.AppConstants;
 import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
@@ -61,6 +65,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by MS on 2019-06-04.
@@ -68,40 +74,10 @@ import java.util.List;
 public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     private static final String TAG = "AddTSU_Details";
-
-/*    String[] sNumber = {"0", "1","2","3", "4", "5", "6", "7", "8", "9", "10"};
-
-    private Button btnGenerateBarcode;
-
-    private String message = "";
-    private ImageView imageView;
-    // private TextView txt_start_date;
-
-    private String startDate ="";
-    private String endDate = "";
-    private  Spinner spnCentral, spnAliquot;
-    private Button btnReplicate;
-    private RadioButton rbSample, rbAliquot, rbBoth;
-    private LinearLayout llLocal, llCentral, llAliquot;*/
-
-    // private TextView txtStartDate, txtEndDate;
     private  List<StudyList> listStudy = new ArrayList<>();
-
-  /*
-
-    private RadioGroup radioAdditionalKITtype;
-    private RadioButton radioButtonAdditionalKitTYPE;
-    private RadioGroup radioGroupCategory;
-    private RadioButton radioButtonCategory;
-    private RadioGroup radioGroupReqForm;
-    private RadioButton radioButtonReqForm;
-    private EditText editTextKIT_ID;
-    private EditText editTextAccessionNumber;
-    private EditText editTextVISIT;*/
-
     String[] sNumberValue = {"ABC","DBABC","ADDABC","TAABC","OPABC","0", "1","2","3", "4", "5", "6", "7", "8", "9", "10"};
     private String strKitName;
-    private String strKitTitle;
+    private String strKitRecId;
     private String spnSelectedKitID ="";
 
     private String strStudyName;
@@ -120,7 +96,7 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
     private Spinner spnCollectionLabel;
     private Spinner spnTransportLabel;
     private Spinner spnLabUse;
-    private EditText edtVisit;
+    private TextView edtVisit;
     private EditText edtSiteNo;
     private EditText edtCohortNo;
     private EditText edtTimepoint;
@@ -136,7 +112,18 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
     private ImageButton btnEntryDate;
     private TextView txtEntryDate;
     private Button btnSubmit;
+    private List kitListFetchedParam = null;
+    private List kitVisitListFetchedParam = null;
+    private List listPrimaryInvestigator = null;
+    private List listTubeColor = null;
+    private List listAliquotTubeColor = null;
+    private List listDiscardTubeColor = null;
 
+    private List listTestName = null;
+    private List listCollectionTube = null;
+    private List listTransportTube = null;
+    private List listLabUse = null;
+    private List <Kit>listKitList = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -204,25 +191,26 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
         btnEntryDate=  v.findViewById(R.id.btnEntryDate);
         btnEntryDate.setOnClickListener(this);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_item, sNumberValue);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnKitLabel.setAdapter(adapter);
-        spnPrimaryInvestigator.setAdapter(adapter);
+       // ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+       //         android.R.layout.simple_spinner_item, sNumberValue);
+       // adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        spnTubeColor.setAdapter(adapter);
-        spnAliquotTubeColor.setAdapter(adapter);
 
-        spnDiscardTubeColor.setAdapter(adapter);
-        spnCollectionLabel.setAdapter(adapter);
-        spnTransportLabel.setAdapter(adapter);
-        spnTestName.setAdapter(adapter);
-        spnLabUse.setAdapter(adapter);
+        //spnKitLabel.setAdapter(adapter);
+        //spnPrimaryInvestigator.setAdapter(adapter);
+
+        //spnTubeColor.setAdapter(adapter);
+        ///spnAliquotTubeColor.setAdapter(adapter);
+
+        //spnDiscardTubeColor.setAdapter(adapter);
+        //spnCollectionLabel.setAdapter(adapter);
+        //spnTransportLabel.setAdapter(adapter);
+        //spnTestName.setAdapter(adapter);
+        //spnLabUse.setAdapter(adapter);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        //  Toast.makeText(getContext(),spnBloodGroup[position] , Toast.LENGTH_SHORT).show();
 
         // TODO Auto-generated method stub
         switch(parent.getId()){
@@ -233,10 +221,19 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                 strStudyName = String.valueOf(listStudy.get(position).getStudyId());
                 strStudyTitle = listStudy.get(position).getLabel();
                 //Toast.makeText(getContext(), parent.getSelectedItem().toString() , Toast.LENGTH_SHORT).show();
+                getTSUParams(spnSelectedStudyID);
                 break;
 
             case R.id.spnPrimaryInvestigator :
 
+                break;
+
+            case R.id.spnKitLabel :
+                if(kitVisitListFetchedParam!=null) {
+                    edtVisit.setText(kitVisitListFetchedParam.get(position).toString());
+                    strKitName = String.valueOf(listKitList.get(position).getKitId());
+                    strKitRecId = String.valueOf(listKitList.get(position).getId());
+                }
                 break;
 
             //TubeColor
@@ -412,7 +409,7 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                                     strStudyTitle,
                                     spnSelectedKitID,
                                     strKitName,
-                                    strKitTitle,
+                                    strKitRecId,
                                     edtVisit.getText().toString().trim(),
                                     edtSiteNo.getText().toString().trim(),
                                     edtCohortNo.getText().toString().trim(),
@@ -434,31 +431,6 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                                     txtEntryDate.getText().toString().trim()
                             );
 
-                           /* callAddKITdetailsAPI(editTextKIT_ID.getText().toString(),
-                                    editTextAccessionNumber.getText().toString(),
-                                    editTextVISIT.getText().toString(),
-                                    radioButtonKitTYPE.getText().toString().trim(),
-                                    radioButtonAdditionalKitTYPE.getText().toString().trim(),
-                                    radioButtonCategory.getText().toString().trim(),
-                                    radioButtonReqForm.getText().toString().trim(),
-                                    txtStartDate.getText().toString(),
-                                    txtEndDate.getText().toString(),
-                                    spnTransportLabel.getSelectedItem().toString(),
-                                    spnCentral.getSelectedItem().toString(),
-                                    spnAliquot.getSelectedItem().toString(),
-                                    spnSelectedStudyID,
-                                    strStudyName,
-                                    strStudyTitle);*/
-                            //  }
-
-                        /*}else {
-
-                            Toast.makeText(getActivity(),"Kit Expiry Date cannot be earlier than Kit Scan Date" , Toast.LENGTH_SHORT).show();
-                        }*/
-/*
-                    }else {
-                        Toast.makeText(getContext(),"Please Select Expiry Date" , Toast.LENGTH_SHORT).show();
-                    }*/
                         }else {
                             Toast.makeText(getContext(),"Please select Entry Date" , Toast.LENGTH_SHORT).show();
                         }
@@ -482,7 +454,7 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
 
     //Call callAddTSUapi API
     private void callAddTSUapi(String spnSelectedStudyID, String studyName, String studyTitle,
-                               String spnSelectedKitID, String strKitName, String strKitTitle,
+                               String spnSelectedKitID, String strKitName, String strKitRecId,
                                String visit, String siteNo, String cohortNo,
                                String prim_investegator, String strTimePoint, String rbTypeValue,
                                String tubeColor, String tubeVolume, String aliquotColor, String aliquotVol,
@@ -502,12 +474,12 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
         tsuRequestModel.setEvent(AppConstants.ADD_TSU);
 
         tsuRequestModel.setVisit(visit);
-       // tsuRequestModel.setStudyName(strStudyName);
-        tsuRequestModel.setStudyName("SST");
-        tsuRequestModel.setKitId("SsT");
-       // tsuRequestModel.setStudyId(Integer.valueOf(spnSelectedStudyID));
-        tsuRequestModel.setStudyId(4);
-        tsuRequestModel.setKitRecId(24);
+         tsuRequestModel.setStudyName(strStudyName);
+        //tsuRequestModel.setStudyName("SST");
+        tsuRequestModel.setKitId(strKitName);
+        tsuRequestModel.setStudyId(Integer.valueOf(spnSelectedStudyID));
+        //tsuRequestModel.setStudyId(4);
+        tsuRequestModel.setKitRecId(Integer.valueOf(strKitRecId));
         if(rbTypeValue.equalsIgnoreCase("Blood")) {
             tsuRequestModel.setTubeType(1);
         }else {
@@ -690,6 +662,207 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
             }
         };
 
+    }
+
+
+    private void getTSUParams(String studyId){
+
+        new NetworkingHelper(new GetTSUParamRequest(getActivity(), true, studyId)) {
+
+            @Override
+            public void serverResponseFromApi(ApiResponse serverResponse) {
+                if (serverResponse.isSucess) {
+
+                    try {
+
+                        GetTSUParamsResponse getTSUParamsResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, GetTSUParamsResponse.class);
+
+                        if (getTSUParamsResponse.getStatus().getCODE() == 200) {
+
+                            if(getTSUParamsResponse.getResponse().getKits().size() > 0){
+
+                                Logger.logError("GetTSU PARAM API success " +
+                                        getTSUParamsResponse.getResponse().getKits().size());
+                                Logger.logError("GetTSU PARAM API success " +
+                                        getTSUParamsResponse.getResponse().getKits());
+
+
+                                kitListFetchedParam = new ArrayList();
+                                kitVisitListFetchedParam = new ArrayList();
+                                listPrimaryInvestigator = new ArrayList();
+                                listTubeColor = new ArrayList();
+                                listDiscardTubeColor = new ArrayList();
+                                listAliquotTubeColor = new ArrayList();
+
+                                listTestName = new ArrayList();
+                                listCollectionTube = new ArrayList();
+                                listTransportTube = new ArrayList();
+                                listLabUse = new ArrayList();
+                                listKitList = new ArrayList();
+
+
+                                listKitList = getTSUParamsResponse.getResponse().getKits();
+
+                                for (int i = 0; i < getTSUParamsResponse.getResponse().getKits().size(); i++) {
+
+                                    kitListFetchedParam.add(getTSUParamsResponse.getResponse().getKits().get(i).getKitId());
+                                    kitVisitListFetchedParam.add(getTSUParamsResponse.getResponse().getKits().get(i).getVisit());
+
+                                }
+
+                                if(kitVisitListFetchedParam !=null) {
+                                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                                            android.R.layout.simple_spinner_item, kitListFetchedParam);
+                                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnKitLabel.setAdapter(adapter);
+                                }
+
+
+                                //For Primary Investigator
+                                //========================
+                                for (int i = 0; i < getTSUParamsResponse.getResponse().getPI().size(); i++) {
+
+                                    listPrimaryInvestigator.add(getTSUParamsResponse.getResponse().getPI().get(i).getValue());
+                                }
+
+                                if(listPrimaryInvestigator!=null) {
+                                    ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(),
+                                            android.R.layout.simple_spinner_item, listPrimaryInvestigator);
+                                    adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnPrimaryInvestigator.setAdapter(adapter1);
+                                }
+
+                                //For TubeColor
+                                //========================
+                                for (int i = 0; i < getTSUParamsResponse.getResponse().getTubeColor().size(); i++) {
+
+                                    listTubeColor.add(getTSUParamsResponse.getResponse().getTubeColor().get(i).getValue());
+                                }
+
+                                if(listTubeColor!=null) {
+                                    ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActivity(),
+                                            android.R.layout.simple_spinner_item, listTubeColor);
+                                    adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnTubeColor.setAdapter(adapter2);
+                                }
+
+
+                                //For DiscardTubeColor
+                                //========================
+                                for (int i = 0; i < getTSUParamsResponse.getResponse().getDiscardTubeColor().size(); i++) {
+                                    listDiscardTubeColor.add(getTSUParamsResponse.getResponse().getDiscardTubeColor().get(i).getValue());
+                                }
+
+                                if(listDiscardTubeColor!=null) {
+                                    ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(),
+                                            android.R.layout.simple_spinner_item, listDiscardTubeColor);
+                                    adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnDiscardTubeColor.setAdapter(adapter1);
+                                }
+
+                                //For AliquotTubeColor
+                                //========================
+                                for (int i = 0; i < getTSUParamsResponse.getResponse().getAliquotTubeColor().size(); i++) {
+                                    listAliquotTubeColor.add(getTSUParamsResponse.getResponse().getAliquotTubeColor().get(i).getValue());
+                                }
+
+                                if(listAliquotTubeColor!=null) {
+                                    ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(getActivity(),
+                                            android.R.layout.simple_spinner_item, listAliquotTubeColor);
+                                    adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnAliquotTubeColor.setAdapter(adapter3);
+                                }
+
+
+                                //For TestName
+                                //========================
+                                for (int i = 0; i < getTSUParamsResponse.getResponse().getTestName().size(); i++) {
+
+                                    listTestName.add(getTSUParamsResponse.getResponse().getTestName().get(i).getValue());
+                                }
+
+                                if(listTestName!=null) {
+                                    ArrayAdapter<String> adapter4 = new ArrayAdapter<String>(getActivity(),
+                                            android.R.layout.simple_spinner_item, listTestName);
+                                    adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnTestName.setAdapter(adapter4);
+                                }
+
+                                //For CollectionLable
+                                //========================
+                                for (int i = 0; i < getTSUParamsResponse.getResponse().getCollectionLable().size(); i++) {
+
+                                    listCollectionTube.add(getTSUParamsResponse.getResponse().getCollectionLable().get(i).getValue());
+                                }
+
+                                if(listCollectionTube!=null) {
+                                    ArrayAdapter<String> adapter5 = new ArrayAdapter<String>(getActivity(),
+                                            android.R.layout.simple_spinner_item, listCollectionTube);
+                                    adapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnCollectionLabel.setAdapter(adapter5);
+                                }
+
+
+                                //For TransportLable
+                                //========================
+                                for (int i = 0; i < getTSUParamsResponse.getResponse().getTransportLable().size(); i++) {
+
+                                    listTransportTube.add(getTSUParamsResponse.getResponse().getTransportLable().get(i).getValue());
+                                }
+
+                                if(listTransportTube!=null) {
+                                    ArrayAdapter<String> adapter6 = new ArrayAdapter<String>(getActivity(),
+                                            android.R.layout.simple_spinner_item, listTransportTube);
+                                    adapter6.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnTransportLabel.setAdapter(adapter6);
+                                }
+
+
+                                //For LAB USE
+                                //========================
+                                for (int i = 0; i < getTSUParamsResponse.getResponse().getLabUse().size(); i++) {
+
+                                    listLabUse.add(getTSUParamsResponse.getResponse().getLabUse().get(i).getValue());
+                                }
+
+                                if(listLabUse!=null) {
+                                    ArrayAdapter<String> adapter7 = new ArrayAdapter<String>(getActivity(),
+                                            android.R.layout.simple_spinner_item, listLabUse);
+                                    adapter7.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnLabUse.setAdapter(adapter7);
+                                }
+
+
+
+                            }else {
+
+                              /*  Logger.logError("GetTSU PARAM API Failure " +
+                                        getTSUParamsResponse.getResponse().getKits());
+                                Logger.logError("GetTSU PARAM API Failure " +
+                                        getTSUParamsResponse.getResponse().getKits());*/
+
+                                Utils.showAlertDialog(getActivity(),  getTSUParamsResponse.getStatus().getMSG());
+                            }
+
+                        }else {
+
+                            Utils.showAlertDialog(getActivity(),  getTSUParamsResponse.getStatus().getMSG());
+                        }
+
+
+
+                    }
+                    catch (Exception e){
+                        Logger.logError("Exception " + e.getMessage());
+                    }
+
+                } else {
+                    Logger.logError("GetTSU PARAM API Failure " +
+                            serverResponse.errorMessageToDisplay);
+                }
+            }
+        };
     }
 
 }

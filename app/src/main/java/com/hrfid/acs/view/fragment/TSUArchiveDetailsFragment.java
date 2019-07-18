@@ -17,11 +17,9 @@ import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
-import com.hrfid.acs.helpers.request.GetKitDetailsRequest;
 import com.hrfid.acs.helpers.request.GetTSUDetailsRequest;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList;
-import com.hrfid.acs.helpers.serverResponses.models.GetKitDetails.GetKitDetailsResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetTSUDetails.GetTSUDetailsResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetTSUDetails.TSUList;
 import com.hrfid.acs.util.AppConstants;
@@ -29,7 +27,6 @@ import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
-import com.hrfid.acs.view.adapter.KitDetailsAdapter;
 import com.hrfid.acs.view.adapter.TSUArchiveDetailsAdapter;
 import com.hrfid.acs.view.adapter.TSUDetailsAdapter;
 
@@ -39,14 +36,14 @@ import java.util.List;
 /**
  * Created by MS on 2019-05-30.
  */
-public class TSUDetailsFragment extends Fragment {
+public class TSUArchiveDetailsFragment extends Fragment {
 
     private LinearLayout linearLayout;
     private TextView textView;
     private  RecyclerView recyclerView;
     private  List<Integer> listGetStudyList = new ArrayList<>();
     private  List<StudyList> listStudy = new ArrayList<>();
-    private  List<TSUList> tsuLists = null;
+    private List<TSUList> tsuListsArchive = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -104,8 +101,7 @@ public class TSUDetailsFragment extends Fragment {
 
                             if(getKitDetailsResponse.getTSUList().size() > 0){
 
-                               // linearLayout.setVisibility(View.VISIBLE);
-                                //textView.setVisibility(View.GONE);
+
 
                                 Logger.logError("getTSUList API success status " +
                                         getKitDetailsResponse.getStatus());
@@ -114,31 +110,28 @@ public class TSUDetailsFragment extends Fragment {
 
                                 getAllStudyID();
 
-                                //TSUDetailsAdapter customAdapter = new TSUDetailsAdapter(getContext(), getKitDetailsResponse.getTSUList(), listStudy, recyclerView);
-                                //recyclerView.setAdapter(customAdapter);
 
+                                tsuListsArchive = new ArrayList<>();
 
-                                tsuLists = new ArrayList<>();
                                 for (int i = 0; i < getKitDetailsResponse.getTSUList().size(); i++) {
 
-                                    if(getKitDetailsResponse.getTSUList().get(i).getIsArchived() ==0) {
-                                        tsuLists.add(getKitDetailsResponse.getTSUList().get(i));
+                                    if(getKitDetailsResponse.getTSUList().get(i).getIsArchived() ==1) {
+                                        tsuListsArchive.add(getKitDetailsResponse.getTSUList().get(i));
                                     }
                                 }
 
 
-                                if(tsuLists !=null && tsuLists.size() > 0) {
+                                if(tsuListsArchive !=null && tsuListsArchive.size() > 0) {
                                     linearLayout.setVisibility(View.VISIBLE);
                                     textView.setVisibility(View.GONE);
 
-                                    TSUDetailsAdapter tsuDetailsAdapter = new TSUDetailsAdapter(getContext(), tsuLists, listStudy, recyclerView);
-                                    recyclerView.setAdapter(tsuDetailsAdapter);
+                                    TSUArchiveDetailsAdapter customAdapter = new TSUArchiveDetailsAdapter(getContext(), tsuListsArchive, listStudy, recyclerView);
+                                    recyclerView.setAdapter(customAdapter);
                                 }else {
 
                                     linearLayout.setVisibility(View.GONE);
                                     textView.setVisibility(View.VISIBLE);
                                 }
-
 
 
                             }else {

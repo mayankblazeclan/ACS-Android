@@ -39,8 +39,6 @@ public class TSUSetupActivity extends BaseActivity {
 
     private static final String TAG = "TSUSetupActivity";
     ViewPager viewPager;
-    //SearchView searchView;
-    //MenuItem searchViewItem;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,11 +64,11 @@ public class TSUSetupActivity extends BaseActivity {
     }
 
     private void initializeUI() {
-
         //Tab Layout for Tabs
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Add TSU"));
         tabLayout.addTab(tabLayout.newTab().setText("TSU Details"));
+        tabLayout.addTab(tabLayout.newTab().setText("ARCHIVED TSU Details"));
         tabLayout.setTabTextColors(    ContextCompat.getColor(this, R.color.black),
                 ContextCompat.getColor(this, R.color.white));
         //tabLayout.addTab(tabLayout.newTab().setText("Contact"));
@@ -88,11 +86,7 @@ public class TSUSetupActivity extends BaseActivity {
                             Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
 
-                   // searchView.setVisibility(View.VISIBLE);
-                  //  searchViewItem.setVisible(true);
                 }else {
-                  //  searchView.setVisibility(View.INVISIBLE);
-                  //  searchViewItem.setVisible(false);
                 }
 
             }
@@ -102,11 +96,7 @@ public class TSUSetupActivity extends BaseActivity {
                     final InputMethodManager imm = (InputMethodManager)getSystemService(
                             Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
-                  //  searchView.setVisibility(View.VISIBLE);
-                   // searchViewItem.setVisible(true);
                 }else {
-                   // searchView.setVisibility(View.INVISIBLE);
-                   // searchViewItem.setVisible(false);
                 }
 
             }
@@ -116,11 +106,7 @@ public class TSUSetupActivity extends BaseActivity {
                     final InputMethodManager imm = (InputMethodManager)getSystemService(
                             Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
-                   // searchView.setVisibility(View.VISIBLE);
-                   // searchViewItem.setVisible(true);
                 }else {
-                  //  searchView.setVisibility(View.INVISIBLE);
-                  //  searchViewItem.setVisible(false);
                 }
 
             }
@@ -131,16 +117,13 @@ public class TSUSetupActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.menu_with_search_logout, menu);
+        getMenuInflater().inflate(R.menu.menu_with_logout_only, menu);
         return true;
     }
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         //Logout Functionality
         if (id == R.id.action_logout) {
@@ -157,13 +140,6 @@ public class TSUSetupActivity extends BaseActivity {
 
                 }
             }, null);
-            return true;
-        }
-
-        if (id == R.id.app_bar_search) {
-            //Toast.makeText(SeniorStaffHomeActivity.this, "Logout tapped", Toast.LENGTH_LONG).show();
-            Intent mNextActivity = new Intent(TSUSetupActivity.this, SearchKitActivity.class);
-            startActivity(mNextActivity);
             return true;
         }
 
