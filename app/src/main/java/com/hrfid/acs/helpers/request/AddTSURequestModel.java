@@ -50,7 +50,7 @@ public class AddTSURequestModel {
     private int kitRecId;
     @SerializedName("tubeType")
     @Expose
-    private int tubeType;
+    private String tubeType;
     @SerializedName("isDuplicate")
     @Expose
     private int isDuplicate;
@@ -218,11 +218,11 @@ public class AddTSURequestModel {
         this.kitRecId = kitRecId;
     }
 
-    public int getTubeType() {
+    public String getTubeType() {
         return tubeType;
     }
 
-    public void setTubeType(int tubeType) {
+    public void setTubeType(String tubeType) {
         this.tubeType = tubeType;
     }
 

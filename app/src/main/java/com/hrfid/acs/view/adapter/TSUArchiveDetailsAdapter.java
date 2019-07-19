@@ -154,7 +154,7 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
             super(itemView);
             // get the reference of item view's
             //txtKitId = (TextView) itemView.findViewById(R.id.txtKitId);
-           // txtStudyName = (TextView) itemView.findViewById(R.id.txtStudyName);
+            // txtStudyName = (TextView) itemView.findViewById(R.id.txtStudyName);
             txtVisit = (TextView) itemView.findViewById(R.id.txtVisit);
             txtSiteNo = itemView.findViewById(R.id.txtSiteNo);
             txtTimepoint = (TextView) itemView.findViewById(R.id.txtTimepoint);
@@ -189,41 +189,56 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         // set the data in items
 
-            holder.linearLayout.setVisibility(View.GONE);
-            //holder.txtKitId.setText(tsuLists.get(position).getKitId().trim());
-            holder.textViewHeading.setText("STUDY NAME (ID) : " + "" + tsuLists.get(position).getStudyTitle() + "(" + tsuLists.get(position).getStudyName() + ")" + "  KIT NAME/ID : " + tsuLists.get(position).getKitId());
-            holder.textViewHeading.setSelected(true);
+        holder.linearLayout.setVisibility(View.GONE);
+        //holder.txtKitId.setText(tsuLists.get(position).getKitId().trim());
+        holder.textViewHeading.setText("STUDY NAME (ID) : " + "" + tsuLists.get(position).getStudyTitle() + "(" + tsuLists.get(position).getStudyName() + ")" + "  KIT NAME/ID : " + tsuLists.get(position).getKitId());
+        holder.textViewHeading.setSelected(true);
 //        holder.txtStudyName.setText("" + tsuLists.get(position).getStudyTitle()+ "("+ tsuLists.get(position).getStudyName()+")");
-            holder.txtVisit.setText(tsuLists.get(position).getVisit().trim());
-            holder.txtVisit.setSelected(true);
+        holder.txtVisit.setText(tsuLists.get(position).getVisit().trim());
+        holder.txtVisit.setSelected(true);
+        holder.txtTubetype.setText(tsuLists.get(position).getTubeType().trim());
 
-            if (tsuLists.get(position).getTubeType() == 1) {
+           /* if (tsuLists.get(position).getTubeType() == 1) {
                 holder.txtTubetype.setText("BLOOD");
             } else {
                 holder.txtTubetype.setText("URINE");
+            }*/
+        //holder.txtCohortNo.setText(tsuLists.get(position).getStatus().trim());
+
+        holder.txtSiteNo.setText("" + tsuLists.get(position).getSiteNo());
+        holder.txtCohortNo.setText(tsuLists.get(position).getCohortNo());
+        holder.txtPrimartInvestigator.setText(tsuLists.get(position).getPrimaryInvestigator());
+        holder.txtTimepoint.setText(tsuLists.get(position).getTimepoint());
+        holder.txtDiscardTubeColor.setText(tsuLists.get(position).getDiscardTubeColor());
+        holder.txtDiscardTubeVolume.setText(tsuLists.get(position).getDiscardTubeVolume());
+        holder.txtCollectionLabel.setText("" + tsuLists.get(position).getCollectionLable());
+        holder.txtTestName.setText("" + tsuLists.get(position).getTestName());
+        //holder.txtEntryDate.setText(""+ tsuLists.get(position).get());
+
+        holder.txtTubeColor.setText("" + tsuLists.get(position).getTubeColor());
+        if(tsuLists.get(position).getTubeVolume()!=null) {
+            if (!tsuLists.get(position).getTubeVolume().equalsIgnoreCase("0")) {
+                holder.txtTubeVol.setText("" + tsuLists.get(position).getTubeVolume());
+            } else {
+                holder.txtTubeVol.setText("-");
             }
-            //holder.txtCohortNo.setText(tsuLists.get(position).getStatus().trim());
+        }
+        holder.txtAliquotTubeColor.setText("" + tsuLists.get(position).getAliquotColorTube());
 
-            holder.txtSiteNo.setText("" + tsuLists.get(position).getSiteNo());
-            holder.txtCohortNo.setText(tsuLists.get(position).getCohortNo());
-            holder.txtPrimartInvestigator.setText(tsuLists.get(position).getPrimaryInvestigator());
-            holder.txtTimepoint.setText(tsuLists.get(position).getTimepoint());
-            holder.txtDiscardTubeColor.setText(tsuLists.get(position).getDiscardTubeColor());
-            holder.txtDiscardTubeVolume.setText(tsuLists.get(position).getDiscardTubeVolume());
-            holder.txtCollectionLabel.setText("" + tsuLists.get(position).getCollectionLable());
-            holder.txtTestName.setText("" + tsuLists.get(position).getTestName());
-            //holder.txtEntryDate.setText(""+ tsuLists.get(position).get());
-
-            holder.txtTubeColor.setText("" + tsuLists.get(position).getTubeColor());
-            holder.txtTubeVol.setText("" + tsuLists.get(position).getTubeVolume());
-            holder.txtAliquotTubeColor.setText("" + tsuLists.get(position).getAliquotColorTube());
-            holder.txtAliquotTubeVol.setText("" + tsuLists.get(position).getAliquotVolume());
-            holder.txtAliquotTubeExt.setText("" + tsuLists.get(position).getAliquotExtNo());
-            holder.txtCentrifugeProg.setText("" + tsuLists.get(position).getCentrifugeProg());
-            holder.txtLabUse.setText("" + tsuLists.get(position).getLabUse());
-            holder.txtEntryDate.setText
-                    (Utilities.splitDateFromDesired(tsuLists.get(position).getEntry_date()));
-            holder.btnModify.setVisibility(View.GONE);
+        if(tsuLists.get(position).getAliquotVolume()!=null) {
+            if (!tsuLists.get(position).getAliquotVolume().equalsIgnoreCase("0")) {
+                holder.txtAliquotTubeVol.setText("" + tsuLists.get(position).getAliquotVolume());
+            } else {
+                holder.txtAliquotTubeVol.setText("-");
+            }
+        }
+        //holder.txtAliquotTubeVol.setText("" + tsuLists.get(position).getAliquotVolume());
+        holder.txtAliquotTubeExt.setText("" + tsuLists.get(position).getAliquotExtNo());
+        holder.txtCentrifugeProg.setText("" + tsuLists.get(position).getCentrifugeProg());
+        holder.txtLabUse.setText("" + tsuLists.get(position).getLabUse());
+        holder.txtEntryDate.setText
+                (Utilities.splitDateFromDesired(tsuLists.get(position).getEntry_date()));
+        holder.btnModify.setVisibility(View.GONE);
 
 
         /*holder.btnModify.setOnClickListener(new View.OnClickListener() {
@@ -240,7 +255,7 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
             @Override
             public void onClick(View v) {
 
-               // showDismissKitDialog(tsuLists.get(position));
+                // showDismissKitDialog(tsuLists.get(position));
             }
         });
 
@@ -503,7 +518,7 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
     private void initViews(Dialog v, TSUList tsuList, List<StudyList> lists) {
 
         spnStudyLabel = (TextView) v.findViewById(R.id.spnStatusId);
-       // spnStudyLabel.setOnItemSelectedListener(this);
+        // spnStudyLabel.setOnItemSelectedListener(this);
         spnStudyLabel.setText(tsuList.getStudyTitle()+ "("+ tsuList.getStudyName()+")");
 
         spnKitLabel = (Spinner) v.findViewById(R.id.spnKitLabel);
@@ -564,11 +579,11 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
         radioButtonTubeTypeBlood=(RadioButton) v.findViewById(R.id.rBlood);
         radioButtonTubeTypeUrine=(RadioButton) v.findViewById(R.id.rUrine);
 
-        if(tsuList.getTubeType() ==1){
+       /* if(tsuList.getTubeType() ==1){
             radioButtonTubeTypeBlood.setChecked(true);
         }else {
             radioButtonTubeTypeUrine.setChecked(true);
-        }
+        }*/
 
         txtEntryDate = v.findViewById(R.id.txt_entry_date);
         txtEntryDate.setText(tsuList.getEntry_date());
@@ -659,7 +674,7 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
 
 
 
-    private void submitDetails() {
+/*    private void submitDetails() {
 
         if(edtSiteNo.getText().toString().trim().length() >0) {
 
@@ -731,10 +746,10 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
             Toast.makeText(context,"Please enter Site Number" , Toast.LENGTH_SHORT).show();
         }
 
-    }
+    }*/
 
 
-    //Call callAddTSUapi API
+    /*//Call callAddTSUapi API
     private void callModifyTSUapi(String spnSelectedStudyID, String studyName, String studyTitle,
                                String spnSelectedKitID, String strKitName, String strKitTitle,
                                String visit, String siteNo, String cohortNo,
@@ -867,7 +882,7 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
         };
 
     }
-
+*/
 
 
 

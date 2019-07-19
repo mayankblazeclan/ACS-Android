@@ -1,5 +1,5 @@
 
-package com.hrfid.acs.helpers.serverResponses.models.GetTSUParams;
+package com.hrfid.acs.helpers.serverResponses.models.GetKitListForTSU;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

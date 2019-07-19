@@ -53,7 +53,9 @@ public class Utilities {
 
     private static int size = 660;
     private static int size_width = 660;
-    private static int size_height = 264;
+    private static int size_height = 220;
+    private static int big_size_width = 1800;
+    private static int big_size_height = 164;
 
     public static boolean isNetworkConnected(Context cmgContext) {
         ConnectivityManager cm = (ConnectivityManager) cmgContext
@@ -674,6 +676,44 @@ public class Utilities {
         return bitmap;
     }
 
+    public static Bitmap CreateBigImage(String message, String type) throws WriterException
+    {
+        BitMatrix bitMatrix = null;
+        // BitMatrix bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.QR_CODE, size, size);
+        switch (type)
+        {
+            //case "QR Code": bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.QR_CODE, size, size);break;
+            case "Barcode": bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.CODE_128, big_size_width, big_size_height);break;
+            /*case "Data Matrix": bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.DATA_MATRIX, size, size);break;
+            case "PDF 417": bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.PDF_417, size_width, size_height);break;
+            case "Barcode-39":bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.CODE_39, size_width, size_height);break;
+            case "Barcode-93":bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.CODE_93, size_width, size_height);break;
+            case "AZTEC": bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.AZTEC, size, size);break;*/
+            default: bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.QR_CODE, size, size);break;
+        }
+        int width = bitMatrix.getWidth();
+        int height = bitMatrix.getHeight();
+        int [] pixels = new int [width * height];
+        for (int i = 0 ; i < height ; i++)
+        {
+            for (int j = 0 ; j < width ; j++)
+            {
+                if (bitMatrix.get(j, i))
+                {
+                    pixels[i * width + j] = 0xff000000;
+                }
+                else
+                {
+                    pixels[i * width + j] = 0xffffffff;
+                }
+            }
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+        return bitmap;
+    }
+
 
     public static boolean isValidEmailId(String email){
 
@@ -685,10 +725,13 @@ public class Utilities {
                 + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$").matcher(email).matches();
     }
 
-    public void SetSpinnerSelection(Spinner spinner, String[] array, String text) {
-        for(int i=0;i<array.length;i++) {
-            if(array[i].equals(text)) {
-                spinner.setSelection(i);
+    public static void SetSpinnerSelection(Spinner spinner, List list, String text) {
+
+        if(list !=null) {
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).equals(text)) {
+                    spinner.setSelection(i);
+                }
             }
         }
     }

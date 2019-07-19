@@ -865,25 +865,47 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
                 PrintManager printManager = (PrintManager) getActivity().getSystemService(Context.PRINT_SERVICE);
                 List<ReplicateModel> replicateListQtyc = new ArrayList<>();
 
-                ReplicateModel replicateModel = null;
-                try {
-                    replicateModel = new ReplicateModel(message, Utilities.CreateImage(message, "Barcode"));
-                } catch (WriterException e) {
-                    e.printStackTrace();
-                }
-                replicateListQtyc.add(replicateModel);
-                String jobName = getString(R.string.app_name) +
-                        " Document";
+
 
                 if(rbLabelSize[0].getText().toString().trim().equalsIgnoreCase("0.5 ml tube")){
+
+                    ReplicateModel replicateModel = null;
+                    try {
+                        replicateModel = new ReplicateModel(message, Utilities.CreateImage(message, "Barcode"));
+                    } catch (WriterException e) {
+                        e.printStackTrace();
+                    }
+                    replicateListQtyc.add(replicateModel);
+                    String jobName = getString(R.string.app_name) +
+                            " Document";
 
                     printManager.print(jobName, new PrintAdapter(getActivity(), "4", replicateListQtyc), null);
 
                 }else if(rbLabelSize[0].getText().toString().trim().equalsIgnoreCase("1.5 - 2.0 ml tube")){
 
+                    ReplicateModel replicateModel = null;
+                    try {
+                        replicateModel = new ReplicateModel(message, Utilities.CreateImage(message, "Barcode"));
+                    } catch (WriterException e) {
+                        e.printStackTrace();
+                    }
+                    replicateListQtyc.add(replicateModel);
+                    String jobName = getString(R.string.app_name) +
+                            " Document";
+
                     printManager.print(jobName, new PrintAdapter(getActivity(), "5", replicateListQtyc), null);
 
                 }else {
+
+                    ReplicateModel replicateModel = null;
+                    try {
+                        replicateModel = new ReplicateModel(message, Utilities.CreateBigImage(message, "Barcode"));
+                    } catch (WriterException e) {
+                        e.printStackTrace();
+                    }
+                    replicateListQtyc.add(replicateModel);
+                    String jobName = getString(R.string.app_name) +
+                            " Document";
 
                     printManager.print(jobName, new PrintAdapter(getActivity(), "6", replicateListQtyc), null);
 

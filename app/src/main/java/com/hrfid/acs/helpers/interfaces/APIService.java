@@ -9,6 +9,7 @@ import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.CreateScheduleModel;
 import com.hrfid.acs.helpers.request.CreateScheduleRequest;
 import com.hrfid.acs.helpers.request.DismissKitRequestModel;
+import com.hrfid.acs.helpers.request.GetTSUParamRequest;
 import com.hrfid.acs.helpers.request.IdentifySubjectRequestModel;
 import com.hrfid.acs.helpers.request.LogoutRequest;
 import com.hrfid.acs.helpers.request.MapKitRequestModel;
@@ -149,6 +150,10 @@ public interface APIService {
   //getkitListValues
   @GET("/acs/api/getkitListValues?")
   Call<ResponseBody> getkitListValues(@Query("id") String id);
+
+  //getTSUParamsList
+  @GET("/acs/api/getTSUParamsList")
+  Call<ResponseBody> getTSUParamsList();
 
  /* @POST("api/facebook/fblogin")
   Call<ResponseBody> loginFBToSSOAPI(@Body RequestBody body);

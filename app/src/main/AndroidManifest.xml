@@ -81,12 +81,12 @@
             android:name=".view.activity.SeniorSubjectOnBoardingActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"/>
-        <activity
+      <!--  <activity
             android:name=".view.activity.InventorySetupActivity"
             android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"/>-->
 
-     <!--   <activity
+      <!--  <activity
             android:name=".view.activity.TSUSetupActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"/>-->

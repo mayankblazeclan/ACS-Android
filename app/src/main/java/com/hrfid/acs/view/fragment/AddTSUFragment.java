@@ -2,26 +2,19 @@ package com.hrfid.acs.view.fragment;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.print.PrintManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -29,44 +22,33 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.WriterException;
 import com.hrfid.acs.R;
 import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
-import com.hrfid.acs.helpers.request.AddKitRequest;
-import com.hrfid.acs.helpers.request.AddKitRequestModel;
 import com.hrfid.acs.helpers.request.AddTSURequest;
 import com.hrfid.acs.helpers.request.AddTSURequestModel;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
+import com.hrfid.acs.helpers.request.GetKitListForTSURequest;
 import com.hrfid.acs.helpers.request.GetTSUParamRequest;
 import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList;
-import com.hrfid.acs.helpers.serverResponses.models.GetKitDetails.KitList;
+import com.hrfid.acs.helpers.serverResponses.models.GetKitListForTSU.GetKitListForTSUResponse;
+import com.hrfid.acs.helpers.serverResponses.models.GetKitListForTSU.Kit;
 import com.hrfid.acs.helpers.serverResponses.models.GetTSUParams.GetTSUParamsResponse;
-import com.hrfid.acs.helpers.serverResponses.models.GetTSUParams.Kit;
 import com.hrfid.acs.util.AppConstants;
 import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
-import com.hrfid.acs.view.activity.InventorySetupActivity;
 import com.hrfid.acs.view.activity.TSUSetupActivity;
-import com.hrfid.acs.view.barcode.PrintAdapter;
-import com.hrfid.acs.view.barcode.ReplicateModel;
-import com.hrfid.acs.view.barcode.ShowReplicateListActivity;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by MS on 2019-06-04.
@@ -124,6 +106,9 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
     private List listTransportTube = null;
     private List listLabUse = null;
     private List <Kit>listKitList = null;
+    private RadioButton rBlood, rUrine, rAliquot;
+    private LinearLayout linearLayoutTube;
+    private LinearLayout linearLayoutAliquot;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -134,6 +119,8 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
         initViews(v);
 
         getAllStudyID();
+
+        getTSUParamList();
 
         return v;
     }
@@ -191,7 +178,22 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
         btnEntryDate=  v.findViewById(R.id.btnEntryDate);
         btnEntryDate.setOnClickListener(this);
 
-       // ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+        linearLayoutTube=  v.findViewById(R.id.ll_tube);
+        linearLayoutAliquot=  v.findViewById(R.id.linearLayout_aliquot);
+
+        rUrine=  v.findViewById(R.id.rUrine);
+        rUrine.setOnClickListener(this);
+
+        rBlood=  v.findViewById(R.id.rBlood);
+        rBlood.setOnClickListener(this);
+
+        rAliquot = v.findViewById(R.id.radioAliquot);
+        rAliquot.setOnClickListener(this);
+
+        linearLayoutTube.setVisibility(View.VISIBLE);
+        linearLayoutAliquot.setVisibility(View.GONE);
+
+        // ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
        //         android.R.layout.simple_spinner_item, sNumberValue);
        // adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -221,7 +223,10 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                 strStudyName = String.valueOf(listStudy.get(position).getStudyId());
                 strStudyTitle = listStudy.get(position).getLabel();
                 //Toast.makeText(getContext(), parent.getSelectedItem().toString() , Toast.LENGTH_SHORT).show();
-                getTSUParams(spnSelectedStudyID);
+
+                if(spnSelectedStudyID !=null) {
+                    getKitListParamsForTSU(spnSelectedStudyID);
+                }
                 break;
 
             case R.id.spnPrimaryInvestigator :
@@ -270,8 +275,6 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
             case R.id.spnLabUse :
 
                 break;
-
-
         }
     }
 
@@ -289,6 +292,23 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
 
             case R.id.btnEntryDate:
                 setEntryDate();
+                break;
+
+            case R.id.rBlood :
+                boolean checked = ((RadioButton) v).isChecked();
+                if(checked)
+                    linearLayoutTube.setVisibility(View.VISIBLE);
+                linearLayoutAliquot.setVisibility(View.GONE);
+                break;
+
+            case R.id.rUrine :
+                linearLayoutTube.setVisibility(View.VISIBLE);
+                linearLayoutAliquot.setVisibility(View.GONE);
+                break;
+
+            case R.id.radioAliquot :
+                linearLayoutTube.setVisibility(View.GONE);
+                linearLayoutAliquot.setVisibility(View.VISIBLE);
                 break;
 
         }
@@ -358,17 +378,19 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
 
     private void submitDetails() {
 
-        if(edtSiteNo.getText().toString().trim().length() >0) {
+        if(!rAliquot.isChecked()) {
 
-            if(edtCohortNo.getText().toString().trim().length() > 0) {
+            if (edtSiteNo.getText().toString().trim().length() > 0) {
 
-                if(edtTimepoint.getText().toString().trim().length() > 0) {
+                if (edtCohortNo.getText().toString().trim().length() > 0) {
 
-                    if(edtTubeVolume.getText().toString().trim().length() > 0) {
+                    if (edtTimepoint.getText().toString().trim().length() > 0) {
 
-                        if(!txtEntryDate.getText().toString().equalsIgnoreCase("")){
+                        if (edtTubeVolume.getText().toString().trim().length() > 0) {
 
-                            //if(!txtEndDate.getText().toString().equalsIgnoreCase("")){
+                            if (!txtEntryDate.getText().toString().equalsIgnoreCase("")) {
+
+                                //if(!txtEndDate.getText().toString().equalsIgnoreCase("")){
 
 
                        /* SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -387,7 +409,7 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                             Calendar cal = Calendar.getInstance();
                             Date sysDate = cal.getTime();*/
 
-                            // if(date1.compareTo(sysDate) >0 && date2.compareTo(sysDate) >0) {
+                                // if(date1.compareTo(sysDate) >0 && date2.compareTo(sysDate) >0) {
 
                    /* Calendar cal = Calendar.getInstance();
                     Date sysDate = cal.getTime();
@@ -400,54 +422,149 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                     }else {*/
 
 
-                            int selectedId = radioTubeType.getCheckedRadioButtonId();
-                            radioButtonTubeType = (RadioButton) getView().findViewById(selectedId);
+                                int selectedId = radioTubeType.getCheckedRadioButtonId();
+                                radioButtonTubeType = (RadioButton) getView().findViewById(selectedId);
 
 
-                            callAddTSUapi(spnSelectedStudyID,
-                                    strStudyName,
-                                    strStudyTitle,
-                                    spnSelectedKitID,
-                                    strKitName,
-                                    strKitRecId,
-                                    edtVisit.getText().toString().trim(),
-                                    edtSiteNo.getText().toString().trim(),
-                                    edtCohortNo.getText().toString().trim(),
-                                    spnPrimaryInvestigator.getSelectedItem().toString(),
-                                    edtTimepoint.getText().toString().trim(),
-                                    radioButtonTubeType.getText().toString().trim(),
-                                    spnTubeColor.getSelectedItem().toString(),
-                                    edtTubeVolume.getText().toString().trim(),
-                                    spnAliquotTubeColor.getSelectedItem().toString(),
-                                    edtAliquotTubeVolume.getText().toString().trim(),
-                                    edtAliquotExtNo.getText().toString().trim(),
-                                    spnDiscardTubeColor.getSelectedItem().toString(),
-                                    edtDiscardTubeVolume.getText().toString().trim(),
-                                    spnTestName.getSelectedItem().toString().trim(),
-                                    spnCollectionLabel.getSelectedItem().toString().trim(),
-                                    spnTransportLabel.getSelectedItem().toString().trim(),
-                                    edtCentrifugeProg.getText().toString().trim(),
-                                    spnLabUse.getSelectedItem().toString().trim(),
-                                    txtEntryDate.getText().toString().trim()
-                            );
+                                callAddTSUapi(spnSelectedStudyID,
+                                        strStudyName,
+                                        strStudyTitle,
+                                        spnSelectedKitID,
+                                        strKitName,
+                                        strKitRecId,
+                                        edtVisit.getText().toString().trim(),
+                                        edtSiteNo.getText().toString().trim(),
+                                        edtCohortNo.getText().toString().trim(),
+                                        spnPrimaryInvestigator.getSelectedItem().toString(),
+                                        edtTimepoint.getText().toString().trim(),
+                                        radioButtonTubeType.getText().toString().trim(),
+                                        spnTubeColor.getSelectedItem().toString(),
+                                        edtTubeVolume.getText().toString().trim(),
+                                        spnAliquotTubeColor.getSelectedItem().toString(),
+                                        edtAliquotTubeVolume.getText().toString().trim(),
+                                        edtAliquotExtNo.getText().toString().trim(),
+                                        spnDiscardTubeColor.getSelectedItem().toString(),
+                                        edtDiscardTubeVolume.getText().toString().trim(),
+                                        spnTestName.getSelectedItem().toString().trim(),
+                                        spnCollectionLabel.getSelectedItem().toString().trim(),
+                                        spnTransportLabel.getSelectedItem().toString().trim(),
+                                        edtCentrifugeProg.getText().toString().trim(),
+                                        spnLabUse.getSelectedItem().toString().trim(),
+                                        txtEntryDate.getText().toString().trim()
+                                );
 
-                        }else {
-                            Toast.makeText(getContext(),"Please select Entry Date" , Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getContext(), "Please select Entry Date", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else {
+                            Toast.makeText(getContext(), "Please enter Tube Volume", Toast.LENGTH_SHORT).show();
                         }
 
-                    }else {
-                        Toast.makeText(getContext(),"Please enter Tube Volume" , Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Please enter Timpepoint", Toast.LENGTH_SHORT).show();
                     }
 
-                }else {
-                    Toast.makeText(getContext(),"Please enter Timpepoint" , Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Please enter Cohort Number", Toast.LENGTH_SHORT).show();
                 }
-
-            }else {
-                Toast.makeText(getContext(),"Please enter Cohort Number" , Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "Please enter Site Number", Toast.LENGTH_SHORT).show();
             }
+
         }else {
-            Toast.makeText(getContext(),"Please enter Site Number" , Toast.LENGTH_SHORT).show();
+
+            if (edtSiteNo.getText().toString().trim().length() > 0) {
+
+                if (edtCohortNo.getText().toString().trim().length() > 0) {
+
+                    if (edtTimepoint.getText().toString().trim().length() > 0) {
+
+                        if (edtAliquotTubeVolume.getText().toString().trim().length() > 0) {
+
+                            if (!txtEntryDate.getText().toString().equalsIgnoreCase("")) {
+
+                                //if(!txtEndDate.getText().toString().equalsIgnoreCase("")){
+
+
+                       /* SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+                        Date date1 = null;
+                        Date date2 = null;
+                        try {
+                            date1 = format.parse(startDate);
+                            date2 = format.parse(endDate);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        if (date1.compareTo(date2) <= 0) {
+                            //Toast.makeText(getActivity(),"All Date OK.. RUN API.." , Toast.LENGTH_SHORT).show();
+                            Calendar cal = Calendar.getInstance();
+                            Date sysDate = cal.getTime();*/
+
+                                // if(date1.compareTo(sysDate) >0 && date2.compareTo(sysDate) >0) {
+
+                   /* Calendar cal = Calendar.getInstance();
+                    Date sysDate = cal.getTime();
+
+                    if(date1.compareTo(sysDate) >0) {
+
+
+                        Toast.makeText(getActivity(),"Please select correct Date of Birth",Toast.LENGTH_SHORT).show();
+
+                    }else {*/
+
+
+                                int selectedId = radioTubeType.getCheckedRadioButtonId();
+                                radioButtonTubeType = (RadioButton) getView().findViewById(selectedId);
+
+
+                                callAddTSUapi(spnSelectedStudyID,
+                                        strStudyName,
+                                        strStudyTitle,
+                                        spnSelectedKitID,
+                                        strKitName,
+                                        strKitRecId,
+                                        edtVisit.getText().toString().trim(),
+                                        edtSiteNo.getText().toString().trim(),
+                                        edtCohortNo.getText().toString().trim(),
+                                        spnPrimaryInvestigator.getSelectedItem().toString(),
+                                        edtTimepoint.getText().toString().trim(),
+                                        radioButtonTubeType.getText().toString().trim(),
+                                        spnTubeColor.getSelectedItem().toString(),
+                                        edtTubeVolume.getText().toString().trim(),
+                                        spnAliquotTubeColor.getSelectedItem().toString(),
+                                        edtAliquotTubeVolume.getText().toString().trim(),
+                                        edtAliquotExtNo.getText().toString().trim(),
+                                        spnDiscardTubeColor.getSelectedItem().toString(),
+                                        edtDiscardTubeVolume.getText().toString().trim(),
+                                        spnTestName.getSelectedItem().toString().trim(),
+                                        spnCollectionLabel.getSelectedItem().toString().trim(),
+                                        spnTransportLabel.getSelectedItem().toString().trim(),
+                                        edtCentrifugeProg.getText().toString().trim(),
+                                        spnLabUse.getSelectedItem().toString().trim(),
+                                        txtEntryDate.getText().toString().trim()
+                                );
+
+                            } else {
+                                Toast.makeText(getContext(), "Please select Entry Date", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else {
+                            Toast.makeText(getContext(), "Please enter Tube Volume", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } else {
+                        Toast.makeText(getContext(), "Please enter Timpepoint", Toast.LENGTH_SHORT).show();
+                    }
+
+                } else {
+                    Toast.makeText(getContext(), "Please enter Cohort Number", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(getContext(), "Please enter Site Number", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
@@ -480,22 +597,47 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
         tsuRequestModel.setStudyId(Integer.valueOf(spnSelectedStudyID));
         //tsuRequestModel.setStudyId(4);
         tsuRequestModel.setKitRecId(Integer.valueOf(strKitRecId));
-        if(rbTypeValue.equalsIgnoreCase("Blood")) {
-            tsuRequestModel.setTubeType(1);
+        /*if(rbTypeValue.equalsIgnoreCase("Blood")) {
+            tsuRequestModel.setTubeType("Blood");
         }else {
             tsuRequestModel.setTubeType(0);
+        }*/
+        tsuRequestModel.setTubeType(rbTypeValue);
+
+        if(rbTypeValue.equalsIgnoreCase("BLOOD")){
+
+            tsuRequestModel.setTubeColor(tubeColor);
+            tsuRequestModel.setTubeVol(tubeVolume);
+            tsuRequestModel.setAliquotColor("-");
+            tsuRequestModel.setAliquotVol("0");
+            tsuRequestModel.setAliquotExt("-");
+
+        }else if(rbTypeValue.equalsIgnoreCase("URINE")) {
+
+            tsuRequestModel.setTubeColor(tubeColor);
+            tsuRequestModel.setTubeVol(tubeVolume);
+            tsuRequestModel.setAliquotColor("-");
+            tsuRequestModel.setAliquotVol("0");
+            tsuRequestModel.setAliquotExt("-");
+
+        }else  if(rbTypeValue.equalsIgnoreCase("ALIQUOT")) {
+
+            tsuRequestModel.setTubeColor("-");
+            tsuRequestModel.setTubeVol("0");
+
+            tsuRequestModel.setAliquotColor(aliquotColor);
+            tsuRequestModel.setAliquotVol(aliquotVol);
+            tsuRequestModel.setAliquotExt(aliquotExtNo);
+        }else{
+
         }
+
         tsuRequestModel.setIsDuplicate(0);
         tsuRequestModel.setEntryDate(txtEntryDate);
         tsuRequestModel.setSiteNo(siteNo);
         tsuRequestModel.setCohortNo(cohortNo);
         tsuRequestModel.setPi(prim_investegator);
         tsuRequestModel.setTimepoint(strTimePoint);
-        tsuRequestModel.setTubeColor(tubeColor);
-        tsuRequestModel.setTubeVol(tubeVolume);
-        tsuRequestModel.setAliquotColor(aliquotColor);
-        tsuRequestModel.setAliquotVol(aliquotVol);
-        tsuRequestModel.setAliquotExt(aliquotExtNo);
         tsuRequestModel.setDiscardTubeColor(spnDiscardTubeColor);
         tsuRequestModel.setDiscardTubeVolume(discardTubeVol);
         tsuRequestModel.setTestName(spnTestName);
@@ -665,9 +807,9 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
     }
 
 
-    private void getTSUParams(String studyId){
+    private void getKitListParamsForTSU(String studyId){
 
-        new NetworkingHelper(new GetTSUParamRequest(getActivity(), true, studyId)) {
+        new NetworkingHelper(new GetKitListForTSURequest(getActivity(), true, studyId)) {
 
             @Override
             public void serverResponseFromApi(ApiResponse serverResponse) {
@@ -675,18 +817,17 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
 
                     try {
 
-                        GetTSUParamsResponse getTSUParamsResponse = JsonParser
-                                .parseClass(serverResponse.jsonResponse, GetTSUParamsResponse.class);
+                        GetKitListForTSUResponse getTSUParamsResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, GetKitListForTSUResponse.class);
 
                         if (getTSUParamsResponse.getStatus().getCODE() == 200) {
 
                             if(getTSUParamsResponse.getResponse().getKits().size() > 0){
 
-                                Logger.logError("GetTSU PARAM API success " +
+                                Logger.logError("GetKitListForTSUResponse  API success " +
                                         getTSUParamsResponse.getResponse().getKits().size());
-                                Logger.logError("GetTSU PARAM API success " +
+                                Logger.logError("GetKitListForTSUResponse  API success " +
                                         getTSUParamsResponse.getResponse().getKits());
-
 
                                 kitListFetchedParam = new ArrayList();
                                 kitVisitListFetchedParam = new ArrayList();
@@ -700,8 +841,6 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                                 listTransportTube = new ArrayList();
                                 listLabUse = new ArrayList();
                                 listKitList = new ArrayList();
-
-
                                 listKitList = getTSUParamsResponse.getResponse().getKits();
 
                                 for (int i = 0; i < getTSUParamsResponse.getResponse().getKits().size(); i++) {
@@ -717,6 +856,67 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                     spnKitLabel.setAdapter(adapter);
                                 }
+
+                            }else {
+
+                                kitListFetchedParam.clear();
+                                kitVisitListFetchedParam.clear();
+                               // Utils.showAlertDialog(getActivity(),  getTSUParamsResponse.getStatus().getMSG());
+                            }
+
+                        }else {
+
+                            Utils.showAlertDialog(getActivity(),  getTSUParamsResponse.getStatus().getMSG());
+                        }
+
+
+
+                    }
+                    catch (Exception e){
+                        Logger.logError("Exception " + e.getMessage());
+                    }
+
+                } else {
+                    Logger.logError("GetKitListForTSUResponse API Failure " +
+                            serverResponse.errorMessageToDisplay);
+                }
+            }
+        };
+    }
+
+
+    private void getTSUParamList(){
+
+        new NetworkingHelper(new GetTSUParamRequest(getActivity(), true)) {
+
+            @Override
+            public void serverResponseFromApi(ApiResponse serverResponse) {
+                if (serverResponse.isSucess) {
+
+                    try {
+
+                        GetTSUParamsResponse getTSUParamsResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, GetTSUParamsResponse.class);
+
+                        if (getTSUParamsResponse.getStatus().getCODE() == 200) {
+
+                            if(getTSUParamsResponse.getResponse().getPI().size() > 0){
+
+                                Logger.logError("GetTSU PARAM API success " +
+                                        getTSUParamsResponse.getResponse().getPI().size());
+                                Logger.logError("GetTSU PARAM API success " +
+                                        getTSUParamsResponse.getResponse().getPI());
+
+                                listPrimaryInvestigator = new ArrayList();
+                                listTubeColor = new ArrayList();
+                                listDiscardTubeColor = new ArrayList();
+                                listAliquotTubeColor = new ArrayList();
+
+                                listTestName = new ArrayList();
+                                listCollectionTube = new ArrayList();
+                                listTransportTube = new ArrayList();
+                                listLabUse = new ArrayList();
+                                listKitList = new ArrayList();
 
 
                                 //For Primary Investigator
@@ -735,6 +935,7 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
 
                                 //For TubeColor
                                 //========================
+                               // listTubeColor.add("--");
                                 for (int i = 0; i < getTSUParamsResponse.getResponse().getTubeColor().size(); i++) {
 
                                     listTubeColor.add(getTSUParamsResponse.getResponse().getTubeColor().get(i).getValue());
@@ -750,6 +951,7 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
 
                                 //For DiscardTubeColor
                                 //========================
+
                                 for (int i = 0; i < getTSUParamsResponse.getResponse().getDiscardTubeColor().size(); i++) {
                                     listDiscardTubeColor.add(getTSUParamsResponse.getResponse().getDiscardTubeColor().get(i).getValue());
                                 }
@@ -763,6 +965,7 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
 
                                 //For AliquotTubeColor
                                 //========================
+                                //listAliquotTubeColor.add("--");
                                 for (int i = 0; i < getTSUParamsResponse.getResponse().getAliquotTubeColor().size(); i++) {
                                     listAliquotTubeColor.add(getTSUParamsResponse.getResponse().getAliquotTubeColor().get(i).getValue());
                                 }
@@ -833,15 +1036,7 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                                     spnLabUse.setAdapter(adapter7);
                                 }
 
-
-
                             }else {
-
-                              /*  Logger.logError("GetTSU PARAM API Failure " +
-                                        getTSUParamsResponse.getResponse().getKits());
-                                Logger.logError("GetTSU PARAM API Failure " +
-                                        getTSUParamsResponse.getResponse().getKits());*/
-
                                 Utils.showAlertDialog(getActivity(),  getTSUParamsResponse.getStatus().getMSG());
                             }
 

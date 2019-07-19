@@ -7,9 +7,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class Response {
 
-    @SerializedName("kits")
-    @Expose
-    private List<Kit> kits = null;
     @SerializedName("PI")
     @Expose
     private List<Pus> pI = null;
@@ -34,14 +31,6 @@ public class Response {
     @SerializedName("aliquotTubeColor")
     @Expose
     private List<AliquotTubeColor> aliquotTubeColor = null;
-
-    public List<Kit> getKits() {
-        return kits;
-    }
-
-    public void setKits(List<Kit> kits) {
-        this.kits = kits;
-    }
 
     public List<Pus> getPI() {
         return pI;

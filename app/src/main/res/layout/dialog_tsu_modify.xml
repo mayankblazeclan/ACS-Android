@@ -142,7 +142,7 @@
                         android:textAllCaps="true"
                         android:text="@string/visit"/>
 
-                    <EditText
+                    <TextView
                         android:id="@+id/edtVisit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -326,6 +326,17 @@
                                     android:layout_marginRight="@dimen/margin_30dp"
                                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
+                                <RadioButton
+                                    android:id="@+id/radioAliquot"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="  ALIQUOT"
+                                    android:checked="false"
+                                    android:layout_marginLeft="@dimen/margin_30dp"
+                                    android:layout_marginRight="@dimen/margin_30dp"
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
                             </RadioGroup>
                         </TableRow>
 
@@ -334,6 +345,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_tube"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center|top"
@@ -442,6 +454,7 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:layout_margin="@dimen/activity_5dp_margin"
                         android:textAllCaps="true"
+                        android:visibility="gone"
                         android:text="@string/txt_aliquot_tube"/>
 
                     <!-- <EditText

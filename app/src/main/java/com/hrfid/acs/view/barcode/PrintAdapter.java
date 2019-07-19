@@ -259,7 +259,7 @@ public class PrintAdapter extends PrintDocumentAdapter {
         }
         else if (selectedValue.equals("6")) {
 
-            int height = 50;
+            /*int height = 50;
             int textXPos = 110;
             int textYPos = 80;
 
@@ -268,14 +268,26 @@ public class PrintAdapter extends PrintDocumentAdapter {
             int row3height = 50;
             int row3textYPos = 90;
             int row4height = 50;
-            int row4textYPos = 90;
+            int row4textYPos = 90;*/
+
+
+            int height = 30;
+            int textXPos = 150;
+            int textYPos = 150;
+
+            int row2height = 50;
+            int row2textYPos = 120;
+            int row3height = 50;
+            int row3textYPos = 120;
+            int row4height = 50;
+            int row4textYPos = 120;
             for (int i = 0; i < replicateArrayList.size(); i++) {
 
                 if (i > 6 && i < 14) {
                     paint.setTextSize(20);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 
-                    Bitmap resized = getResizedBitmap(replicateArrayList.get(i).getBarcodeBitmap(), 650);
+                    Bitmap resized = getGeneralResizedBitmap(replicateArrayList.get(i).getBarcodeBitmap(), 650);
                     canvas.drawBitmap(resized, 250, row2height, paint);
 
                     canvas.drawText(replicateArrayList.get(i).getTitle(), 300, row2textYPos, paint);
@@ -289,7 +301,7 @@ public class PrintAdapter extends PrintDocumentAdapter {
                     paint.setTextSize(20);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 
-                    Bitmap resized = getResizedBitmap(replicateArrayList.get(i).getBarcodeBitmap(), 650);
+                    Bitmap resized = getGeneralResizedBitmap(replicateArrayList.get(i).getBarcodeBitmap(), 650);
                     canvas.drawBitmap(resized, 450, row3height, paint);
 
                     canvas.drawText(replicateArrayList.get(i).getTitle(), 500, row3textYPos, paint);
@@ -302,7 +314,7 @@ public class PrintAdapter extends PrintDocumentAdapter {
                     paint.setTextSize(20);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 
-                    Bitmap resized = getResizedBitmap(replicateArrayList.get(i).getBarcodeBitmap(), 650);
+                    Bitmap resized = getGeneralResizedBitmap(replicateArrayList.get(i).getBarcodeBitmap(), 650);
                     canvas.drawBitmap(resized, 650, row4height, paint);
 
                     canvas.drawText(replicateArrayList.get(i).getTitle(), 700, row4textYPos, paint);
@@ -315,14 +327,14 @@ public class PrintAdapter extends PrintDocumentAdapter {
                         paint.setTextSize(20);
                         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 
-                        Bitmap resized = getResizedBitmap(replicateArrayList.get(i).getBarcodeBitmap(), 650);
+                        Bitmap resized = getGeneralResizedBitmap(replicateArrayList.get(i).getBarcodeBitmap(), 650);
                         canvas.drawBitmap(resized, 25, height, paint);
 
-                        canvas.drawText(replicateArrayList.get(i).getTitle(), textXPos, textYPos, paint);
+                        canvas.drawText(replicateArrayList.get(i).getTitle(), 150, textYPos, paint);
 
-                        textYPos = textYPos + 100;
+                        textYPos = textYPos + 200;
 
-                        height = height + 100;
+                        height = height + 200;
                     }
 
 
@@ -509,5 +521,20 @@ public class PrintAdapter extends PrintDocumentAdapter {
             width = (int) (height * bitmapRatio);
         }
         return Bitmap.createScaledBitmap(image, width - 350, height - 250, true);
+    }
+
+    public Bitmap getGeneralResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float) width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width - 250, height - 150, true);
     }
 }

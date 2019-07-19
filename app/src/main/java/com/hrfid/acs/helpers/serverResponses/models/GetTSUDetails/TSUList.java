@@ -80,7 +80,7 @@ public class TSUList {
     private String aliquotExtNo;
     @SerializedName("tube_type")
     @Expose
-    private int tubeType;
+    private String tubeType;
     @SerializedName("centrifuge_prog")
     @Expose
     private String centrifugeProg;
@@ -286,11 +286,11 @@ public class TSUList {
         this.aliquotExtNo = aliquotExtNo;
     }
 
-    public int getTubeType() {
+    public String getTubeType() {
         return tubeType;
     }
 
-    public void setTubeType(int tubeType) {
+    public void setTubeType(String tubeType) {
         this.tubeType = tubeType;
     }
 
