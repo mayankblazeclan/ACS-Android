@@ -1,11 +1,9 @@
 package com.hrfid.acs.view.adapter;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -28,18 +26,14 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hrfid.acs.R;
 import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
-import com.hrfid.acs.helpers.request.AddTSURequest;
-import com.hrfid.acs.helpers.request.AddTSURequestModel;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.request.GetKitDetailsRequest;
-import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList;
 import com.hrfid.acs.helpers.serverResponses.models.GetTSUDetails.GetTSUDetailsResponse;
@@ -49,7 +43,6 @@ import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
-import com.hrfid.acs.view.activity.TSUSetupActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -128,7 +121,7 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
         TextView txtSiteNo;
         TextView txtCohortNo;
         TextView txtPrimartInvestigator;
-        TextView txtTimepoint;
+        TextView txtTransportLabel;
         TextView txtDiscardTubeColor;
 
         TextView txtDiscardTubeVolume;
@@ -157,7 +150,7 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
             // txtStudyName = (TextView) itemView.findViewById(R.id.txtStudyName);
             txtVisit = (TextView) itemView.findViewById(R.id.txtVisit);
             txtSiteNo = itemView.findViewById(R.id.txtSiteNo);
-            txtTimepoint = (TextView) itemView.findViewById(R.id.txtTimepoint);
+            txtTransportLabel = (TextView) itemView.findViewById(R.id.txtTimepoint);
             txtDiscardTubeColor = itemView.findViewById(R.id.txtDiscardTubeColor);
             txtCohortNo = itemView.findViewById(R.id.txtCohortNo);
             txtPrimartInvestigator = itemView.findViewById(R.id.txtPrimartInvestigator);
@@ -191,7 +184,9 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
 
         holder.linearLayout.setVisibility(View.GONE);
         //holder.txtKitId.setText(tsuLists.get(position).getKitId().trim());
-        holder.textViewHeading.setText("STUDY NAME (ID) : " + "" + tsuLists.get(position).getStudyTitle() + "(" + tsuLists.get(position).getStudyName() + ")" + "  KIT NAME/ID : " + tsuLists.get(position).getKitId());
+       // holder.textViewHeading.setText("STUDY NAME (ID) : " + "" + tsuLists.get(position).getStudyTitle() + "(" + tsuLists.get(position).getStudyName() + ")" + "  KIT NAME/ID : " + tsuLists.get(position).getKitId());
+        holder.textViewHeading.setText("STUDY NAME (ID) : " + "" + tsuLists.get(position).getStudyTitle() + "(" + tsuLists.get(position).getStudyName() + ")" + "  LAB KIT : " + tsuLists.get(position).getKitId() + "  TIMEPOINT : " + tsuLists.get(position).getTimepoint()+ "  TEST NAME : " + tsuLists.get(position).getTestName());
+
         holder.textViewHeading.setSelected(true);
 //        holder.txtStudyName.setText("" + tsuLists.get(position).getStudyTitle()+ "("+ tsuLists.get(position).getStudyName()+")");
         holder.txtVisit.setText(tsuLists.get(position).getVisit().trim());
@@ -208,7 +203,7 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
         holder.txtSiteNo.setText("" + tsuLists.get(position).getSiteNo());
         holder.txtCohortNo.setText(tsuLists.get(position).getCohortNo());
         holder.txtPrimartInvestigator.setText(tsuLists.get(position).getPrimaryInvestigator());
-        holder.txtTimepoint.setText(tsuLists.get(position).getTimepoint());
+        holder.txtTransportLabel.setText(tsuLists.get(position).getTransportLable());
         holder.txtDiscardTubeColor.setText(tsuLists.get(position).getDiscardTubeColor());
         holder.txtDiscardTubeVolume.setText(tsuLists.get(position).getDiscardTubeVolume());
         holder.txtCollectionLabel.setText("" + tsuLists.get(position).getCollectionLable());

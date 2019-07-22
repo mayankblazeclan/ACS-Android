@@ -116,9 +116,9 @@ public class PrintAdapter extends PrintDocumentAdapter {
 
         } else if (selectedValue.equals("4")) {
 
-            int height = 50;
+            int height = 30;
             int textXPos = 70;
-            int textYPos = 120;
+            int textYPos = 100;
 
             int row2height = 50;
             int row2textYPos = 120;
@@ -187,9 +187,9 @@ public class PrintAdapter extends PrintDocumentAdapter {
             }
         } else if (selectedValue.equals("5")) {
 
-            int height = 50;
+            int height = 30;
             int textXPos = 110;
-            int textYPos = 90;
+            int textYPos = 115;
 
             int row2height = 50;
             int row2textYPos = 90;

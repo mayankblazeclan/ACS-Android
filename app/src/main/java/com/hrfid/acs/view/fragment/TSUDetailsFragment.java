@@ -160,8 +160,12 @@ public class TSUDetailsFragment extends Fragment {
                             Logger.logError("getTSUList API Failure " +
                                     getKitDetailsResponse.getStatus().getMSG());*/
 
-                            Utils.showAlertDialog(getActivity(),  getKitDetailsResponse.getStatus()
-                                    .getERROR());
+                           if(!getKitDetailsResponse.getStatus()
+                                   .getERROR().equalsIgnoreCase("No relevant data found")) {
+
+                               Utils.showAlertDialog(getActivity(), getKitDetailsResponse.getStatus()
+                                       .getERROR());
+                           }
                         }
 
 

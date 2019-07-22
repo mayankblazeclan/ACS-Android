@@ -53,7 +53,8 @@ public class Utilities {
 
     private static int size = 660;
     private static int size_width = 660;
-    private static int size_height = 220;
+    private static int size_height = 264;
+    private static int size_height_medium = 220;
     private static int big_size_width = 1800;
     private static int big_size_height = 164;
 
@@ -646,6 +647,44 @@ public class Utilities {
         {
             //case "QR Code": bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.QR_CODE, size, size);break;
             case "Barcode": bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.CODE_128, size_width, size_height);break;
+            /*case "Data Matrix": bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.DATA_MATRIX, size, size);break;
+            case "PDF 417": bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.PDF_417, size_width, size_height);break;
+            case "Barcode-39":bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.CODE_39, size_width, size_height);break;
+            case "Barcode-93":bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.CODE_93, size_width, size_height);break;
+            case "AZTEC": bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.AZTEC, size, size);break;*/
+            default: bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.QR_CODE, size, size);break;
+        }
+        int width = bitMatrix.getWidth();
+        int height = bitMatrix.getHeight();
+        int [] pixels = new int [width * height];
+        for (int i = 0 ; i < height ; i++)
+        {
+            for (int j = 0 ; j < width ; j++)
+            {
+                if (bitMatrix.get(j, i))
+                {
+                    pixels[i * width + j] = 0xff000000;
+                }
+                else
+                {
+                    pixels[i * width + j] = 0xffffffff;
+                }
+            }
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+        return bitmap;
+    }
+
+    public static Bitmap CreateMediumImage(String message, String type) throws WriterException
+    {
+        BitMatrix bitMatrix = null;
+        // BitMatrix bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.QR_CODE, size, size);
+        switch (type)
+        {
+            //case "QR Code": bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.QR_CODE, size, size);break;
+            case "Barcode": bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.CODE_128, size_width, size_height_medium);break;
             /*case "Data Matrix": bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.DATA_MATRIX, size, size);break;
             case "PDF 417": bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.PDF_417, size_width, size_height);break;
             case "Barcode-39":bitMatrix = new MultiFormatWriter().encode(message, BarcodeFormat.CODE_39, size_width, size_height);break;

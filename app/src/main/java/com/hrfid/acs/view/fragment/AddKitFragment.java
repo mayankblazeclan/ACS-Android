@@ -885,7 +885,7 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
 
                     ReplicateModel replicateModel = null;
                     try {
-                        replicateModel = new ReplicateModel(message, Utilities.CreateImage(message, "Barcode"));
+                        replicateModel = new ReplicateModel(message, Utilities.CreateMediumImage(message, "Barcode"));
                     } catch (WriterException e) {
                         e.printStackTrace();
                     }

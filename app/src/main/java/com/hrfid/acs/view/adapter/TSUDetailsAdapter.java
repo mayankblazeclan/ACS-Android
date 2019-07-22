@@ -1,13 +1,9 @@
 package com.hrfid.acs.view.adapter;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -24,7 +20,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -33,34 +28,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.WriterException;
 import com.hrfid.acs.R;
 import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
-import com.hrfid.acs.helpers.request.AddTSURequest;
-import com.hrfid.acs.helpers.request.AddTSURequestModel;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
-import com.hrfid.acs.helpers.request.DismissKitDetailsRequest;
-import com.hrfid.acs.helpers.request.DismissKitRequestModel;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
-import com.hrfid.acs.helpers.request.GetKitDetailsRequest;
 import com.hrfid.acs.helpers.request.GetKitListForTSURequest;
 import com.hrfid.acs.helpers.request.GetTSUDetailsRequest;
 import com.hrfid.acs.helpers.request.GetTSUParamRequest;
-import com.hrfid.acs.helpers.request.MapKitDetailsRequest;
-import com.hrfid.acs.helpers.request.MapKitRequestModel;
-import com.hrfid.acs.helpers.request.ModifyKitRequest;
-import com.hrfid.acs.helpers.request.ModifyKitRequestModel;
 import com.hrfid.acs.helpers.request.ModifyTSUDetailsRequestModel;
 import com.hrfid.acs.helpers.request.ModifyTSURequest;
-import com.hrfid.acs.helpers.request.ReturnKitDetailsRequest;
-import com.hrfid.acs.helpers.request.ReturnKitRequestModel;
 import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList;
-import com.hrfid.acs.helpers.serverResponses.models.GetKitDetails.GetKitDetailsResponse;
-import com.hrfid.acs.helpers.serverResponses.models.GetKitDetails.KitList;
 import com.hrfid.acs.helpers.serverResponses.models.GetKitListForTSU.GetKitListForTSUResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetKitListForTSU.Kit;
 import com.hrfid.acs.helpers.serverResponses.models.GetTSUDetails.GetTSUDetailsResponse;
@@ -71,14 +52,9 @@ import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
-import com.hrfid.acs.view.activity.TSUSetupActivity;
-import com.hrfid.acs.view.barcode.ShowReplicateListActivity;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -172,7 +148,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
     TextView txtSiteNo;
     TextView txtCohortNo;
     TextView txtPrimartInvestigator;
-    TextView txtTimepoint;
+    TextView txtTransport;
     TextView txtDiscardTubeColor;
 
     TextView txtDiscardTubeVolume;
@@ -201,7 +177,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
       // txtStudyName = (TextView) itemView.findViewById(R.id.txtStudyName);
       txtVisit = (TextView) itemView.findViewById(R.id.txtVisit);
       txtSiteNo = itemView.findViewById(R.id.txtSiteNo);
-      txtTimepoint = (TextView) itemView.findViewById(R.id.txtTimepoint);
+      txtTransport = (TextView) itemView.findViewById(R.id.txtTimepoint);
       txtDiscardTubeColor = itemView.findViewById(R.id.txtDiscardTubeColor);
       txtCohortNo = itemView.findViewById(R.id.txtCohortNo);
       txtPrimartInvestigator = itemView.findViewById(R.id.txtPrimartInvestigator);
@@ -233,7 +209,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
     // set the data in items
     holder.linearLayout.setVisibility(View.GONE);
     //holder.txtKitId.setText(tsuLists.get(position).getKitId().trim());
-    holder.textViewHeading.setText("STUDY NAME (ID) : " + "" + tsuLists.get(position).getStudyTitle() + "(" + tsuLists.get(position).getStudyName() + ")" + "  KIT NAME/ID : " + tsuLists.get(position).getKitId());
+    holder.textViewHeading.setText("STUDY NAME (ID) : " + "" + tsuLists.get(position).getStudyTitle() + "(" + tsuLists.get(position).getStudyName() + ")" + "  LAB KIT : " + tsuLists.get(position).getKitId() + "  TIMEPOINT : " + tsuLists.get(position).getTimepoint()+ "  TEST NAME : " + tsuLists.get(position).getTestName());
     holder.textViewHeading.setSelected(true);
 //        holder.txtStudyName.setText("" + tsuLists.get(position).getStudyTitle()+ "("+ tsuLists.get(position).getStudyName()+")");
     holder.txtVisit.setText(tsuLists.get(position).getVisit().trim());
@@ -251,7 +227,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
     holder.txtSiteNo.setText("" + tsuLists.get(position).getSiteNo());
     holder.txtCohortNo.setText(tsuLists.get(position).getCohortNo());
     holder.txtPrimartInvestigator.setText(tsuLists.get(position).getPrimaryInvestigator());
-    holder.txtTimepoint.setText(tsuLists.get(position).getTimepoint());
+    holder.txtTransport.setText(tsuLists.get(position).getTransportLable());
     holder.txtDiscardTubeColor.setText(tsuLists.get(position).getDiscardTubeColor());
     holder.txtDiscardTubeVolume.setText(tsuLists.get(position).getDiscardTubeVolume());
     holder.txtCollectionLabel.setText("" + tsuLists.get(position).getCollectionLable());
@@ -359,6 +335,11 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
           edtVisit.setText(kitVisitListFetchedParam.get(position).toString());
           strKitName = String.valueOf(listKitList.get(position).getKitId());
           strKitRecId = String.valueOf(listKitList.get(position).getId());
+        }else {
+
+          edtVisit.setText(" ");
+          strKitName = " ";
+          strKitRecId = " ";
         }
         break;
 
@@ -539,9 +520,9 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
       @Override
       public void onClick(View v) {
         // Close dialog
-        dialog.dismiss();
 
-        submitDetails(tsuList.getId());
+
+        submitDetails(tsuList.getId(), dialog);
       }
     });
 
@@ -589,13 +570,24 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
     edtAliquotTubeVolume.setText(tsuList.getAliquotVolume());
 
     edtAliquotExtNo = v.findViewById(R.id.edtAliquotTubeExt);
-    edtAliquotExtNo.setText(tsuList.getAliquotExtNo());
+
+    if(!tsuList.getAliquotExtNo().equalsIgnoreCase("-")) {
+      edtAliquotExtNo.setText(tsuList.getAliquotExtNo());
+    }else {
+      edtAliquotExtNo.setText("");
+    }
 
     edtDiscardTubeVolume = v.findViewById(R.id.edtDiscardTubeVol);
     edtDiscardTubeVolume.setText(tsuList.getDiscardTubeVolume());
 
     edtCentrifugeProg = v.findViewById(R.id.edtCentrifugeProgramme);
-    edtCentrifugeProg.setText(tsuList.getCentrifugeProg());
+    //edtCentrifugeProg.setText(tsuList.getCentrifugeProg());
+
+    if(!tsuList.getCentrifugeProg().equalsIgnoreCase("-")) {
+      edtCentrifugeProg.setText(tsuList.getCentrifugeProg());
+    }else {
+      edtCentrifugeProg.setText("");
+    }
 
     spnPrimaryInvestigator = (Spinner) v.findViewById(R.id.spnPrimaryInvestigator);
     spnPrimaryInvestigator.setOnItemSelectedListener(this);
@@ -746,7 +738,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
 
 
-  private void submitDetails(int id) {
+  private void submitDetails(int id, Dialog dialog) {
 
     if(!rAliquot.isChecked()) {
 
@@ -757,6 +749,8 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
           if (edtTimepoint.getText().toString().trim().length() > 0) {
 
             if (edtTubeVolume.getText().toString().trim().length() > 0) {
+
+              if(edtDiscardTubeVolume.getText().toString().trim().length() > 0) {
 
               if (!txtEntryDate.getText().toString().equalsIgnoreCase("")) {
 
@@ -774,6 +768,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
                   tubeType = "ALIQUOT";
                 }
 
+                dialog.dismiss();
                 callModifyTSUapi(spnSelectedStudyID,
                         strStudyName,
                         strStudyTitle,
@@ -804,6 +799,10 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
               } else {
                 Toast.makeText(context, "Please select Entry Date", Toast.LENGTH_SHORT).show();
               }
+
+            } else {
+              Toast.makeText(context, "Please enter Discard Tube Volume", Toast.LENGTH_SHORT).show();
+            }
 
             } else {
               Toast.makeText(context, "Please enter Tube Volume", Toast.LENGTH_SHORT).show();
@@ -829,6 +828,8 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
             if (edtAliquotTubeVolume.getText().toString().trim().length() > 0) {
 
+              if(edtDiscardTubeVolume.getText().toString().trim().length() > 0) {
+
               if (!txtEntryDate.getText().toString().equalsIgnoreCase("")) {
 
 
@@ -847,6 +848,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
                 }
 
+                dialog.dismiss();
                 callModifyTSUapi(spnSelectedStudyID,
                         strStudyName,
                         strStudyTitle,
@@ -878,12 +880,16 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
                 Toast.makeText(context, "Please select Entry Date", Toast.LENGTH_SHORT).show();
               }
 
+              } else {
+                Toast.makeText(context, "Please enter Discard Tube Volume", Toast.LENGTH_SHORT).show();
+              }
+
             } else {
               Toast.makeText(context, "Please enter Tube Volume", Toast.LENGTH_SHORT).show();
             }
 
           } else {
-            Toast.makeText(context, "Please enter Timpepoint", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Please enter Timepoint", Toast.LENGTH_SHORT).show();
           }
 
         } else {
@@ -957,7 +963,13 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
       tsuRequestModel.setAliquotColor(aliquotColor);
       tsuRequestModel.setAliquotVol(aliquotVol);
-      tsuRequestModel.setAliquotExt(aliquotExtNo);
+     // tsuRequestModel.setAliquotExt(aliquotExtNo);
+
+      if(!aliquotExtNo.isEmpty()){
+        tsuRequestModel.setAliquotExt(aliquotExtNo);
+      }else {
+        tsuRequestModel.setAliquotExt("-");
+      }
     }else{
 
     }
@@ -977,7 +989,13 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
     tsuRequestModel.setTestName(spnTestName);
     tsuRequestModel.setCollectionLable(spnCollectionLabel);
     tsuRequestModel.setTransportLable(spnTransportLabel);
-    tsuRequestModel.setCentrifugeProg(centriProg);
+    //tsuRequestModel.setCentrifugeProg(centriProg);
+
+    if(!centriProg.isEmpty()){
+      tsuRequestModel.setCentrifugeProg(centriProg);
+    }else {
+      tsuRequestModel.setCentrifugeProg("-");
+    }
     tsuRequestModel.setLabUse(strLabUse);
     tsuRequestModel.setId(id);
 
@@ -1106,12 +1124,23 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
                           android.R.layout.simple_spinner_item, kitListFetchedParam);
                   adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                   spnKitLabel.setAdapter(adapter);
-                  Utilities.SetSpinnerSelection(spnDiscardTubeColor, kitListFetchedParam, tsuList.getDiscardTubeColor());
+                  Utilities.SetSpinnerSelection(spnKitLabel, kitListFetchedParam, tsuList.getKitId());
                 }
 
               }else {
-                kitListFetchedParam=null;
-                kitVisitListFetchedParam=null;
+                kitListFetchedParam.clear();
+                kitVisitListFetchedParam.clear();
+
+                if(kitVisitListFetchedParam !=null) {
+                  ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
+                          android.R.layout.simple_spinner_item, kitListFetchedParam);
+                  adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                  spnKitLabel.setAdapter(adapter);
+
+                  edtVisit.setText(" ");
+                  strKitName = " ";
+                  strKitRecId = " ";
+                }
 
                 //Utils.showAlertDialog((Activity)context,  getTSUParamsResponse.getStatus().getMSG());
               }
@@ -1254,6 +1283,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
                 //For CollectionLable
                 //========================
+                listCollectionTube.add("NA");
                 for (int i = 0; i < getTSUParamsResponse.getResponse().getCollectionLable().size(); i++) {
 
                   listCollectionTube.add(getTSUParamsResponse.getResponse().getCollectionLable().get(i).getValue());
@@ -1271,6 +1301,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
                 //For TransportLable
                 //========================
+                listTransportTube.add("NA");
                 for (int i = 0; i < getTSUParamsResponse.getResponse().getTransportLable().size(); i++) {
 
                   listTransportTube.add(getTSUParamsResponse.getResponse().getTransportLable().get(i).getValue());

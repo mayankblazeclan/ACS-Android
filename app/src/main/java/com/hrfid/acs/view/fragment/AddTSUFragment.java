@@ -238,6 +238,11 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                     edtVisit.setText(kitVisitListFetchedParam.get(position).toString());
                     strKitName = String.valueOf(listKitList.get(position).getKitId());
                     strKitRecId = String.valueOf(listKitList.get(position).getId());
+                }else {
+
+                    edtVisit.setText(" ");
+                    strKitName = " ";
+                    strKitRecId = " ";
                 }
                 break;
 
@@ -388,9 +393,14 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
 
                         if (edtTubeVolume.getText().toString().trim().length() > 0) {
 
+                            if(edtDiscardTubeVolume.getText().toString().trim().length() > 0) {
+
                             if (!txtEntryDate.getText().toString().equalsIgnoreCase("")) {
 
-                                //if(!txtEndDate.getText().toString().equalsIgnoreCase("")){
+
+                                if(spnKitLabel !=null && !strKitRecId.trim().isEmpty()) {
+
+                                    //if(!txtEndDate.getText().toString().equalsIgnoreCase("")){
 
 
                        /* SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -409,7 +419,7 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                             Calendar cal = Calendar.getInstance();
                             Date sysDate = cal.getTime();*/
 
-                                // if(date1.compareTo(sysDate) >0 && date2.compareTo(sysDate) >0) {
+                                    // if(date1.compareTo(sysDate) >0 && date2.compareTo(sysDate) >0) {
 
                    /* Calendar cal = Calendar.getInstance();
                     Date sysDate = cal.getTime();
@@ -422,36 +432,44 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                     }else {*/
 
 
-                                int selectedId = radioTubeType.getCheckedRadioButtonId();
-                                radioButtonTubeType = (RadioButton) getView().findViewById(selectedId);
+                                    int selectedId = radioTubeType.getCheckedRadioButtonId();
+                                    radioButtonTubeType = (RadioButton) getView().findViewById(selectedId);
 
 
-                                callAddTSUapi(spnSelectedStudyID,
-                                        strStudyName,
-                                        strStudyTitle,
-                                        spnSelectedKitID,
-                                        strKitName,
-                                        strKitRecId,
-                                        edtVisit.getText().toString().trim(),
-                                        edtSiteNo.getText().toString().trim(),
-                                        edtCohortNo.getText().toString().trim(),
-                                        spnPrimaryInvestigator.getSelectedItem().toString(),
-                                        edtTimepoint.getText().toString().trim(),
-                                        radioButtonTubeType.getText().toString().trim(),
-                                        spnTubeColor.getSelectedItem().toString(),
-                                        edtTubeVolume.getText().toString().trim(),
-                                        spnAliquotTubeColor.getSelectedItem().toString(),
-                                        edtAliquotTubeVolume.getText().toString().trim(),
-                                        edtAliquotExtNo.getText().toString().trim(),
-                                        spnDiscardTubeColor.getSelectedItem().toString(),
-                                        edtDiscardTubeVolume.getText().toString().trim(),
-                                        spnTestName.getSelectedItem().toString().trim(),
-                                        spnCollectionLabel.getSelectedItem().toString().trim(),
-                                        spnTransportLabel.getSelectedItem().toString().trim(),
-                                        edtCentrifugeProg.getText().toString().trim(),
-                                        spnLabUse.getSelectedItem().toString().trim(),
-                                        txtEntryDate.getText().toString().trim()
-                                );
+                                    callAddTSUapi(spnSelectedStudyID,
+                                            strStudyName,
+                                            strStudyTitle,
+                                            spnSelectedKitID,
+                                            strKitName,
+                                            strKitRecId,
+                                            edtVisit.getText().toString().trim(),
+                                            edtSiteNo.getText().toString().trim(),
+                                            edtCohortNo.getText().toString().trim(),
+                                            spnPrimaryInvestigator.getSelectedItem().toString(),
+                                            edtTimepoint.getText().toString().trim(),
+                                            radioButtonTubeType.getText().toString().trim(),
+                                            spnTubeColor.getSelectedItem().toString(),
+                                            edtTubeVolume.getText().toString().trim(),
+                                            spnAliquotTubeColor.getSelectedItem().toString(),
+                                            edtAliquotTubeVolume.getText().toString().trim(),
+                                            edtAliquotExtNo.getText().toString().trim(),
+                                            spnDiscardTubeColor.getSelectedItem().toString(),
+                                            edtDiscardTubeVolume.getText().toString().trim(),
+                                            spnTestName.getSelectedItem().toString().trim(),
+                                            spnCollectionLabel.getSelectedItem().toString().trim(),
+                                            spnTransportLabel.getSelectedItem().toString().trim(),
+                                            edtCentrifugeProg.getText().toString().trim(),
+                                            spnLabUse.getSelectedItem().toString().trim(),
+                                            txtEntryDate.getText().toString().trim()
+                                    );
+
+                                } else {
+                                    Toast.makeText(getContext(), "LAB KIT Cannot be Empty", Toast.LENGTH_SHORT).show();
+                                }
+
+                            } else {
+                                Toast.makeText(getContext(), "Please enter Discard Tube Volume", Toast.LENGTH_SHORT).show();
+                            }
 
                             } else {
                                 Toast.makeText(getContext(), "Please select Entry Date", Toast.LENGTH_SHORT).show();
@@ -462,7 +480,7 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                         }
 
                     } else {
-                        Toast.makeText(getContext(), "Please enter Timpepoint", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Please enter Timepoint", Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
@@ -556,7 +574,7 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                         }
 
                     } else {
-                        Toast.makeText(getContext(), "Please enter Timpepoint", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Please enter Timepoint", Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
@@ -627,7 +645,14 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
 
             tsuRequestModel.setAliquotColor(aliquotColor);
             tsuRequestModel.setAliquotVol(aliquotVol);
-            tsuRequestModel.setAliquotExt(aliquotExtNo);
+
+
+            if(!aliquotExtNo.isEmpty()){
+                tsuRequestModel.setAliquotExt(aliquotExtNo);
+            }else {
+                tsuRequestModel.setAliquotExt("-");
+            }
+
         }else{
 
         }
@@ -643,7 +668,13 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
         tsuRequestModel.setTestName(spnTestName);
         tsuRequestModel.setCollectionLable(spnCollectionLabel);
         tsuRequestModel.setTransportLable(spnTransportLabel);
-        tsuRequestModel.setCentrifugeProg(centriProg);
+        //tsuRequestModel.setCentrifugeProg(centriProg);
+        if(!centriProg.isEmpty()){
+            tsuRequestModel.setCentrifugeProg(centriProg);
+        }else {
+            tsuRequestModel.setCentrifugeProg("-");
+        }
+
         tsuRequestModel.setLabUse(strLabUse);
 
         new NetworkingHelper(new AddTSURequest(getActivity(), true, tsuRequestModel)) {
@@ -861,6 +892,16 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
 
                                 kitListFetchedParam.clear();
                                 kitVisitListFetchedParam.clear();
+                                if(kitVisitListFetchedParam !=null) {
+                                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                                            android.R.layout.simple_spinner_item, kitListFetchedParam);
+                                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnKitLabel.setAdapter(adapter);
+
+                                    edtVisit.setText(" ");
+                                    strKitName = " ";
+                                    strKitRecId = " ";
+                                }
                                // Utils.showAlertDialog(getActivity(),  getTSUParamsResponse.getStatus().getMSG());
                             }
 
@@ -992,6 +1033,9 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                                     spnTestName.setAdapter(adapter4);
                                 }
 
+
+                                listCollectionTube.add("NA");
+
                                 //For CollectionLable
                                 //========================
                                 for (int i = 0; i < getTSUParamsResponse.getResponse().getCollectionLable().size(); i++) {
@@ -1006,6 +1050,7 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                                     spnCollectionLabel.setAdapter(adapter5);
                                 }
 
+                                listTransportTube.add("NA");
 
                                 //For TransportLable
                                 //========================

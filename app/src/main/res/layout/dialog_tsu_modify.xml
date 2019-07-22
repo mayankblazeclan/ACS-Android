@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="MODIFY TSU DETAILS"
+            android:text="MODIFY TSU"
             android:textColor="@color/white"
             android:textStyle="bold"
             android:gravity="center"
@@ -362,7 +362,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/colorBCRed"
+                            android:textColor="@color/black"
                             android:textStyle="bold"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:layout_marginLeft="@dimen/activity_5dp_margin"
@@ -418,7 +418,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/colorBCRed"
+                            android:textColor="@color/black"
                             android:textStyle="bold"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:layout_marginLeft="@dimen/activity_5dp_margin"
@@ -429,7 +429,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal"
-                            android:hint="Enter Tube Vol (in ml)"/>
+                            android:hint="Enter Tube Volume"/>
 
                     </LinearLayout>
 
@@ -548,7 +548,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="numberDecimal"
-                                android:hint="Enter Tube Vol"/>
+                                android:hint="Enter Tube Volume"/>
 
                         </LinearLayout>
 
@@ -628,15 +628,16 @@
                         android:textStyle="bold"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:layout_marginLeft="@dimen/activity_5dp_margin"
-                        android:textAllCaps="true"
+                        android:textAllCaps="false"
                         android:text="@string/txt_discard_tube_volume"/>
 
                     <EditText
                         android:id="@+id/edtDiscardTubeVol"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
                         android:layout_marginLeft="@dimen/margin_10dp"
-                        android:hint="Enter Discard Tube Volume" />
+                        android:hint="Enter Tube Volume" />
 
                 </LinearLayout>
 

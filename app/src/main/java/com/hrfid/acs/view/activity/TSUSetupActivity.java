@@ -46,7 +46,7 @@ public class TSUSetupActivity extends BaseActivity {
         setContentView(R.layout.activity_senior_study_setup);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        toolbar.setTitle("TSU Setup");
+        toolbar.setTitle("Tube Setup");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
