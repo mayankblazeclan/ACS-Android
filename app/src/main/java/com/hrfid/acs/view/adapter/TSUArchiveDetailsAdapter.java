@@ -26,18 +26,27 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hrfid.acs.R;
 import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
+import com.hrfid.acs.helpers.request.AddTSURequest;
+import com.hrfid.acs.helpers.request.AddTSURequestModel;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.request.GetKitDetailsRequest;
+import com.hrfid.acs.helpers.request.GetKitListForTSURequest;
+import com.hrfid.acs.helpers.request.GetTSUParamRequest;
+import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList;
+import com.hrfid.acs.helpers.serverResponses.models.GetKitListForTSU.GetKitListForTSUResponse;
+import com.hrfid.acs.helpers.serverResponses.models.GetKitListForTSU.Kit;
 import com.hrfid.acs.helpers.serverResponses.models.GetTSUDetails.GetTSUDetailsResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetTSUDetails.TSUList;
+import com.hrfid.acs.helpers.serverResponses.models.GetTSUParams.GetTSUParamsResponse;
 import com.hrfid.acs.util.AppConstants;
 import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
@@ -67,7 +76,7 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
 
     String[] sNumberValue = {"ABC","DBABC","ADDABC","TAABC","OPABC","0", "1","2","3", "4", "5", "6", "7", "8", "9", "10"};
     private String strKitName;
-    private String strKitTitle;
+    private String strKitRecId;
     private String spnSelectedKitID ="";
 
     private TextView spnStudyLabel;
@@ -97,6 +106,22 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
     private ImageButton btnEntryDate;
     private TextView txtEntryDate;
     private Button btnSubmit;
+
+    private List kitListFetchedParam = null;
+    private List kitVisitListFetchedParam = null;
+    private List listPrimaryInvestigator = null;
+    private List listTubeColor = null;
+    private List listAliquotTubeColor = null;
+    private List listDiscardTubeColor = null;
+    private List listTestName = null;
+    private List listCollectionTube = null;
+    private List listTransportTube = null;
+    private List listLabUse = null;
+    private List <Kit>listKitList = null;
+    private RadioButton rBlood, rUrine, rAliquot;
+
+    private LinearLayout linearLayoutTube;
+    private LinearLayout linearLayoutAliquot;
 
     public TSUArchiveDetailsAdapter(Context context, List<TSUList> tsuLists, List<StudyList> lists, RecyclerView recyclerView) {
         this.context = context;
@@ -184,8 +209,8 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
 
         holder.linearLayout.setVisibility(View.GONE);
         //holder.txtKitId.setText(tsuLists.get(position).getKitId().trim());
-       // holder.textViewHeading.setText("STUDY NAME (ID) : " + "" + tsuLists.get(position).getStudyTitle() + "(" + tsuLists.get(position).getStudyName() + ")" + "  KIT NAME/ID : " + tsuLists.get(position).getKitId());
-        holder.textViewHeading.setText("LAB KIT : " + tsuLists.get(position).getKitId() + "  TIMEPOINT : " + tsuLists.get(position).getTimepoint()+ "  TEST NAME : " + tsuLists.get(position).getTestName());
+        // holder.textViewHeading.setText("STUDY NAME (ID) : " + "" + tsuLists.get(position).getStudyTitle() + "(" + tsuLists.get(position).getStudyName() + ")" + "  KIT NAME/ID : " + tsuLists.get(position).getKitId());
+        holder.textViewHeading.setText("LAB KIT : " + tsuLists.get(position).getKitId() + "  TIMEPOINT : " + tsuLists.get(position).getTimepoint() + "  TEST NAME : " + tsuLists.get(position).getTestName());
 
         holder.textViewHeading.setSelected(true);
 //        holder.txtStudyName.setText("" + tsuLists.get(position).getStudyTitle()+ "("+ tsuLists.get(position).getStudyName()+")");
@@ -208,11 +233,11 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
         holder.txtDiscardTubeVolume.setText(tsuLists.get(position).getDiscardTubeVolume());
         holder.txtCollectionLabel.setText("" + tsuLists.get(position).getCollectionLable());
         //holder.txtTestName.setText("" + tsuLists.get(position).getTestName());
-        holder.txtTestName.setText("" + tsuLists.get(position).getStudyTitle()+ "(" + tsuLists.get(position).getStudyName() + ")");
+        holder.txtTestName.setText("" + tsuLists.get(position).getStudyTitle() + "(" + tsuLists.get(position).getStudyName() + ")");
         //holder.txtEntryDate.setText(""+ tsuLists.get(position).get());
 
         holder.txtTubeColor.setText("" + tsuLists.get(position).getTubeColor());
-        if(tsuLists.get(position).getTubeVolume()!=null) {
+        if (tsuLists.get(position).getTubeVolume() != null) {
             if (!tsuLists.get(position).getTubeVolume().equalsIgnoreCase("0")) {
                 holder.txtTubeVol.setText("" + tsuLists.get(position).getTubeVolume());
             } else {
@@ -221,7 +246,7 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
         }
         holder.txtAliquotTubeColor.setText("" + tsuLists.get(position).getAliquotColorTube());
 
-        if(tsuLists.get(position).getAliquotVolume()!=null) {
+        if (tsuLists.get(position).getAliquotVolume() != null) {
             if (!tsuLists.get(position).getAliquotVolume().equalsIgnoreCase("0")) {
                 holder.txtAliquotTubeVol.setText("" + tsuLists.get(position).getAliquotVolume());
             } else {
@@ -252,6 +277,8 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
             public void onClick(View v) {
 
                 // showDismissKitDialog(tsuLists.get(position));
+
+                showDuplicateDialog(tsuLists.get(position), getListStudy);
             }
         });
 
@@ -278,36 +305,6 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
                 notifyDataSetChanged();
             }
         });
-
-       /* holder.btnMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //showDeleteDialog();
-
-                Utils.createDialogTwoButtons(
-                        context, context.getString(R.string.kit_mapping),
-                        true, context.getString(R.string.kit_alert_mapping),
-                        context.getString(R.string.dlg_yes_text),
-                        context.getString(R.string.dlg_no_text), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                dialog.dismiss();
-                                //CALL MAP API
-                              //  callKitMapAPI(tsuLists.get(position).getId(), tsuLists.get(position).getIsTrial());
-
-                            }
-                        }, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                dialog.dismiss();
-
-                            }
-                        });
-            }
-        });*/
     }
 
     @Override
@@ -474,11 +471,12 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
         }
     }
 
-    private void showModifyDialog(final TSUList tsuList, List<StudyList> lists) {
+
+    private void showDuplicateDialog(final TSUList tsuList, List<StudyList> lists) {
 
         // Create custom dialog object
         final Dialog dialog = new Dialog(context);
-        dialog.setContentView(R.layout.dialog_tsu_modify);
+        dialog.setContentView(R.layout.dialog_tsu_duplicate);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         Window window = dialog.getWindow();
         window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
@@ -486,14 +484,14 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
 
         initViews(dialog, tsuList, lists);
 
+        getTSUParamList(tsuList);
+
         Button btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Close dialog
-                dialog.dismiss();
-
-                //submitDetails();
+                submitDuplicateDetails(tsuList.getId(), dialog);
             }
         });
 
@@ -517,6 +515,8 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
         // spnStudyLabel.setOnItemSelectedListener(this);
         spnStudyLabel.setText(tsuList.getStudyTitle()+ "("+ tsuList.getStudyName()+")");
 
+        getKitListParamsForTSU(String.valueOf(tsuList.getStudyId()), tsuList);
+
         spnKitLabel = (Spinner) v.findViewById(R.id.spnKitLabel);
         spnKitLabel.setOnItemSelectedListener(this);
 
@@ -539,13 +539,24 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
         edtAliquotTubeVolume.setText(tsuList.getAliquotVolume());
 
         edtAliquotExtNo = v.findViewById(R.id.edtAliquotTubeExt);
-        edtAliquotExtNo.setText(tsuList.getAliquotExtNo());
+
+        if(!tsuList.getAliquotExtNo().equalsIgnoreCase("-")) {
+            edtAliquotExtNo.setText(tsuList.getAliquotExtNo());
+        }else {
+            edtAliquotExtNo.setText("");
+        }
 
         edtDiscardTubeVolume = v.findViewById(R.id.edtDiscardTubeVol);
         edtDiscardTubeVolume.setText(tsuList.getDiscardTubeVolume());
 
         edtCentrifugeProg = v.findViewById(R.id.edtCentrifugeProgramme);
-        edtCentrifugeProg.setText(tsuList.getCentrifugeProg());
+        //edtCentrifugeProg.setText(tsuList.getCentrifugeProg());
+
+        if(!tsuList.getCentrifugeProg().equalsIgnoreCase("-")) {
+            edtCentrifugeProg.setText(tsuList.getCentrifugeProg());
+        }else {
+            edtCentrifugeProg.setText("");
+        }
 
         spnPrimaryInvestigator = (Spinner) v.findViewById(R.id.spnPrimaryInvestigator);
         spnPrimaryInvestigator.setOnItemSelectedListener(this);
@@ -575,11 +586,6 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
         radioButtonTubeTypeBlood=(RadioButton) v.findViewById(R.id.rBlood);
         radioButtonTubeTypeUrine=(RadioButton) v.findViewById(R.id.rUrine);
 
-       /* if(tsuList.getTubeType() ==1){
-            radioButtonTubeTypeBlood.setChecked(true);
-        }else {
-            radioButtonTubeTypeUrine.setChecked(true);
-        }*/
 
         txtEntryDate = v.findViewById(R.id.txt_entry_date);
         txtEntryDate.setText(tsuList.getEntry_date());
@@ -590,20 +596,36 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
         btnEntryDate=  v.findViewById(R.id.btnEntryDate);
         btnEntryDate.setOnClickListener(this);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
-                android.R.layout.simple_spinner_item, sNumberValue);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnKitLabel.setAdapter(adapter);
-        spnPrimaryInvestigator.setAdapter(adapter);
+        linearLayoutTube=  v.findViewById(R.id.ll_tube);
+        linearLayoutAliquot=  v.findViewById(R.id.linearLayout_aliquot);
 
-        spnTubeColor.setAdapter(adapter);
-        spnAliquotTubeColor.setAdapter(adapter);
+        rUrine=  v.findViewById(R.id.rUrine);
+        rUrine.setOnClickListener(this);
 
-        spnDiscardTubeColor.setAdapter(adapter);
-        spnCollectionLabel.setAdapter(adapter);
-        spnTransportLabel.setAdapter(adapter);
-        spnTestName.setAdapter(adapter);
-        spnLabUse.setAdapter(adapter);
+        rBlood=  v.findViewById(R.id.rBlood);
+        rBlood.setOnClickListener(this);
+
+        rAliquot = v.findViewById(R.id.radioAliquot);
+        rAliquot.setOnClickListener(this);
+
+        if(tsuList.getTubeType().equalsIgnoreCase("BLOOD")){
+            radioButtonTubeTypeBlood.setChecked(true);
+        }else if (tsuList.getTubeType().equalsIgnoreCase("URINE")){
+            radioButtonTubeTypeUrine.setChecked(true);
+        }else {
+            rAliquot.setChecked(true);
+        }
+
+        if(!rAliquot.isChecked()){
+            linearLayoutTube.setVisibility(View.VISIBLE);
+            linearLayoutAliquot.setVisibility(View.GONE);
+        }else {
+            linearLayoutTube.setVisibility(View.GONE);
+            linearLayoutAliquot.setVisibility(View.VISIBLE);
+        }
+
+        spnSelectedStudyID = String.valueOf(tsuList.getStudyId());
+        strStudyName = String.valueOf(tsuList.getStudyName());
     }
 
     private void setEntryDate() {
@@ -668,86 +690,442 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
         datePickerDialog.show();
     }
 
+    private void getKitListParamsForTSU(String studyId, final TSUList tsuList){
 
+        new NetworkingHelper(new GetKitListForTSURequest((Activity)context, true, studyId)) {
 
-/*    private void submitDetails() {
+            @Override
+            public void serverResponseFromApi(ApiResponse serverResponse) {
+                if (serverResponse.isSucess) {
 
-        if(edtSiteNo.getText().toString().trim().length() >0) {
+                    try {
 
-            if(edtCohortNo.getText().toString().trim().length() > 0) {
+                        GetKitListForTSUResponse getTSUParamsResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, GetKitListForTSUResponse.class);
 
-                if(edtTimepoint.getText().toString().trim().length() > 0) {
+                        if (getTSUParamsResponse.getStatus().getCODE() == 200) {
 
-                    if(edtTubeVolume.getText().toString().trim().length() > 0) {
+                            if(getTSUParamsResponse.getResponse().getKits().size() > 0){
 
-                        if(!txtEntryDate.getText().toString().equalsIgnoreCase("")){
+                                Logger.logError("GetKitListForTSUResponse  API success " +
+                                        getTSUParamsResponse.getResponse().getKits().size());
+                                Logger.logError("GetKitListForTSUResponse  API success " +
+                                        getTSUParamsResponse.getResponse().getKits());
 
+                                kitListFetchedParam = new ArrayList();
+                                kitVisitListFetchedParam = new ArrayList();
+                                listKitList = new ArrayList();
+                                listKitList = getTSUParamsResponse.getResponse().getKits();
 
-                           // int selectedId = radioTubeType.getCheckedRadioButtonId();
-                           // radioButtonTubeType = (RadioButton) getView().findViewById(selectedId);
+                                for (int i = 0; i < getTSUParamsResponse.getResponse().getKits().size(); i++) {
 
+                                    kitListFetchedParam.add(getTSUParamsResponse.getResponse().getKits().get(i).getKitId());
+                                    kitVisitListFetchedParam.add(getTSUParamsResponse.getResponse().getKits().get(i).getVisit());
 
-                            String tubeType = "";
-                            if(radioButtonTubeTypeBlood.isChecked()){
-                                tubeType="1";
-                            }else if(radioButtonTubeTypeUrine.isChecked()){
-                                tubeType= "0";
+                                }
+
+                                if(kitVisitListFetchedParam !=null) {
+                                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
+                                            android.R.layout.simple_spinner_item, kitListFetchedParam);
+                                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnKitLabel.setAdapter(adapter);
+                                    Utilities.SetSpinnerSelection(spnKitLabel, kitListFetchedParam, tsuList.getKitId());
+                                }
+
                             }else {
+                                kitListFetchedParam.clear();
+                                kitVisitListFetchedParam.clear();
 
+                                if(kitVisitListFetchedParam !=null) {
+                                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
+                                            android.R.layout.simple_spinner_item, kitListFetchedParam);
+                                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnKitLabel.setAdapter(adapter);
+
+                                    edtVisit.setText(" ");
+                                    strKitName = " ";
+                                    strKitRecId = " ";
+                                }
+
+                                //Utils.showAlertDialog((Activity)context,  getTSUParamsResponse.getStatus().getMSG());
                             }
 
-                            callModifyTSUapi(spnSelectedStudyID,
-                                    strStudyName,
-                                    strStudyTitle,
-                                    spnSelectedKitID,
-                                    strKitName,
-                                    strKitTitle,
-                                    edtVisit.getText().toString().trim(),
-                                    edtSiteNo.getText().toString().trim(),
-                                    edtCohortNo.getText().toString().trim(),
-                                    spnPrimaryInvestigator.getSelectedItem().toString(),
-                                    edtTimepoint.getText().toString().trim(),
-                                    tubeType,
-                                    spnTubeColor.getSelectedItem().toString(),
-                                    edtTubeVolume.getText().toString().trim(),
-                                    spnAliquotTubeColor.getSelectedItem().toString(),
-                                    edtAliquotTubeVolume.getText().toString().trim(),
-                                    edtAliquotExtNo.getText().toString().trim(),
-                                    spnDiscardTubeColor.getSelectedItem().toString(),
-                                    edtDiscardTubeVolume.getText().toString().trim(),
-                                    spnTestName.getSelectedItem().toString().trim(),
-                                    spnCollectionLabel.getSelectedItem().toString().trim(),
-                                    spnTransportLabel.getSelectedItem().toString().trim(),
-                                    edtCentrifugeProg.getText().toString().trim(),
-                                    spnLabUse.getSelectedItem().toString().trim(),
-                                    txtEntryDate.getText().toString().trim()
-                            );
-
                         }else {
-                            Toast.makeText(context,"Please select Entry Date" , Toast.LENGTH_SHORT).show();
+
+                            Utils.showAlertDialog((Activity)context,  getTSUParamsResponse.getStatus().getMSG());
                         }
 
-                    }else {
-                        Toast.makeText(context,"Please enter Tube Volume" , Toast.LENGTH_SHORT).show();
+
+
+                    }
+                    catch (Exception e){
+                        Logger.logError("Exception " + e.getMessage());
                     }
 
-                }else {
-                    Toast.makeText(context,"Please enter Timpepoint" , Toast.LENGTH_SHORT).show();
+                } else {
+                    Logger.logError("GetKitListForTSUResponse API Failure " +
+                            serverResponse.errorMessageToDisplay);
                 }
+            }
+        };
+    }
 
-            }else {
-                Toast.makeText(context,"Please enter Cohort Number" , Toast.LENGTH_SHORT).show();
+    private void getTSUParamList(final TSUList tsuList){
+
+        new NetworkingHelper(new GetTSUParamRequest((Activity)context, true)) {
+
+            @Override
+            public void serverResponseFromApi(ApiResponse serverResponse) {
+                if (serverResponse.isSucess) {
+
+                    try {
+
+                        GetTSUParamsResponse getTSUParamsResponse = JsonParser
+                                .parseClass(serverResponse.jsonResponse, GetTSUParamsResponse.class);
+
+                        if (getTSUParamsResponse.getStatus().getCODE() == 200) {
+
+                            if(getTSUParamsResponse.getResponse().getPI().size() > 0){
+
+                                Logger.logError("GetTSU PARAM API success " +
+                                        getTSUParamsResponse.getResponse().getPI().size());
+                                Logger.logError("GetTSU PARAM API success " +
+                                        getTSUParamsResponse.getResponse().getPI());
+
+                                listPrimaryInvestigator = new ArrayList();
+                                listTubeColor = new ArrayList();
+                                listDiscardTubeColor = new ArrayList();
+                                listAliquotTubeColor = new ArrayList();
+
+                                listTestName = new ArrayList();
+                                listCollectionTube = new ArrayList();
+                                listTransportTube = new ArrayList();
+                                listLabUse = new ArrayList();
+                                //listKitList = new ArrayList();
+
+
+                                //For Primary Investigator
+                                //========================
+                                for (int i = 0; i < getTSUParamsResponse.getResponse().getPI().size(); i++) {
+
+                                    listPrimaryInvestigator.add(getTSUParamsResponse.getResponse().getPI().get(i).getValue());
+                                }
+
+                                if(listPrimaryInvestigator!=null) {
+                                    ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(context,
+                                            android.R.layout.simple_spinner_item, listPrimaryInvestigator);
+                                    adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnPrimaryInvestigator.setAdapter(adapter1);
+                                    Utilities.SetSpinnerSelection(spnPrimaryInvestigator, listPrimaryInvestigator, tsuList.getPrimaryInvestigator());
+
+                                }
+
+                                //For TubeColor
+                                //========================
+                                //listTubeColor.add("--");
+                                for (int i = 0; i < getTSUParamsResponse.getResponse().getTubeColor().size(); i++) {
+
+                                    listTubeColor.add(getTSUParamsResponse.getResponse().getTubeColor().get(i).getValue());
+                                }
+
+                                if(listTubeColor!=null) {
+                                    ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(context,
+                                            android.R.layout.simple_spinner_item, listTubeColor);
+                                    adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnTubeColor.setAdapter(adapter2);
+                                    Utilities.SetSpinnerSelection(spnTubeColor, listTubeColor, tsuList.getTubeColor());
+                                }
+
+
+                                //For DiscardTubeColor
+                                //========================
+                                for (int i = 0; i < getTSUParamsResponse.getResponse().getDiscardTubeColor().size(); i++) {
+                                    listDiscardTubeColor.add(getTSUParamsResponse.getResponse().getDiscardTubeColor().get(i).getValue());
+                                }
+
+                                if(listDiscardTubeColor!=null) {
+                                    ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(context,
+                                            android.R.layout.simple_spinner_item, listDiscardTubeColor);
+                                    adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnDiscardTubeColor.setAdapter(adapter1);
+                                    Utilities.SetSpinnerSelection(spnDiscardTubeColor, listDiscardTubeColor, tsuList.getDiscardTubeColor());
+                                }
+
+                                //For AliquotTubeColor
+                                //========================
+                                //listAliquotTubeColor.add("--");
+                                for (int i = 0; i < getTSUParamsResponse.getResponse().getAliquotTubeColor().size(); i++) {
+                                    listAliquotTubeColor.add(getTSUParamsResponse.getResponse().getAliquotTubeColor().get(i).getValue());
+                                }
+
+                                if(listAliquotTubeColor!=null) {
+                                    ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(context,
+                                            android.R.layout.simple_spinner_item, listAliquotTubeColor);
+                                    adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnAliquotTubeColor.setAdapter(adapter3);
+                                    Utilities.SetSpinnerSelection(spnAliquotTubeColor, listAliquotTubeColor, tsuList.getAliquotColorTube());
+
+                                }
+
+
+                                //For TestName
+                                //========================
+                                for (int i = 0; i < getTSUParamsResponse.getResponse().getTestName().size(); i++) {
+
+                                    listTestName.add(getTSUParamsResponse.getResponse().getTestName().get(i).getValue());
+                                }
+
+                                if(listTestName!=null) {
+                                    ArrayAdapter<String> adapter4 = new ArrayAdapter<String>(context,
+                                            android.R.layout.simple_spinner_item, listTestName);
+                                    adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnTestName.setAdapter(adapter4);
+                                    Utilities.SetSpinnerSelection(spnTestName, listTestName, tsuList.getTestName());
+
+                                }
+
+                                //For CollectionLable
+                                //========================
+                                listCollectionTube.add("NA");
+                                for (int i = 0; i < getTSUParamsResponse.getResponse().getCollectionLable().size(); i++) {
+
+                                    listCollectionTube.add(getTSUParamsResponse.getResponse().getCollectionLable().get(i).getValue());
+                                }
+
+                                if(listCollectionTube!=null) {
+                                    ArrayAdapter<String> adapter5 = new ArrayAdapter<String>(context,
+                                            android.R.layout.simple_spinner_item, listCollectionTube);
+                                    adapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnCollectionLabel.setAdapter(adapter5);
+                                    Utilities.SetSpinnerSelection(spnCollectionLabel, listCollectionTube, tsuList.getCollectionLable());
+
+                                }
+
+
+                                //For TransportLable
+                                //========================
+                                listTransportTube.add("NA");
+                                for (int i = 0; i < getTSUParamsResponse.getResponse().getTransportLable().size(); i++) {
+
+                                    listTransportTube.add(getTSUParamsResponse.getResponse().getTransportLable().get(i).getValue());
+                                }
+
+                                if(listTransportTube!=null) {
+                                    ArrayAdapter<String> adapter6 = new ArrayAdapter<String>(context,
+                                            android.R.layout.simple_spinner_item, listTransportTube);
+                                    adapter6.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnTransportLabel.setAdapter(adapter6);
+                                    Utilities.SetSpinnerSelection(spnTransportLabel, listTransportTube, tsuList.getTransportLable());
+                                }
+
+
+                                //For LAB USE
+                                //========================
+                                for (int i = 0; i < getTSUParamsResponse.getResponse().getLabUse().size(); i++) {
+
+                                    listLabUse.add(getTSUParamsResponse.getResponse().getLabUse().get(i).getValue());
+                                }
+
+                                if(listLabUse!=null) {
+                                    ArrayAdapter<String> adapter7 = new ArrayAdapter<String>(context,
+                                            android.R.layout.simple_spinner_item, listLabUse);
+                                    adapter7.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnLabUse.setAdapter(adapter7);
+                                    Utilities.SetSpinnerSelection(spnLabUse, listLabUse, tsuList.getLabUse());
+
+                                }
+
+                            }else {
+                                Utils.showAlertDialog((Activity)context,  getTSUParamsResponse.getStatus().getMSG());
+                            }
+
+                        }else {
+
+                            Utils.showAlertDialog((Activity)context,  getTSUParamsResponse.getStatus().getMSG());
+                        }
+
+
+
+                    }
+                    catch (Exception e){
+                        Logger.logError("Exception " + e.getMessage());
+                    }
+
+                } else {
+                    Logger.logError("GetTSU PARAM API Failure " +
+                            serverResponse.errorMessageToDisplay);
+                }
+            }
+        };
+    }
+
+
+    private void submitDuplicateDetails(int id, Dialog dialog) {
+
+        if(!rAliquot.isChecked()) {
+
+            if (edtSiteNo.getText().toString().trim().length() > 0) {
+
+                if (edtCohortNo.getText().toString().trim().length() > 0) {
+
+                    if (edtTimepoint.getText().toString().trim().length() > 0) {
+
+                        if (edtTubeVolume.getText().toString().trim().length() > 0) {
+
+                            if(edtDiscardTubeVolume.getText().toString().trim().length() > 0) {
+
+                                if (!txtEntryDate.getText().toString().equalsIgnoreCase("")) {
+
+
+                                    // int selectedId = radioTubeType.getCheckedRadioButtonId();
+                                    // radioButtonTubeType = (RadioButton) getView().findViewById(selectedId);
+
+
+                                    String tubeType = "";
+                                    if (radioButtonTubeTypeBlood.isChecked()) {
+                                        tubeType = "BLOOD";
+                                    } else if (radioButtonTubeTypeUrine.isChecked()) {
+                                        tubeType = "URINE";
+                                    } else {
+                                        tubeType = "ALIQUOT";
+                                    }
+
+                                    dialog.dismiss();
+                                    callAddTSUapi(spnSelectedStudyID,
+                                            strStudyName,
+                                            strStudyTitle,
+                                            spnSelectedKitID,
+                                            strKitName,
+                                            strKitRecId,
+                                            edtVisit.getText().toString().trim(),
+                                            edtSiteNo.getText().toString().trim(),
+                                            edtCohortNo.getText().toString().trim(),
+                                            spnPrimaryInvestigator.getSelectedItem().toString(),
+                                            edtTimepoint.getText().toString().trim(),
+                                            tubeType,
+                                            spnTubeColor.getSelectedItem().toString(),
+                                            edtTubeVolume.getText().toString().trim(),
+                                            spnAliquotTubeColor.getSelectedItem().toString(),
+                                            edtAliquotTubeVolume.getText().toString().trim(),
+                                            edtAliquotExtNo.getText().toString().trim(),
+                                            spnDiscardTubeColor.getSelectedItem().toString(),
+                                            edtDiscardTubeVolume.getText().toString().trim(),
+                                            spnTestName.getSelectedItem().toString().trim(),
+                                            spnCollectionLabel.getSelectedItem().toString().trim(),
+                                            spnTransportLabel.getSelectedItem().toString().trim(),
+                                            edtCentrifugeProg.getText().toString().trim(),
+                                            spnLabUse.getSelectedItem().toString().trim(),
+                                            txtEntryDate.getText().toString().trim());
+
+                                } else {
+                                    Toast.makeText(context, "Please select Entry Date", Toast.LENGTH_SHORT).show();
+                                }
+
+                            } else {
+                                Toast.makeText(context, "Please enter Discard Tube Volume", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else {
+                            Toast.makeText(context, "Please enter Tube Volume", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } else {
+                        Toast.makeText(context, "Please enter Timpepoint", Toast.LENGTH_SHORT).show();
+                    }
+
+                } else {
+                    Toast.makeText(context, "Please enter Cohort Number", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(context, "Please enter Site Number", Toast.LENGTH_SHORT).show();
             }
         }else {
-            Toast.makeText(context,"Please enter Site Number" , Toast.LENGTH_SHORT).show();
+
+            if (edtSiteNo.getText().toString().trim().length() > 0) {
+
+                if (edtCohortNo.getText().toString().trim().length() > 0) {
+
+                    if (edtTimepoint.getText().toString().trim().length() > 0) {
+
+                        if (edtAliquotTubeVolume.getText().toString().trim().length() > 0) {
+
+                            if(edtDiscardTubeVolume.getText().toString().trim().length() > 0) {
+
+                                if (!txtEntryDate.getText().toString().equalsIgnoreCase("")) {
+
+
+                                    // int selectedId = radioTubeType.getCheckedRadioButtonId();
+                                    // radioButtonTubeType = (RadioButton) getView().findViewById(selectedId);
+
+
+                                    String tubeType = "";
+                                    if (radioButtonTubeTypeBlood.isChecked()) {
+                                        tubeType = "BLOOD";
+                                    } else if (radioButtonTubeTypeUrine.isChecked()) {
+                                        tubeType = "URINE";
+                                    }else if(rAliquot.isChecked()){
+                                        tubeType = "ALIQUOT";
+                                    } else{
+
+                                    }
+
+                                    dialog.dismiss();
+                                    callAddTSUapi(spnSelectedStudyID,
+                                            strStudyName,
+                                            strStudyTitle,
+                                            spnSelectedKitID,
+                                            strKitName,
+                                            strKitRecId,
+                                            edtVisit.getText().toString().trim(),
+                                            edtSiteNo.getText().toString().trim(),
+                                            edtCohortNo.getText().toString().trim(),
+                                            spnPrimaryInvestigator.getSelectedItem().toString(),
+                                            edtTimepoint.getText().toString().trim(),
+                                            tubeType,
+                                            spnTubeColor.getSelectedItem().toString(),
+                                            edtTubeVolume.getText().toString().trim(),
+                                            spnAliquotTubeColor.getSelectedItem().toString(),
+                                            edtAliquotTubeVolume.getText().toString().trim(),
+                                            edtAliquotExtNo.getText().toString().trim(),
+                                            spnDiscardTubeColor.getSelectedItem().toString(),
+                                            edtDiscardTubeVolume.getText().toString().trim(),
+                                            spnTestName.getSelectedItem().toString().trim(),
+                                            spnCollectionLabel.getSelectedItem().toString().trim(),
+                                            spnTransportLabel.getSelectedItem().toString().trim(),
+                                            edtCentrifugeProg.getText().toString().trim(),
+                                            spnLabUse.getSelectedItem().toString().trim(),
+                                            txtEntryDate.getText().toString().trim());
+
+                                } else {
+                                    Toast.makeText(context, "Please select Entry Date", Toast.LENGTH_SHORT).show();
+                                }
+
+                            } else {
+                                Toast.makeText(context, "Please enter Discard Tube Volume", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else {
+                            Toast.makeText(context, "Please enter Tube Volume", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } else {
+                        Toast.makeText(context, "Please enter Timepoint", Toast.LENGTH_SHORT).show();
+                    }
+
+                } else {
+                    Toast.makeText(context, "Please enter Cohort Number", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(context, "Please enter Site Number", Toast.LENGTH_SHORT).show();
+            }
+
         }
 
-    }*/
+    }
 
-
-    /*//Call callAddTSUapi API
-    private void callModifyTSUapi(String spnSelectedStudyID, String studyName, String studyTitle,
-                               String spnSelectedKitID, String strKitName, String strKitTitle,
+    //Call callAddTSUapi API
+    private void callAddTSUapi(String spnSelectedStudyID, String studyName, String studyTitle,
+                               String spnSelectedKitID, String strKitName, String strKitRecId,
                                String visit, String siteNo, String cohortNo,
                                String prim_investegator, String strTimePoint, String rbTypeValue,
                                String tubeColor, String tubeVolume, String aliquotColor, String aliquotVol,
@@ -767,37 +1145,75 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
         tsuRequestModel.setEvent(AppConstants.ADD_TSU);
 
         tsuRequestModel.setVisit(visit);
-        // tsuRequestModel.setStudyName(strStudyName);
-        tsuRequestModel.setStudyName("SST");
-        tsuRequestModel.setKitId("SsT");
-        // tsuRequestModel.setStudyId(Integer.valueOf(spnSelectedStudyID));
-        tsuRequestModel.setStudyId(4);
-        tsuRequestModel.setKitRecId(24);
-        if(rbTypeValue.equalsIgnoreCase("Blood")) {
-            tsuRequestModel.setTubeType(1);
+        tsuRequestModel.setStudyName(strStudyName);
+        //tsuRequestModel.setStudyName("SST");
+        tsuRequestModel.setKitId(strKitName);
+        tsuRequestModel.setStudyId(Integer.valueOf(spnSelectedStudyID));
+        //tsuRequestModel.setStudyId(4);
+        tsuRequestModel.setKitRecId(Integer.valueOf(strKitRecId));
+        /*if(rbTypeValue.equalsIgnoreCase("Blood")) {
+            tsuRequestModel.setTubeType("Blood");
         }else {
             tsuRequestModel.setTubeType(0);
+        }*/
+        tsuRequestModel.setTubeType(rbTypeValue);
+
+        if(rbTypeValue.equalsIgnoreCase("BLOOD")){
+
+            tsuRequestModel.setTubeColor(tubeColor);
+            tsuRequestModel.setTubeVol(tubeVolume);
+            tsuRequestModel.setAliquotColor("-");
+            tsuRequestModel.setAliquotVol("0");
+            tsuRequestModel.setAliquotExt("-");
+
+        }else if(rbTypeValue.equalsIgnoreCase("URINE")) {
+
+            tsuRequestModel.setTubeColor(tubeColor);
+            tsuRequestModel.setTubeVol(tubeVolume);
+            tsuRequestModel.setAliquotColor("-");
+            tsuRequestModel.setAliquotVol("0");
+            tsuRequestModel.setAliquotExt("-");
+
+        }else  if(rbTypeValue.equalsIgnoreCase("ALIQUOT")) {
+
+            tsuRequestModel.setTubeColor("-");
+            tsuRequestModel.setTubeVol("0");
+
+            tsuRequestModel.setAliquotColor(aliquotColor);
+            tsuRequestModel.setAliquotVol(aliquotVol);
+
+
+            if(!aliquotExtNo.isEmpty()){
+                tsuRequestModel.setAliquotExt(aliquotExtNo);
+            }else {
+                tsuRequestModel.setAliquotExt("-");
+            }
+
+        }else{
+
         }
+
         tsuRequestModel.setIsDuplicate(0);
         tsuRequestModel.setEntryDate(txtEntryDate);
         tsuRequestModel.setSiteNo(siteNo);
         tsuRequestModel.setCohortNo(cohortNo);
         tsuRequestModel.setPi(prim_investegator);
         tsuRequestModel.setTimepoint(strTimePoint);
-        tsuRequestModel.setTubeColor(tubeColor);
-        tsuRequestModel.setTubeVol(tubeVolume);
-        tsuRequestModel.setAliquotColor(aliquotColor);
-        tsuRequestModel.setAliquotVol(aliquotVol);
-        tsuRequestModel.setAliquotExt(aliquotExtNo);
         tsuRequestModel.setDiscardTubeColor(spnDiscardTubeColor);
         tsuRequestModel.setDiscardTubeVolume(discardTubeVol);
         tsuRequestModel.setTestName(spnTestName);
         tsuRequestModel.setCollectionLable(spnCollectionLabel);
         tsuRequestModel.setTransportLable(spnTransportLabel);
-        tsuRequestModel.setCentrifugeProg(centriProg);
+        //tsuRequestModel.setCentrifugeProg(centriProg);
+        if(!centriProg.isEmpty()){
+            tsuRequestModel.setCentrifugeProg(centriProg);
+        }else {
+            tsuRequestModel.setCentrifugeProg("-");
+        }
+
         tsuRequestModel.setLabUse(strLabUse);
 
-        new NetworkingHelper(new AddTSURequest((Activity) context, true, tsuRequestModel)) {
+        new NetworkingHelper(new AddTSURequest((Activity)context, true, tsuRequestModel)) {
 
             @Override
             public void serverResponseFromApi(ApiResponse serverResponse) {
@@ -817,36 +1233,8 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
                                 Logger.logError("addTSU API success " +
                                         commonResponse.getResponse().get(0).getMessage());
 
-                                // Utils.showAlertDialog(context,  commonResponse.getResponse().get(0).getMessage());
-
-                                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-                                // ...Irrelevant code for customizing the buttons and title
-                                LayoutInflater inflater = ((Activity) context).getParent().getLayoutInflater();
-                                View dialogView = inflater.inflate(R.layout.alert_dialog_with_one_button, null);
-                                dialogBuilder.setView(dialogView);
-                                final AlertDialog alertDialog = dialogBuilder.create();
-
-                                TextView tvDesc = (TextView) dialogView.findViewById(R.id.tv_dialog_desc);
-                                tvDesc.setText(commonResponse.getResponse().get(0).getMessage());
-                                Button btDialogOk = (Button) dialogView.findViewById(R.id.bt_dialog_ok);
-                                btDialogOk.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-
-                                        alertDialog.dismiss();
-                                        Intent mNextActivity = new Intent(context, TSUSetupActivity.class);
-                                        context.startActivity(mNextActivity);
-                                        //context.finish();
-                                    }
-                                });
-
-                                alertDialog.setCanceledOnTouchOutside(false);
-                                alertDialog.show();
-                                edtSiteNo.setText("");
-                                edtCohortNo.setText("");
-                                edtTimepoint.setText("");
-                                edtTubeVolume.setText("");
-                                //txtEntryDate.setText("");
+                                Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
+                                callGetTSUDetailsAPI();
 
                             }else {
 
@@ -878,84 +1266,7 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
         };
 
     }
-*/
 
-
-
-
-    //getAllStudyID API
-    private void getAllStudyID()
-    {
-        final CommonRequestModel commonRequestModel = new CommonRequestModel();
-        commonRequestModel.setAppName(AppConstants.APP_NAME);
-        commonRequestModel.setVersionNumber(AppConstants.APP_VERSION);
-        commonRequestModel.setDeviceType(AppConstants.APP_OS);
-        commonRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
-        commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(context));
-        commonRequestModel.setUserRole(new PrefManager(context).getUserRoleType());
-        commonRequestModel.setTagId(new PrefManager(context).getBarCodeValue());
-        //commonRequestModel.setEvent(AppConstants.GET_NOTIFICATION);
-        commonRequestModel.setUserName(new PrefManager(context).getUserName());
-
-        new NetworkingHelper(new GetAllStudyIdRequest((Activity)context, true, commonRequestModel)) {
-
-            @Override
-            public void serverResponseFromApi(ApiResponse serverResponse) {
-                if (serverResponse.isSucess) {
-
-                    try {
-
-                        GetAllStudyIdResponse commonResponse = JsonParser
-                                .parseClass(serverResponse.jsonResponse, GetAllStudyIdResponse.class);
-
-                        if (commonResponse.getStatus().getCODE() == 200) {
-
-                            if(commonResponse.getStatus().getMSG().equalsIgnoreCase("REQ_SUCCESS")){
-
-                                Logger.logError("getStudyIds API success " +
-                                        commonResponse.getStudyList());
-
-                                listStudy = commonResponse.getStudyList();
-
-                                if(commonResponse.getStudyList().size()>0) {
-
-                                    List<String> lists = new ArrayList<>();
-
-                                    for (int i = 0; i < commonResponse.getStudyList().size(); i++) {
-
-                                        lists.add(commonResponse.getStudyList().get(i).getLabel());
-
-                                    }
-
-                                    ArrayAdapter studyIdAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, lists);
-                                    studyIdAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                    //spnStudyLabel.setAdapter(studyIdAdp);
-
-                                }else {
-                                    Logger.logError("No STUDY_LIST FOUND :" + "No STUDY_LIST FOUND");
-                                }
-
-
-                            }else {
-
-                                Utils.showAlertDialog((Activity)context,  commonResponse.getStatus().getMSG());
-                            }
-
-                        }
-
-                    }
-                    catch (Exception e){
-                        Logger.logError("Exception " + e.getMessage());
-                    }
-
-                } else {
-                    Logger.logError("getStudyIds API Failure " +
-                            serverResponse.errorMessageToDisplay);
-                }
-            }
-        };
-
-    }
 
 }
 

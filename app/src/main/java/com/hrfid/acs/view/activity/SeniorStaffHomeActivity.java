@@ -74,6 +74,7 @@ public class SeniorStaffHomeActivity extends BaseActivity {
         staffItemList.add(new StaffItem("Subject Onboarding",R.drawable.ic_senior_onboarding));
         staffItemList.add(new StaffItem("TSU",R.drawable.ic_senior_tsu));
         staffItemList.add(new StaffItem("Inventory Setup",R.drawable.ic_senior_inventory_barcode));
+        staffItemList.add(new StaffItem("Sample Intake",R.drawable.ic_nurse_sample_intake));
 
         StaffItemAdapter staffItemAdapter=new StaffItemAdapter(this,R.layout.activity_staff_grid_items, staffItemList);
         gridView.setAdapter(staffItemAdapter);

@@ -1,9 +1,11 @@
 package com.hrfid.acs.view.adapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -32,6 +34,8 @@ import com.hrfid.acs.R;
 import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
+import com.hrfid.acs.helpers.request.AddTSURequest;
+import com.hrfid.acs.helpers.request.AddTSURequestModel;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.request.GetKitListForTSURequest;
@@ -52,6 +56,7 @@ import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
+import com.hrfid.acs.view.activity.TSUSetupActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -274,6 +279,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
       public void onClick(View v) {
 
         // showDismissKitDialog(tsuLists.get(position));
+        showDuplicateDialog(tsuLists.get(position), getListStudy);
       }
     });
 
@@ -426,8 +432,19 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
                 //getAllStudyID();
 
-                TSUDetailsAdapter customAdapter = new TSUDetailsAdapter(context, getKitDetailsResponse.getTSUList(), listStudy, recyclerView);
-                recyclerView.setAdapter(customAdapter);
+                tsuLists.clear();
+
+                for (int i = 0; i < getKitDetailsResponse.getTSUList().size(); i++) {
+
+                  if(getKitDetailsResponse.getTSUList().get(i).getIsArchived() ==0) {
+                    tsuLists.add(getKitDetailsResponse.getTSUList().get(i));
+                  }
+                }
+
+                if(tsuLists !=null && tsuLists.size() > 0) {
+                  TSUDetailsAdapter customAdapter = new TSUDetailsAdapter(context, tsuLists, listStudy, recyclerView);
+                  recyclerView.setAdapter(customAdapter);
+                }
 
 
               }else {
@@ -495,6 +512,42 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
         break;
 
     }
+  }
+
+  private void showDuplicateDialog(final TSUList tsuList, List<StudyList> lists) {
+
+    // Create custom dialog object
+    final Dialog dialog = new Dialog(context);
+    dialog.setContentView(R.layout.dialog_tsu_duplicate);
+    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    Window window = dialog.getWindow();
+    window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT);
+
+    initViews(dialog, tsuList, lists);
+
+    getTSUParamList(tsuList);
+
+    Button btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
+    btnSubmit.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // Close dialog
+        submitDuplicateDetails(tsuList.getId(), dialog);
+      }
+    });
+
+    Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
+    // if decline button is clicked, close the custom dialog
+    btnCancel.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // Close dialog
+        dialog.dismiss();
+      }
+    });
+
+    dialog.show();
   }
 
   private void showModifyDialog(final TSUList tsuList, List<StudyList> lists) {
@@ -774,7 +827,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
                         strStudyTitle,
                         spnSelectedKitID,
                         strKitName,
-                        strKitName,
+                        strKitRecId,
                         edtVisit.getText().toString().trim(),
                         edtSiteNo.getText().toString().trim(),
                         edtCohortNo.getText().toString().trim(),
@@ -854,7 +907,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
                         strStudyTitle,
                         spnSelectedKitID,
                         strKitName,
-                        strKitName,
+                        strKitRecId,
                         edtVisit.getText().toString().trim(),
                         edtSiteNo.getText().toString().trim(),
                         edtCohortNo.getText().toString().trim(),
@@ -913,6 +966,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
                                 String aliquotExtNo, String spnDiscardTubeColor, String discardTubeVol,
                                 String spnTestName, String spnCollectionLabel, String spnTransportLabel,
                                 String centriProg, String strLabUse, String txtEntryDate, int id) {
+
 
     ModifyTSUDetailsRequestModel tsuRequestModel = new ModifyTSUDetailsRequestModel();
     tsuRequestModel.setAppName(AppConstants.APP_NAME);
@@ -1357,21 +1411,260 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
   }
 
 
-  //getAllStudyID API
-  private void getAllStudyID()
-  {
-    final CommonRequestModel commonRequestModel = new CommonRequestModel();
-    commonRequestModel.setAppName(AppConstants.APP_NAME);
-    commonRequestModel.setVersionNumber(AppConstants.APP_VERSION);
-    commonRequestModel.setDeviceType(AppConstants.APP_OS);
-    commonRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
-    commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(context));
-    commonRequestModel.setUserRole(new PrefManager(context).getUserRoleType());
-    commonRequestModel.setTagId(new PrefManager(context).getBarCodeValue());
-    //commonRequestModel.setEvent(AppConstants.GET_NOTIFICATION);
-    commonRequestModel.setUserName(new PrefManager(context).getUserName());
+  private void submitDuplicateDetails(int id, Dialog dialog) {
 
-    new NetworkingHelper(new GetAllStudyIdRequest((Activity)context, true, commonRequestModel)) {
+    if(!rAliquot.isChecked()) {
+
+      if (edtSiteNo.getText().toString().trim().length() > 0) {
+
+        if (edtCohortNo.getText().toString().trim().length() > 0) {
+
+          if (edtTimepoint.getText().toString().trim().length() > 0) {
+
+            if (edtTubeVolume.getText().toString().trim().length() > 0) {
+
+              if(edtDiscardTubeVolume.getText().toString().trim().length() > 0) {
+
+                if (!txtEntryDate.getText().toString().equalsIgnoreCase("")) {
+
+
+                  // int selectedId = radioTubeType.getCheckedRadioButtonId();
+                  // radioButtonTubeType = (RadioButton) getView().findViewById(selectedId);
+
+
+                  String tubeType = "";
+                  if (radioButtonTubeTypeBlood.isChecked()) {
+                    tubeType = "BLOOD";
+                  } else if (radioButtonTubeTypeUrine.isChecked()) {
+                    tubeType = "URINE";
+                  } else {
+                    tubeType = "ALIQUOT";
+                  }
+
+                  dialog.dismiss();
+                  callAddTSUapi(spnSelectedStudyID,
+                          strStudyName,
+                          strStudyTitle,
+                          spnSelectedKitID,
+                          strKitName,
+                          strKitRecId,
+                          edtVisit.getText().toString().trim(),
+                          edtSiteNo.getText().toString().trim(),
+                          edtCohortNo.getText().toString().trim(),
+                          spnPrimaryInvestigator.getSelectedItem().toString(),
+                          edtTimepoint.getText().toString().trim(),
+                          tubeType,
+                          spnTubeColor.getSelectedItem().toString(),
+                          edtTubeVolume.getText().toString().trim(),
+                          spnAliquotTubeColor.getSelectedItem().toString(),
+                          edtAliquotTubeVolume.getText().toString().trim(),
+                          edtAliquotExtNo.getText().toString().trim(),
+                          spnDiscardTubeColor.getSelectedItem().toString(),
+                          edtDiscardTubeVolume.getText().toString().trim(),
+                          spnTestName.getSelectedItem().toString().trim(),
+                          spnCollectionLabel.getSelectedItem().toString().trim(),
+                          spnTransportLabel.getSelectedItem().toString().trim(),
+                          edtCentrifugeProg.getText().toString().trim(),
+                          spnLabUse.getSelectedItem().toString().trim(),
+                          txtEntryDate.getText().toString().trim());
+
+                } else {
+                  Toast.makeText(context, "Please select Entry Date", Toast.LENGTH_SHORT).show();
+                }
+
+              } else {
+                Toast.makeText(context, "Please enter Discard Tube Volume", Toast.LENGTH_SHORT).show();
+              }
+
+            } else {
+              Toast.makeText(context, "Please enter Tube Volume", Toast.LENGTH_SHORT).show();
+            }
+
+          } else {
+            Toast.makeText(context, "Please enter Timpepoint", Toast.LENGTH_SHORT).show();
+          }
+
+        } else {
+          Toast.makeText(context, "Please enter Cohort Number", Toast.LENGTH_SHORT).show();
+        }
+      } else {
+        Toast.makeText(context, "Please enter Site Number", Toast.LENGTH_SHORT).show();
+      }
+    }else {
+
+      if (edtSiteNo.getText().toString().trim().length() > 0) {
+
+        if (edtCohortNo.getText().toString().trim().length() > 0) {
+
+          if (edtTimepoint.getText().toString().trim().length() > 0) {
+
+            if (edtAliquotTubeVolume.getText().toString().trim().length() > 0) {
+
+              if(edtDiscardTubeVolume.getText().toString().trim().length() > 0) {
+
+                if (!txtEntryDate.getText().toString().equalsIgnoreCase("")) {
+
+
+                  // int selectedId = radioTubeType.getCheckedRadioButtonId();
+                  // radioButtonTubeType = (RadioButton) getView().findViewById(selectedId);
+
+
+                  String tubeType = "";
+                  if (radioButtonTubeTypeBlood.isChecked()) {
+                    tubeType = "BLOOD";
+                  } else if (radioButtonTubeTypeUrine.isChecked()) {
+                    tubeType = "URINE";
+                  }else if(rAliquot.isChecked()){
+                    tubeType = "ALIQUOT";
+                  } else{
+
+                  }
+
+                  dialog.dismiss();
+                  callAddTSUapi(spnSelectedStudyID,
+                          strStudyName,
+                          strStudyTitle,
+                          spnSelectedKitID,
+                          strKitName,
+                          strKitRecId,
+                          edtVisit.getText().toString().trim(),
+                          edtSiteNo.getText().toString().trim(),
+                          edtCohortNo.getText().toString().trim(),
+                          spnPrimaryInvestigator.getSelectedItem().toString(),
+                          edtTimepoint.getText().toString().trim(),
+                          tubeType,
+                          spnTubeColor.getSelectedItem().toString(),
+                          edtTubeVolume.getText().toString().trim(),
+                          spnAliquotTubeColor.getSelectedItem().toString(),
+                          edtAliquotTubeVolume.getText().toString().trim(),
+                          edtAliquotExtNo.getText().toString().trim(),
+                          spnDiscardTubeColor.getSelectedItem().toString(),
+                          edtDiscardTubeVolume.getText().toString().trim(),
+                          spnTestName.getSelectedItem().toString().trim(),
+                          spnCollectionLabel.getSelectedItem().toString().trim(),
+                          spnTransportLabel.getSelectedItem().toString().trim(),
+                          edtCentrifugeProg.getText().toString().trim(),
+                          spnLabUse.getSelectedItem().toString().trim(),
+                          txtEntryDate.getText().toString().trim());
+
+                } else {
+                  Toast.makeText(context, "Please select Entry Date", Toast.LENGTH_SHORT).show();
+                }
+
+              } else {
+                Toast.makeText(context, "Please enter Discard Tube Volume", Toast.LENGTH_SHORT).show();
+              }
+
+            } else {
+              Toast.makeText(context, "Please enter Tube Volume", Toast.LENGTH_SHORT).show();
+            }
+
+          } else {
+            Toast.makeText(context, "Please enter Timepoint", Toast.LENGTH_SHORT).show();
+          }
+
+        } else {
+          Toast.makeText(context, "Please enter Cohort Number", Toast.LENGTH_SHORT).show();
+        }
+      } else {
+        Toast.makeText(context, "Please enter Site Number", Toast.LENGTH_SHORT).show();
+      }
+
+    }
+
+  }
+
+  //Call callAddTSUapi API
+  private void callAddTSUapi(String spnSelectedStudyID, String studyName, String studyTitle,
+                             String spnSelectedKitID, String strKitName, String strKitRecId,
+                             String visit, String siteNo, String cohortNo,
+                             String prim_investegator, String strTimePoint, String rbTypeValue,
+                             String tubeColor, String tubeVolume, String aliquotColor, String aliquotVol,
+                             String aliquotExtNo, String spnDiscardTubeColor, String discardTubeVol,
+                             String spnTestName, String spnCollectionLabel, String spnTransportLabel,
+                             String centriProg, String strLabUse, String txtEntryDate) {
+
+    AddTSURequestModel tsuRequestModel = new AddTSURequestModel();
+    tsuRequestModel.setAppName(AppConstants.APP_NAME);
+    tsuRequestModel.setVersionNumber(AppConstants.APP_VERSION);
+    tsuRequestModel.setDeviceType(AppConstants.APP_OS);
+    tsuRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
+    tsuRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(context));
+    tsuRequestModel.setUserRole(new PrefManager(context).getUserRoleType());
+    tsuRequestModel.setUserName(new PrefManager(context).getUserName());
+    tsuRequestModel.setTagId(new PrefManager(context).getBarCodeValue());
+    tsuRequestModel.setEvent(AppConstants.ADD_TSU);
+
+    tsuRequestModel.setVisit(visit);
+    tsuRequestModel.setStudyName(strStudyName);
+    //tsuRequestModel.setStudyName("SST");
+    tsuRequestModel.setKitId(strKitName);
+    tsuRequestModel.setStudyId(Integer.valueOf(spnSelectedStudyID));
+    //tsuRequestModel.setStudyId(4);
+    tsuRequestModel.setKitRecId(Integer.valueOf(strKitRecId));
+        /*if(rbTypeValue.equalsIgnoreCase("Blood")) {
+            tsuRequestModel.setTubeType("Blood");
+        }else {
+            tsuRequestModel.setTubeType(0);
+        }*/
+    tsuRequestModel.setTubeType(rbTypeValue);
+
+    if(rbTypeValue.equalsIgnoreCase("BLOOD")){
+
+      tsuRequestModel.setTubeColor(tubeColor);
+      tsuRequestModel.setTubeVol(tubeVolume);
+      tsuRequestModel.setAliquotColor("-");
+      tsuRequestModel.setAliquotVol("0");
+      tsuRequestModel.setAliquotExt("-");
+
+    }else if(rbTypeValue.equalsIgnoreCase("URINE")) {
+
+      tsuRequestModel.setTubeColor(tubeColor);
+      tsuRequestModel.setTubeVol(tubeVolume);
+      tsuRequestModel.setAliquotColor("-");
+      tsuRequestModel.setAliquotVol("0");
+      tsuRequestModel.setAliquotExt("-");
+
+    }else  if(rbTypeValue.equalsIgnoreCase("ALIQUOT")) {
+
+      tsuRequestModel.setTubeColor("-");
+      tsuRequestModel.setTubeVol("0");
+
+      tsuRequestModel.setAliquotColor(aliquotColor);
+      tsuRequestModel.setAliquotVol(aliquotVol);
+
+
+      if(!aliquotExtNo.isEmpty()){
+        tsuRequestModel.setAliquotExt(aliquotExtNo);
+      }else {
+        tsuRequestModel.setAliquotExt("-");
+      }
+
+    }else{
+
+    }
+
+    tsuRequestModel.setIsDuplicate(0);
+    tsuRequestModel.setEntryDate(txtEntryDate);
+    tsuRequestModel.setSiteNo(siteNo);
+    tsuRequestModel.setCohortNo(cohortNo);
+    tsuRequestModel.setPi(prim_investegator);
+    tsuRequestModel.setTimepoint(strTimePoint);
+    tsuRequestModel.setDiscardTubeColor(spnDiscardTubeColor);
+    tsuRequestModel.setDiscardTubeVolume(discardTubeVol);
+    tsuRequestModel.setTestName(spnTestName);
+    tsuRequestModel.setCollectionLable(spnCollectionLabel);
+    tsuRequestModel.setTransportLable(spnTransportLabel);
+    //tsuRequestModel.setCentrifugeProg(centriProg);
+    if(!centriProg.isEmpty()){
+      tsuRequestModel.setCentrifugeProg(centriProg);
+    }else {
+      tsuRequestModel.setCentrifugeProg("-");
+    }
+
+    tsuRequestModel.setLabUse(strLabUse);
+
+    new NetworkingHelper(new AddTSURequest((Activity)context, true, tsuRequestModel)) {
 
       @Override
       public void serverResponseFromApi(ApiResponse serverResponse) {
@@ -1379,43 +1672,68 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
           try {
 
-            GetAllStudyIdResponse commonResponse = JsonParser
-                    .parseClass(serverResponse.jsonResponse, GetAllStudyIdResponse.class);
+            CommonResponse commonResponse = JsonParser
+                    .parseClass(serverResponse.jsonResponse, CommonResponse.class);
 
             if (commonResponse.getStatus().getCODE() == 200) {
 
-              if(commonResponse.getStatus().getMSG().equalsIgnoreCase("REQ_SUCCESS")){
+              if(commonResponse.getResponse().get(0).isStatus()){
 
-                Logger.logError("getStudyIds API success " +
-                        commonResponse.getStudyList());
+                Logger.logError("addTSU API success " +
+                        commonResponse.getResponse().get(0).isStatus());
+                Logger.logError("addTSU API success " +
+                        commonResponse.getResponse().get(0).getMessage());
 
-                listStudy = commonResponse.getStudyList();
+                Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
+                callGetTSUDetailsAPI();
 
-                if(commonResponse.getStudyList().size()>0) {
+                // Utils.showAlertDialog(context,  commonResponse.getResponse().get(0).getMessage());
 
-                  List<String> lists = new ArrayList<>();
+                /*AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+                // ...Irrelevant code for customizing the buttons and title
+                LayoutInflater inflater = ((Activity) context).getParent().getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.alert_dialog_with_one_button, null);
+                dialogBuilder.setView(dialogView);
+                final AlertDialog alertDialog = dialogBuilder.create();
 
-                  for (int i = 0; i < commonResponse.getStudyList().size(); i++) {
+                TextView tvDesc = (TextView) dialogView.findViewById(R.id.tv_dialog_desc);
+                tvDesc.setText(commonResponse.getResponse().get(0).getMessage());
+                Button btDialogOk = (Button) dialogView.findViewById(R.id.bt_dialog_ok);
+                btDialogOk.setOnClickListener(new View.OnClickListener() {
+                  @Override
+                  public void onClick(View v) {
 
-                    lists.add(commonResponse.getStudyList().get(i).getLabel());
-
+                    alertDialog.dismiss();
+                    Intent mNextActivity = new Intent(context, TSUSetupActivity.class);
+                    context.startActivity(mNextActivity);
+                    //context.finish();
                   }
+                });
 
-                  ArrayAdapter studyIdAdp = new ArrayAdapter(context,android.R.layout.simple_spinner_item, lists);
-                  studyIdAdp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                  //spnStudyLabel.setAdapter(studyIdAdp);
-
-                }else {
-                  Logger.logError("No STUDY_LIST FOUND :" + "No STUDY_LIST FOUND");
-                }
-
+                alertDialog.setCanceledOnTouchOutside(false);
+                alertDialog.show();
+                edtSiteNo.setText("");
+                edtCohortNo.setText("");
+                edtTimepoint.setText("");
+                edtTubeVolume.setText("");*/
+                //txtEntryDate.setText("");
 
               }else {
 
-                Utils.showAlertDialog((Activity)context,  commonResponse.getStatus().getMSG());
+                Logger.logError("addTSU API Failure " +
+                        commonResponse.getResponse().get(0).isStatus());
+                Logger.logError("addTSU API Failure " +
+                        commonResponse.getResponse().get(0).getMessage());
+
+                Utils.showAlertDialog((Activity)context,  commonResponse.getResponse().get(0).getMessage());
               }
 
+            }else {
+
+              Utils.showAlertDialog((Activity)context,  commonResponse.getStatus().geteRROR());
             }
+
+
 
           }
           catch (Exception e){
@@ -1423,7 +1741,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
           }
 
         } else {
-          Logger.logError("getStudyIds API Failure " +
+          Logger.logError("addTSU API Failure " +
                   serverResponse.errorMessageToDisplay);
         }
       }
