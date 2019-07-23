@@ -468,11 +468,11 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                                 }
 
                             } else {
-                                Toast.makeText(getContext(), "Please enter Discard Tube Volume", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(),  "Please select Entry Date", Toast.LENGTH_SHORT).show();
                             }
 
                             } else {
-                                Toast.makeText(getContext(), "Please select Entry Date", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Please enter Discard Tube Volume", Toast.LENGTH_SHORT).show();
                             }
 
                         } else {
@@ -499,6 +499,8 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
                     if (edtTimepoint.getText().toString().trim().length() > 0) {
 
                         if (edtAliquotTubeVolume.getText().toString().trim().length() > 0) {
+
+                            if(edtDiscardTubeVolume.getText().toString().trim().length() > 0) {
 
                             if (!txtEntryDate.getText().toString().equalsIgnoreCase("")) {
 
@@ -567,6 +569,11 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
 
                             } else {
                                 Toast.makeText(getContext(), "Please select Entry Date", Toast.LENGTH_SHORT).show();
+                            }
+
+
+                            } else {
+                                Toast.makeText(getContext(), "Please enter Discard Tube Volume", Toast.LENGTH_SHORT).show();
                             }
 
                         } else {

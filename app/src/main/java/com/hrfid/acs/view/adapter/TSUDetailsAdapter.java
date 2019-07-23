@@ -209,7 +209,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
     // set the data in items
     holder.linearLayout.setVisibility(View.GONE);
     //holder.txtKitId.setText(tsuLists.get(position).getKitId().trim());
-    holder.textViewHeading.setText("STUDY NAME (ID) : " + "" + tsuLists.get(position).getStudyTitle() + "(" + tsuLists.get(position).getStudyName() + ")" + "  LAB KIT : " + tsuLists.get(position).getKitId() + "  TIMEPOINT : " + tsuLists.get(position).getTimepoint()+ "  TEST NAME : " + tsuLists.get(position).getTestName());
+    holder.textViewHeading.setText("LAB KIT : " + tsuLists.get(position).getKitId() + "  TIMEPOINT : " + tsuLists.get(position).getTimepoint()+ "  TEST NAME : " + tsuLists.get(position).getTestName());
     holder.textViewHeading.setSelected(true);
 //        holder.txtStudyName.setText("" + tsuLists.get(position).getStudyTitle()+ "("+ tsuLists.get(position).getStudyName()+")");
     holder.txtVisit.setText(tsuLists.get(position).getVisit().trim());
@@ -231,7 +231,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
     holder.txtDiscardTubeColor.setText(tsuLists.get(position).getDiscardTubeColor());
     holder.txtDiscardTubeVolume.setText(tsuLists.get(position).getDiscardTubeVolume());
     holder.txtCollectionLabel.setText("" + tsuLists.get(position).getCollectionLable());
-    holder.txtTestName.setText("" + tsuLists.get(position).getTestName());
+    holder.txtTestName.setText("" + tsuLists.get(position).getStudyTitle()+ "(" + tsuLists.get(position).getStudyName() + ")");
     //holder.txtEntryDate.setText(""+ tsuLists.get(position).get());
 
     holder.txtTubeColor.setText("" + tsuLists.get(position).getTubeColor());

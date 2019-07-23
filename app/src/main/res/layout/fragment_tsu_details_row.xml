@@ -52,6 +52,37 @@
 
 
             <LinearLayout
+                android:id="@+id/linearLayout_test_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/bt_ok_padding"
+                android:layout_marginRight="@dimen/bt_ok_padding"
+                android:layout_marginTop="@dimen/activity_5dp_margin"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txt_test_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/study_name_id"
+                    android:textAllCaps="true"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#000" />
+
+                <TextView
+                    android:id="@+id/txtTestName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_marginLeft="@dimen/margin_10dp"
+                    android:textColor="@color/gray"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
                 android:id="@+id/linearLayout_kit_acc_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -266,35 +297,6 @@
 
             </LinearLayout>
 
-
-            <LinearLayout
-                android:id="@+id/linearLayout_test_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/bt_ok_padding"
-                android:layout_marginRight="@dimen/bt_ok_padding"
-                android:layout_marginTop="@dimen/activity_5dp_margin"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/txt_test_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_test_name"
-                    android:textAllCaps="true"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="#000" />
-
-                <TextView
-                    android:id="@+id/txtTestName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:layout_marginLeft="@dimen/margin_10dp"
-                    android:textColor="@color/gray"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
-
-            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linearLayout_date"
