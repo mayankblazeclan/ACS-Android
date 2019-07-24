@@ -57,7 +57,7 @@ public class AddTSUFragment extends Fragment implements AdapterView.OnItemSelect
 
     private static final String TAG = "AddTSU_Details";
     private  List<StudyList> listStudy = new ArrayList<>();
-    String[] sNumberValue = {"ABC","DBABC","ADDABC","TAABC","OPABC","0", "1","2","3", "4", "5", "6", "7", "8", "9", "10"};
+
     private String strKitName;
     private String strKitRecId;
     private String spnSelectedKitID ="";

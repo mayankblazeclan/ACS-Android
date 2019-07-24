@@ -30,15 +30,14 @@ import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
-import com.hrfid.acs.view.adapter.InventorySetupAdapter;
 import com.hrfid.acs.view.adapter.TSUSetupAdapter;
 
 /**
  * Created by MS on 2019-05-30.
  */
-public class TSUSetupActivity extends BaseActivity {
+public class SampleIntakeSetupActivity extends BaseActivity {
 
-    private static final String TAG = "TSUSetupActivity";
+    private static final String TAG = "SampleIntakeSetupActivity";
     ViewPager viewPager;
     private String isFromArchive;
 
@@ -48,7 +47,7 @@ public class TSUSetupActivity extends BaseActivity {
         setContentView(R.layout.activity_senior_study_setup);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        toolbar.setTitle("Tube Setup");
+        toolbar.setTitle("SAMPLE INTAKE");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -61,14 +60,14 @@ public class TSUSetupActivity extends BaseActivity {
             }
         });
 
-      getIntentData();
+      //getIntentData();
 
         initializeUI();
 
 
 
     }
-
+/*
     private void getIntentData() {
 
         Intent intent = getIntent();
@@ -76,14 +75,14 @@ public class TSUSetupActivity extends BaseActivity {
 //we should use the same key as we used to attach the data.
         isFromArchive  = intent.getStringExtra(Constants.IS_FROM_TSU_ARCHEIVE);
         Logger.log("Value of isFromArchive : " +isFromArchive);
-    }
+    }*/
 
     private void initializeUI() {
         //Tab Layout for Tabs
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Add TSU"));
-        tabLayout.addTab(tabLayout.newTab().setText("TSU Details"));
-        tabLayout.addTab(tabLayout.newTab().setText("ARCHIVED TSU Details"));
+        tabLayout.addTab(tabLayout.newTab().setText("CREATE FORM"));
+        tabLayout.addTab(tabLayout.newTab().setText("FORM DETAILS"));
+        tabLayout.addTab(tabLayout.newTab().setText("ARCHIVED FORM"));
         tabLayout.setTabTextColors(    ContextCompat.getColor(this, R.color.black),
                 ContextCompat.getColor(this, R.color.white));
         //tabLayout.addTab(tabLayout.newTab().setText("Contact"));
@@ -150,14 +149,14 @@ public class TSUSetupActivity extends BaseActivity {
         //Logout Functionality
         if (id == R.id.action_logout) {
             //Toast.makeText(SeniorStaffHomeActivity.this, "Logout tapped", Toast.LENGTH_LONG).show();
-            Utils.createDialogTwoButtons(TSUSetupActivity.this, getString(R.string.settings_logout), true, getString(R.string.logout_message), getString(R.string.dlg_yes_text), getString(R.string.dlg_no_text), new DialogInterface.OnClickListener() {
+            Utils.createDialogTwoButtons(SampleIntakeSetupActivity.this, getString(R.string.settings_logout), true, getString(R.string.logout_message), getString(R.string.dlg_yes_text), getString(R.string.dlg_no_text), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    if (Utilities.isNetworkConnected(TSUSetupActivity.this)) {
+                    if (Utilities.isNetworkConnected(SampleIntakeSetupActivity.this)) {
                         callLogout();
                     } else {
-                        Utils.showAlertDialog(TSUSetupActivity.this, getString(R.string.no_internet_connection));
+                        Utils.showAlertDialog(SampleIntakeSetupActivity.this, getString(R.string.no_internet_connection));
                     }
 
                 }
@@ -176,13 +175,13 @@ public class TSUSetupActivity extends BaseActivity {
         commonRequestModel.setVersionNumber(AppConstants.APP_VERSION);
         commonRequestModel.setDeviceType(AppConstants.APP_OS);
         commonRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
-        commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(TSUSetupActivity.this));
+        commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(SampleIntakeSetupActivity.this));
         commonRequestModel.setUserRole(new PrefManager(this).getUserRoleType());
         commonRequestModel.setTagId(new PrefManager(this).getBarCodeValue());
         commonRequestModel.setEvent(AppConstants.LOGOUT);
         commonRequestModel.setUserName(new PrefManager(this).getUserName());
 
-        new NetworkingHelper(new LogoutRequest(TSUSetupActivity.this, true, commonRequestModel)) {
+        new NetworkingHelper(new LogoutRequest(SampleIntakeSetupActivity.this, true, commonRequestModel)) {
 
             @Override
             public void serverResponseFromApi(ApiResponse serverResponse) {
@@ -203,7 +202,7 @@ public class TSUSetupActivity extends BaseActivity {
                                         commonResponse.getResponse().get(0).getMessage());
 
 
-                                Intent mNextActivity = new Intent(TSUSetupActivity.this, SelectRoleActivity.class);
+                                Intent mNextActivity = new Intent(SampleIntakeSetupActivity.this, SelectRoleActivity.class);
                                 startActivity(mNextActivity);
                                 finish();
 
@@ -214,7 +213,7 @@ public class TSUSetupActivity extends BaseActivity {
                                 Logger.logError("Logout API Failure " +
                                         commonResponse.getResponse().get(0).getMessage());
 
-                                Utils.showAlertDialog(TSUSetupActivity.this,  commonResponse.getResponse().get(0).getMessage());
+                                Utils.showAlertDialog(SampleIntakeSetupActivity.this,  commonResponse.getResponse().get(0).getMessage());
                             }
 
                         }

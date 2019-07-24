@@ -80,11 +80,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
   private  List<StudyList> getListStudy;
   private RecyclerView recyclerView;
   private static int currentPosition = 0;
-
-  String[] sNumberValue = {"ABC","DBABC","ADDABC","TAABC","OPABC","0", "1","2","3", "4", "5", "6", "7", "8", "9", "10"};
-  // private String strKitTitle;
   private String spnSelectedKitID ="";
-
   private TextView spnStudyLabel;
   private Spinner spnKitLabel;
   private Spinner spnPrimaryInvestigator;

@@ -117,6 +117,14 @@ public class SeniorStaffHomeActivity extends BaseActivity {
                     startActivity(mNextActivity);
 
 
+                } else if(i==4){
+
+                    //Toast.makeText(SeniorStaffHomeActivity.this, "Tapped on 3", Toast.LENGTH_SHORT).show();
+
+                    Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, SampleIntakeSetupActivity.class);
+                    startActivity(mNextActivity);
+
+
                 }else {
 
                    // Toast.makeText(SeniorStaffHomeActivity.this, "Tapped On " + 2, Toast.LENGTH_LONG).show();

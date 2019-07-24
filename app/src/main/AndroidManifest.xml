@@ -86,8 +86,13 @@
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"/>
 
-        <activity
+        <!--<activity
             android:name=".view.activity.TSUSetupActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"/>-->
+
+        <activity
+            android:name=".view.activity.SampleIntakeSetupActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"/>
 

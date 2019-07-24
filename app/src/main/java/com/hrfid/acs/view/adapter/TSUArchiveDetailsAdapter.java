@@ -1,9 +1,11 @@
 package com.hrfid.acs.view.adapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -29,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hrfid.acs.R;
+import com.hrfid.acs.data.Constants;
 import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
@@ -38,6 +41,7 @@ import com.hrfid.acs.helpers.request.CommonRequestModel;
 import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.request.GetKitDetailsRequest;
 import com.hrfid.acs.helpers.request.GetKitListForTSURequest;
+import com.hrfid.acs.helpers.request.GetTSUDetailsRequest;
 import com.hrfid.acs.helpers.request.GetTSUParamRequest;
 import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
@@ -52,6 +56,9 @@ import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
+import com.hrfid.acs.view.activity.BarcodeScanActivity;
+import com.hrfid.acs.view.activity.LabStaffHomeActivity;
+import com.hrfid.acs.view.activity.TSUSetupActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -73,8 +80,6 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
     private  List<StudyList> getListStudy;
     private RecyclerView recyclerView;
     private static int currentPosition = 0;
-
-    String[] sNumberValue = {"ABC","DBABC","ADDABC","TAABC","OPABC","0", "1","2","3", "4", "5", "6", "7", "8", "9", "10"};
     private String strKitName;
     private String strKitRecId;
     private String spnSelectedKitID ="";
@@ -89,7 +94,7 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
     private Spinner spnCollectionLabel;
     private Spinner spnTransportLabel;
     private Spinner spnLabUse;
-    private EditText edtVisit;
+    private TextView edtVisit;
     private EditText edtSiteNo;
     private EditText edtCohortNo;
     private EditText edtTimepoint;
@@ -331,6 +336,19 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
 
                 break;
 
+            case R.id.spnKitLabel :
+                if(kitVisitListFetchedParam!=null) {
+                    edtVisit.setText(kitVisitListFetchedParam.get(position).toString());
+                    strKitName = String.valueOf(listKitList.get(position).getKitId());
+                    strKitRecId = String.valueOf(listKitList.get(position).getId());
+                }else {
+
+                    edtVisit.setText(" ");
+                    strKitName = " ";
+                    strKitRecId = " ";
+                }
+                break;
+
             //TubeColor
             case R.id.spnTubeColor :
 
@@ -388,7 +406,7 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
         commonRequestModel.setEvent(AppConstants.GET_TSU_DETAILS);
         commonRequestModel.setUserName(new PrefManager(context).getUserName());
 
-        new NetworkingHelper(new GetKitDetailsRequest((Activity) context, true,
+        new NetworkingHelper(new GetTSUDetailsRequest((Activity) context, true,
                 commonRequestModel)) {
 
             @Override
@@ -414,8 +432,19 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
 
                                 //getAllStudyID();
 
-                                TSUArchiveDetailsAdapter customAdapter = new TSUArchiveDetailsAdapter(context, getKitDetailsResponse.getTSUList(), listStudy, recyclerView);
-                                recyclerView.setAdapter(customAdapter);
+                                tsuLists.clear();
+
+                                for (int i = 0; i < getKitDetailsResponse.getTSUList().size(); i++) {
+
+                                    if(getKitDetailsResponse.getTSUList().get(i).getIsArchived() ==0) {
+                                        tsuLists.add(getKitDetailsResponse.getTSUList().get(i));
+                                    }
+                                }
+
+                                if(tsuLists !=null && tsuLists.size() > 0) {
+                                    TSUDetailsAdapter customAdapter = new TSUDetailsAdapter(context, tsuLists, listStudy, recyclerView);
+                                    recyclerView.setAdapter(customAdapter);
+                                }
 
 
                             }else {
@@ -1233,8 +1262,33 @@ public class TSUArchiveDetailsAdapter extends RecyclerView.Adapter<TSUArchiveDet
                                 Logger.logError("addTSU API success " +
                                         commonResponse.getResponse().get(0).getMessage());
 
-                                Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
-                                callGetTSUDetailsAPI();
+                                //Utils.showAlertDialog((Activity) context,  commonResponse.getResponse().get(0).getMessage());
+                                //callGetTSUDetailsAPI();
+
+                                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+                                // ...Irrelevant code for customizing the buttons and title
+                                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                View dialogView = inflater.inflate(R.layout.alert_dialog_with_one_button, null);
+                                dialogBuilder.setView(dialogView);
+                                final AlertDialog alertDialog = dialogBuilder.create();
+
+                                TextView tvDesc = (TextView) dialogView.findViewById(R.id.tv_dialog_desc);
+                                tvDesc.setText(commonResponse.getResponse().get(0).getMessage());
+                                Button btDialogOk = (Button) dialogView.findViewById(R.id.bt_dialog_ok);
+                                btDialogOk.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        alertDialog.dismiss();
+
+                                        Intent mNextActivity = new Intent(context, TSUSetupActivity.class);
+                                        mNextActivity.putExtra(Constants.IS_FROM_TSU_ARCHEIVE, "YES");
+                                        context.startActivity(mNextActivity);
+                                        ((Activity)context).finish();
+                                    }
+                                });
+
+                                alertDialog.setCanceledOnTouchOutside(false);
+                                alertDialog.show();
 
                             }else {
 

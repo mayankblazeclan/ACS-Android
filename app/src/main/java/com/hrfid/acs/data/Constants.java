@@ -119,9 +119,10 @@ public class Constants {
     public static final String SENIOR_STAFF = "Senior Staff";
     public static final String TYPE_NURSE_STAFF = "Nurse";
     public static final String LAB_STAFF = "Lab Staff";
+  public static final String IS_FROM_TSU_ARCHEIVE = "IS_FROM_ARCHIVE_TSU";
 
 
-    public static int YELLOW_BUTTON = 139;
+  public static int YELLOW_BUTTON = 139;
     public static int LEFT_BUTTON = 280;
     public static int RIGHT_BUTTON = 278;
 

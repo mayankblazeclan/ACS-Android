@@ -15,7 +15,6 @@ import com.hrfid.acs.view.fragment.TSUDetailsFragment;
  */
 public class TSUSetupAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
-    private String frmPage;
 
     public TSUSetupAdapter(FragmentManager fm, int NoofTabs){
         super(fm);
