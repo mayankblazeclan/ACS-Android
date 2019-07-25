@@ -1,11 +1,9 @@
 package com.hrfid.acs.view.adapter;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -37,14 +35,12 @@ import com.hrfid.acs.helpers.network.NetworkingHelper;
 import com.hrfid.acs.helpers.request.AddTSURequest;
 import com.hrfid.acs.helpers.request.AddTSURequestModel;
 import com.hrfid.acs.helpers.request.CommonRequestModel;
-import com.hrfid.acs.helpers.request.GetAllStudyIdRequest;
 import com.hrfid.acs.helpers.request.GetKitListForTSURequest;
 import com.hrfid.acs.helpers.request.GetTSUDetailsRequest;
 import com.hrfid.acs.helpers.request.GetTSUParamRequest;
 import com.hrfid.acs.helpers.request.ModifyTSUDetailsRequestModel;
 import com.hrfid.acs.helpers.request.ModifyTSURequest;
 import com.hrfid.acs.helpers.serverResponses.models.CommonResponse;
-import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.GetAllStudyIdResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetAllStudyID.StudyList;
 import com.hrfid.acs.helpers.serverResponses.models.GetKitListForTSU.GetKitListForTSUResponse;
 import com.hrfid.acs.helpers.serverResponses.models.GetKitListForTSU.Kit;
@@ -56,7 +52,6 @@ import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
-import com.hrfid.acs.view.activity.TSUSetupActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -69,7 +64,7 @@ import java.util.List;
 public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.MyViewHolder> implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
   private int mYear, mMonth, mDay;
-  private  List<StudyList> listStudy = new ArrayList<>();
+  private List<String> listStudy = new ArrayList<String>();
   private String spnSelectedStudyID ="";
   private String strStudyName;
   private String strStudyTitle;
@@ -316,15 +311,15 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
     // TODO Auto-generated method stub
     switch(parent.getId()){
 
-      /*case R.id.spnStatusId :
+    /*  case R.id.spnStatusId :
         //Your Action Here.
-        spnSelectedStudyID = String.valueOf(listStudy.get(position).getValue());
-        strStudyName = String.valueOf(listStudy.get(position).getStudyId());
-        strStudyTitle = listStudy.get(position).getLabel();
+        spnSelectedStudyID = String.valueOf(getListStudy.get(position).getValue());
+        strStudyName = String.valueOf(getListStudy.get(position).getStudyId());
+        strStudyTitle = getListStudy.get(position).getLabel();
         //Toast.makeText(getContext(), parent.getSelectedItem().toString() , Toast.LENGTH_SHORT).show();
 
         if(spnSelectedStudyID !=null) {
-          getKitListParamsForTSU(spnSelectedStudyID);
+          getKitListParamsForTSU(spnSelectedStudyID, tsuLists.get(position));
         }
         break;*/
 
@@ -438,7 +433,7 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
                 }
 
                 if(tsuLists !=null && tsuLists.size() > 0) {
-                  TSUDetailsAdapter customAdapter = new TSUDetailsAdapter(context, tsuLists, listStudy, recyclerView);
+                  TSUDetailsAdapter customAdapter = new TSUDetailsAdapter(context, tsuLists, getListStudy, recyclerView);
                   recyclerView.setAdapter(customAdapter);
                 }
 
@@ -591,9 +586,23 @@ public class TSUDetailsAdapter extends RecyclerView.Adapter<TSUDetailsAdapter.My
 
   private void initViews(Dialog v, TSUList tsuList, List<StudyList> lists) {
 
+    String actualStudyValue = tsuList.getStudyTitle()+ " ("+ tsuList.getStudyName()+")";
+
     spnStudyLabel = (TextView) v.findViewById(R.id.spnStatusId);
-    // spnStudyLabel.setOnItemSelectedListener(this);
-    spnStudyLabel.setText(tsuList.getStudyTitle()+ "("+ tsuList.getStudyName()+")");
+    spnStudyLabel.setText(actualStudyValue);
+
+    //spnStudyLabel.setOnItemSelectedListener(this);
+
+    /*for (int i = 0; i < getListStudy.size(); i++) {
+
+      listStudy.add(getListStudy.get(i).getLabel());
+
+    }
+
+    Utilities.SetSpinnerSelection(spnStudyLabel, listStudy, actualStudyValue);*/
+    //spnStudyLabel.setText(tsuList.getStudyTitle()+ "("+ tsuList.getStudyName()+")");
+
+    //getKitListParamsForTSU(String.valueOf(tsuList.getStudyId()), tsuList);
 
     getKitListParamsForTSU(String.valueOf(tsuList.getStudyId()), tsuList);
 

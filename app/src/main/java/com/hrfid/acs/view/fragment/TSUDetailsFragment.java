@@ -104,7 +104,7 @@ public class TSUDetailsFragment extends Fragment {
 
                             if(getKitDetailsResponse.getTSUList().size() > 0){
 
-                               // linearLayout.setVisibility(View.VISIBLE);
+                                // linearLayout.setVisibility(View.VISIBLE);
                                 //textView.setVisibility(View.GONE);
 
                                 Logger.logError("getTSUList API success status " +
@@ -160,12 +160,12 @@ public class TSUDetailsFragment extends Fragment {
                             Logger.logError("getTSUList API Failure " +
                                     getKitDetailsResponse.getStatus().getMSG());*/
 
-                           if(!getKitDetailsResponse.getStatus()
-                                   .getERROR().equalsIgnoreCase("No relevant data found")) {
+                            if(!getKitDetailsResponse.getStatus()
+                                    .getERROR().equalsIgnoreCase("No relevant data found")) {
 
-                               Utils.showAlertDialog(getActivity(), getKitDetailsResponse.getStatus()
-                                       .getERROR());
-                           }
+                                Utils.showAlertDialog(getActivity(), getKitDetailsResponse.getStatus()
+                                        .getERROR());
+                            }
                         }
 
 
