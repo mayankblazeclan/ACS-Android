@@ -171,7 +171,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:context=".view.activity.InventorySetupActivity">
+                tools:context=".view.activity.KitInventorySetup">
 
                 <!--KIT -->
                 <TableRow
@@ -279,7 +279,7 @@
                     android:background="@color/white"
                     android:padding="@dimen/margin_10dp">
 
-                    <TextView
+                   <!-- <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:textColor="@color/black"
@@ -290,9 +290,9 @@
                         android:layout_marginLeft="@dimen/activity_5dp_margin"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="@string/txt_category"/>
+-->
 
-
-                    <RadioGroup
+                  <!--  <RadioGroup
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/activity_5dp_margin"
@@ -329,14 +329,14 @@
                             android:layout_marginLeft="@dimen/activity_5dp_margin"
                             android:layout_marginRight="@dimen/margin_30dp"
                             android:textAppearance="?android:attr/textAppearanceMedium" />
-                    </RadioGroup>
+                    </RadioGroup>-->
                 </TableRow>
 
             </TableLayout>
 
         </LinearLayout>
 
-        <LinearLayout
+       <!-- <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -451,9 +451,9 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:context=".view.activity.InventorySetupActivity">
+                tools:context=".view.activity.KitInventorySetup">
 
-                <!--KIT -->
+                &lt;!&ndash;KIT &ndash;&gt;
                 <TableRow
                     android:background="@color/white"
                     android:padding="@dimen/margin_10dp">
@@ -504,7 +504,7 @@
 
             </TableLayout>
 
-        </LinearLayout>
+        </LinearLayout>-->
 
         <LinearLayout
             android:id="@+id/linearLayout_date"

@@ -22,7 +22,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity  android:name=".view.activity.TSUSetupActivity"
+        <activity  android:name=".view.activity.SeniorStaffHomeActivity"
             android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,10 +51,10 @@
             android:name=".view.activity.BarcodeScanActivity"
             android:screenOrientation="portrait" />
 
-        <activity
+        <!--<activity
             android:name=".view.activity.SeniorStaffHomeActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"/>-->
 
         <activity
             android:name=".view.activity.NurseStaffHomeActivity"
@@ -82,14 +82,14 @@
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".view.activity.InventorySetupActivity"
+            android:name=".view.activity.KitInventorySetup"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"/>
 
-        <!--<activity
+        <activity
             android:name=".view.activity.TSUSetupActivity"
             android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"/>-->
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".view.activity.SampleIntakeSetupActivity"
@@ -103,6 +103,16 @@
 
         <activity
             android:name=".view.activity.IdentifySubjectActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".view.activity.InventoryHomeActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".view.activity.TubeInventorySetup"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"/>
 

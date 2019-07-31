@@ -12,11 +12,11 @@ import com.hrfid.acs.view.fragment.SubjectDetailsFragment;
 /**
  * Created by MS on 2019-05-30.
  */
-public class InventorySetupAdapter extends FragmentStatePagerAdapter {
+public class KitInventorySetupAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
     private String frmPage;
 
-    public InventorySetupAdapter(FragmentManager fm, int NoofTabs){
+    public KitInventorySetupAdapter(FragmentManager fm, int NoofTabs){
         super(fm);
         this.mNumOfTabs = NoofTabs;
         //this.frmPage = fromSMS;

@@ -18,7 +18,6 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.hrfid.acs.R;
 import com.hrfid.acs.components.BaseActivity;
-import com.hrfid.acs.data.Constants;
 import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
@@ -30,16 +29,17 @@ import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
-import com.hrfid.acs.view.adapter.TSUSetupAdapter;
+import com.hrfid.acs.view.adapter.KitInventorySetupAdapter;
 
 /**
  * Created by MS on 2019-05-30.
  */
-public class TSUSetupActivity extends BaseActivity {
+public class KitInventorySetup extends BaseActivity {
 
-    private static final String TAG = "TSUSetupActivity";
+    private static final String TAG = "KitInventorySetup";
     ViewPager viewPager;
-    private String isFromArchive;
+    //SearchView searchView;
+    //MenuItem searchViewItem;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class TSUSetupActivity extends BaseActivity {
         setContentView(R.layout.activity_senior_study_setup);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        toolbar.setTitle("Tube Setup");
+        toolbar.setTitle("Inventory Setup");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -60,43 +60,23 @@ public class TSUSetupActivity extends BaseActivity {
             }
         });
 
-      getIntentData();
-
         initializeUI();
 
-
-
-    }
-
-    private void getIntentData() {
-
-        Intent intent = getIntent();
-//get the attached extras from the intent
-//we should use the same key as we used to attach the data.
-        isFromArchive  = intent.getStringExtra(Constants.IS_FROM_TSU_ARCHEIVE);
-        Logger.log("Value of isFromArchive : " +isFromArchive);
     }
 
     private void initializeUI() {
+
         //Tab Layout for Tabs
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Add TSU"));
-        tabLayout.addTab(tabLayout.newTab().setText("TSU Details"));
-        tabLayout.addTab(tabLayout.newTab().setText("ARCHIVED TSU Details"));
+        tabLayout.addTab(tabLayout.newTab().setText("Add KIT"));
+        tabLayout.addTab(tabLayout.newTab().setText("KIT Details"));
         tabLayout.setTabTextColors(    ContextCompat.getColor(this, R.color.black),
                 ContextCompat.getColor(this, R.color.white));
         //tabLayout.addTab(tabLayout.newTab().setText("Contact"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         viewPager =(ViewPager)findViewById(R.id.view_pager);
-        TSUSetupAdapter tabsAdapter = new TSUSetupAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        KitInventorySetupAdapter tabsAdapter = new KitInventorySetupAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(tabsAdapter);
-
-        if(isFromArchive !=null && isFromArchive.equalsIgnoreCase("YES")){
-            viewPager.setCurrentItem(1);
-        }else {
-            viewPager.setCurrentItem(0);
-        }
-
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -107,7 +87,11 @@ public class TSUSetupActivity extends BaseActivity {
                             Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
 
+                   // searchView.setVisibility(View.VISIBLE);
+                  //  searchViewItem.setVisible(true);
                 }else {
+                  //  searchView.setVisibility(View.INVISIBLE);
+                  //  searchViewItem.setVisible(false);
                 }
 
             }
@@ -117,7 +101,11 @@ public class TSUSetupActivity extends BaseActivity {
                     final InputMethodManager imm = (InputMethodManager)getSystemService(
                             Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
+                  //  searchView.setVisibility(View.VISIBLE);
+                   // searchViewItem.setVisible(true);
                 }else {
+                   // searchView.setVisibility(View.INVISIBLE);
+                   // searchViewItem.setVisible(false);
                 }
 
             }
@@ -127,7 +115,11 @@ public class TSUSetupActivity extends BaseActivity {
                     final InputMethodManager imm = (InputMethodManager)getSystemService(
                             Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
+                   // searchView.setVisibility(View.VISIBLE);
+                   // searchViewItem.setVisible(true);
                 }else {
+                  //  searchView.setVisibility(View.INVISIBLE);
+                  //  searchViewItem.setVisible(false);
                 }
 
             }
@@ -138,29 +130,76 @@ public class TSUSetupActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.menu_with_logout_only, menu);
+        getMenuInflater().inflate(R.menu.menu_with_search_logout, menu);
+        // Inflate the menu; this adds items to the action bar if it is present.
+        /*getMenuInflater().inflate(R.menu.menu_main, menu);
+        final View notificaitons = menu.findItem(R.id.action_notification).getActionView();
+        notificaitons.setVisibility(View.GONE);
+        menu.findItem(R.id.action_notification).setVisible(false);
+        return true;*/
+
+       /* MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_with_search_logout, menu);
+        searchViewItem = menu.findItem(R.id.app_bar_search);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchViewItem);
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+        ImageView searchClose = searchView.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
+        searchClose.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        searchView.setVisibility(View.INVISIBLE);
+        searchViewItem.setVisible(false);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchView.clearFocus();
+             *//*   if(list.contains(query)){
+                    adapter.getFilter().filter(query);
+                }else{
+                    Toast.makeText(MainActivity.this, "No Match found",Toast.LENGTH_LONG).show();
+                }*//*
+                return false;
+
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //adapter.getFilter().filter(newText);
+                return false;
+            }
+        });*/
+
+        //return super.onCreateOptionsMenu(menu);
         return true;
     }
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         //Logout Functionality
         if (id == R.id.action_logout) {
             //Toast.makeText(SeniorStaffHomeActivity.this, "Logout tapped", Toast.LENGTH_LONG).show();
-            Utils.createDialogTwoButtons(TSUSetupActivity.this, getString(R.string.settings_logout), true, getString(R.string.logout_message), getString(R.string.dlg_yes_text), getString(R.string.dlg_no_text), new DialogInterface.OnClickListener() {
+            Utils.createDialogTwoButtons(KitInventorySetup.this, getString(R.string.settings_logout), true, getString(R.string.logout_message), getString(R.string.dlg_yes_text), getString(R.string.dlg_no_text), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    if (Utilities.isNetworkConnected(TSUSetupActivity.this)) {
+                    if (Utilities.isNetworkConnected(KitInventorySetup.this)) {
                         callLogout();
                     } else {
-                        Utils.showAlertDialog(TSUSetupActivity.this, getString(R.string.no_internet_connection));
+                        Utils.showAlertDialog(KitInventorySetup.this, getString(R.string.no_internet_connection));
                     }
 
                 }
             }, null);
+            return true;
+        }
+
+        if (id == R.id.app_bar_search) {
+            //Toast.makeText(SeniorStaffHomeActivity.this, "Logout tapped", Toast.LENGTH_LONG).show();
+            Intent mNextActivity = new Intent(KitInventorySetup.this, SearchKitActivity.class);
+            startActivity(mNextActivity);
             return true;
         }
 
@@ -175,13 +214,13 @@ public class TSUSetupActivity extends BaseActivity {
         commonRequestModel.setVersionNumber(AppConstants.APP_VERSION);
         commonRequestModel.setDeviceType(AppConstants.APP_OS);
         commonRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
-        commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(TSUSetupActivity.this));
+        commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(KitInventorySetup.this));
         commonRequestModel.setUserRole(new PrefManager(this).getUserRoleType());
         commonRequestModel.setTagId(new PrefManager(this).getBarCodeValue());
         commonRequestModel.setEvent(AppConstants.LOGOUT);
         commonRequestModel.setUserName(new PrefManager(this).getUserName());
 
-        new NetworkingHelper(new LogoutRequest(TSUSetupActivity.this, true, commonRequestModel)) {
+        new NetworkingHelper(new LogoutRequest(KitInventorySetup.this, true, commonRequestModel)) {
 
             @Override
             public void serverResponseFromApi(ApiResponse serverResponse) {
@@ -202,7 +241,7 @@ public class TSUSetupActivity extends BaseActivity {
                                         commonResponse.getResponse().get(0).getMessage());
 
 
-                                Intent mNextActivity = new Intent(TSUSetupActivity.this, SelectRoleActivity.class);
+                                Intent mNextActivity = new Intent(KitInventorySetup.this, SelectRoleActivity.class);
                                 startActivity(mNextActivity);
                                 finish();
 
@@ -213,7 +252,7 @@ public class TSUSetupActivity extends BaseActivity {
                                 Logger.logError("Logout API Failure " +
                                         commonResponse.getResponse().get(0).getMessage());
 
-                                Utils.showAlertDialog(TSUSetupActivity.this,  commonResponse.getResponse().get(0).getMessage());
+                                Utils.showAlertDialog(KitInventorySetup.this,  commonResponse.getResponse().get(0).getMessage());
                             }
 
                         }

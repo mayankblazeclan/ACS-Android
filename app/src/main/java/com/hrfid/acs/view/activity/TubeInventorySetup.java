@@ -4,22 +4,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
 
 import com.hrfid.acs.R;
 import com.hrfid.acs.components.BaseActivity;
@@ -34,15 +29,14 @@ import com.hrfid.acs.util.Logger;
 import com.hrfid.acs.util.PrefManager;
 import com.hrfid.acs.util.Utilities;
 import com.hrfid.acs.util.Utils;
-import com.hrfid.acs.view.adapter.InventorySetupAdapter;
-import com.hrfid.acs.view.adapter.SubjectOnBoardingAdapter;
+import com.hrfid.acs.view.adapter.TubeInventorySetupAdapter;
 
 /**
  * Created by MS on 2019-05-30.
  */
-public class InventorySetupActivity extends BaseActivity {
+public class TubeInventorySetup extends BaseActivity {
 
-    private static final String TAG = "InventorySetupActivity";
+    private static final String TAG = "TubeInventorySetup";
     ViewPager viewPager;
     //SearchView searchView;
     //MenuItem searchViewItem;
@@ -53,7 +47,7 @@ public class InventorySetupActivity extends BaseActivity {
         setContentView(R.layout.activity_senior_study_setup);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        toolbar.setTitle("Inventory Setup");
+        toolbar.setTitle("Tube Inventory");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -74,14 +68,14 @@ public class InventorySetupActivity extends BaseActivity {
 
         //Tab Layout for Tabs
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Add KIT"));
-        tabLayout.addTab(tabLayout.newTab().setText("KIT Details"));
+        tabLayout.addTab(tabLayout.newTab().setText("Add Tube"));
+        tabLayout.addTab(tabLayout.newTab().setText("Tube Details"));
         tabLayout.setTabTextColors(    ContextCompat.getColor(this, R.color.black),
                 ContextCompat.getColor(this, R.color.white));
         //tabLayout.addTab(tabLayout.newTab().setText("Contact"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         viewPager =(ViewPager)findViewById(R.id.view_pager);
-        InventorySetupAdapter tabsAdapter = new InventorySetupAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        TubeInventorySetupAdapter tabsAdapter = new TubeInventorySetupAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(tabsAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -187,14 +181,14 @@ public class InventorySetupActivity extends BaseActivity {
         //Logout Functionality
         if (id == R.id.action_logout) {
             //Toast.makeText(SeniorStaffHomeActivity.this, "Logout tapped", Toast.LENGTH_LONG).show();
-            Utils.createDialogTwoButtons(InventorySetupActivity.this, getString(R.string.settings_logout), true, getString(R.string.logout_message), getString(R.string.dlg_yes_text), getString(R.string.dlg_no_text), new DialogInterface.OnClickListener() {
+            Utils.createDialogTwoButtons(TubeInventorySetup.this, getString(R.string.settings_logout), true, getString(R.string.logout_message), getString(R.string.dlg_yes_text), getString(R.string.dlg_no_text), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    if (Utilities.isNetworkConnected(InventorySetupActivity.this)) {
+                    if (Utilities.isNetworkConnected(TubeInventorySetup.this)) {
                         callLogout();
                     } else {
-                        Utils.showAlertDialog(InventorySetupActivity.this, getString(R.string.no_internet_connection));
+                        Utils.showAlertDialog(TubeInventorySetup.this, getString(R.string.no_internet_connection));
                     }
 
                 }
@@ -204,7 +198,7 @@ public class InventorySetupActivity extends BaseActivity {
 
         if (id == R.id.app_bar_search) {
             //Toast.makeText(SeniorStaffHomeActivity.this, "Logout tapped", Toast.LENGTH_LONG).show();
-            Intent mNextActivity = new Intent(InventorySetupActivity.this, SearchKitActivity.class);
+            Intent mNextActivity = new Intent(TubeInventorySetup.this, SearchKitActivity.class);
             startActivity(mNextActivity);
             return true;
         }
@@ -220,13 +214,13 @@ public class InventorySetupActivity extends BaseActivity {
         commonRequestModel.setVersionNumber(AppConstants.APP_VERSION);
         commonRequestModel.setDeviceType(AppConstants.APP_OS);
         commonRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
-        commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(InventorySetupActivity.this));
+        commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(TubeInventorySetup.this));
         commonRequestModel.setUserRole(new PrefManager(this).getUserRoleType());
         commonRequestModel.setTagId(new PrefManager(this).getBarCodeValue());
         commonRequestModel.setEvent(AppConstants.LOGOUT);
         commonRequestModel.setUserName(new PrefManager(this).getUserName());
 
-        new NetworkingHelper(new LogoutRequest(InventorySetupActivity.this, true, commonRequestModel)) {
+        new NetworkingHelper(new LogoutRequest(TubeInventorySetup.this, true, commonRequestModel)) {
 
             @Override
             public void serverResponseFromApi(ApiResponse serverResponse) {
@@ -247,7 +241,7 @@ public class InventorySetupActivity extends BaseActivity {
                                         commonResponse.getResponse().get(0).getMessage());
 
 
-                                Intent mNextActivity = new Intent(InventorySetupActivity.this, SelectRoleActivity.class);
+                                Intent mNextActivity = new Intent(TubeInventorySetup.this, SelectRoleActivity.class);
                                 startActivity(mNextActivity);
                                 finish();
 
@@ -258,7 +252,7 @@ public class InventorySetupActivity extends BaseActivity {
                                 Logger.logError("Logout API Failure " +
                                         commonResponse.getResponse().get(0).getMessage());
 
-                                Utils.showAlertDialog(InventorySetupActivity.this,  commonResponse.getResponse().get(0).getMessage());
+                                Utils.showAlertDialog(TubeInventorySetup.this,  commonResponse.getResponse().get(0).getMessage());
                             }
 
                         }

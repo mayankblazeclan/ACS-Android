@@ -6,21 +6,16 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-
 import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hrfid.acs.R;
 import com.hrfid.acs.components.BaseActivity;
-import com.hrfid.acs.data.Constants;
 import com.hrfid.acs.helpers.network.ApiResponse;
 import com.hrfid.acs.helpers.network.JsonParser;
 import com.hrfid.acs.helpers.network.NetworkingHelper;
@@ -42,10 +37,10 @@ import java.util.ArrayList;
 /**
  * Created by MS on 08/05/19.
  */
-public class SeniorStaffHomeActivity extends BaseActivity {
+public class InventoryHomeActivity extends BaseActivity {
 
 
-    private static final String TAG = "SeniorStaffHOME";
+    private static final String TAG = "InventoryHomeActivity";
     GridView gridView;
     ArrayList<StaffItem> staffItemList=new ArrayList<>();
     private TextView txtViewCount;
@@ -55,9 +50,18 @@ public class SeniorStaffHomeActivity extends BaseActivity {
         setContentView(R.layout.activity_senior_staff_home);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Senior Staff");
+        toolbar.setTitle("Inventory Setup");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // back button pressed
+                finish();
+            }
+        });
 
 
         initializeUI();
@@ -70,11 +74,11 @@ public class SeniorStaffHomeActivity extends BaseActivity {
 
 
         gridView = (GridView) findViewById(R.id.simpleGridView);
-        staffItemList.add(new StaffItem("Study Setup",R.drawable.ic_nurse_guidelines));
-        staffItemList.add(new StaffItem("Subject Onboarding",R.drawable.ic_senior_onboarding));
-        staffItemList.add(new StaffItem("TSU",R.drawable.ic_senior_tsu));
+        staffItemList.add(new StaffItem("Kit Inventory",R.drawable.ic_kit_inventory));
+        staffItemList.add(new StaffItem("Tube Inventory",R.drawable.ic_tube_inventory));
+      /*  staffItemList.add(new StaffItem("TSU",R.drawable.ic_senior_tsu));
         staffItemList.add(new StaffItem("Inventory Setup",R.drawable.ic_senior_inventory_barcode));
-        staffItemList.add(new StaffItem("Sample Intake",R.drawable.ic_nurse_sample_intake));
+        staffItemList.add(new StaffItem("Sample Intake",R.drawable.ic_nurse_sample_intake));*/
 
         StaffItemAdapter staffItemAdapter=new StaffItemAdapter(this,R.layout.activity_staff_grid_items, staffItemList);
         gridView.setAdapter(staffItemAdapter);
@@ -90,7 +94,7 @@ public class SeniorStaffHomeActivity extends BaseActivity {
 
                     //Toast.makeText(SeniorStaffHomeActivity.this, "Tapped On Create Study", Toast.LENGTH_LONG).show();
 
-                    Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, SeniorStudySetupActivity.class);
+                    Intent mNextActivity = new Intent(InventoryHomeActivity.this, KitInventorySetup.class);
                     startActivity(mNextActivity);
 
 
@@ -98,14 +102,14 @@ public class SeniorStaffHomeActivity extends BaseActivity {
 
                     //Toast.makeText(SeniorStaffHomeActivity.this, "Tapped OnBoarding", Toast.LENGTH_LONG).show();
 
-                    Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, SeniorSubjectOnBoardingActivity.class);
+                    Intent mNextActivity = new Intent(InventoryHomeActivity.this, TubeInventorySetup.class);
                     startActivity(mNextActivity);
 
 
-                } else if(i==2){
+                }/* else if(i==2){
 
                     //Toast.makeText(SeniorStaffHomeActivity.this, "Tapped on TSU", Toast.LENGTH_SHORT).show();
-                    Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, TSUSetupActivity.class);
+                    Intent mNextActivity = new Intent(InventoryHomeActivity.this, TSUSetupActivity.class);
                     startActivity(mNextActivity);
 
 
@@ -113,7 +117,7 @@ public class SeniorStaffHomeActivity extends BaseActivity {
 
                     //Toast.makeText(SeniorStaffHomeActivity.this, "Tapped on 3", Toast.LENGTH_SHORT).show();
 
-                    Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, InventoryHomeActivity.class);
+                    Intent mNextActivity = new Intent(InventoryHomeActivity.this, KitInventorySetup.class);
                     startActivity(mNextActivity);
 
 
@@ -121,7 +125,7 @@ public class SeniorStaffHomeActivity extends BaseActivity {
 
                     //Toast.makeText(SeniorStaffHomeActivity.this, "Tapped on 3", Toast.LENGTH_SHORT).show();
 
-                    Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, SampleIntakeSetupActivity.class);
+                    Intent mNextActivity = new Intent(InventoryHomeActivity.this, SampleIntakeSetupActivity.class);
                     startActivity(mNextActivity);
 
 
@@ -129,7 +133,7 @@ public class SeniorStaffHomeActivity extends BaseActivity {
 
                    // Toast.makeText(SeniorStaffHomeActivity.this, "Tapped On " + 2, Toast.LENGTH_LONG).show();
 
-                }
+                }*/
 
             }
         });
@@ -140,14 +144,14 @@ public class SeniorStaffHomeActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         // super.onBackPressed();
-        Utils.createDialogTwoButtons(SeniorStaffHomeActivity.this, "Logout", true, getString(R.string.logout_message), "YES", "NO", new DialogInterface.OnClickListener() {
+        Utils.createDialogTwoButtons(InventoryHomeActivity.this, "Logout", true, getString(R.string.logout_message), "YES", "NO", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                if (Utilities.isNetworkConnected(SeniorStaffHomeActivity.this)) {
+                if (Utilities.isNetworkConnected(InventoryHomeActivity.this)) {
                     callLogout();
                 } else {
-                    Utils.showAlertDialog(SeniorStaffHomeActivity.this, getString(R.string.no_internet_connection));
+                    Utils.showAlertDialog(InventoryHomeActivity.this, getString(R.string.no_internet_connection));
                 }
             }
         }, null);
@@ -164,9 +168,9 @@ public class SeniorStaffHomeActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_with_logout_only, menu);
 
-        final View notificaitons = menu.findItem(R.id.action_notification).getActionView();
+      /*  final View notificaitons = menu.findItem(R.id.action_notification).getActionView();
 
         txtViewCount = (TextView) notificaitons.findViewById(R.id.txtCount);
         //txtViewCount.setText("10");
@@ -176,7 +180,7 @@ public class SeniorStaffHomeActivity extends BaseActivity {
             public void onClick(View v) {
                 txtViewCount.setVisibility(View.GONE);
                 //Toast.makeText(SeniorStaffHomeActivity.this, "Notification tapped", Toast.LENGTH_LONG).show();
-                Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, NotificationActivity.class);
+                Intent mNextActivity = new Intent(InventoryHomeActivity.this, NotificationActivity.class);
                 startActivity(mNextActivity);
             }
         });
@@ -185,10 +189,10 @@ public class SeniorStaffHomeActivity extends BaseActivity {
             public void onClick(View v) {
                 txtViewCount.setVisibility(View.GONE);
                 //Toast.makeText(SeniorStaffHomeActivity.this, "Notification tapped", Toast.LENGTH_LONG).show();
-                Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, NotificationActivity.class);
+                Intent mNextActivity = new Intent(InventoryHomeActivity.this, NotificationActivity.class);
                 startActivity(mNextActivity);
             }
-        });
+        });*/
         return true;
     }
 
@@ -202,14 +206,14 @@ public class SeniorStaffHomeActivity extends BaseActivity {
         //Logout Functionality
         if (id == R.id.action_logout) {
             //Toast.makeText(SeniorStaffHomeActivity.this, "Logout tapped", Toast.LENGTH_LONG).show();
-            Utils.createDialogTwoButtons(SeniorStaffHomeActivity.this, getString(R.string.settings_logout), true, getString(R.string.logout_message), getString(R.string.dlg_yes_text), getString(R.string.dlg_no_text), new DialogInterface.OnClickListener() {
+            Utils.createDialogTwoButtons(InventoryHomeActivity.this, getString(R.string.settings_logout), true, getString(R.string.logout_message), getString(R.string.dlg_yes_text), getString(R.string.dlg_no_text), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    if (Utilities.isNetworkConnected(SeniorStaffHomeActivity.this)) {
+                    if (Utilities.isNetworkConnected(InventoryHomeActivity.this)) {
                         callLogout();
                     } else {
-                        Utils.showAlertDialog(SeniorStaffHomeActivity.this, getString(R.string.no_internet_connection));
+                        Utils.showAlertDialog(InventoryHomeActivity.this, getString(R.string.no_internet_connection));
                     }
 
 
@@ -232,13 +236,13 @@ public class SeniorStaffHomeActivity extends BaseActivity {
         commonRequestModel.setVersionNumber(AppConstants.APP_VERSION);
         commonRequestModel.setDeviceType(AppConstants.APP_OS);
         commonRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
-        commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(SeniorStaffHomeActivity.this));
+        commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(InventoryHomeActivity.this));
         commonRequestModel.setUserRole(new PrefManager(this).getUserRoleType());
         commonRequestModel.setTagId(new PrefManager(this).getBarCodeValue());
         commonRequestModel.setEvent(AppConstants.LOGOUT);
         commonRequestModel.setUserName(new PrefManager(this).getUserName());
 
-        new NetworkingHelper(new LogoutRequest(SeniorStaffHomeActivity.this, true, commonRequestModel)) {
+        new NetworkingHelper(new LogoutRequest(InventoryHomeActivity.this, true, commonRequestModel)) {
 
             @Override
             public void serverResponseFromApi(ApiResponse serverResponse) {
@@ -259,7 +263,7 @@ public class SeniorStaffHomeActivity extends BaseActivity {
                                         commonResponse.getResponse().get(0).getMessage());
 
 
-                                Intent mNextActivity = new Intent(SeniorStaffHomeActivity.this, SelectRoleActivity.class);
+                                Intent mNextActivity = new Intent(InventoryHomeActivity.this, SelectRoleActivity.class);
                                 startActivity(mNextActivity);
                                 finish();
 
@@ -270,7 +274,7 @@ public class SeniorStaffHomeActivity extends BaseActivity {
                                 Logger.logError("Logout API Failure " +
                                         commonResponse.getResponse().get(0).getMessage());
 
-                                Utils.showAlertDialog(SeniorStaffHomeActivity.this,  commonResponse.getResponse().get(0).getMessage());
+                                Utils.showAlertDialog(InventoryHomeActivity.this,  commonResponse.getResponse().get(0).getMessage());
                             }
 
                         }
@@ -301,14 +305,14 @@ public class SeniorStaffHomeActivity extends BaseActivity {
         commonRequestModel.setVersionNumber(AppConstants.APP_VERSION);
         commonRequestModel.setDeviceType(AppConstants.APP_OS);
         commonRequestModel.setModel(Build.MANUFACTURER + " - " + Build.MODEL);
-        commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(SeniorStaffHomeActivity.this));
+        commonRequestModel.setDeviceNumber(Utilities.getDeviceUniqueId(InventoryHomeActivity.this));
         commonRequestModel.setUserRole(new PrefManager(this).getUserRoleType());
         //commonRequestModel.setUserRole(Constants.SENIOR_STAFF);
         commonRequestModel.setTagId(new PrefManager(this).getBarCodeValue());
         commonRequestModel.setEvent(AppConstants.GET_NOTIFICATION);
         commonRequestModel.setUserName(new PrefManager(this).getUserName());
 
-        new NetworkingHelper(new GetNotificationRequest(SeniorStaffHomeActivity.this, true, commonRequestModel)) {
+        new NetworkingHelper(new GetNotificationRequest(InventoryHomeActivity.this, true, commonRequestModel)) {
 
             @Override
             public void serverResponseFromApi(ApiResponse serverResponse) {
@@ -351,7 +355,7 @@ public class SeniorStaffHomeActivity extends BaseActivity {
                                 /*Logger.logError("GetNofication API Failure " +
                                         commonResponse.getNotifications().get(0).getDescription());*/
 
-                                Utils.showAlertDialog(SeniorStaffHomeActivity.this,  commonResponse.getStatus().getMSG());
+                                Utils.showAlertDialog(InventoryHomeActivity.this,  commonResponse.getStatus().getMSG());
                             }
 
                         }else {

@@ -294,6 +294,7 @@
     <string name="txt_centrifuge_prog">Centrifuge Prog</string>
     <string name="txt_duplicate">DUPLICATE</string>
     <string name="modify">MODIFY</string>
+    <string name="txt_day">Day</string>
 
 
 </resources>

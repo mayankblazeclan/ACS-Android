@@ -16,60 +16,6 @@
             android:background="@color/white">
 
             <LinearLayout
-                android:id="@+id/linearLayout_study_id"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/bt_ok_padding"
-                android:layout_marginRight="@dimen/bt_ok_padding"
-                android:layout_marginTop="@dimen/bt_ok_padding"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:layout_marginLeft="@dimen/activity_5dp_margin"
-                    android:textAllCaps="true"
-                    android:text="@string/txt_kit_id"/>
-
-                <EditText
-                    android:id="@+id/edtKitId"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Enter KIT ID"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linearLayout_acc_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/bt_ok_padding"
-                android:layout_marginRight="@dimen/bt_ok_padding"
-                android:layout_marginTop="@dimen/bt_ok_padding"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:layout_marginLeft="@dimen/activity_5dp_margin"
-                    android:textAllCaps="true"
-                    android:text="@string/txt_accession_number"/>
-
-                <EditText
-                    android:id="@+id/edtAccession"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Enter Extension Number"/>
-
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/linearLayout_days"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -100,6 +46,69 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/linearLayout_study_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/bt_ok_padding"
+                android:layout_marginRight="@dimen/bt_ok_padding"
+                android:layout_marginTop="@dimen/bt_ok_padding"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:layout_marginLeft="@dimen/activity_5dp_margin"
+                    android:textAllCaps="true"
+                    android:text="@string/txt_kit_id"/>
+
+               <!-- <Spinner
+                    android:id="@+id/edtKitId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter KIT ID"/>-->
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/spnKitId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner_background"
+                    android:layout_margin="@dimen/activity_5dp_margin" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout_acc_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/bt_ok_padding"
+                android:layout_marginRight="@dimen/bt_ok_padding"
+                android:layout_marginTop="@dimen/bt_ok_padding"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:layout_marginLeft="@dimen/activity_5dp_margin"
+                    android:textAllCaps="true"
+                    android:text="@string/btn_barcode"/>
+
+                <EditText
+                    android:id="@+id/edtAccession"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Tube Barcode ID"/>
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
                 android:id="@+id/visit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -117,13 +126,13 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:layout_marginLeft="@dimen/activity_5dp_margin"
                     android:textAllCaps="true"
-                    android:text="@string/visit"/>
+                    android:text="@string/txt_day"/>
 
                 <EditText
                     android:id="@+id/edtVisit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter VISIT"/>
+                    android:hint="Get it from Kit"/>
 
             </LinearLayout>
 
@@ -157,7 +166,7 @@
                             android:textAllCaps="true"
                             android:layout_marginLeft="@dimen/activity_5dp_margin"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="@string/txt_kit"/>
+                            android:text="@string/txt_blood_tube_type"/>
 
 
                         <RadioGroup
@@ -172,7 +181,7 @@
                                 android:id="@+id/rScreening"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="  SCREENING"
+                                android:text="  SAMPLE"
                                 android:checked="true"
                                 android:layout_marginLeft="@dimen/margin_30dp"
                                 android:layout_marginRight="@dimen/margin_30dp"
@@ -182,7 +191,7 @@
                                 android:id="@+id/rTrial"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="  TRIAL"
+                                android:text="  ALIQUOT"
                                 android:checked="false"
                                 android:layout_marginLeft="@dimen/margin_30dp"
                                 android:layout_marginRight="@dimen/margin_30dp"
@@ -199,15 +208,15 @@
 
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:textColor="@color/black"
                             android:layout_gravity="left"
                             android:textStyle="bold"
-                            android:gravity="start|center"
+                            android:gravity="left|center"
                             android:textAllCaps="true"
                             android:layout_marginLeft="@dimen/activity_5dp_margin"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="@string/txt_additional_kit"/>
+                            android:text="@string/txt_category"/>
 
 
                         <RadioGroup
@@ -222,7 +231,7 @@
                                 android:id="@+id/radioNo"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="  NO"
+                                android:text="  LOCAL"
                                 android:checked="true"
                                 android:layout_marginLeft="@dimen/margin_30dp"
                                 android:layout_marginRight="@dimen/margin_30dp"
@@ -232,9 +241,9 @@
                                 android:id="@+id/radioNO"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="  YES"
+                                android:text="  CENTRAL"
                                 android:checked="false"
-                                android:layout_marginLeft="120dp"
+                                android:layout_marginLeft="45dp"
                                 android:layout_marginRight="@dimen/margin_30dp"
                                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -479,7 +488,7 @@
             </LinearLayout>
 
 
-            <LinearLayout
+          <!--  <LinearLayout
                 android:id="@+id/linearLayout_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -528,10 +537,10 @@
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </LinearLayout>-->
 
 
-            <LinearLayout
+        <!--    <LinearLayout
                 android:id="@+id/linearLayout_date2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -566,10 +575,10 @@
                     android:layout_width="400dp"
                     android:layout_height="90dp"
                     android:id="@+id/barcode_image"/>
-                <!-- android:src="@drawable/ic_senior_inventory_barcode"-->
+                &lt;!&ndash; android:src="@drawable/ic_senior_inventory_barcode"&ndash;&gt;
 
 
-            </LinearLayout>
+            </LinearLayout>-->
 
 
             <LinearLayout

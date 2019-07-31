@@ -100,7 +100,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
     private RadioButton radioButtonAdditionalKitTYPE;
     private RadioGroup radioGroupCategory;
     private RadioButton radioButtonCategory;
-    private RadioGroup radioGroupReqForm;
+   // private RadioGroup radioGroupReqForm;
     private RadioButton radioButtonReqForm;
     private TextView editTextKIT_ID;
     private EditText editTextAccessionNumber;
@@ -1060,8 +1060,8 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         rbAdYes=(RadioButton) dialog.findViewById(R.id.rbAdYes);
         rbAdNo=(RadioButton) dialog.findViewById(R.id.rbAdNo);
 
-        rbReqFormYES=(RadioButton) dialog.findViewById(R.id.rbReqFormYES);
-        rbReqFormNO=(RadioButton) dialog.findViewById(R.id.rbReqFormNO);
+       /* rbReqFormYES=(RadioButton) dialog.findViewById(R.id.rbReqFormYES);
+        rbReqFormNO=(RadioButton) dialog.findViewById(R.id.rbReqFormNO);*/
 
         btnStartDatePicker.setOnClickListener(this);
         btnEndDatePicker.setOnClickListener(this);
@@ -1098,7 +1098,7 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         radioKITtype =(RadioGroup) dialog.findViewById(R.id.radioGroupKitType);
         radioAdditionalKITtype =(RadioGroup) dialog.findViewById(R.id.rg_additional_kit);
         radioGroupCategory =(RadioGroup) dialog.findViewById(R.id.rg_category);
-        radioGroupReqForm =(RadioGroup) dialog.findViewById(R.id.radioGroup_req_form);
+        //radioGroupReqForm =(RadioGroup) dialog.findViewById(R.id.radioGroup_req_form);
 
         int selectedId=radioKITtype.getCheckedRadioButtonId();
         radioButtonKitTYPE =(RadioButton)dialog.findViewById(selectedId);
@@ -1109,8 +1109,8 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         int selectedId2=radioGroupCategory.getCheckedRadioButtonId();
         radioButtonCategory =(RadioButton)dialog.findViewById(selectedId2);
 
-        int selectedId3=radioGroupReqForm.getCheckedRadioButtonId();
-        radioButtonReqForm =(RadioButton)dialog.findViewById(selectedId3);
+        //int selectedId3=radioGroupReqForm.getCheckedRadioButtonId();
+       // radioButtonReqForm =(RadioButton)dialog.findViewById(selectedId3);
 
         if(kitList.getIsTrial() ==1){
             rbTrial.setChecked(true);
@@ -1537,14 +1537,20 @@ public class KitDetailsAdapter extends RecyclerView.Adapter<KitDetailsAdapter.My
         }
         modifyKitRequestModel.setCategory(category);
         modifyKitRequestModel.setStatus(AppConstants.IN_STOCK);
-        modifyKitRequestModel.setLocal(Integer.valueOf(localQty));
+
+        modifyKitRequestModel.setLocal(0);
+        modifyKitRequestModel.setCentral(0);
+        modifyKitRequestModel.setAliquot(0);
+
+
+      /*  modifyKitRequestModel.setLocal(Integer.valueOf(localQty));
         modifyKitRequestModel.setCentral(Integer.valueOf(centralQty));
         modifyKitRequestModel.setAliquot(Integer.valueOf(aliquotQty));
         if(reqForm.equalsIgnoreCase("YES")) {
             modifyKitRequestModel.setReqForm(1);
         }else {
             modifyKitRequestModel.setReqForm(0);
-        }
+        }*/
         modifyKitRequestModel.setScanDate(startDate);
         modifyKitRequestModel.setExpDate(endDate);
         modifyKitRequestModel.setStudyId(Integer.valueOf(studyID));

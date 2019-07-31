@@ -62,7 +62,7 @@ import java.util.List;
 /**
  * Created by MS on 2019-06-04.
  */
-public class AddKitFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
+public class AddTubeFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     private static final String TAG = "SeniorSubjectOnBoarding";
 
@@ -103,7 +103,7 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_add_kit, container, false);
+        View v = inflater.inflate(R.layout.fragment_add_tube, container, false);
 
         initViews(v);
 
@@ -127,7 +127,7 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
         spnAliquot = (Spinner) v.findViewById(R.id.spnAliquot);
         spnAliquot.setOnItemSelectedListener(this);*/
 
-        btnStartDatePicker=(ImageButton)v.findViewById(R.id.btn_start_date);
+      /*  btnStartDatePicker=(ImageButton)v.findViewById(R.id.btn_start_date);
         txtStartDate=(TextView)v.findViewById(R.id.txt_start_date);
 
         btnEndDatePicker=(ImageButton)v.findViewById(R.id.btn_end_date);
@@ -158,7 +158,7 @@ public class AddKitFragment extends Fragment implements AdapterView.OnItemSelect
         btnReplicate.setOnClickListener(this);
 
         ArrayAdapter adpNumber = new ArrayAdapter(getActivity(),android.R.layout.simple_spinner_item, sNumber);
-        adpNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adpNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);*/
         /*spnAliquot.setAdapter(adpNumber);
         spnLocal.setAdapter(adpNumber);
         spnCentral.setAdapter(adpNumber);*/
